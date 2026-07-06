@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CosmoVedic - Premium Vedic Astrology App</title>
+  <style>
+    /* Premium Cosmic Theme Styles */
+    :root {
+      --bg-color: #09071A;
+      --card-bg: #14102C;
+      --gold: #E8C879;
+      --gold-dark: #D4B157;
+      --purple: #8E6FD6;
+      --nebula: #4A90E2;
+      --text: #FFFFFF;
+      --text-muted: #B3B1C9;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      background-image: 
+        radial-gradient(circle at 20% 30%, rgba(142, 111, 214, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(74, 144, 226, 0.08) 0%, transparent 40%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Splash Screen */
+    #splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg-color);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease;
+    }
+
+    .splash-logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(232, 200, 121, 0.3);
+      animation: rotateSun 20s linear infinite, glowSun 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes rotateSun {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes glowSun {
+      from { box-shadow: 0 0 20px rgba(232, 200, 121, 0.2); }
+      to { box-shadow: 0 0 40px rgba(232, 200, 121, 0.4); }
+    }
+
+    .splash-title {
+      margin-top: 30px;
+      font-size: 2.2rem;
+      letter-spacing: 6px;
+      color: var(--gold);
+      font-weight: 700;
+      text-shadow: 0 4px 10px rgba(142, 111, 214, 0.4);
+    }
+
+    .splash-subtitle {
+      margin-top: 10px;
+      font-size: 1rem;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      font-style: italic;
+    }
+
+    /* Auth Screen */
+    #auth-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .auth-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(42, 36, 78, 0.8);
+      border-radius: 20px;
+      padding: 40px 30px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      color: var(--gold);
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      background: #1A1438;
+      border: 1px solid #2A244E;
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: white;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border 0.3s ease;
+    }
+
+    .form-group input:focus {
+      border-color: var(--gold);
+    }
+
+    .btn {
+      background: var(--gold);
+      color: #1E1C0A;
+      border: none;
+      border-radius: 30px;
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 15px rgba(232, 200, 121, 0.3);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(232, 200, 121, 0.5);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: white;
+      border: 1px solid var(--gold);
+      margin-top: 15px;
+      box-shadow: none;
+    }
+
+    .btn-link {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      text-decoration: underline;
+      font-size: 0.85rem;
+      margin-top: 15px;
+      cursor: pointer;
+    }
+
+    /* Main Application Layout */
+    #app-layout {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(42, 36, 78, 0.5);
+      background: rgba(9, 7, 26, 0.8);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    header h1 {
+      color: var(--gold);
+      font-size: 1.5rem;
+      letter-spacing: 3px;
+    }
+
+    main {
+      flex: 1;
+      padding: 20px;
+      max-width: 600px;
+      width: 100%;
+      margin: 0 auto;
+      padding-bottom: 100px;
+    }
+
+    /* Tabs Navigation */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      border-top: 1px solid rgba(42, 36, 78, 0.8);
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      z-index: 200;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.75rem;
+      text-decoration: none;
+      background: none;
+      border: none;
+      outline: none;
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+      margin-bottom: 4px;
+      fill: currentColor;
+    }
+
+    .nav-item.active {
+      color: var(--gold);
+    }
+
+    /* Cards and Containers */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid rgba(42, 36, 78, 0.8);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Home Tab Predictions */
+    .horoscope-grid {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scrollbar-width: none;
+    }
+
+    .horoscope-grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .horoscope-item {
+      flex: 0 0 90px;
+      background: var(--card-bg);
+      border: 1px solid rgba(42, 36, 78, 0.8);
+      border-radius: 12px;
+      padding: 15px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: border 0.3s;
+    }
+
+    .horoscope-item:hover {
+      border-color: var(--gold);
+    }
+
+    .horoscope-item h4 {
+      font-size: 0.85rem;
+      margin-top: 6px;
+    }
+
+    /* Kundli Canvas */
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      margin: 20px auto;
+    }
+
+    canvas {
+      width: 100%;
+      aspect-ratio: 1;
+      background: #0C0922;
+      border: 1px solid var(--gold);
+      border-radius: 12px;
+    }
+
+    .chart-toggle {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    /* Matching compatibility score */
+    .score-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid var(--gold);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 20px auto;
+      box-shadow: 0 0 15px rgba(232, 200, 121, 0.2);
+    }
+
+    .score-num {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    /* Tarot draw */
+    .tarot-deck {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 40px;
+    }
+
+    .tarot-card {
+      width: 100px;
+      height: 160px;
+      background: linear-gradient(135deg, #1A1438, #352365);
+      border: 2px solid var(--gold);
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 2rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+      transition: transform 0.5s;
+    }
+
+    .tarot-card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    .table th, .table td {
+      border: 1px solid rgba(42, 36, 78, 0.8);
+      padding: 10px;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+
+    .table th {
+      background: #1B143E;
+      color: var(--gold);
+    }
+
+    /* Simple Overlay for sheets */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 500;
+      align-items: flex-end;
+    }
+
+    .sheet {
+      background: var(--card-bg);
+      border-radius: 20px 20px 0 0;
+      padding: 30px 20px;
+      width: 100%;
+      max-height: 80%;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. SPLASH SCREEN -->
+  <div id="splash-screen">
+    <div class="splash-logo">
+      <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.5">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5.636 5.636l1.414 1.414M16.95 16.95l1.414 1.414M2 12A10 10 0 0 1 12 2M12 22A10 10 0 0 1 2 12"/>
+      </svg>
+    </div>
+    <div class="splash-title">COSMOVEDIC</div>
+    <div class="splash-subtitle">Align with the Cosmos</div>
+  </div>
+
+  <!-- 2. AUTH SCREEN -->
+  <div id="auth-screen">
+    <div class="auth-card">
+      <div style="margin-bottom: 25px;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.5">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <h2 style="margin-bottom: 10px;">Access CosmoVedic</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 30px;">Vedic Astro Insights & Predictions</p>
+
+      <form id="auth-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" required placeholder="name@domain.com">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" required placeholder="••••••">
+        </div>
+        <button type="submit" class="btn">SIGN IN</button>
+      </form>
+
+      <button onclick="bypassAuth()" class="btn btn-outline">CONTINUE AS GUEST</button>
+    </div>
+  </div>
+
+  <!-- 3. MAIN APP LAYOUT -->
+  <div id="app-layout">
+    <header>
+      <h1 id="header-title">COSMOVEDIC</h1>
+    </header>
+
+    <main>
+      <!-- TAB 1: HOME -->
+      <div id="tab-home" class="tab-content active">
+        <h3 style="margin-bottom: 15px;">Welcome, Cosmic Seeker</h3>
+        
+        <div class="card">
+          <h4 style="color: var(--gold); margin-bottom: 12px;">Today's Panchang</h4>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.9rem;">
+            <div>
+              <p style="color: var(--text-muted); font-size: 0.8rem;">Tithi</p>
+              <strong id="p-tithi">Prathama</strong>
+            </div>
+            <div>
+              <p style="color: var(--text-muted); font-size: 0.8rem;">Nakshatra</p>
+              <strong id="p-nakshatra">Ashwini</strong>
+            </div>
+            <div>
+              <p style="color: var(--text-muted); font-size: 0.8rem;">Yoga</p>
+              <strong id="p-yoga">Vishkumbha</strong>
+            </div>
+            <div>
+              <p style="color: var(--text-muted); font-size: 0.8rem;">Day (Vara)</p>
+              <strong id="p-vara">Monday</strong>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin-bottom: 15px;">Daily Horoscope</h3>
+        <div class="horoscope-grid" id="horoscope-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- TAB 2: KUNDLI -->
+      <div id="tab-kundli" class="tab-content">
+        <div id="kundli-form-view">
+          <h3 style="margin-bottom: 15px;">Generate Birth Chart</h3>
+          <div class="card">
+            <form onsubmit="generateChart(event)">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="k-name" required placeholder="Name">
+              </div>
+              <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                  <label>Birth Date</label>
+                  <input type="date" id="k-date" required>
+                </div>
+                <div>
+                  <label>Birth Time</label>
+                  <input type="time" id="k-time" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Birth Place (City)</label>
+                <select id="k-city" required onchange="onCitySelect()">
+                  <option value="delhi">New Delhi, India</option>
+                  <option value="mumbai">Mumbai, India</option>
+                  <option value="bengaluru">Bengaluru, India</option>
+                  <option value="newyork">New York, USA</option>
+                  <option value="london">London, UK</option>
+                </select>
+              </div>
+              <button type="submit" class="btn" style="margin-top: 10px;">GENERATE KUNDLI</button>
+            </form>
+          </div>
+        </div>
+
+        <div id="kundli-result-view" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 id="result-name">Kundli Results</h3>
+            <button class="btn" style="width: auto; padding: 6px 12px; font-size: 0.8rem;" onclick="showKundliForm()">BACK</button>
+          </div>
+          
+          <div class="chart-toggle">
+            <button class="btn btn-outline" style="width: auto; padding: 4px 10px; font-size: 0.8rem; margin:0;" onclick="toggleChartStyle(true)">North Indian</button>
+            <button class="btn btn-outline" style="width: auto; padding: 4px 10px; font-size: 0.8rem; margin:0;" onclick="toggleChartStyle(false)">South Indian</button>
+          </div>
+
+          <div class="chart-container">
+            <canvas id="chartCanvas" width="400" height="400"></canvas>
+          </div>
+
+          <div class="card">
+            <h4 style="color: var(--gold); margin-bottom: 10px;">Placements</h4>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Planet</th>
+                  <th>Sign</th>
+                  <th>House</th>
+                </tr>
+              </thead>
+              <tbody id="placements-tbody">
+                <!-- Placed dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: MATCHING -->
+      <div id="tab-matching" class="tab-content">
+        <h3 style="margin-bottom: 15px;">Kundli Matching</h3>
+        <div class="card">
+          <div class="form-group">
+            <label>Bride's Moon Sign</label>
+            <select id="m-bride-sign">
+              <option value="0">Aries</option>
+              <option value="1">Taurus</option>
+              <option value="2">Gemini</option>
+              <option value="3">Cancer</option>
+              <option value="4">Leo</option>
+              <option value="5">Virgo</option>
+              <option value="6">Libra</option>
+              <option value="7">Scorpio</option>
+              <option value="8">Sagittarius</option>
+              <option value="9">Capricorn</option>
+              <option value="10">Aquarius</option>
+              <option value="11">Pisces</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Groom's Moon Sign</label>
+            <select id="m-groom-sign">
+              <option value="0">Aries</option>
+              <option value="1">Taurus</option>
+              <option value="2">Gemini</option>
+              <option value="3">Cancer</option>
+              <option value="4">Leo</option>
+              <option value="5">Virgo</option>
+              <option value="6">Libra</option>
+              <option value="7">Scorpio</option>
+              <option value="8">Sagittarius</option>
+              <option value="9">Capricorn</option>
+              <option value="10">Aquarius</option>
+              <option value="11">Pisces</option>
+            </select>
+          </div>
+          <button class="btn" onclick="calculateCompatibility()">CHECK COMPATIBILITY</button>
+        </div>
+
+        <div id="matching-result" style="display: none;" class="card">
+          <h4 style="color: var(--gold); text-align: center;">Result</h4>
+          <div class="score-circle">
+            <div class="score-num" id="matching-score">24</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">out of 36</div>
+          </div>
+          <p id="matching-verdict" style="text-align: center; font-weight: bold; margin-bottom: 15px;"></p>
+        </div>
+      </div>
+
+      <!-- TAB 4: TAROT -->
+      <div id="tab-tarot" class="tab-content">
+        <h3 style="margin-bottom: 10px;">Tarot Card Reading</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Focus on your question and select one of the cards below.</p>
+        
+        <div class="tarot-deck" id="tarot-deck">
+          <div class="tarot-card" onclick="drawTarot(0)">?</div>
+          <div class="tarot-card" onclick="drawTarot(1)">?</div>
+          <div class="tarot-card" onclick="drawTarot(2)">?</div>
+        </div>
+
+        <div id="tarot-result" style="display: none; margin-top: 30px;" class="card">
+          <h4 style="color: var(--gold); margin-bottom: 8px;" id="tarot-card-name">The Fool</h4>
+          <p style="color: var(--purple); font-size: 0.8rem; font-weight: bold; margin-bottom: 15px;" id="tarot-card-arcana">Major Arcana</p>
+          <p id="tarot-card-meaning" style="font-size: 0.95rem; line-height: 1.4; color: var(--text-muted); font-style: italic;"></p>
+          <button class="btn btn-outline" onclick="resetTarot()" style="margin-top: 20px;">DRAW ANOTHER</button>
+        </div>
+      </div>
+
+      <!-- TAB 5: SETTINGS -->
+      <div id="tab-settings" class="tab-content">
+        <h3 style="margin-bottom: 15px;">System & Settings</h3>
+        
+        <div class="card">
+          <h4 style="color: var(--gold); margin-bottom: 15px;">Saved Profile</h4>
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--purple); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">S</div>
+            <div>
+              <strong>Cosmic Seeker</strong>
+              <p style="color: var(--text-muted); font-size: 0.8rem;">Active Session: Guest Mode</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 style="color: var(--gold); margin-bottom: 15px;">Localization (Language)</h4>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Toggle Language</span>
+            <select id="lang-select" onchange="changeLanguage()" style="width: auto; background: #1A1438; border: 1px solid #2A244E; color: white; padding: 6px 12px; border-radius: 6px;">
+              <option value="en">English</option>
+              <option value="hi">हिन्दी (Hindi)</option>
+            </select>
+          </div>
+        </div>
+
+        <button onclick="logout()" class="btn" style="background: #381414; color: #ff6b6b; box-shadow: none;">LOG OUT</button>
+      </div>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="nav-bar">
+      <button class="nav-item active" onclick="switchTab(0, this)">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+      </button>
+      <button class="nav-item" onclick="switchTab(1, this)">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 3.99L19.53 19H4.47L12 5.99z"/></svg>
+        <span>Kundli</span>
+      </button>
+      <button class="nav-item" onclick="switchTab(2, this)">
+        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <span>Matching</span>
+      </button>
+      <button class="nav-item" onclick="switchTab(3, this)">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        <span>Tarot</span>
+      </button>
+      <button class="nav-item" onclick="switchTab(4, this)">
+        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        <span>Settings</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 4. BOTTOM SHEET FOR HOROSCOPE -->
+  <div id="horoscope-overlay" class="overlay" onclick="closeOverlay()">
+    <div class="sheet" onclick="event.stopPropagation()">
+      <h3 style="color: var(--gold); margin-bottom: 8px;" id="sheet-sign-title">Aries</h3>
+      <p style="color: var(--purple); font-weight: bold; font-size: 0.75rem; margin-bottom: 15px;">DAILY INSIGHT</p>
+      <p id="sheet-sign-desc" style="line-height: 1.5; font-size: 0.95rem; margin-bottom: 25px;"></p>
+      <button class="btn" onclick="closeOverlay()">DISMISS</button>
+    </div>
+  </div>
+
+  <!-- Astrological Scripts -->
+  <script>
+    // 1. ZODIAC DICTIONARIES
+    const signNames = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+    const horoscopes = {
+      "Aries": "Your energy is aligned for career initiatives today. Trust your intuition.",
+      "Taurus": "Take it slow. Financial investments made today show strong long-term promise.",
+      "Gemini": "Your mind is buzzing with creativity. Reach out to network contacts.",
+      "Cancer": "Time for emotional self-care. Relax and meditate to align your energy centers.",
+      "Leo": "Command your workspace today. You'll find natural support from leaders.",
+      "Virgo": "Attention to detail brings success. Clean and organize your living space.",
+      "Libra": "Seek balance in your communication. Partnerships are supported today.",
+      "Scorpio": "Deep internal growth is taking place. Accept changes as they come.",
+      "Sagittarius": "Philosophical insights flow to you today. Read and expand your knowledge.",
+      "Capricorn": "Hard work is yielding results. Keep going; the cosmic elements favor diligence.",
+      "Aquarius": "Innovative thoughts solve a lingering challenge. Share your ideas.",
+      "Pisces": "Intuition and dreams are highly active. Focus on creative expressions."
+    };
+
+    const cities = {
+      "delhi": { name: "New Delhi, India", lat: 28.6139, lng: 77.2090, tz: 5.5 },
+      "mumbai": { name: "Mumbai, India", lat: 19.0760, lng: 72.8777, tz: 5.5 },
+      "bengaluru": { name: "Bengaluru, India", lat: 12.9716, lng: 77.5946, tz: 5.5 },
+      "newyork": { name: "New York, USA", lat: 40.7128, lng: -74.0060, tz: -5.0 },
+      "london": { name: "London, UK", lat: 51.5074, lng: -0.1278, tz: 0.0 }
+    };
+
+    // Global active variables
+    let currentPlacements = [];
+    let isNorthIndianStyle = true;
+
+    // Transition Splash to Auth
+    setTimeout(() => {
+      document.getElementById('splash-screen').style.opacity = 0;
+      setTimeout(() => {
+        document.getElementById('splash-screen').style.display = 'none';
+        document.getElementById('auth-screen').style.display = 'flex';
+      }, 800);
+    }, 2500);
+
+    // Auth flows
+    function handleLogin(e) {
+      e.preventDefault();
+      bypassAuth();
+    }
+
+    function bypassAuth() {
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('app-layout').style.display = 'flex';
+      initApp();
+    }
+
+    function logout() {
+      document.getElementById('app-layout').style.display = 'none';
+      document.getElementById('auth-screen').style.display = 'flex';
+    }
+
+    // App Initialization
+    function initApp() {
+      // Setup Horoscope Scroll
+      const list = document.getElementById('horoscope-list');
+      list.innerHTML = "";
+      signNames.forEach(sign => {
+        const div = document.createElement('div');
+        div.className = 'horoscope-item';
+        div.onclick = () => showHoroscope(sign);
+        div.innerHTML = `
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.5">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          <h4>${sign}</h4>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    // Tab Switching
+    function switchTab(index, btn) {
+      // Deactivate other tabs
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      
+      // Activate this tab
+      const tabIds = ['tab-home', 'tab-kundli', 'tab-matching', 'tab-tarot', 'tab-settings'];
+      document.getElementById(tabIds[index]).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // Show Horoscope Overlay
+    function showHoroscope(sign) {
+      document.getElementById('sheet-sign-title').innerText = sign;
+      document.getElementById('sheet-sign-desc').innerText = horoscopes[sign];
+      document.getElementById('horoscope-overlay').style.display = 'flex';
+    }
+
+    function closeOverlay() {
+      document.getElementById('horoscope-overlay').style.display = 'none';
+    }
+
+    // 2. KUNDLI CALCULATIONS (Pure JS)
+    function generateChart(e) {
+      e.preventDefault();
+      const name = document.getElementById('k-name').value;
+      const date = document.getElementById('k-date').value;
+      const time = document.getElementById('k-time').value;
+      const cityKey = document.getElementById('k-city').value;
+      const city = cities[cityKey];
+
+      // Simple Ephemeris mock placements based on seed (birth time/date details)
+      // Generates deterministic signs (0-11) for planets
+      const seed = new Date(date + "T" + time).getTime();
+      const planets = ["Lagna", "Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Rahu", "Ketu"];
+      
+      currentPlacements = planets.map((name, idx) => {
+        // Deterministic but random-looking sign placement (0-11)
+        const sign = Math.floor(Math.abs(Math.sin(seed + idx)) * 12);
+        // Ketu is always 180 degrees (6 signs) opposite Rahu
+        if (name === "Ketu") {
+          const rahuSign = currentPlacements.find(p => p.name === "Rahu").sign;
+          return { name, sign: (rahuSign + 6) % 12 };
+        }
+        return { name, sign };
+      });
+
+      // Show Results View
+      document.getElementById('result-name').innerText = `${name}'s Kundli`;
+      document.getElementById('kundli-form-view').style.display = 'none';
+      document.getElementById('kundli-result-view').style.display = 'block';
+
+      // Populate Placements table
+      const tbody = document.getElementById('placements-tbody');
+      tbody.innerHTML = "";
+      currentPlacements.forEach(p => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td style="color: var(--gold); font-weight: bold;">${p.name}</td>
+          <td>${signNames[p.sign]}</td>
+          <td>House ${((p.sign - currentPlacements[0].sign + 12) % 12) + 1}</td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      drawChart();
+    }
+
+    function showKundliForm() {
+      document.getElementById('kundli-result-view').style.display = 'none';
+      document.getElementById('kundli-form-view').style.display = 'block';
+    }
+
+    // Custom Canvas Painting
+    function toggleChartStyle(isNorth) {
+      isNorthIndianStyle = isNorth;
+      drawChart();
+    }
+
+    function drawChart() {
+      const canvas = document.getElementById('chartCanvas');
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // Clear Canvas
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = '#0C0922';
+      ctx.fillRect(0, 0, w, h);
+
+      if (isNorthIndianStyle) {
+        // Draw North Indian style (Diamond)
+        ctx.strokeStyle = '#E8C879';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(0, 0, w, h);
+
+        // Draw Diagonals
+        ctx.beginPath();
+        ctx.moveTo(0, 0); ctx.lineTo(w, h);
+        ctx.moveTo(w, 0); ctx.lineTo(0, h);
+        // Draw Diamonds
+        ctx.moveTo(w/2, 0); ctx.lineTo(0, h/2);
+        ctx.lineTo(w/2, h); ctx.lineTo(w, h/2);
+        ctx.lineTo(w/2, 0);
+        ctx.stroke();
+
+        // Placements center coords (12 houses)
+        const houseCenters = [
+          {x: w * 0.5, y: h * 0.28},   // House 1
+          {x: w * 0.25, y: h * 0.16},  // House 2
+          {x: w * 0.16, y: h * 0.25},  // House 3
+          {x: w * 0.28, y: h * 0.5},   // House 4
+          {x: w * 0.16, y: h * 0.75},  // House 5
+          {x: w * 0.25, y: h * 0.84},  // House 6
+          {x: w * 0.5, y: h * 0.72},   // House 7
+          {x: w * 0.75, y: h * 0.84},  // House 8
+          {x: w * 0.84, y: h * 0.75},  // House 9
+          {x: w * 0.72, y: h * 0.5},   // House 10
+          {x: w * 0.84, y: h * 0.25},  // House 11
+          {x: w * 0.75, y: h * 0.16},  // House 12
+        ];
+
+        const signNumberCoords = [
+          {x: w * 0.5, y: h * 0.38},
+          {x: w * 0.33, y: h * 0.22},
+          {x: w * 0.22, y: h * 0.33},
+          {x: w * 0.38, y: h * 0.5},
+          {x: w * 0.22, y: h * 0.67},
+          {x: w * 0.33, y: h * 0.78},
+          {x: w * 0.5, y: h * 0.62},
+          {x: w * 0.67, y: h * 0.78},
+          {x: w * 0.78, y: h * 0.67},
+          {x: w * 0.62, y: h * 0.5},
+          {x: w * 0.78, y: h * 0.33},
+          {x: w * 0.67, y: h * 0.22},
+        ];
+
+        // Draw Sign Numbers
+        const lagnaSign = currentPlacements[0].sign + 1; // 1-based index
+        ctx.fillStyle = '#E8C879';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'center';
+
+        for (let i = 0; i < 12; i++) {
+          const signVal = (lagnaSign - 1 + i) % 12 + 1;
+          ctx.fillText(signVal.toString(), signNumberCoords[i].x, signNumberCoords[i].y);
+        }
+
+        // Draw Planets grouped by House
+        const housePlanets = Array.from({length: 13}, () => []);
+        currentPlacements.forEach(p => {
+          const houseIdx = ((p.sign - currentPlacements[0].sign + 12) % 12) + 1;
+          const short = p.name.substring(0, 2);
+          housePlanets[houseIdx].push(short);
+        });
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '10px sans-serif';
+        for (let h = 1; h <= 12; h++) {
+          const text = housePlanets[h].join(" ");
+          ctx.fillText(text, houseCenters[h-1].x, houseCenters[h-1].y);
+        }
+
+      } else {
+        // Draw South Indian style (Grid)
+        ctx.strokeStyle = '#E8C879';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(0, 0, w, h);
+
+        const step = w / 4;
+        // Draw inner boxes lines
+        ctx.beginPath();
+        ctx.moveTo(step, 0); ctx.lineTo(step, h);
+        ctx.moveTo(step*2, 0); ctx.lineTo(step*2, step);
+        ctx.moveTo(step*2, step*3); ctx.lineTo(step*2, h);
+        ctx.moveTo(step*3, 0); ctx.lineTo(step*3, h);
+        // Horizontal
+        ctx.moveTo(0, step); ctx.lineTo(w, step);
+        ctx.moveTo(0, step*2); ctx.lineTo(step, step*2);
+        ctx.moveTo(step*3, step*2); ctx.lineTo(w, step*2);
+        ctx.moveTo(0, step*3); ctx.lineTo(w, step*3);
+        ctx.stroke();
+
+        // 12 Sign Coords clockwise
+        const gridCoords = [
+          {r: 0, c: 1}, {r: 0, c: 2}, {r: 0, c: 3},
+          {r: 1, c: 3}, {r: 2, c: 3}, {r: 3, c: 3},
+          {r: 3, c: 2}, {r: 3, c: 1}, {r: 3, c: 0},
+          {r: 2, c: 0}, {r: 1, c: 0}, {r: 0, c: 0}
+        ];
+
+        // Draw Signs headers & planets
+        const signPlanets = Array.from({length: 12}, () => []);
+        currentPlacements.forEach(p => {
+          const short = p.name.substring(0, 2);
+          signPlanets[p.sign].push(short);
+        });
+
+        for (let s = 0; s < 12; s++) {
+          const c = gridCoords[s];
+          const x = c.c * step;
+          const y = c.r * step;
+
+          // Header
+          ctx.fillStyle = '#8E6FD6';
+          ctx.font = 'bold 9px sans-serif';
+          ctx.textAlign = 'left';
+          ctx.fillText(signNames[s].substring(0, 3).toUpperCase(), x + 4, y + 12);
+
+          // Planets
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = '10px sans-serif';
+          ctx.textAlign = 'center';
+          
+          const text = signPlanets[s].join(" ");
+          ctx.fillText(text, x + step/2, y + step/2 + 4);
+        }
+      }
+    }
+
+    // 3. MATCHING COMPATIBILITY
+    function calculateCompatibility() {
+      const bride = parseInt(document.getElementById('m-bride-sign').value);
+      const groom = parseInt(document.getElementById('m-groom-sign').value);
+
+      // Simple deterministic formula for Gunas match (out of 36)
+      const diff = Math.abs(bride - groom);
+      const score = 18 + Math.floor(Math.abs(Math.sin(diff) * 18));
+
+      document.getElementById('matching-score').innerText = score;
+      document.getElementById('matching-verdict').innerText = score >= 18 
+        ? "Highly Compatible Connection" 
+        : "Astro Remedies Required for Harmony";
+      document.getElementById('matching-result').style.display = 'block';
+    }
+
+    // 4. TAROT INTERACTIVE
+    const tarotCards = [
+      { name: "The Fool", arcana: "Major Arcana (0)", meaning: "A day of fresh beginnings, clean slates, and spontaneity. The cosmos is urging you to take a leap of faith." },
+      { name: "The Magician", arcana: "Major Arcana (I)", meaning: "You hold the creative focus and active power to manifest your goals today. Focus on active creation." },
+      { name: "The High Priestess", arcana: "Major Arcana (II)", meaning: "Silence and inner intuition are highlighted. Go within for the answers you seek." }
+    ];
+
+    function drawTarot(idx) {
+      const card = tarotCards[idx % tarotCards.length];
+      document.getElementById('tarot-deck').style.display = 'none';
+      
+      document.getElementById('tarot-card-name').innerText = card.name;
+      document.getElementById('tarot-card-arcana').innerText = card.arcana;
+      document.getElementById('tarot-card-meaning').innerText = card.meaning;
+      document.getElementById('tarot-result').style.display = 'block';
+    }
+
+    function resetTarot() {
+      document.getElementById('tarot-result').style.display = 'none';
+      document.getElementById('tarot-deck').style.display = 'flex';
+    }
+
+    // 5. SYSTEM SETTINGS
+    function changeLanguage() {
+      const lang = document.getElementById('lang-select').value;
+      const title = document.getElementById('header-title');
+      if (lang === 'hi') {
+        title.innerText = "कोस्मोवैदिक";
+      } else {
+        title.innerText = "COSMOVEDIC";
+      }
+    }
+  </script>
+</body>
+</html>
