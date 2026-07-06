@@ -1065,8 +1065,8 @@
       let latRad = lat * Math.PI / 180.0;
       let oblRad = obliquity * Math.PI / 180.0;
       
-      let num = -Math.cos(lstRad);
-      let den = Math.sin(lstRad) * Math.cos(oblRad) + Math.tan(latRad) * Math.sin(oblRad);
+      let num = Math.cos(lstRad);
+      let den = -(Math.sin(oblRad) * Math.tan(latRad) + Math.cos(oblRad) * Math.sin(lstRad));
       
       let ascRad = Math.atan2(num, den);
       let asc = ascRad * 180.0 / Math.PI;
