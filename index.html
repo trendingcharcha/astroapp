@@ -598,7 +598,7 @@
                 <tr>
                   <th>Planet</th>
                   <th>Sign</th>
-                  <th>House</th>
+                  <th>Degree</th>
                 </tr>
               </thead>
               <tbody id="placements-tbody">
@@ -1025,7 +1025,116 @@
       document.getElementById('horoscope-overlay').style.display = 'none';
     }
 
-    // 2. KUNDLI CALCULATIONS (Pure JS)
+    // 2. KUNDLI CALCULATIONS (Pure JS with Keplerian elements & Lahiri Ayanamsa)
+    function getJulianDay(year, month, day, hour, min, tz) {
+      let decimalHour = hour + min / 60.0 - tz;
+      let dDay = day + decimalHour / 24.0;
+      
+      let y = year;
+      let m = month;
+      if (m <= 2) {
+        y -= 1;
+        m += 12;
+      }
+      
+      let A = Math.floor(y / 100);
+      let B = 2 - A + Math.floor(A / 4);
+      
+      let jd = Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + dDay + B - 1524.5;
+      return jd;
+    }
+
+    function getLahiriAyanamsa(jd) {
+      let t = (jd - 2451545.0) / 36525.0; // J2000
+      let ayanamsa = 23.856083 + 1.39634 * t + 0.000308 * t * t;
+      return ayanamsa;
+    }
+
+    function getLocalSiderealTime(jd, lng) {
+      let t = (jd - 2451545.0) / 36525.0;
+      let gmst = 280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * t * t - t * t * t / 38710000.0;
+      gmst = gmst % 360;
+      if (gmst < 0) gmst += 360;
+      let lst = (gmst + lng) % 360;
+      if (lst < 0) lst += 360;
+      return lst;
+    }
+
+    function getAscendant(lst, lat, obliquity) {
+      let lstRad = lst * Math.PI / 180.0;
+      let latRad = lat * Math.PI / 180.0;
+      let oblRad = obliquity * Math.PI / 180.0;
+      
+      let num = -Math.cos(lstRad);
+      let den = Math.sin(lstRad) * Math.cos(oblRad) + Math.tan(latRad) * Math.sin(oblRad);
+      
+      let ascRad = Math.atan2(num, den);
+      let asc = ascRad * 180.0 / Math.PI;
+      asc = asc % 360;
+      if (asc < 0) asc += 360;
+      return asc;
+    }
+
+    function getPlanetLongitude(planetName, jd) {
+      let t = (jd - 2451545.0) / 36525.0; // J2000
+      
+      let longitudes = {
+        "Sun": 280.46646 + 36000.76983 * t,
+        "Moon": 218.3165 + 481267.8813 * t,
+        "Mars": 355.4533 + 19140.3026 * t,
+        "Mercury": 252.2508 + 149472.6741 * t,
+        "Venus": 181.9797 + 58517.8153 * t,
+        "Jupiter": 34.40438 + 3034.74612 * t,
+        "Saturn": 49.94432 + 1222.49443 * t,
+        "Rahu": 125.04452 - 1934.13626 * t,
+      };
+      
+      let meanAnomalies = {
+        "Sun": 357.52911 + 35999.05029 * t,
+        "Moon": 134.9634 + 477198.8676 * t,
+        "Mars": 19.3879 + 19139.9774 * t,
+        "Mercury": 174.7947 + 149472.5153 * t,
+        "Venus": 50.115 + 58517.8039 * t,
+        "Jupiter": 19.895 + 3034.906 * t,
+        "Saturn": 316.967 + 1222.113 * t,
+      };
+
+      if (planetName === "Ketu") {
+        let rahuLon = (longitudes["Rahu"]) % 360;
+        if (rahuLon < 0) rahuLon += 360;
+        return (rahuLon + 180) % 360;
+      }
+
+      let lon = longitudes[planetName] % 360;
+      if (lon < 0) lon += 360;
+
+      if (meanAnomalies[planetName]) {
+        let ma = meanAnomalies[planetName] * Math.PI / 180.0;
+        let correction = 0;
+        if (planetName === "Sun") {
+          correction = 1.914602 * Math.sin(ma) + 0.019993 * Math.sin(2 * ma);
+        } else if (planetName === "Moon") {
+          let meanElongation = (297.8502 + 445267.1114 * t) * Math.PI / 180.0;
+          correction = 6.289 * Math.sin(ma) + 1.274 * Math.sin(2 * meanElongation - ma) + 0.658 * Math.sin(2 * meanElongation);
+        } else if (planetName === "Mars") {
+          correction = 8.560 * Math.sin(ma);
+        } else if (planetName === "Mercury") {
+          correction = 20.598 * Math.sin(ma);
+        } else if (planetName === "Venus") {
+          correction = 0.776 * Math.sin(ma);
+        } else if (planetName === "Jupiter") {
+          correction = 5.555 * Math.sin(ma);
+        } else if (planetName === "Saturn") {
+          correction = 6.366 * Math.sin(ma);
+        }
+        lon += correction;
+      }
+      
+      lon = lon % 360;
+      if (lon < 0) lon += 360;
+      return lon;
+    }
+
     async function generateChart(e) {
       e.preventDefault();
       
@@ -1066,46 +1175,66 @@
         }
       }
 
-      // Safe date & time parsing for both YYYY-MM-DD and DD-MM-YYYY
-      let parsedDate = new Date(date + "T" + time);
-      let seed = parsedDate.getTime();
-      
-      if (isNaN(seed)) {
-        try {
-          const parts = date.split(/[-/]/);
-          if (parts.length === 3) {
-            if (parts[0].length === 4) {
-              parsedDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-            } else {
-              parsedDate = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
-            }
-            const timeParts = time.split(":");
-            if (timeParts.length >= 2) {
-              parsedDate.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]));
-            }
-            seed = parsedDate.getTime();
-          }
-        } catch (err) {
-          console.error("Manual date parsing failed:", err);
+      // Parse birth date and time
+      let year, month, day, hour, min;
+      try {
+        const parts = date.split(/[-/]/);
+        if (parts[0].length === 4) {
+          year = parseInt(parts[0]);
+          month = parseInt(parts[1]);
+          day = parseInt(parts[2]);
+        } else {
+          year = parseInt(parts[2]);
+          month = parseInt(parts[1]);
+          day = parseInt(parts[0]);
         }
+        const timeParts = time.split(":");
+        hour = parseInt(timeParts[0]);
+        min = parseInt(timeParts[1]);
+      } catch (err) {
+        const now = new Date();
+        year = now.getFullYear();
+        month = now.getMonth() + 1;
+        day = now.getDate();
+        hour = now.getHours();
+        min = now.getMinutes();
       }
 
-      if (isNaN(seed)) {
-        seed = Date.now();
-      }
+      // 1. Calculate Julian Day (UT)
+      const jd = getJulianDay(year, month, day, hour, min, city.tz);
 
-      // Safe calculation sequence avoiding undefined references
-      const planets = ["Lagna", "Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Rahu", "Ketu"];
+      // 2. Calculate Lahiri Ayanamsa
+      const ayanamsa = getLahiriAyanamsa(jd);
+
+      // 3. Calculate Obliquity of Ecliptic
+      const t = (jd - 2451545.0) / 36525.0;
+      const obliquity = 23.439291 - 0.013004167 * t;
+
+      // 4. Calculate Lagna (Ascendant)
+      const lst = getLocalSiderealTime(jd, city.lng);
+      const tropicalAsc = getAscendant(lst, city.lat, obliquity);
+      const siderealAsc = (tropicalAsc - ayanamsa + 360) % 360;
+      const lagnaSignNum = Math.floor(siderealAsc / 30.0);
+
+      // 5. Calculate Sidereal Placements for all planets
+      const planets = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Rahu", "Ketu"];
       const placementsList = [];
-      
-      planets.forEach((pName, idx) => {
-        let sign = Math.floor(Math.abs(Math.sin(seed + idx)) * 12);
-        if (pName === "Ketu") {
-          const rahu = placementsList.find(p => p.name === "Rahu");
-          sign = rahu ? (rahu.sign + 6) % 12 : (sign + 6) % 12;
-        }
-        placementsList.push({ name: pName, sign });
+
+      // Add Lagna first
+      placementsList.push({
+        name: "Lagna",
+        sign: lagnaSignNum,
+        degree: siderealAsc % 30.0
       });
+
+      planets.forEach(pName => {
+        const tropicalLon = getPlanetLongitude(pName, jd);
+        const siderealLon = (tropicalLon - ayanamsa + 360) % 360;
+        const sign = Math.floor(siderealLon / 30.0);
+        const degree = siderealLon % 30.0;
+        placementsList.push({ name: pName, sign, degree });
+      });
+
       currentPlacements = placementsList;
 
       // Restore button state
@@ -1125,7 +1254,7 @@
         row.innerHTML = `
           <td style="color: var(--gold); font-weight: bold;">${p.name}</td>
           <td>${signNames[p.sign]}</td>
-          <td>House ${((p.sign - currentPlacements[0].sign + 12) % 12) + 1}</td>
+          <td>${Math.floor(p.degree)}° ${Math.round((p.degree % 1) * 60)}'</td>
         `;
         tbody.appendChild(row);
       });
