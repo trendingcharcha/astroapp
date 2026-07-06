@@ -568,7 +568,7 @@
               </div>
               <div class="form-group" style="position: relative;">
                 <label>Birth Place (City)</label>
-                <input type="text" id="k-city" required placeholder="Type city (e.g. New Delhi)" oninput="filterCities(this.value)" onblur="setTimeout(() => { document.getElementById('city-suggestions').style.display = 'none'; }, 200)" autocomplete="off">
+                <input type="text" id="k-city" required placeholder="Type city (e.g. New Delhi)" oninput="filterCitiesDebounced(this.value)" onblur="setTimeout(() => { document.getElementById('city-suggestions').style.display = 'none'; }, 200)" autocomplete="off">
                 <div id="city-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1px solid #2A244E; border-radius: 10px; z-index: 1000; max-height: 180px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
               </div>
               <button type="submit" class="btn" style="margin-top: 10px;">GENERATE KUNDLI</button>
@@ -796,13 +796,77 @@
 
     let selectedCity = majorCities[0]; // Default New Delhi
 
-    function filterCities(query) {
+    function getTimezoneFromCoordinates(lat, lng, address) {
+      let addr = address.toLowerCase();
+      if (addr.includes("india")) return 5.5;
+      if (addr.includes("united kingdom") || addr.includes("uk") || addr.includes("london")) return 0.0;
+      if (addr.includes("united states") || addr.includes("usa") || addr.includes("us")) {
+        if (lng < -114) return -8.0; // Pacific (Los Angeles)
+        if (lng < -102) return -7.0; // Mountain (Denver)
+        if (lng < -85) return -6.0;  // Central (Chicago)
+        return -5.0;                 // Eastern (New York)
+      }
+      if (addr.includes("australia")) {
+        if (lng < 129) return 8.0;   // Perth
+        if (lng < 141) return 9.5;   // Adelaide
+        return 10.0;                 // Sydney/Melbourne
+      }
+      if (addr.includes("united arab emirates") || addr.includes("uae") || addr.includes("dubai")) return 4.0;
+      if (addr.includes("singapore")) return 8.0;
+      if (addr.includes("japan") || addr.includes("tokyo")) return 9.0;
+      
+      // Standard timezone longitude approximation: 1 hour per 15 degrees
+      let approximateTz = Math.round(lng / 15.0 * 2) / 2; // Round to nearest 0.5 hours
+      return approximateTz;
+    }
+
+    async function filterCities(query) {
       const suggestionsDiv = document.getElementById('city-suggestions');
-      if (!query.trim()) {
+      if (query.trim().length < 3) {
         suggestionsDiv.style.display = 'none';
         return;
       }
 
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`);
+        const data = await response.json();
+        
+        if (!data || data.length === 0) {
+          filterLocalCities(query);
+          return;
+        }
+
+        suggestionsDiv.innerHTML = "";
+        data.forEach(item => {
+          const city = {
+            name: item.display_name,
+            lat: parseFloat(item.lat),
+            lng: parseFloat(item.lon),
+            tz: getTimezoneFromCoordinates(parseFloat(item.lat), parseFloat(item.lon), item.display_name)
+          };
+
+          const div = document.createElement('div');
+          div.style.padding = '12px 15px';
+          div.style.cursor = 'pointer';
+          div.style.borderBottom = '1px solid rgba(42,36,78,0.3)';
+          div.style.fontSize = '0.9rem';
+          div.style.color = '#FFFFFF';
+          div.innerText = city.name;
+          
+          div.onmousedown = () => {
+            selectCity(city);
+          };
+          suggestionsDiv.appendChild(div);
+        });
+        suggestionsDiv.style.display = 'block';
+      } catch (e) {
+        console.error("Geocoding API failed, falling back to local list:", e);
+        filterLocalCities(query);
+      }
+    }
+
+    function filterLocalCities(query) {
+      const suggestionsDiv = document.getElementById('city-suggestions');
       const matches = majorCities.filter(c => c.name.toLowerCase().includes(query.toLowerCase()));
       if (matches.length === 0) {
         suggestionsDiv.style.display = 'none';
@@ -818,13 +882,20 @@
         item.style.fontSize = '0.9rem';
         item.style.color = '#FFFFFF';
         item.innerText = city.name;
-        // mousedown fires before input blur, preventing closing list too early
         item.onmousedown = () => {
           selectCity(city);
         };
         suggestionsDiv.appendChild(item);
       });
       suggestionsDiv.style.display = 'block';
+    }
+
+    let debounceTimer;
+    function filterCitiesDebounced(query) {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        filterCities(query);
+      }, 500);
     }
 
     function selectCity(city) {
