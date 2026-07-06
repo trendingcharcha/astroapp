@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CosmoVedic - Premium Vedic Astrology App</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     /* Premium Cosmic Theme Styles */
     :root {
@@ -655,6 +656,20 @@
           </div>
         </div>
 
+        <div class="card">
+          <h4 style="color: var(--gold); margin-bottom: 15px;">Cloud Database Sync (Supabase)</h4>
+          <div class="form-group">
+            <label>Project URL</label>
+            <input type="text" id="db-url" placeholder="https://xxxx.supabase.co">
+          </div>
+          <div class="form-group">
+            <label>Public Anon Key</label>
+            <input type="password" id="db-key" placeholder="eyJhbGciOi...">
+          </div>
+          <button onclick="saveCloudConfig()" class="btn" style="padding: 10px 20px; font-size: 0.9rem;">CONNECT & SYNC</button>
+          <p id="cloud-status" style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted); text-align: center;"></p>
+        </div>
+
         <button onclick="logout()" class="btn" style="background: #381414; color: #ff6b6b; box-shadow: none;">LOG OUT</button>
       </div>
     </main>
@@ -734,6 +749,52 @@
       }, 800);
     }, 2500);
 
+    // Global Supabase client variables
+    let supabaseClient = null;
+
+    // Supabase cloud integration
+    function loadCloudConfig() {
+      const url = localStorage.getItem('supabase_url') || 'https://rnunibjmmowhaxsytthf.supabase.co';
+      const key = localStorage.getItem('supabase_key') || 'sb_publishable_jjYnowJojZtzDjqEmVXACg_C7J1PGlq';
+      
+      document.getElementById('db-url').value = url;
+      document.getElementById('db-key').value = key;
+      
+      try {
+        supabaseClient = supabase.createClient(url, key);
+        document.getElementById('cloud-status').innerText = "✓ Connected to Supabase Cloud Database";
+        document.getElementById('cloud-status').style.color = "#E8C879";
+      } catch (e) {
+        document.getElementById('cloud-status').innerText = "✗ Failed to initialize client";
+        document.getElementById('cloud-status').style.color = "#ff6b6b";
+      }
+    }
+
+    function saveCloudConfig() {
+      const url = document.getElementById('db-url').value.trim();
+      const key = document.getElementById('db-key').value.trim();
+
+      if (!url || !key) {
+        localStorage.removeItem('supabase_url');
+        localStorage.removeItem('supabase_key');
+        supabaseClient = null;
+        document.getElementById('cloud-status').innerText = "Cleared cloud credentials.";
+        document.getElementById('cloud-status').style.color = "var(--text-muted)";
+        return;
+      }
+
+      try {
+        localStorage.setItem('supabase_url', url);
+        localStorage.setItem('supabase_key', key);
+        supabaseClient = supabase.createClient(url, key);
+        document.getElementById('cloud-status').innerText = "✓ Connected & Saved Successfully!";
+        document.getElementById('cloud-status').style.color = "#E8C879";
+      } catch (e) {
+        document.getElementById('cloud-status').innerText = "✗ Error: " + e.message;
+        document.getElementById('cloud-status').style.color = "#ff6b6b";
+      }
+    }
+
     // Auth flows
     function handleLogin(e) {
       e.preventDefault();
@@ -753,6 +814,9 @@
 
     // App Initialization
     function initApp() {
+      // Load Cloud DB Config
+      loadCloudConfig();
+
       // Setup Horoscope Scroll
       const list = document.getElementById('horoscope-list');
       list.innerHTML = "";

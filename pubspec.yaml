@@ -25,6 +25,9 @@ dependencies:
   # Auth Helper
   google_sign_in: ^6.2.1
 
+  # Supabase Backend
+  supabase_flutter: ^2.6.0
+
   # UI / Animations / Icons
   flutter_svg: ^2.0.10+1
   lottie: ^3.1.2

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/astrology/astrology_engine.dart';
 
 // Model representing Birth Details
@@ -159,8 +160,8 @@ class ChartNotifier extends StateNotifier<ChartState> {
     );
   }
 
-  // Save current chart to history list
-  void saveCurrentChart() {
+  // Save current chart to history list and sync to Supabase in the background
+  void saveCurrentChart() async {
     if (state.currentBirthDetails == null || state.calculatedChartData == null) return;
 
     final details = state.currentBirthDetails!;
@@ -175,12 +176,35 @@ class ChartNotifier extends StateNotifier<ChartState> {
     state = state.copyWith(
       savedCharts: [...state.savedCharts, newChart],
     );
+
+    // Sync to Supabase cloud database
+    try {
+      final supabase = Supabase.instance.client;
+      await supabase.from('charts').insert({
+        'id': newChart.id,
+        'name': newChart.name,
+        'date_time': newChart.dateTime,
+        'location': newChart.location,
+        'data': newChart.data,
+      });
+    } catch (e) {
+      // Local fallback: ignore sync errors and log it
+      print("Supabase cloud sync failed (running in local offline mode): $e");
+    }
   }
 
-  void deleteChart(String id) {
+  void deleteChart(String id) async {
     state = state.copyWith(
       savedCharts: state.savedCharts.where((c) => c.id != id).toList(),
     );
+
+    // Delete from Supabase in the background
+    try {
+      final supabase = Supabase.instance.client;
+      await supabase.from('charts').delete().eq('id', id);
+    } catch (e) {
+      print("Supabase delete sync failed: $e");
+    }
   }
 }
 
