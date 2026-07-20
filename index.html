@@ -947,8 +947,25 @@
 
         <!-- Today's Quests -->
         <div id="quests-section" style="margin-bottom: 25px; text-align: left; display: block;">
-          <h3 style="margin-bottom: 12px; font-size: 1.1rem; display: flex; justify-content: space-between; align-items: center;">
-            <span>Today's Daily Quests</span>
+          <!-- Day-by-Day Progressive Roadmap Navigator -->
+          <div class="card" style="border: 1px solid rgba(232, 200, 121, 0.3); background: linear-gradient(135deg, rgba(20,16,44,0.95), rgba(10,8,25,0.98)); margin-bottom: 15px; padding: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <button class="btn btn-outline" style="width: auto; padding: 4px 10px; font-size: 0.72rem; margin: 0;" onclick="navigateRoadmapDay(-1)">◄ Prev</button>
+              <div style="text-align: center;">
+                <h3 id="roadmap-day-title" style="color: var(--gold); margin: 0; font-size: 1.05rem;">Day 1 of 90</h3>
+                <span id="roadmap-day-date" style="font-size: 0.72rem; color: var(--text-muted);">Today's Scheduled Tasks</span>
+              </div>
+              <button class="btn btn-outline" style="width: auto; padding: 4px 10px; font-size: 0.72rem; margin: 0;" onclick="navigateRoadmapDay(1)">Next ►</button>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; background: rgba(232, 200, 121, 0.08); padding: 6px 10px; border-radius: 8px;">
+              <span id="roadmap-phase-label" style="color: var(--gold); font-weight: bold;">Phase 1: Foundation (Day 1)</span>
+              <span id="roadmap-intensity-label" style="color: #5dade2; font-weight: bold;">21 Chants (Gentle Start)</span>
+            </div>
+          </div>
+
+          <h3 style="margin-bottom: 12px; font-size: 1.05rem; display: flex; justify-content: space-between; align-items: center;">
+            <span id="quests-section-title">Day 1 Doable Tasks</span>
             <span id="quests-completed-count" style="font-size: 0.8rem; color: var(--gold); font-weight: normal;">0 / 4 Complete</span>
           </h3>
 
@@ -958,7 +975,7 @@
               <input type="checkbox" id="q-vedic" onchange="toggleQuest('vedic', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
               <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
-                  <strong style="color: var(--gold); font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3 0-5 2-5 4s2 4 5 4c-1 2-3 4-6 5"/><path d="M14 10c1 2 2 4 2 6a4 4 0 0 1-4 4"/><path d="M12 2c3 0 5 2 5 4"/><circle cx="17" cy="7" r="1" fill="#E8C879"/></svg> Vedic Mantra Chanting</strong>
+                  <strong style="color: var(--gold); font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3 0-5 2-5 4s2 4 5 4c-1 2-3 4-6 5"/><path d="M14 10c1 2 2 4 2 6a4 4 0 0 1-4 4"/><path d="M12 2c3 0 5 2 5 4"/><circle cx="17" cy="7" r="1" fill="#E8C879"/></svg> 🌅 Morning Ritual (06:00 AM - 07:30 AM)</strong>
                   <span style="font-size: 0.75rem; background: rgba(232, 200, 121, 0.15); color: var(--gold); padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+20 XP</span>
                 </div>
                 <div id="q-vedic-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;"></div>
@@ -970,7 +987,7 @@
               <input type="checkbox" id="q-lalkitab" onchange="toggleQuest('lalkitab', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
               <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
-                  <strong style="color: #ff6b6b; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="6" x2="16" y2="6"/><line x1="12" y1="10" x2="16" y2="10"/></svg> Lal Kitab Remedy</strong>
+                  <strong style="color: #ff6b6b; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="6" x2="16" y2="6"/><line x1="12" y1="10" x2="16" y2="10"/></svg> 🌇 Evening Remedy (06:30 PM - 07:15 PM)</strong>
                   <span style="font-size: 0.75rem; background: rgba(255, 107, 107, 0.15); color: #ff6b6b; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+15 XP</span>
                 </div>
                 <div id="q-lalkitab-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;"></div>
@@ -982,7 +999,7 @@
               <input type="checkbox" id="q-vastu" onchange="toggleQuest('vastu', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
               <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
-                  <strong style="color: #5dade2; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> Vastu Alignment</strong>
+                  <strong style="color: #5dade2; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> 🏡 Workspace &amp; Direction Setup</strong>
                   <span style="font-size: 0.75rem; background: rgba(93, 173, 226, 0.15); color: #5dade2; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+15 XP</span>
                 </div>
                 <div id="q-vastu-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;"></div>
@@ -994,7 +1011,7 @@
               <input type="checkbox" id="q-practical" onchange="toggleQuest('practical', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
               <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
-                  <strong style="color: #2ecc71; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Coaching Action Item</strong>
+                  <strong style="color: #2ecc71; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ☀️ Mid-Day Doable Task (11:45 AM - 01:30 PM)</strong>
                   <span style="font-size: 0.75rem; background: rgba(46, 204, 113, 0.15); color: #2ecc71; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+30 XP</span>
                 </div>
                 <div id="q-practical-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;"></div>
@@ -2833,6 +2850,131 @@
       return formatted;
     }
 
+    
+    // ═══════════════════════════════════════════════════════════════
+    // PROGRESSIVE 90-DAY DAILY ROADMAP ENGINE (SLIGHT PROGRESSION)
+    // ═══════════════════════════════════════════════════════════════
+    let selectedRoadmapDay = 1;
+
+    function getPlanStartDayOffset() {
+      let planStartDate = localStorage.getItem('karma_plan_start_date');
+      if (!planStartDate) {
+        planStartDate = getFormattedDate();
+        localStorage.setItem('karma_plan_start_date', planStartDate);
+      }
+      const startDateObj = new Date(planStartDate);
+      const todayObj = new Date();
+      const diffTime = Math.abs(todayObj - startDateObj);
+      let dayNum = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+      return Math.min(Math.max(dayNum, 1), 90);
+    }
+
+    function navigateRoadmapDay(delta) {
+      selectedRoadmapDay = Math.min(Math.max(selectedRoadmapDay + delta, 1), 90);
+      renderRoadmapDayTasks(selectedRoadmapDay);
+    }
+
+    function renderRoadmapDayTasks(dayNum) {
+      selectedRoadmapDay = dayNum;
+      
+      // Update Day Title & Date
+      const titleEl = document.getElementById('roadmap-day-title');
+      const dateEl = document.getElementById('roadmap-day-date');
+      const phaseEl = document.getElementById('roadmap-phase-label');
+      const intensityEl = document.getElementById('roadmap-intensity-label');
+      const secTitleEl = document.getElementById('quests-section-title');
+
+      let planStartDate = localStorage.getItem('karma_plan_start_date') || getFormattedDate();
+      let targetDate = new Date(new Date(planStartDate).getTime() + (dayNum - 1) * 86400000);
+      let dateString = targetDate.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+
+      if (titleEl) titleEl.textContent = `Day ${dayNum} of 90`;
+      if (dateEl) dateEl.textContent = dateString;
+      if (secTitleEl) secTitleEl.textContent = `Day ${dayNum} Doable Tasks`;
+
+      // Slow Progression Calculations
+      let chantCount = 21;
+      let phaseName = "Phase 1: Foundation";
+      if (dayNum <= 10) {
+        chantCount = 21;
+        phaseName = "Phase 1: Foundation (Gentle Start)";
+      } else if (dayNum <= 20) {
+        chantCount = 54;
+        phaseName = "Phase 1: Foundation (Building Energy)";
+      } else if (dayNum <= 30) {
+        chantCount = 108;
+        phaseName = "Phase 1: Foundation (Full Mala)";
+      } else if (dayNum <= 60) {
+        chantCount = 108;
+        phaseName = "Phase 2: Karmic Alignment";
+      } else {
+        chantCount = 108;
+        phaseName = "Phase 3: Manifestation & Mastery";
+      }
+
+      if (phaseEl) phaseEl.textContent = phaseName;
+      if (intensityEl) intensityEl.textContent = `Intensity: ${chantCount} Chants`;
+
+      // Get Active Goal Context
+      const activeGoals = (typeof getActiveGoals === 'function') ? getActiveGoals() : ['job'];
+      const primaryGoal = activeGoals[0] || 'job';
+
+      // Progressive Vedic Task (Gentle slow progression)
+      const vText = `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Recite your ruling planet mantra facing East between 06:00 AM - 07:15 AM for Day ${dayNum} alignment.`;
+      
+      // Progressive Lal Kitab / Day Remedy
+      const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const dayName = daysOfWeek[targetDate.getDay()];
+      let lText = `<span style="color:#ff6b6b;font-weight:600;">${dayName} Remedy:</span> Offer water or light a ghee lamp facing East at sunset (06:30 PM).`;
+      if (dayName === "Wednesday") {
+        lText = `<span style="color:#ff6b6b;font-weight:600;">Wednesday Mercury Remedy:</span> Feed green fodder (Palak/gass) to cows or offer 7 grains to birds.`;
+      } else if (dayName === "Thursday") {
+        lText = `<span style="color:#ff6b6b;font-weight:600;">Thursday Jupiter Remedy:</span> Offer yellow flowers or a pinch of turmeric in water to rising Sun.`;
+      } else if (dayName === "Friday") {
+        lText = `<span style="color:#ff6b6b;font-weight:600;">Friday Venus Remedy:</span> Offer white sweets or milk to young girls or needy individuals.`;
+      } else if (dayName === "Saturday") {
+        lText = `<span style="color:#ff6b6b;font-weight:600;">Saturday Saturn Remedy:</span> Light a mustard oil lamp under a Peepal tree or donate black sesame seeds.`;
+      }
+
+      // Progressive Vastu & Asset Purchasing Muhurat
+      let vaText = `<span style="color:#5dade2;font-weight:600;">Vastu Alignment:</span> Keep your North-East room corner clean &amp; clutter-free today.`;
+      if (primaryGoal.includes('property') || primaryGoal.includes('asset')) {
+        vaText += `<br/><span style="color:var(--gold);font-weight:600;">Asset Purchasing Muhurat:</span> Upcoming auspicious window on ${dayName} during Abhijit Muhurat (11:45 AM - 12:30 PM).`;
+      }
+
+      // Progressive Doable Practical Task (Tailored per Day)
+      let pText = `<span style="color:#2ecc71;font-weight:600;">Doable Action Step ${dayNum}:</span> Spend 15 minutes today organizing your top 3 daily goal priorities.`;
+      if (dayNum === 1) pText = `<span style="color:#2ecc71;font-weight:600;">Day 1 Action Step:</span> Write down your top 3 goal targets and gather relevant documents / ledger.`;
+      else if (dayNum === 2) pText = `<span style="color:#2ecc71;font-weight:600;">Day 2 Action Step:</span> Shortlist 3 specific options / contacts matching your primary goal.`;
+      else if (dayNum === 3) pText = `<span style="color:#2ecc71;font-weight:600;">Day 3 Action Step:</span> Initiate first outreach / draft application or contact your banker/advisor.`;
+      else if (dayNum === 4) pText = `<span style="color:#2ecc71;font-weight:600;">Day 4 Action Step:</span> Review feedback and organize workspace in North/East direction.`;
+      else if (dayNum === 5) pText = `<span style="color:#2ecc71;font-weight:600;">Day 5 Action Step:</span> Dedicate 20 minutes to skill refinement or financial budget review.`;
+
+      if (document.getElementById('q-vedic-text')) document.getElementById('q-vedic-text').innerHTML = vText;
+      if (document.getElementById('q-lalkitab-text')) document.getElementById('q-lalkitab-text').innerHTML = lText;
+      if (document.getElementById('q-vastu-text')) document.getElementById('q-vastu-text').innerHTML = vaText;
+      if (document.getElementById('q-practical-text')) document.getElementById('q-practical-text').innerHTML = pText;
+
+      // Check task completion status for dayNum
+      const roadmapHistory = JSON.parse(localStorage.getItem('karma_daily_roadmap_history') || '{}');
+      const dayState = roadmapHistory[dayNum] || [false, false, false, false];
+
+      document.getElementById('q-vedic').checked = dayState[0];
+      document.getElementById('q-lalkitab').checked = dayState[1];
+      document.getElementById('q-vastu').checked = dayState[2];
+      document.getElementById('q-practical').checked = dayState[3];
+
+      ['q-vedic-card','q-lalkitab-card','q-vastu-card','q-practical-card'].forEach((id, idx) => {
+        const el = document.getElementById(id);
+        if (el) {
+          if (dayState[idx]) el.classList.add('completed');
+          else el.classList.remove('completed');
+        }
+      });
+
+      updateQuestCompletionCount();
+    }
+
     function getFormattedDate(d = new Date()) {
       const y = d.getFullYear();
       const m = String(d.getMonth() + 1).padStart(2, '0');
@@ -4301,6 +4443,9 @@
 
         updateQuestCompletionCount();
       }
+
+      const currentPlanDay = getPlanStartDayOffset();
+      renderRoadmapDayTasks(currentPlanDay);
 
       const qSec = document.getElementById('quests-section');
       if (qSec) qSec.style.display = 'block';
