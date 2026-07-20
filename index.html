@@ -1186,7 +1186,7 @@
             <div style="display:flex; gap:6px; flex-wrap:wrap;">
               <button id="kr-lang-en" onclick="setKundliLang('en')" style="padding:4px 12px; border-radius:20px; border:1px solid var(--gold); background:var(--gold); color:#0C0922; font-size:0.72rem; font-weight:700; cursor:pointer;">EN</button>
               <button id="kr-lang-hi" onclick="setKundliLang('hi')" style="padding:4px 12px; border-radius:20px; border:1px solid rgba(232,200,121,0.3); background:transparent; color:var(--gold); font-size:0.72rem; font-weight:700; cursor:pointer;">हिंदी</button>
-              <button class="btn" style="width:auto; padding:6px 14px; font-size:0.78rem;" onclick="showKundliForm()">
+              <button class="btn" style="width:auto; padding:6px 14px; font-size:0.78rem;" onclick="switchTab(0, document.querySelectorAll('.nav-item')[0])">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back
               </button>
             </div>
@@ -1536,7 +1536,7 @@
         <div id="coach-result-view" style="display: none;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
             <h4 id="coach-result-title" style="color: var(--gold); font-size: 1.1rem;">Your Astro Mission</h4>
-            <button class="btn" style="width: auto; padding: 6px 12px; font-size: 0.8rem;" onclick="showCoachForm()">BACK</button>
+            <button class="btn" style="width: auto; padding: 6px 12px; font-size: 0.8rem;" onclick="switchTab(0, document.querySelectorAll('.nav-item')[0])">BACK</button>
           </div>
 
           <div class="card" style="margin-bottom: 20px; text-align: left;">
@@ -4258,19 +4258,35 @@
       }
     }
 
-    // Tab Switching
+    // Tab Switching — Unified Single-Route System
     function switchTab(index, btn) {
       // Deactivate other tabs
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
       
-      // Activate this tab
+      // Activate target tab
       const tabIds = ['tab-home', 'tab-kundli', 'tab-matching', 'tab-tarot', 'tab-coach', 'tab-settings'];
-      document.getElementById(tabIds[index]).classList.add('active');
-      btn.classList.add('active');
-      // Auto-fill Kundali from onboarding data when switching to tab
+      const targetEl = document.getElementById(tabIds[index]);
+      if (targetEl) targetEl.classList.add('active');
+      if (btn) btn.classList.add('active');
+
+      // TAB 1: KUNDLI — Automatically generate & show chart directly (Zero secondary form)
       if (index === 1) {
-        setTimeout(() => autoFillKundliFromOnboarding(), 100);
+        const kForm = document.getElementById('kundli-form-view');
+        const kRes = document.getElementById('kundli-result-view');
+        if (kForm) kForm.style.display = 'none';
+        if (kRes) kRes.style.display = 'block';
+        
+        // Auto-fill from single master profile and generate chart if needed
+        autoFillKundliFromOnboarding();
+      }
+
+      // TAB 4: COACH — Automatically show active Mission & Action Plan (Zero secondary form)
+      if (index === 4) {
+        const cForm = document.getElementById('coach-form-view');
+        const cRes = document.getElementById('coach-result-view');
+        if (cForm) cForm.style.display = 'none';
+        if (cRes) cRes.style.display = 'block';
       }
     }
 
@@ -5112,54 +5128,29 @@
 
     // Auto fill details from user profile/onboarding data
     function autoFillKundliFromOnboarding() {
-      const name = localStorage.getItem('kundli_name') || localStorage.getItem('user_name') || document.getElementById('c-name')?.value || '';
-      const date = localStorage.getItem('kundli_date') || localStorage.getItem('user_dob') || document.getElementById('c-date')?.value || '';
-      const time = localStorage.getItem('kundli_time') || localStorage.getItem('user_tob') || document.getElementById('c-time')?.value || '';
-      const city = localStorage.getItem('kundli_city') || localStorage.getItem('user_pob') || document.getElementById('c-city')?.value || '';
-      const gender = localStorage.getItem('kundli_gender') || localStorage.getItem('user_gender') || 'M';
-      const goal = localStorage.getItem('kundli_goal') || localStorage.getItem('user_goal') || 'general';
+      const name = localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || document.getElementById('o-name')?.value || 'User';
+      const date = localStorage.getItem('user_dob') || localStorage.getItem('kundli_date') || document.getElementById('o-date')?.value || '1995-01-01';
+      const time = localStorage.getItem('user_tob') || localStorage.getItem('kundli_time') || document.getElementById('o-time')?.value || '12:00';
+      const city = localStorage.getItem('user_pob') || localStorage.getItem('kundli_city') || document.getElementById('o-city')?.value || 'New Delhi, India';
+      const gender = localStorage.getItem('user_gender') || localStorage.getItem('kundli_gender') || 'M';
+      const goal = localStorage.getItem('user_goal') || 'general';
 
-      let filled = false;
-      if (name && document.getElementById('k-name').value === '') {
-        document.getElementById('k-name').value = name;
-        filled = true;
-      }
-      if (date && document.getElementById('k-date').value === '') {
-        document.getElementById('k-date').value = date;
-        filled = true;
-      }
-      if (time && document.getElementById('k-time').value === '') {
-        document.getElementById('k-time').value = time;
-        filled = true;
-      }
-      if (city && document.getElementById('k-city').value === '') {
-        document.getElementById('k-city').value = city;
-        filled = true;
-      }
-      if (gender) {
-        const gLabel = document.getElementById('k-g-' + gender);
-        if (gLabel) selectKundliGender(gLabel, gender);
-      }
-      if (goal) {
-        const goalSel = document.getElementById('k-goal');
-        if (goalSel) {
-          const normGoal = ['marriage-single','marriage-couple'].includes(goal) ? 'marriage' : ['property-single','property-couple'].includes(goal) ? 'property' : goal;
-          for (let i = 0; i < goalSel.options.length; i++) {
-            if (goalSel.options[i].value === normGoal) {
-              goalSel.options[i].selected = true;
-              break;
-            }
-          }
-        }
-      }
+      if (document.getElementById('k-name')) document.getElementById('k-name').value = name;
+      if (document.getElementById('k-date')) document.getElementById('k-date').value = date;
+      if (document.getElementById('k-time')) document.getElementById('k-time').value = time;
+      if (document.getElementById('k-city')) document.getElementById('k-city').value = city;
+      if (document.getElementById('k-gender')) document.getElementById('k-gender').value = gender;
 
-      const banner = document.getElementById('k-autofill-banner');
-      if (banner && filled) {
-        banner.style.display = 'block';
-        const txt = document.getElementById('k-autofill-text');
-        if (txt) {
-          txt.textContent = 'Details pre-filled from your profile, ' + name + '! Tap "Generate Kundli" to view your complete birth chart.';
-        }
+      // Always show result view and trigger chart generation directly
+      const kForm = document.getElementById('kundli-form-view');
+      const kRes = document.getElementById('kundli-result-view');
+      if (kForm) kForm.style.display = 'none';
+      if (kRes) kRes.style.display = 'block';
+
+      // Generate Kundli directly if not drawn yet
+      if (!window.kundliChartGenerated) {
+        window.kundliChartGenerated = true;
+        generateChart({ preventDefault: () => {} });
       }
     }
 
