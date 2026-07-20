@@ -2752,6 +2752,28 @@
     // ═══════════════════════════════════════════════════════════════
     // PDF DOWNLOAD FOR KUNDLI REPORT
     // ═══════════════════════════════════════════════════════════════
+    
+    // ═══════════════════════════════════════════════════════════════
+    // GUEST CHOICE & GATED KUNDLI / GOAL FLOW ENGINE
+    // ═══════════════════════════════════════════════════════════════
+    let isGuestVisitorMode = false;
+
+    function showGuestChoiceScreen() {
+      document.querySelectorAll('#onboarding-screen > div').forEach(d => d.style.display = 'none');
+      document.getElementById('guest-choice-screen').style.display = 'block';
+    }
+
+    function startGuestKundliFlow() {
+      isGuestVisitorMode = true;
+      document.querySelectorAll('#onboarding-screen > div').forEach(d => d.style.display = 'none');
+      document.getElementById('onboarding-step-2').style.display = 'block';
+    }
+
+    function promptAuthForGoal() {
+      alert("🔐 Sign In or Sign Up Required!\n\nTo set active life goals, track daily mantras, and save your 90-day karmic streak, please sign in or create a free account.");
+      showOnboardingStep('path');
+    }
+
     function downloadKundliPDF() {
       window.print();
     }
