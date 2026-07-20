@@ -1400,6 +1400,8 @@
         const text = issueText.toLowerCase();
         
         // Define Keyword Sets
+        const propertyKeys = ["home", "house", "property", "flat", "apartment", "land", "plot", "rent", "buy", "ghar", "makan", "makkan", "zameen", "building", "construction", "decor", "villa", "घर", "जमीन", "मकान"];
+        const pregnancyKeys = ["pregnancy", "childbirth", "child", "baby", "conceive", "fertility", "pregnant", "santan", "baccha", "bacha", "beta", "beti", "delivery", "conceiving", "गर्भावस्था", "संतान", "बच्चा"];
         const jobKeys = ["job", "career", "work", "promotion", "office", "salary", "boss", "interview", "nokri", "naukri", "naukar", "business", "vyapar", "dhanda", "dhandha", "नौकरी", "व्यवसाय", "काम", "नौकरी"];
         const moneyKeys = ["money", "finance", "debt", "loan", "wealth", "paisa", "payse", "karz", "udhaar", "bank", "loss", "nuksan", "nuksaan", "credit", "कर्ज", "धन", "पैसा", "उधार"];
         const marriageKeys = ["marriage", "love", "relationship", "divorce", "spouse", "shadi", "shaadi", "vivah", "patni", "pati", "gf", "bf", "breakup", "relationship", "शादी", "प्यार", "विवाह", "पति", "पत्नी"];
@@ -1410,7 +1412,11 @@
         const mentalKeys = ["mental", "depress", "anxiety", "stress", "sad", "fear", "sleep", "insomnia", "tension", "ghabrahat", "darr", "neend", "depression", "تनाव", "तनाव", "चिंता", "मानसिक", "नींद"];
 
         // Check Matches
-        if (jobKeys.some(key => text.includes(key))) {
+        if (pregnancyKeys.some(key => text.includes(key))) {
+          customCategory = "pregnancy";
+        } else if (propertyKeys.some(key => text.includes(key))) {
+          customCategory = "property";
+        } else if (jobKeys.some(key => text.includes(key))) {
           customCategory = "job";
         } else if (moneyKeys.some(key => text.includes(key))) {
           customCategory = "money";
@@ -1479,6 +1485,14 @@
           "Avoid consuming milk late at night; instead, offer milk or food to stray dogs in the morning.",
           "Keep a glass of water near your bedside table at night and pour it into a plant's roots in the morning."
         ],
+        "custom_property": [
+          "Feed sweet baked bread or rotis to black stray dogs on the street to pacify Saturn and Rahu (rulers of land/property).",
+          "Offer fresh water with a pinch of honey to the rising Sun to invoke Mars (Mars represents Bhumi/Land)."
+        ],
+        "custom_pregnancy": [
+          "Donate a copper vessel filled with sugar or yellow sweets to a temple or charity on Sundays to strengthen Jupiter and Sun.",
+          "Feed fresh green grass or spinach to a cow on Wednesday mornings to harmonize progeny configurations."
+        ],
         "custom_general": [
           "Feed birds with mixed grains (Satnaja) on your terrace or open balcony to remove daily obstacles.",
           "Offer fresh water with a pinch of sugar to the rising Sun from a copper vessel."
@@ -1491,7 +1505,13 @@
       }
       let remedies = [...(lalkitabRemedies[remediesGoal] || lalkitabRemedies["job"])];
       if (hasPartner) {
-        remedies[1] = `Both you and ${partnerName} should feed a white cow, or donate rice and milk on Monday mornings to strengthen Venus/Moon compatibilities.`;
+        if (customCategory === "pregnancy") {
+          remedies[1] = `Both you and ${partnerName} should offer milk or sweet water to a banyan tree root together and apply the wet soil tilak on your foreheads to strengthen progeny blessings.`;
+        } else if (customCategory === "property") {
+          remedies[1] = `Both you and ${partnerName} should offer fresh water mixed with a small spoon of honey to the rising Sun together to invoke collective Mars/land energy.`;
+        } else {
+          remedies[1] = `Both you and ${partnerName} should feed a white cow, or donate rice and milk on Monday mornings to strengthen Venus/Moon compatibilities.`;
+        }
       }
       const lalkitabListHTML = `
         <li style="margin-bottom: 10px;"><strong>Remedy 1:</strong> ${remedies[0]}</li>
@@ -1512,6 +1532,8 @@
         "custom_visa": "Place your passport, travel documents, or visa applications in the North-West corner (Vayu/Transit zone) of your room to accelerate transit energy.",
         "custom_legal": "Store all court case files, legal letters, and dispute documents in the South or South-West corner of your office or bedroom to ensure stability.",
         "custom_mental": "Ensure the North-West area of your bedroom is clean, free of heavy storage blocks, and well-ventilated to promote stable mental air currents.",
+        "custom_property": "Ensure the West or South-West zone of your room is clean, free of dust, and well-lit to attract stable property transactions.",
+        "custom_pregnancy": "Keep the East and North-East zone of your bedroom light, clean, and place fresh flowers here. Avoid sleeping directly under a heavy concrete structural beam.",
         "custom_general": `Sit facing East while planning steps to resolve: '${issueText}', and ensure your work chair has a solid wall backing behind it.`
       };
 
@@ -1521,7 +1543,13 @@
       }
       let vastuText = vastuSuggestions[vastuGoal] || vastuSuggestions["job"];
       if (hasPartner) {
-        vastuText = `Ensure the South-West (relationship and stability zone) of your shared bedroom is clean, has a rose quartz sphere or a pair of pink lovebirds, and contains no mirrors directly reflecting the bed.`;
+        if (customCategory === "pregnancy") {
+          vastuText = `Ensure your shared bed is placed in the South-West direction. Avoid using aggressive colors (like red or dark blue) in your bedroom; prefer warm cream, pastel pink, or light yellow tones to support pregnancy vibrations.`;
+        } else if (customCategory === "property") {
+          vastuText = `Ensure the North-East zone of your shared living space is kept light and clean, and place a picture of a flourishing green forest in the East direction of your living room to invite collective growth.`;
+        } else {
+          vastuText = `Ensure the South-West (relationship and stability zone) of your shared bedroom is clean, has a rose quartz sphere or a pair of pink lovebirds, and contains no mirrors directly reflecting the bed.`;
+        }
       }
       const vastuListHTML = `<li>${vastuText}</li>`;
 
@@ -1599,6 +1627,18 @@
           `Reach out and talk to a supportive friend, family member, or professional counselor to express your feelings.`,
           `Disconnect from social media and electronic screens for at least 2 hours before going to sleep tonight.`
         ],
+        "custom_property": [
+          `Open property finder apps or portals and shortlist at least 3 homes/plots matching your budget today.`,
+          `Write down a detailed checklist of your absolute requirements (e.g. location, distance to work, room count).`,
+          `Contact at least 2 real estate brokers or property listings owners to schedule site visits for this week.`,
+          `Review your bank balance or calculate mortgage/home loan affordability limits on your banking dashboard.`
+        ],
+        "custom_pregnancy": [
+          `Prepare a nutritious diet chart rich in folic acid, iron, and green vegetables, and track your meals today.`,
+          `Research and shortlist highly rated gynecologists or maternity hospitals in your local city area.`,
+          `Spend 20 minutes doing light breathing exercises (Pranayama) or mindfulness yoga to reduce bodily cortisol.`,
+          `Create a daily health tracking diary to log your fertility, body temperature, or prenatal vitamin intakes.`
+        ],
         "custom_general": [
           `Write down a clear list of 3 specific actions you can take today to address the issue: "${issueText}".`,
           `Execute the most immediate or simplest action from your list today to gain momentum.`,
@@ -1613,12 +1653,28 @@
       }
       let actions = [...(practicalActions[actionsGoal] || practicalActions["job"])];
       if (hasPartner) {
-        actions = [
-          `Self: Take 15 minutes today to write down a relationship concern or goal you want to discuss with ${partnerName}.`,
-          `Partner (${partnerName}): Ask them to spend 15 minutes listening actively to your daily experiences without offering unsolicited advice.`,
-          `Joint Action: Both you and ${partnerName} should spend 20 minutes walking together outdoors or sharing a relaxing tea while discussing a shared domestic plan.`,
-          `Energetic Sync: Wear pleasing light colors today (like cream, pastel pink, or light yellow) to harmonize both partners' planetary vibrations.`
-        ];
+        if (customCategory === "pregnancy") {
+          actions = [
+            `Self (Female Partner): Track your physical health indicators, keep a pregnancy diary, and take prenatal vitamins.`,
+            `Partner (${partnerName}): Take over one heavy household chore (like carrying groceries or deep cleaning) to minimize physical fatigue for your partner.`,
+            `Joint Action: Spend 15 minutes in the evening doing light breathing exercises (Anulom Vilom) together to harmonize stress levels.`,
+            `Joint Planning: Draft a shared list of questions you want to ask your gynecologist or consultant during next week's check-up.`
+          ];
+        } else if (customCategory === "property") {
+          actions = [
+            `Self: Spend 15 minutes searching online listings for properties matching your target criteria and shortlist 3 choices.`,
+            `Partner (${partnerName}): Spend 15 minutes reviewing the financial budget, savings, or loan documentation options.`,
+            `Joint Action: Spend 20 minutes looking at the shortlisted options together and align on your location priorities.`,
+            `Joint Action: Schedule a joint site visit or broker call to inspect a physical property together this weekend.`
+          ];
+        } else {
+          actions = [
+            `Self: Take 15 minutes today to write down a relationship concern or goal you want to discuss with ${partnerName}.`,
+            `Partner (${partnerName}): Ask them to spend 15 minutes listening actively to your daily experiences without offering unsolicited advice.`,
+            `Joint Action: Both you and ${partnerName} should spend 20 minutes walking together outdoors or sharing a relaxing tea while discussing a shared domestic plan.`,
+            `Energetic Sync: Wear pleasing light colors today (like cream, pastel pink, or light yellow) to harmonize both partners' planetary vibrations.`
+          ];
+        }
       }
       const practicalListHTML = `
         <li style="margin-bottom: 10px;"><strong>Action Step 1:</strong> ${actions[0]}</li>
