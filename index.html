@@ -1821,13 +1821,16 @@
       
       let btn = null;
       let originalText = "GENERATE MY COSMIC MISSION";
-      if (e && e.target && e.target.querySelector) {
-        btn = e.target.querySelector('button[type="submit"]');
+      if (e && e.target) {
+        if (e.target.tagName === 'BUTTON') {
+          btn = e.target;
+        } else if (e.target.querySelector) {
+          btn = e.target.querySelector('button[type="submit"]') || (e.target.tagName === 'FORM' ? e.target.querySelector('button') : e.target);
+        } else {
+          btn = e.target;
+        }
       }
-      if (!btn && e && e.target && e.target.tagName === 'BUTTON') {
-        btn = e.target;
-      }
-      if (btn) {
+      if (btn && btn.innerText) {
         originalText = btn.innerText;
         btn.innerText = "ALIGNING STARS...";
         btn.disabled = true;
@@ -2635,11 +2638,17 @@
       document.getElementById('quests-section').style.display = 'block';
       updateQuestCompletionCount();
 
-      // Restore button and switch views
-      btn.innerText = originalText;
-      btn.disabled = false;
-      document.getElementById('coach-form-view').style.display = 'none';
-      document.getElementById('coach-result-view').style.display = 'block';
+      // Restore button and switch views safely
+      if (btn && btn.innerText) {
+        btn.innerText = originalText;
+        btn.disabled = false;
+      }
+      if (document.getElementById('coach-form-view')) {
+        document.getElementById('coach-form-view').style.display = 'none';
+      }
+      if (document.getElementById('coach-result-view')) {
+        document.getElementById('coach-result-view').style.display = 'block';
+      }
     }
 
     // Global active variables
@@ -3747,12 +3756,24 @@
     }
 
     async function submitOnboarding(e) {
-      e.preventDefault();
+      if (e && e.preventDefault) e.preventDefault();
       
-      const btn = e.target.querySelector('button[type="submit"]');
-      const originalText = btn.innerText;
-      btn.innerText = "ALIGNING STARS...";
-      btn.disabled = true;
+      let btn = null;
+      if (e && e.target) {
+        if (e.target.tagName === 'BUTTON') {
+          btn = e.target;
+        } else if (e.target.querySelector) {
+          btn = e.target.querySelector('button[type="submit"]') || e.target.querySelector('button');
+        }
+      }
+      if (!btn) {
+        btn = document.querySelector('#onboarding-step-2 button[type="submit"]');
+      }
+      const originalText = btn ? btn.innerText : "GENERATE MY COSMIC MISSION";
+      if (btn) {
+        btn.innerText = "ALIGNING STARS...";
+        btn.disabled = true;
+      }
 
       const name = document.getElementById('o-name').value;
       const gender = document.getElementById('o-gender').value;
@@ -3841,7 +3862,7 @@
       try {
         await generateCoachMission({
           preventDefault: () => {},
-          target: btn ? { querySelector: () => btn } : null
+          target: btn
         });
       } catch (err) {
         console.error("Coach Mission Generation Error:", err);
