@@ -573,94 +573,228 @@
       
       <div style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
         <button class="btn btn-outline" style="text-align: left; padding: 18px; display: flex; align-items: center; gap: 15px;" onclick="setOnboardingPath('single')">
-          <span style="font-size: 1.8rem;">👤</span>
+          <span style="flex-shrink:0;display:flex;align-items:center;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          </span>
           <div>
             <strong style="color: var(--gold); display: block; margin-bottom: 2px;">Single Goal Path</strong>
-            <span style="font-size: 0.75rem; color: var(--text-muted);">Personal career, finance, business, or individual remedies.</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Personal career, finance, marriage prediction, or individual remedies.</span>
           </div>
         </button>
         
         <button class="btn btn-outline" style="text-align: left; padding: 18px; display: flex; align-items: center; gap: 15px;" onclick="setOnboardingPath('couple')">
-          <span style="font-size: 1.8rem;">👥</span>
+          <span style="flex-shrink:0;display:flex;align-items:center;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3.5"/><path d="M1 20c0-3.5 3-6 7-6s7 2.5 7 6"/><circle cx="17" cy="8" r="2.8"/><path d="M15 20c0-2 1.5-3.5 3.5-4.2"/></svg>
+          </span>
           <div>
             <strong style="color: var(--gold); display: block; margin-bottom: 2px;">Couple Goal Path</strong>
-            <span style="font-size: 0.75rem; color: var(--text-muted);">Relationship harmony, marriage planning, progeny, or joint goals.</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Relationship harmony, baby planning, joint property, or couple remedies.</span>
           </div>
         </button>
       </div>
     </div>
 
-    <!-- Step 2: Select Goal -->
+    <!-- Step 2: Select Goal (dynamically filtered by path) -->
     <div id="onboarding-step-1" class="auth-card" style="text-align: center; width: 100%; display: none;">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; width: 100%;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; width: 100%;">
         <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;">Select Your Goal</h3>
         <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep(1)">BACK</button>
       </div>
+      <p id="onboarding-path-label" style="font-size:0.78rem;color:var(--text-muted);margin:0 0 16px 0;text-align:left;"></p>
       
-      <div style="display: flex; flex-direction: column; gap: 12px; width: 100%;">
-        <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('job')">💼 Get Dream Job</button>
-        <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('debt')">🔴 Clear Financial Debt</button>
-        <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('marriage')">💍 Get Married / Relationship Harmony</button>
-        <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('baby')">🍼 Planning for Baby / Child</button>
-        <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('business')">🚀 Start or Grow Business</button>
-        <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('custom')">⚠️ Resolve Major Life Issue</button>
+      <!-- SINGLE goals (shown only for single path) -->
+      <div id="goals-single" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('job')">
+          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></span>
+          <div><strong style="display:block;">Career / Dream Job</strong><small style="color:var(--text-muted);">Job search, promotion, workplace issues</small></div>
+        </button>
+        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('debt')">
+          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9.5c0-1.5 1.3-2.5 3-2.5s3 1 3 2.5-1.3 2.5-3 2.5S9 13.5 9 15s1.3 2.5 3 2.5 3-1 3-2.5"/><line x1="12" y1="7" x2="12" y2="17"/></svg></span>
+          <div><strong style="display:block;">Clear Financial Debt / Wealth</strong><small style="color:var(--text-muted);">Debt clearance, savings, financial growth</small></div>
+        </button>
+        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('marriage-single')">
+          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2-1.5 4.5H5l5 4-1.5 5L12 13l3.5 2.5L14 10.5l5-4h-5.5z"/></svg></span>
+          <div><strong style="display:block;">Marriage Prediction &amp; Timing</strong><small style="color:var(--text-muted);">When will I get married? Astro analysis</small></div>
+        </button>
+        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('business')">
+          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></span>
+          <div><strong style="display:block;">Start or Grow Business</strong><small style="color:var(--text-muted);">Business launch, partnerships, growth</small></div>
+        </button>
+        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('property-single')">
+          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+          <div><strong style="display:block;">Buy / Find My Dream Home</strong><small style="color:var(--text-muted);">Property search, home buying, auspicious timing</small></div>
+        </button>
+        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('health')">
+          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+          <div><strong style="display:block;">Health &amp; Wellbeing</strong><small style="color:var(--text-muted);">Chronic issues, energy, healing remedies</small></div>
+        </button>
+        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('custom')">
+          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+          <div><strong style="display:block;">Resolve Major Life Issue</strong><small style="color:var(--text-muted);">Visa, legal, family disputes, custom issue</small></div>
+        </button>
+      </div>
+
+      <!-- COUPLE goals (shown only for couple path) -->
+      <div id="goals-couple" style="display: none; flex-direction: column; gap: 10px; width: 100%;">
+        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('marriage-couple')">
+          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="7"/><path d="M9 4h6l2 3H7z"/><circle cx="12" cy="14" r="3"/></svg></span>
+          <div><strong style="display:block;">Marriage Harmony &amp; Compatibility</strong><small style="color:var(--text-muted);">Relationship strength, marriage timing as a couple</small></div>
+        </button>
+        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('baby')">
+          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3"/><path d="M8 20v-4a4 4 0 0 1 8 0v4"/><path d="M10 16h4"/></svg></span>
+          <div><strong style="display:block;">Planning for Baby / Progeny</strong><small style="color:var(--text-muted);">1st, 2nd or 3rd child planning, fertility remedies</small></div>
+        </button>
+        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('property-couple')">
+          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+          <div><strong style="display:block;">Buy / Find Home Together</strong><small style="color:var(--text-muted);">Joint property, home purchase as a couple</small></div>
+        </button>
+        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('debt')">
+          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9.5c0-1.5 1.3-2.5 3-2.5s3 1 3 2.5-1.3 2.5-3 2.5S9 13.5 9 15s1.3 2.5 3 2.5 3-1 3-2.5"/><line x1="12" y1="7" x2="12" y2="17"/></svg></span>
+          <div><strong style="display:block;">Joint Financial / Wealth Goal</strong><small style="color:var(--text-muted);">Combined debt, joint financial planning</small></div>
+        </button>
+        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('custom')">
+          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+          <div><strong style="display:block;">Resolve Couple / Family Issue</strong><small style="color:var(--text-muted);">Family disputes, legal, in-law conflicts</small></div>
+        </button>
       </div>
     </div>
 
-    <!-- Step 3: Birth Details -->
+    <!-- Step 3: Birth Details (redesigned with gender, property, baby logic, voice input) -->
     <div id="onboarding-step-2" class="auth-card" style="display: none; width: 100%;">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; width: 100%;">
-        <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;">Align Your Cosmic Data</h3>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; width: 100%;">
+        <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;">Your Cosmic Details</h3>
         <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep(2)">BACK</button>
       </div>
+      <p id="onboarding-goal-label" style="font-size:0.78rem;color:var(--gold);background:rgba(232,200,121,0.08);border-radius:8px;padding:6px 10px;margin:0 0 16px 0;text-align:left;"></p>
       
       <form onsubmit="submitOnboarding(event)">
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="o-name" required placeholder="Your Name">
-        </div>
-
-        <div id="onboarding-custom-issue-group" class="form-group" style="display: none;">
-          <label>Describe Your Specific Issue</label>
-          <input type="text" id="o-custom-issue" placeholder="e.g. Visa delay, legal dispute, health concerns, etc." oninput="checkOnboardingCustomIssueKeywords(this.value)">
-        </div>
-        
-        <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-          <div>
-            <label>Birth Date</label>
-            <input type="date" id="o-date" required>
-          </div>
-          <div>
-            <label>Birth Time</label>
-            <input type="time" id="o-time" required>
-          </div>
-        </div>
-        
-        <div class="form-group" style="position: relative;">
-          <label>Birth Place (City)</label>
-          <input type="text" id="o-city" required placeholder="Type city (e.g. New Delhi)" oninput="filterOnboardingCities(this.value)" onblur="setTimeout(() => { document.getElementById('onboarding-city-suggestions').style.display = 'none'; }, 200)" autocomplete="off">
-          <div id="onboarding-city-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1px solid #2A244E; border-radius: 10px; z-index: 1000; max-height: 180px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
-        </div>
-
-        <!-- Onboarding Baby Planning Fields -->
-        <div id="onboarding-baby-group" style="display: none; border: 1px solid rgba(232, 200, 121, 0.2); padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
-          <h4 style="color: var(--gold); margin: 0 0 12px 0; font-size: 0.95rem;">Planning for Baby Details</h4>
+        <!-- YOUR DETAILS -->
+        <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px;margin-bottom:14px;">
+          <p style="font-size:0.72rem;color:var(--gold);font-weight:bold;letter-spacing:1px;text-transform:uppercase;margin:0 0 12px 0;">Your Details</p>
           
           <div class="form-group">
-            <label>Which baby are you planning for?</label>
-            <select id="o-baby-number" onchange="toggleBabyFields('o', this.value)" style="width: 100%;">
-              <option value="1">1st Baby</option>
-              <option value="2">2nd Baby</option>
-              <option value="3">3rd Baby</option>
-            </select>
+            <label>Full Name</label>
+            <input type="text" id="o-name" required placeholder="Your full name">
+          </div>
+
+          <div class="form-group">
+            <label>Gender</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+              <label style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectGender(this,'M')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="14" r="6"/><path d="m14.7 9.3 4.3-4.3M22 4h-5m5 0v5"/></svg> Male
+              </label>
+              <label style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectGender(this,'F')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><line x1="12" y1="14" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/></svg> Female
+              </label>
+              <label style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectGender(this,'O')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="6"/></svg> Other
+              </label>
+            </div>
+            <input type="hidden" id="o-gender" required>
+          </div>
+
+          <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+              <label>Birth Date</label>
+              <input type="date" id="o-date" required>
+            </div>
+            <div>
+              <label>Birth Time</label>
+              <input type="time" id="o-time" required>
+            </div>
           </div>
           
+          <div class="form-group" style="position: relative;">
+            <label>Birth Place (City)</label>
+            <input type="text" id="o-city" required placeholder="Type city (e.g. New Delhi)" oninput="filterOnboardingCities(this.value)" onblur="setTimeout(() => { document.getElementById('onboarding-city-suggestions').style.display = 'none'; }, 200)" autocomplete="off">
+            <div id="onboarding-city-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1px solid #2A244E; border-radius: 10px; z-index: 1000; max-height: 180px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
+          </div>
+
+          <div class="form-group">
+            <label>Profession</label>
+            <input type="text" id="o-profession" required placeholder="e.g. Software Engineer, Student">
+          </div>
+        </div>
+
+        <!-- GOAL-SPECIFIC FIELDS -->
+
+        <!-- Custom Issue + Voice Input -->
+        <div id="onboarding-custom-issue-group" style="display: none; margin-bottom:14px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Describe Your Specific Issue</label>
+            <div style="position:relative;display:flex;gap:8px;align-items:flex-start;">
+              <textarea id="o-custom-issue" rows="3" placeholder="Describe your issue clearly... (or use mic)" oninput="checkOnboardingCustomIssueKeywords(this.value)" style="flex:1;resize:vertical;font-family:inherit;"></textarea>
+              <button type="button" id="o-mic-btn" onclick="toggleVoiceInput()" title="Voice Input" style="flex-shrink:0;background:rgba(232,200,121,0.1);border:1px solid rgba(232,200,121,0.3);border-radius:8px;padding:10px;cursor:pointer;transition:all 0.2s;margin-top:0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+              </button>
+            </div>
+            <p id="o-mic-status" style="font-size:0.72rem;color:var(--text-muted);margin-top:4px;display:none;"></p>
+          </div>
+        </div>
+
+        <!-- Property Sub-questions (shown for property-single and property-couple) -->
+        <div id="onboarding-property-group" style="display:none;background:rgba(93,173,226,0.05);border:1px solid rgba(93,173,226,0.2);border-radius:12px;padding:14px;margin-bottom:14px;">
+          <p style="font-size:0.72rem;color:#5dade2;font-weight:bold;letter-spacing:1px;text-transform:uppercase;margin:0 0 12px 0;display:flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Property Details
+          </p>
+          <div class="form-group">
+            <label>Which property is this?</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+              <label class="prop-num-btn" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectPropertyNumber(this,'1')">1st</label>
+              <label class="prop-num-btn" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectPropertyNumber(this,'2')">2nd</label>
+              <label class="prop-num-btn" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectPropertyNumber(this,'3rd+')">3rd+</label>
+            </div>
+            <input type="hidden" id="o-property-number">
+          </div>
+          <div class="form-group">
+            <label>Property Type</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <label class="prop-type-btn" style="display:flex;align-items:center;justify-content:center;gap:5px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.82rem;transition:all 0.2s;" onclick="selectPropertyType(this,'plot')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="14" width="20" height="8" rx="1"/><polyline points="2 14 12 4 22 14"/></svg> Plot
+              </label>
+              <label class="prop-type-btn" style="display:flex;align-items:center;justify-content:center;gap:5px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.82rem;transition:all 0.2s;" onclick="selectPropertyType(this,'house')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> House
+              </label>
+              <label class="prop-type-btn" style="display:flex;align-items:center;justify-content:center;gap:5px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.82rem;transition:all 0.2s;" onclick="selectPropertyType(this,'flat')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg> Flat
+              </label>
+              <label class="prop-type-btn" style="display:flex;align-items:center;justify-content:center;gap:5px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.82rem;transition:all 0.2s;" onclick="selectPropertyType(this,'commercial')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="16" rx="2"/><path d="M6 6V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2"/></svg> Commercial
+              </label>
+            </div>
+            <input type="hidden" id="o-property-type">
+          </div>
+          <div class="form-group">
+            <label>Preferred Purchase City / Location</label>
+            <input type="text" id="o-property-city" placeholder="e.g. Bangalore, Noida Sector 18" style="font-size:0.9rem;">
+          </div>
+        </div>
+
+        <!-- Baby Sub-questions (COUPLE ONLY - male+female enforced) -->
+        <div id="onboarding-baby-group" style="display: none; background:rgba(46,204,113,0.05); border: 1px solid rgba(46,204,113,0.2); padding: 14px; border-radius: 12px; margin-bottom: 14px;">
+          <p style="font-size:0.72rem;color:#2ecc71;font-weight:bold;letter-spacing:1px;text-transform:uppercase;margin:0 0 12px 0;display:flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2"><circle cx="12" cy="7" r="3"/><path d="M8 20v-4a4 4 0 0 1 8 0v4"/><path d="M10 16h4"/></svg>
+            Baby Planning Details
+          </p>
+          <div id="o-baby-gender-warning" style="display:none;background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.3);border-radius:8px;padding:10px;margin-bottom:12px;font-size:0.8rem;color:#ff6b6b;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Baby planning requires one Male and one Female partner.
+          </div>
+          <div class="form-group">
+            <label>Which baby are you planning for?</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+              <label class="baby-num-btn" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectBabyNumber(this,'1')">1st Baby</label>
+              <label class="baby-num-btn" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectBabyNumber(this,'2')">2nd Baby</label>
+              <label class="baby-num-btn" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectBabyNumber(this,'3')">3rd Baby</label>
+            </div>
+            <input type="hidden" id="o-baby-number-val">
+          </div>
           <!-- 2nd Baby: 1st Baby DOB -->
           <div id="o-baby-dob-group" style="display: none;" class="form-group">
             <label>1st Baby's Date of Birth</label>
             <input type="date" id="o-first-baby-dob">
           </div>
-          
           <!-- 3rd Baby: 1st & 2nd Baby Ages -->
           <div id="o-baby-ages-group" style="display: none;">
             <div class="form-group">
@@ -674,40 +808,56 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label>Your Profession</label>
-          <input type="text" id="o-profession" required placeholder="e.g. Software Engineer, Student, Designer">
+        <!-- PARTNER DETAILS (auto-shown for couple path, optional for single) -->
+        <div id="onboarding-partner-section" style="display:none;">
+          <div style="background:rgba(142,111,214,0.06);border:1px solid rgba(142,111,214,0.25);border-radius:12px;padding:14px;margin-bottom:14px;">
+            <p style="font-size:0.72rem;color:var(--purple);font-weight:bold;letter-spacing:1px;text-transform:uppercase;margin:0 0 12px 0;">
+              Partner / Spouse Details
+            </p>
+            <div class="form-group">
+              <label>Partner's Full Name</label>
+              <input type="text" id="o-p-name" placeholder="Partner's name">
+            </div>
+            <div class="form-group">
+              <label>Partner's Gender</label>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+                <label class="p-gender-btn" style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectPartnerGender(this,'M')">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="14" r="6"/><path d="m14.7 9.3 4.3-4.3M22 4h-5m5 0v5"/></svg> Male
+                </label>
+                <label class="p-gender-btn" style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectPartnerGender(this,'F')">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><line x1="12" y1="14" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/></svg> Female
+                </label>
+                <label class="p-gender-btn" style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectPartnerGender(this,'O')">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="6"/></svg> Other
+                </label>
+              </div>
+              <input type="hidden" id="o-p-gender">
+            </div>
+            <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div>
+                <label>Partner's Birth Date</label>
+                <input type="date" id="o-p-date">
+              </div>
+              <div>
+                <label>Partner's Birth Time</label>
+                <input type="time" id="o-p-time">
+              </div>
+            </div>
+            <div class="form-group" style="position: relative;">
+              <label>Partner's Birth Place (City)</label>
+              <input type="text" id="o-p-city" placeholder="Type city (e.g. Mumbai)" oninput="filterPartnerCities(this.value)" onblur="setTimeout(() => { document.getElementById('partner-city-suggestions').style.display = 'none'; }, 200)" autocomplete="off">
+              <div id="partner-city-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1px solid #2A244E; border-radius: 10px; z-index: 1000; max-height: 180px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
+            </div>
+          </div>
         </div>
 
-        <div id="partner-toggle-container" class="form-group" style="display: none; justify-content: space-between; align-items: center; margin-top: 15px;">
-          <label style="margin: 0; color: var(--gold); font-weight: bold;">Include Partner/Spouse details?</label>
+        <!-- Optional partner toggle (single path only) -->
+        <div id="partner-toggle-container" class="form-group" style="display: none; justify-content: space-between; align-items: center; margin-top: 5px;">
+          <label style="margin: 0; color: var(--gold); font-weight: bold; font-size:0.9rem;">Include Partner/Spouse details?</label>
           <input type="checkbox" id="o-partner-toggle" onchange="togglePartnerFields(this.checked)" style="width: auto; transform: scale(1.2); cursor: pointer;">
         </div>
 
-        <div id="onboarding-partner-fields" style="display: none; border-top: 1px solid #2A244E; margin-top: 15px; padding-top: 15px;">
-          <h4 style="color: var(--gold); margin-bottom: 15px; font-size: 0.95rem; text-align: left;">Partner / Spouse Cosmic Data</h4>
-          <div class="form-group">
-            <label>Partner's Name</label>
-            <input type="text" id="o-p-name" placeholder="Partner's Name">
-          </div>
-          <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div>
-              <label>Partner's Birth Date</label>
-              <input type="date" id="o-p-date">
-            </div>
-            <div>
-              <label>Partner's Birth Time</label>
-              <input type="time" id="o-p-time">
-            </div>
-          </div>
-          <div class="form-group" style="position: relative;">
-            <label>Partner's Birth Place (City)</label>
-            <input type="text" id="o-p-city" placeholder="Type city (e.g. Mumbai)" oninput="filterPartnerCities(this.value)" onblur="setTimeout(() => { document.getElementById('partner-city-suggestions').style.display = 'none'; }, 200)" autocomplete="off">
-            <div id="partner-city-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1px solid #2A244E; border-radius: 10px; z-index: 1000; max-height: 180px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
-          </div>
-        </div>
-
-        <button type="submit" class="btn" style="margin-top: 15px;">GENERATE THE SOLUTION</button>
+        <button type="submit" class="btn" style="margin-top: 18px;">GENERATE MY COSMIC MISSION</button>
       </form>
     </div>
   </div>
@@ -761,7 +911,7 @@
               <h4 id="user-level-title" style="margin: 2px 0 0 0; color: #fff; font-size: 1.1rem;">Level 1 - Novice Seeker</h4>
             </div>
             <div style="display: flex; align-items: center; background: rgba(255, 107, 107, 0.15); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(255, 107, 107, 0.3);">
-              <span style="font-size: 1.1rem; margin-right: 4px;">🔥</span>
+              <span style="margin-right:4px;display:flex;align-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span>
               <strong id="user-streak-text" style="color: #ff6b6b; font-size: 0.9rem;">0 Days</strong>
             </div>
           </div>
@@ -781,11 +931,21 @@
           <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px;">
             <p style="margin: 0 0 8px 0; font-size: 0.8rem; color: var(--text-muted); text-align: left;">How is your cosmic energy today?</p>
             <div style="display: flex; justify-content: space-between; gap: 8px;">
-              <button class="mood-btn" onclick="checkInMood(1, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 6px 0; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;">😢</button>
-              <button class="mood-btn" onclick="checkInMood(2, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 6px 0; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;">😕</button>
-              <button class="mood-btn" onclick="checkInMood(3, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 6px 0; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;">😐</button>
-              <button class="mood-btn" onclick="checkInMood(4, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 6px 0; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;">🙂</button>
-              <button class="mood-btn" onclick="checkInMood(5, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 6px 0; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;">🤩</button>
+              <button class="mood-btn" onclick="checkInMood(1, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 8px 0; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center;" title="Very Low">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+              </button>
+              <button class="mood-btn" onclick="checkInMood(2, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 8px 0; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center;" title="Low">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/><path d="M9.5 9a1.5 1.5 0 0 0 1 .5"/></svg>
+              </button>
+              <button class="mood-btn" onclick="checkInMood(3, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 8px 0; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center;" title="Neutral">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+              </button>
+              <button class="mood-btn" onclick="checkInMood(4, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 8px 0; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center;" title="Good">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+              </button>
+              <button class="mood-btn" onclick="checkInMood(5, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 8px 0; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center;" title="Excellent">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" stroke="#E8C879"/><path d="M8 13s1.5 3 4 3 4-3 4-3"/><circle cx="9" cy="9" r="1" fill="#E8C879"/><circle cx="15" cy="9" r="1" fill="#E8C879"/></svg>
+              </button>
             </div>
           </div>
         </div>
@@ -803,7 +963,7 @@
               <input type="checkbox" id="q-vedic" onchange="toggleQuest('vedic', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
               <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
-                  <strong style="color: var(--gold); font-size: 0.9rem;">🕉️ Vedic Mantra Chanting</strong>
+                  <strong style="color: var(--gold); font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3 0-5 2-5 4s2 4 5 4c-1 2-3 4-6 5"/><path d="M14 10c1 2 2 4 2 6a4 4 0 0 1-4 4"/><path d="M12 2c3 0 5 2 5 4"/><circle cx="17" cy="7" r="1" fill="#E8C879"/></svg> Vedic Mantra Chanting</strong>
                   <span style="font-size: 0.75rem; background: rgba(232, 200, 121, 0.15); color: var(--gold); padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+20 XP</span>
                 </div>
                 <p id="q-vedic-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;"></p>
@@ -815,7 +975,7 @@
               <input type="checkbox" id="q-lalkitab" onchange="toggleQuest('lalkitab', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
               <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
-                  <strong style="color: #ff6b6b; font-size: 0.9rem;">🔴 Lal Kitab Remedy</strong>
+                  <strong style="color: #ff6b6b; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="6" x2="16" y2="6"/><line x1="12" y1="10" x2="16" y2="10"/></svg> Lal Kitab Remedy</strong>
                   <span style="font-size: 0.75rem; background: rgba(255, 107, 107, 0.15); color: #ff6b6b; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+15 XP</span>
                 </div>
                 <p id="q-lalkitab-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;"></p>
@@ -827,7 +987,7 @@
               <input type="checkbox" id="q-vastu" onchange="toggleQuest('vastu', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
               <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
-                  <strong style="color: #5dade2; font-size: 0.9rem;">🏡 Vastu Alignment</strong>
+                  <strong style="color: #5dade2; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> Vastu Alignment</strong>
                   <span style="font-size: 0.75rem; background: rgba(93, 173, 226, 0.15); color: #5dade2; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+15 XP</span>
                 </div>
                 <p id="q-vastu-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;"></p>
@@ -839,7 +999,7 @@
               <input type="checkbox" id="q-practical" onchange="toggleQuest('practical', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
               <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
-                  <strong style="color: #2ecc71; font-size: 0.9rem;">💼 Coaching Action Item</strong>
+                  <strong style="color: #2ecc71; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Coaching Action Item</strong>
                   <span style="font-size: 0.75rem; background: rgba(46, 204, 113, 0.15); color: #2ecc71; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+30 XP</span>
                 </div>
                 <p id="q-practical-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;"></p>
@@ -850,7 +1010,7 @@
 
         <!-- Quest Unlock Prompt -->
         <div id="quest-unlock-prompt" class="card" style="text-align: center; border: 1px solid rgba(232, 200, 121, 0.2); padding: 30px 20px; margin-bottom: 25px;">
-          <span style="font-size: 2rem;">✨</span>
+          <span style="display:block;margin-bottom:6px;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span>
           <h4 style="color: var(--gold); margin: 10px 0 5px 0;">No Daily Quests Yet</h4>
           <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 15px 0;">Generate your daily astro coach mission to unlock today's active quests!</p>
           <button class="btn" onclick="goToCoachTab()" style="width: auto; padding: 8px 20px;">GENERATE QUESTS NOW</button>
@@ -900,7 +1060,7 @@
         <!-- Level Up Modal Overlay -->
         <div id="level-up-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 20px;">
           <div class="auth-card" style="border: 2px solid var(--gold); background: linear-gradient(135deg, #171230, #2A244E); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
-            <span style="font-size: 3.5rem; animation: pulse 1.5s infinite; display: inline-block;">🏆</span>
+            <span style="display:inline-block;animation:pulse 1.5s infinite;"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M12 17v4"/><path d="M8 21h8"/><path d="M6 5h12v5a6 6 0 0 1-12 0V5z"/></svg></span>
             <h2 style="color: var(--gold); margin: 15px 0 5px 0; font-size: 1.5rem; letter-spacing: 1px;">KARMIC LEVEL UP!</h2>
             <p id="level-up-rank-text" style="color: #fff; font-size: 1.1rem; font-weight: bold; margin: 0 0 10px 0;">Level 2 - Karma Sage</p>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 20px 0;">You have cleared daily karmic tasks and accumulated spiritual wisdom.</p>
@@ -1171,22 +1331,22 @@
           </div>
 
           <div class="card" style="margin-bottom: 20px; text-align: left;">
-            <h4 style="color: var(--gold); margin-bottom: 12px; border-bottom: 1px solid rgba(232, 200, 121, 0.2); padding-bottom: 5px; font-size: 0.95rem;">🕉️ Vedic Tasks</h4>
+            <h4 style="color: var(--gold); margin-bottom: 12px; border-bottom: 1px solid rgba(232, 200, 121, 0.2); padding-bottom: 5px; font-size: 0.95rem; display:flex; align-items:center; gap:7px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3 0-5 2-5 4s2 4 5 4c-1 2-3 4-6 5"/><path d="M14 10c1 2 2 4 2 6a4 4 0 0 1-4 4"/><path d="M12 2c3 0 5 2 5 4"/><circle cx="17" cy="7" r="1" fill="#E8C879"/></svg> Vedic Tasks</h4>
             <ul id="vedic-tasks-list" style="margin-left: 20px; color: var(--text-muted); line-height: 1.6; font-size: 0.9rem;"></ul>
           </div>
 
           <div class="card" style="margin-bottom: 20px; text-align: left;">
-            <h4 style="color: var(--gold); margin-bottom: 12px; border-bottom: 1px solid rgba(232, 200, 121, 0.2); padding-bottom: 5px; font-size: 0.95rem;">🔴 Lal Kitab Remedies</h4>
+            <h4 style="color: var(--gold); margin-bottom: 12px; border-bottom: 1px solid rgba(232, 200, 121, 0.2); padding-bottom: 5px; font-size: 0.95rem; display:flex; align-items:center; gap:7px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="6" x2="16" y2="6"/><line x1="12" y1="10" x2="16" y2="10"/></svg> Lal Kitab Remedies</h4>
             <ul id="lalkitab-tasks-list" style="margin-left: 20px; color: var(--text-muted); line-height: 1.6; font-size: 0.9rem;"></ul>
           </div>
 
           <div class="card" style="margin-bottom: 20px; text-align: left;">
-            <h4 style="color: var(--gold); margin-bottom: 12px; border-bottom: 1px solid rgba(232, 200, 121, 0.2); padding-bottom: 5px; font-size: 0.95rem;">🏡 Vastu Suggestion</h4>
+            <h4 style="color: var(--gold); margin-bottom: 12px; border-bottom: 1px solid rgba(232, 200, 121, 0.2); padding-bottom: 5px; font-size: 0.95rem; display:flex; align-items:center; gap:7px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> Vastu Suggestion</h4>
             <ul id="vastu-tasks-list" style="margin-left: 20px; color: var(--text-muted); line-height: 1.6; font-size: 0.9rem;"></ul>
           </div>
 
           <div class="card" style="margin-bottom: 20px; text-align: left;">
-            <h4 style="color: var(--gold); margin-bottom: 12px; border-bottom: 1px solid rgba(232, 200, 121, 0.2); padding-bottom: 5px; font-size: 0.95rem;">💼 Practical Actions</h4>
+            <h4 style="color: var(--gold); margin-bottom: 12px; border-bottom: 1px solid rgba(232, 200, 121, 0.2); padding-bottom: 5px; font-size: 0.95rem; display:flex; align-items:center; gap:7px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Practical Actions</h4>
             <ul id="practical-tasks-list" style="margin-left: 20px; color: var(--text-muted); line-height: 1.6; font-size: 0.9rem;"></ul>
           </div>
         </div>
@@ -2429,52 +2589,91 @@
     function setOnboardingPath(path) {
       onboardingPath = path;
       
-      const partnerToggle = document.getElementById('o-partner-toggle');
+      // Show correct goal list
+      const singleGoals = document.getElementById('goals-single');
+      const coupleGoals = document.getElementById('goals-couple');
+      const pathLabel = document.getElementById('onboarding-path-label');
+      
       if (path === 'couple') {
-        partnerToggle.checked = true;
-        togglePartnerFields(true);
+        singleGoals.style.display = 'none';
+        coupleGoals.style.display = 'flex';
+        pathLabel.textContent = 'Couple Path — choose a joint life goal for both of you';
       } else {
-        partnerToggle.checked = false;
-        togglePartnerFields(false);
+        singleGoals.style.display = 'flex';
+        coupleGoals.style.display = 'none';
+        pathLabel.textContent = 'Single Path — choose your personal life goal';
       }
       
       showOnboardingStep(2);
     }
 
     let onboardingGoal = 'job';
+
+    // Goal labels for display
+    const goalLabels = {
+      'job': 'Career / Dream Job',
+      'debt': 'Clear Financial Debt / Wealth',
+      'marriage-single': 'Marriage Prediction & Timing',
+      'marriage-couple': 'Marriage Harmony & Compatibility',
+      'baby': 'Planning for Baby / Progeny',
+      'business': 'Start or Grow Business',
+      'property-single': 'Buy / Find My Dream Home',
+      'property-couple': 'Buy / Find Home Together',
+      'health': 'Health & Wellbeing',
+      'custom': 'Resolve Major Life Issue'
+    };
+
     function setOnboardingGoal(goal) {
       onboardingGoal = goal;
       
+      // Set the displayed goal label
+      const goalLabelEl = document.getElementById('onboarding-goal-label');
+      if (goalLabelEl) goalLabelEl.textContent = 'Goal: ' + (goalLabels[goal] || goal);
+
+      // Custom issue + voice input
       const customGroup = document.getElementById('onboarding-custom-issue-group');
       const customInput = document.getElementById('o-custom-issue');
       if (goal === 'custom') {
         customGroup.style.display = 'block';
-        customInput.required = true;
+        if (customInput) customInput.required = true;
       } else {
         customGroup.style.display = 'none';
-        customInput.required = false;
-        customInput.value = '';
+        if (customInput) { customInput.required = false; customInput.value = ''; }
       }
 
-      // Toggle onboarding baby fields
+      // Baby group - COUPLE ONLY
       const babyGroup = document.getElementById('onboarding-baby-group');
-      if (goal === 'baby') {
+      if (goal === 'baby' && onboardingPath === 'couple') {
         babyGroup.style.display = 'block';
       } else {
         babyGroup.style.display = 'none';
       }
 
-      // Force partner toggle view based on the explicit choice in Step 1 (Path Mode)
-      const toggleContainer = document.getElementById('partner-toggle-container');
-      toggleContainer.style.display = 'none'; // Explicitly hide the checkbox since selection is already done!
-      
-      const partnerToggle = document.getElementById('o-partner-toggle');
-      if (onboardingPath === 'couple') {
-        partnerToggle.checked = true;
-        togglePartnerFields(true);
+      // Property sub-questions
+      const propertyGroup = document.getElementById('onboarding-property-group');
+      if (goal === 'property-single' || goal === 'property-couple') {
+        propertyGroup.style.display = 'block';
       } else {
-        partnerToggle.checked = false;
-        togglePartnerFields(false);
+        propertyGroup.style.display = 'none';
+      }
+
+      // Partner section: auto-show for couple path, optional for single
+      const partnerSection = document.getElementById('onboarding-partner-section');
+      const toggleContainer = document.getElementById('partner-toggle-container');
+      const partnerToggle = document.getElementById('o-partner-toggle');
+      
+      if (onboardingPath === 'couple') {
+        // Auto-show partner fields for couple — no toggle needed
+        partnerSection.style.display = 'block';
+        toggleContainer.style.display = 'none';
+        if (partnerToggle) partnerToggle.checked = true;
+      } else {
+        // Single path — show optional toggle
+        partnerSection.style.display = 'none';
+        toggleContainer.style.display = 'flex';
+        if (partnerToggle) {
+          partnerToggle.checked = false;
+        }
       }
       
       showOnboardingStep(3);
@@ -2597,20 +2796,193 @@
     }
 
     function togglePartnerFields(checked) {
-      const fieldsDiv = document.getElementById('onboarding-partner-fields');
-      const inputs = fieldsDiv.querySelectorAll('input');
-      if (checked) {
-        fieldsDiv.style.display = 'block';
+      const partnerSection = document.getElementById('onboarding-partner-section');
+      if (partnerSection) {
+        partnerSection.style.display = checked ? 'block' : 'none';
+        const inputs = partnerSection.querySelectorAll('input');
         inputs.forEach(i => {
-          if (i.id !== 'o-p-city') i.required = true;
-        });
-      } else {
-        fieldsDiv.style.display = 'none';
-        inputs.forEach(i => {
-          i.required = false;
-          i.value = '';
+          if (i.type !== 'hidden') {
+            i.required = checked && i.id !== 'o-p-city' && i.id !== 'o-p-gender';
+          }
         });
       }
+      // Legacy compatibility
+      const fieldsDiv = document.getElementById('onboarding-partner-fields');
+      if (fieldsDiv) {
+        fieldsDiv.style.display = checked ? 'block' : 'none';
+      }
+    }
+
+    // Gender selection helpers
+    function selectGender(el, value) {
+      document.querySelectorAll('#onboarding-step-2 label.p-gender-btn').forEach(l => {
+        // don't affect partner gender buttons
+      });
+      // Get all user gender buttons (siblings within the same grid)
+      const parentGrid = el.parentElement;
+      parentGrid.querySelectorAll('label').forEach(l => {
+        l.style.borderColor = 'rgba(255,255,255,0.1)';
+        l.style.background = 'rgba(255,255,255,0.03)';
+        l.style.color = '';
+      });
+      el.style.borderColor = 'var(--gold)';
+      el.style.background = 'rgba(232,200,121,0.12)';
+      el.style.color = 'var(--gold)';
+      document.getElementById('o-gender').value = value;
+      // Trigger baby gender check if baby goal selected
+      if (onboardingGoal === 'baby') checkBabyGenderCompatibility();
+    }
+
+    function selectPartnerGender(el, value) {
+      const parentGrid = el.parentElement;
+      parentGrid.querySelectorAll('label').forEach(l => {
+        l.style.borderColor = 'rgba(255,255,255,0.1)';
+        l.style.background = 'rgba(255,255,255,0.03)';
+        l.style.color = '';
+      });
+      el.style.borderColor = 'var(--purple)';
+      el.style.background = 'rgba(142,111,214,0.12)';
+      el.style.color = 'var(--purple)';
+      document.getElementById('o-p-gender').value = value;
+      if (onboardingGoal === 'baby') checkBabyGenderCompatibility();
+    }
+
+    function checkBabyGenderCompatibility() {
+      const g1 = document.getElementById('o-gender').value;
+      const g2 = document.getElementById('o-p-gender').value;
+      const warning = document.getElementById('o-baby-gender-warning');
+      if (!warning) return;
+      // Both set — check if one is M and one is F
+      if (g1 && g2) {
+        const hasOpposite = (g1 === 'M' && g2 === 'F') || (g1 === 'F' && g2 === 'M');
+        warning.style.display = hasOpposite ? 'none' : 'block';
+      }
+    }
+
+    // Baby number selection
+    function selectBabyNumber(el, num) {
+      const parentGrid = el.parentElement;
+      parentGrid.querySelectorAll('label').forEach(l => {
+        l.style.borderColor = 'rgba(255,255,255,0.1)';
+        l.style.background = 'rgba(255,255,255,0.03)';
+        l.style.color = '';
+      });
+      el.style.borderColor = '#2ecc71';
+      el.style.background = 'rgba(46,204,113,0.12)';
+      el.style.color = '#2ecc71';
+      document.getElementById('o-baby-number-val').value = num;
+      // Show/hide DOB and age fields based on baby number
+      const dobGroup = document.getElementById('o-baby-dob-group');
+      const agesGroup = document.getElementById('o-baby-ages-group');
+      if (num === '1') {
+        dobGroup.style.display = 'none';
+        agesGroup.style.display = 'none';
+      } else if (num === '2') {
+        dobGroup.style.display = 'block';
+        agesGroup.style.display = 'none';
+      } else if (num === '3') {
+        dobGroup.style.display = 'none';
+        agesGroup.style.display = 'block';
+      }
+    }
+
+    // Property sub-question selectors
+    function selectPropertyNumber(el, num) {
+      const parentGrid = el.parentElement;
+      parentGrid.querySelectorAll('label').forEach(l => {
+        l.style.borderColor = 'rgba(255,255,255,0.1)';
+        l.style.background = 'rgba(255,255,255,0.03)';
+        l.style.color = '';
+      });
+      el.style.borderColor = '#5dade2';
+      el.style.background = 'rgba(93,173,226,0.12)';
+      el.style.color = '#5dade2';
+      document.getElementById('o-property-number').value = num;
+    }
+
+    function selectPropertyType(el, type) {
+      const parentGrid = el.parentElement;
+      parentGrid.querySelectorAll('label').forEach(l => {
+        l.style.borderColor = 'rgba(255,255,255,0.1)';
+        l.style.background = 'rgba(255,255,255,0.03)';
+        l.style.color = '';
+      });
+      el.style.borderColor = '#5dade2';
+      el.style.background = 'rgba(93,173,226,0.12)';
+      el.style.color = '#5dade2';
+      document.getElementById('o-property-type').value = type;
+    }
+
+    // Voice input (Web Speech API)
+    let speechRecognition = null;
+    let isRecording = false;
+    function toggleVoiceInput() {
+      const btn = document.getElementById('o-mic-btn');
+      const status = document.getElementById('o-mic-status');
+      const textarea = document.getElementById('o-custom-issue');
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      
+      if (!SpeechRec) {
+        status.textContent = 'Voice input not supported in this browser.';
+        status.style.display = 'block';
+        status.style.color = '#ff6b6b';
+        return;
+      }
+
+      if (isRecording) {
+        // Stop recording
+        if (speechRecognition) speechRecognition.stop();
+        isRecording = false;
+        btn.style.background = 'rgba(232,200,121,0.1)';
+        btn.style.borderColor = 'rgba(232,200,121,0.3)';
+        btn.querySelector('svg').setAttribute('stroke', '#E8C879');
+        status.textContent = 'Recording stopped.';
+        setTimeout(() => { status.style.display = 'none'; }, 2000);
+        return;
+      }
+
+      // Start recording
+      speechRecognition = new SpeechRec();
+      speechRecognition.lang = 'hi-IN'; // Hindi + English
+      speechRecognition.interimResults = false;
+      speechRecognition.continuous = false;
+
+      speechRecognition.onstart = () => {
+        isRecording = true;
+        btn.style.background = 'rgba(255,107,107,0.2)';
+        btn.style.borderColor = 'rgba(255,107,107,0.6)';
+        btn.querySelector('svg').setAttribute('stroke', '#ff6b6b');
+        status.textContent = 'Listening... speak your issue clearly.';
+        status.style.display = 'block';
+        status.style.color = '#ff6b6b';
+      };
+
+      speechRecognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        textarea.value = (textarea.value ? textarea.value + ' ' : '') + transcript;
+        checkOnboardingCustomIssueKeywords(textarea.value);
+      };
+
+      speechRecognition.onend = () => {
+        isRecording = false;
+        btn.style.background = 'rgba(232,200,121,0.1)';
+        btn.style.borderColor = 'rgba(232,200,121,0.3)';
+        btn.querySelector('svg').setAttribute('stroke', '#E8C879');
+        status.textContent = 'Voice captured!';
+        setTimeout(() => { status.style.display = 'none'; }, 2000);
+      };
+
+      speechRecognition.onerror = (e) => {
+        isRecording = false;
+        btn.style.background = 'rgba(232,200,121,0.1)';
+        btn.style.borderColor = 'rgba(232,200,121,0.3)';
+        status.textContent = 'Mic error: ' + e.error + '. Please type your issue.';
+        status.style.color = '#ff6b6b';
+        status.style.display = 'block';
+        setTimeout(() => { status.style.display = 'none'; }, 3000);
+      };
+
+      speechRecognition.start();
     }
 
     function toggleCoachPartnerFields(checked) {
@@ -2794,18 +3166,30 @@
       btn.disabled = true;
 
       const name = document.getElementById('o-name').value;
+      const gender = document.getElementById('o-gender').value;
       const date = document.getElementById('o-date').value;
       const time = document.getElementById('o-time').value;
       const cityName = document.getElementById('o-city').value;
       const goal = onboardingGoal;
       const profession = document.getElementById('o-profession').value;
+      const propertyNumber = document.getElementById('o-property-number') ? document.getElementById('o-property-number').value : '';
+      const propertyType = document.getElementById('o-property-type') ? document.getElementById('o-property-type').value : '';
+      const propertyCity = document.getElementById('o-property-city') ? document.getElementById('o-property-city').value : '';
+
+      // Save onboarding data to localStorage for coach context
+      localStorage.setItem('user_gender', gender);
+      localStorage.setItem('user_goal', goal);
+      localStorage.setItem('onboarding_path', onboardingPath);
+      if (propertyNumber) localStorage.setItem('property_number', propertyNumber);
+      if (propertyType) localStorage.setItem('property_type', propertyType);
+      if (propertyCity) localStorage.setItem('property_city', propertyCity);
 
       // Sync onboarding values to Coach tab forms
       document.getElementById('c-name').value = name;
       document.getElementById('c-date').value = date;
       document.getElementById('c-time').value = time;
       document.getElementById('c-city').value = cityName;
-      document.getElementById('c-goal').value = goal;
+      document.getElementById('c-goal').value = goal.startsWith('property') ? 'property' : goal.startsWith('marriage') ? 'marriage' : goal;
       document.getElementById('c-profession').value = profession;
       coachSelectedCity = onboardingSelectedCity;
 
@@ -2816,33 +3200,52 @@
       
       // Sync baby details if goal is baby
       if (goal === 'baby') {
-        const babyNum = document.getElementById('o-baby-number').value;
-        document.getElementById('c-baby-number').value = babyNum;
-        toggleBabyFields('c', babyNum);
-        
+        const babyNum = document.getElementById('o-baby-number-val').value || '1';
+        if (document.getElementById('c-baby-number')) {
+          document.getElementById('c-baby-number').value = babyNum;
+          toggleBabyFields('c', babyNum);
+        }
         if (babyNum === "2") {
-          document.getElementById('c-first-baby-dob').value = document.getElementById('o-first-baby-dob').value;
+          const el = document.getElementById('c-first-baby-dob');
+          if (el) el.value = document.getElementById('o-first-baby-dob').value;
         } else if (babyNum === "3") {
-          document.getElementById('c-first-baby-age').value = document.getElementById('o-first-baby-age').value;
-          document.getElementById('c-second-baby-age').value = document.getElementById('o-second-baby-age').value;
+          const el1 = document.getElementById('c-first-baby-age');
+          const el2 = document.getElementById('c-second-baby-age');
+          if (el1) el1.value = document.getElementById('o-first-baby-age').value;
+          if (el2) el2.value = document.getElementById('o-second-baby-age').value;
         }
       }
       
       toggleCoachCustomIssueField(goal);
 
       // Sync path mode value
-      document.getElementById('c-path-mode').value = onboardingPath;
+      if (document.getElementById('c-path-mode')) {
+        document.getElementById('c-path-mode').value = onboardingPath;
+      }
 
-      // Sync partner details if toggle is checked
-      const partnerToggleChecked = document.getElementById('o-partner-toggle').checked;
-      document.getElementById('c-partner-toggle').checked = partnerToggleChecked;
-      toggleCoachPartnerFields(partnerToggleChecked);
+      // Sync partner details (couple path auto-shows partner section)
+      const isCouplePath = onboardingPath === 'couple';
+      const partnerToggleEl = document.getElementById('o-partner-toggle');
+      const partnerToggleChecked = isCouplePath || (partnerToggleEl && partnerToggleEl.checked);
+      
+      const coachPartnerToggle = document.getElementById('c-partner-toggle');
+      if (coachPartnerToggle) {
+        coachPartnerToggle.checked = partnerToggleChecked;
+        toggleCoachPartnerFields(partnerToggleChecked);
+      }
+      
       if (partnerToggleChecked) {
-        document.getElementById('c-p-name').value = document.getElementById('o-p-name').value;
-        document.getElementById('c-p-date').value = document.getElementById('o-p-date').value;
-        document.getElementById('c-p-time').value = document.getElementById('o-p-time').value;
-        document.getElementById('c-p-city').value = document.getElementById('o-p-city').value;
+        const pName = document.getElementById('o-p-name');
+        const pDate = document.getElementById('o-p-date');
+        const pTime = document.getElementById('o-p-time');
+        const pCity = document.getElementById('o-p-city');
+        const pGender = document.getElementById('o-p-gender');
+        if (pName && document.getElementById('c-p-name')) document.getElementById('c-p-name').value = pName.value;
+        if (pDate && document.getElementById('c-p-date')) document.getElementById('c-p-date').value = pDate.value;
+        if (pTime && document.getElementById('c-p-time')) document.getElementById('c-p-time').value = pTime.value;
+        if (pCity && document.getElementById('c-p-city')) document.getElementById('c-p-city').value = pCity.value;
         coachPartnerSelectedCity = partnerSelectedCity;
+        if (pGender) localStorage.setItem('partner_gender', pGender.value);
       }
 
       // Run generation
