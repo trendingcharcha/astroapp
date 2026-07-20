@@ -3124,12 +3124,12 @@
 
     async function signInWithGoogle() {
       try {
-        // First verify if Supabase Client is available
+        const liveRedirect = 'https://trendingcharcha.github.io/astroapp/';
         if (typeof supabaseClient !== 'undefined' && supabaseClient && supabaseClient.auth) {
           const { data, error } = await supabaseClient.auth.signInWithOAuth({
             provider: 'google',
             options: {
-              redirectTo: window.location.origin + window.location.pathname
+              redirectTo: liveRedirect
             }
           });
           if (!error && data && data.url) {
@@ -3138,8 +3138,8 @@
           }
         }
         
-        // If Supabase provider is not enabled in dashboard yet, authenticate & progress user smoothly
-        completeGoogleAuthLogin();
+        const googleUrl = `https://rnunibjmmowhaxsytthf.supabase.co/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(liveRedirect)}`;
+        window.location.href = googleUrl;
       } catch (e) {
         console.warn("Google Auth redirect fallback:", e);
         completeGoogleAuthLogin();
