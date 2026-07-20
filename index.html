@@ -673,15 +673,12 @@
 
           <div class="form-group">
             <label>Gender</label>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
               <label style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectGender(this,'M')">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="14" r="6"/><path d="m14.7 9.3 4.3-4.3M22 4h-5m5 0v5"/></svg> Male
               </label>
               <label style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectGender(this,'F')">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><line x1="12" y1="14" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/></svg> Female
-              </label>
-              <label style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectGender(this,'O')">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="6"/></svg> Other
               </label>
             </div>
             <input type="hidden" id="o-gender" required>
@@ -704,9 +701,9 @@
             <div id="onboarding-city-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1px solid #2A244E; border-radius: 10px; z-index: 1000; max-height: 180px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
           </div>
 
-          <div class="form-group">
-            <label>Profession</label>
-            <input type="text" id="o-profession" required placeholder="e.g. Software Engineer, Student">
+          <div class="form-group" id="o-profession-group">
+            <label id="o-profession-label">Current Profession / Skill Set</label>
+            <input type="text" id="o-profession" placeholder="e.g. Software Engineer, Sales, Student">
           </div>
         </div>
 
@@ -812,15 +809,12 @@
             </div>
             <div class="form-group">
               <label>Partner's Gender</label>
-              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
                 <label class="p-gender-btn" style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectPartnerGender(this,'M')">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="14" r="6"/><path d="m14.7 9.3 4.3-4.3M22 4h-5m5 0v5"/></svg> Male
                 </label>
                 <label class="p-gender-btn" style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectPartnerGender(this,'F')">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><line x1="12" y1="14" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/></svg> Female
-                </label>
-                <label class="p-gender-btn" style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectPartnerGender(this,'O')">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="6"/></svg> Other
                 </label>
               </div>
               <input type="hidden" id="o-p-gender">
@@ -1123,7 +1117,7 @@
 
               <div class="form-group">
                 <label><span class="k-lbl-en">Gender</span><span class="k-lbl-hi" style="display:none;">लिंग</span></label>
-                <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
                   <label id="k-g-M" onclick="selectKundliGender(this,'M')" style="cursor:pointer; text-align:center; padding:10px 4px; border:1px solid rgba(255,255,255,0.1); border-radius:10px; font-size:0.82rem; transition:all 0.2s; user-select:none;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:block; margin:0 auto 4px;"><circle cx="10" cy="10" r="6"/><line x1="14.5" y1="14.5" x2="20" y2="20"/><line x1="17" y1="20" x2="20" y2="20"/><line x1="20" y1="17" x2="20" y2="20"/></svg>
                     <span class="k-lbl-en">Male</span><span class="k-lbl-hi" style="display:none;">पुरुष</span>
@@ -1131,10 +1125,6 @@
                   <label id="k-g-F" onclick="selectKundliGender(this,'F')" style="cursor:pointer; text-align:center; padding:10px 4px; border:1px solid rgba(255,255,255,0.1); border-radius:10px; font-size:0.82rem; transition:all 0.2s; user-select:none;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:block; margin:0 auto 4px;"><circle cx="12" cy="8" r="5"/><line x1="12" y1="13" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/></svg>
                     <span class="k-lbl-en">Female</span><span class="k-lbl-hi" style="display:none;">महिला</span>
-                  </label>
-                  <label id="k-g-O" onclick="selectKundliGender(this,'O')" style="cursor:pointer; text-align:center; padding:10px 4px; border:1px solid rgba(255,255,255,0.1); border-radius:10px; font-size:0.82rem; transition:all 0.2s; user-select:none;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:block; margin:0 auto 4px;"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="2" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="22" y2="12"/></svg>
-                    <span class="k-lbl-en">Other</span><span class="k-lbl-hi" style="display:none;">अन्य</span>
                   </label>
                 </div>
                 <input type="hidden" id="k-gender" value="M">
@@ -3429,6 +3419,57 @@
         propertyGroup.style.display = 'block';
       } else {
         propertyGroup.style.display = 'none';
+      }
+
+      // ─── DYNAMIC SMART GOAL QUESTION FIELD ─────────────────────────
+      const profGroup = document.getElementById('o-profession-group');
+      const profLabel = document.getElementById('o-profession-label');
+      const profInput = document.getElementById('o-profession');
+      
+      const normG = ['property-single','property-couple'].includes(goal) ? 'property' : ['marriage-single','marriage-couple'].includes(goal) ? 'marriage' : goal;
+
+      if (normG === 'job' || normG === 'business' || normG === 'career') {
+        if (profGroup) profGroup.style.display = 'block';
+        if (profLabel) profLabel.textContent = 'Current Profession / Skill Set';
+        if (profInput) {
+          profInput.placeholder = 'e.g. Mechanical Engineer, Software Developer, Sales';
+          profInput.required = true;
+        }
+      } else if (normG === 'marriage') {
+        if (profGroup) profGroup.style.display = 'block';
+        if (profLabel) profLabel.textContent = 'Relationship Focus / Partner Expectations';
+        if (profInput) {
+          profInput.placeholder = 'e.g. Looking for marriage proposal, Finding soulmate';
+          profInput.required = false;
+        }
+      } else if (normG === 'property') {
+        if (profGroup) profGroup.style.display = 'block';
+        if (profLabel) profLabel.textContent = 'Target Asset / Investment Goal';
+        if (profInput) {
+          profInput.placeholder = 'e.g. Buying 3BHK Apartment, Buying New Car, Gold, Stocks';
+          profInput.required = false;
+        }
+      } else if (normG === 'health') {
+        if (profGroup) profGroup.style.display = 'block';
+        if (profLabel) profLabel.textContent = 'Health & Energy Focus';
+        if (profInput) {
+          profInput.placeholder = 'e.g. Mental peace, Physical stamina & sleep';
+          profInput.required = false;
+        }
+      } else if (normG === 'debt') {
+        if (profGroup) profGroup.style.display = 'block';
+        if (profLabel) profLabel.textContent = 'Financial & Debt Focus';
+        if (profInput) {
+          profInput.placeholder = 'e.g. Clearing home loan debt, Wealth accumulation';
+          profInput.required = false;
+        }
+      } else {
+        // For baby planning or custom issue, hide profession field
+        if (profGroup) profGroup.style.display = 'none';
+        if (profInput) {
+          profInput.required = false;
+          profInput.value = '';
+        }
       }
 
       // ─── PARTNER SECTION RULES ─────────────────────────────────────
