@@ -3912,11 +3912,23 @@
           try { initApp(); } catch(e) { console.error("initApp error:", e); }
         }
 
-        // Set Coach as active tab
+        // Set Home Dashboard as active tab (where gamified 90-day quests live)
         const navItems = document.querySelectorAll('.nav-item');
-        const coachBtn = navItems[4] || navItems[0];
+        const homeBtn = navItems[0];
         if (typeof switchTab === 'function') {
-          switchTab(4, coachBtn);
+          switchTab(0, homeBtn);
+        }
+
+        // Ensure coach tab shows result view, never second form
+        const formView = document.getElementById('coach-form-view');
+        const resultView = document.getElementById('coach-result-view');
+        if (formView) formView.style.display = 'none';
+        if (resultView) resultView.style.display = 'block';
+
+        // Smooth scroll to today's active quests card
+        const questsSec = document.getElementById('quests-section');
+        if (questsSec) {
+          questsSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }
     }
@@ -4027,6 +4039,14 @@
       }
 
       const todayMissionDate = localStorage.getItem('today_mission_date');
+      if (todayMissionDate) {
+        // Ensure coach tab is in result view mode
+        const formView = document.getElementById('coach-form-view');
+        const resultView = document.getElementById('coach-result-view');
+        if (formView) formView.style.display = 'none';
+        if (resultView) resultView.style.display = 'block';
+      }
+
       if (todayMissionDate === todayStr) {
         document.getElementById('q-vedic-text').innerText = localStorage.getItem('today_quest_vedic_text') || '';
         document.getElementById('q-lalkitab-text').innerText = localStorage.getItem('today_quest_lalkitab_text') || '';
