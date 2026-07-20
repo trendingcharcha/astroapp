@@ -573,6 +573,7 @@
         <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('job')">💼 Get Dream Job</button>
         <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('debt')">🔴 Clear Financial Debt</button>
         <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('marriage')">💍 Get Married / Relationship Harmony</button>
+        <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('baby')">🍼 Planning for Baby / Child</button>
         <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('business')">🚀 Start or Grow Business</button>
         <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('custom')">⚠️ Resolve Major Life Issue</button>
       </div>
@@ -611,6 +612,38 @@
           <label>Birth Place (City)</label>
           <input type="text" id="o-city" required placeholder="Type city (e.g. New Delhi)" oninput="filterOnboardingCities(this.value)" onblur="setTimeout(() => { document.getElementById('onboarding-city-suggestions').style.display = 'none'; }, 200)" autocomplete="off">
           <div id="onboarding-city-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1px solid #2A244E; border-radius: 10px; z-index: 1000; max-height: 180px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
+        </div>
+
+        <!-- Onboarding Baby Planning Fields -->
+        <div id="onboarding-baby-group" style="display: none; border: 1px solid rgba(232, 200, 121, 0.2); padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
+          <h4 style="color: var(--gold); margin: 0 0 12px 0; font-size: 0.95rem;">Planning for Baby Details</h4>
+          
+          <div class="form-group">
+            <label>Which baby are you planning for?</label>
+            <select id="o-baby-number" onchange="toggleBabyFields('o', this.value)" style="width: 100%;">
+              <option value="1">1st Baby</option>
+              <option value="2">2nd Baby</option>
+              <option value="3">3rd Baby</option>
+            </select>
+          </div>
+          
+          <!-- 2nd Baby: 1st Baby DOB -->
+          <div id="o-baby-dob-group" style="display: none;" class="form-group">
+            <label>1st Baby's Date of Birth</label>
+            <input type="date" id="o-first-baby-dob">
+          </div>
+          
+          <!-- 3rd Baby: 1st & 2nd Baby Ages -->
+          <div id="o-baby-ages-group" style="display: none;">
+            <div class="form-group">
+              <label>1st Baby's Age (Years)</label>
+              <input type="number" id="o-first-baby-age" min="0" placeholder="e.g. 5">
+            </div>
+            <div class="form-group">
+              <label>2nd Baby's Age (Years)</label>
+              <input type="number" id="o-second-baby-age" min="0" placeholder="e.g. 2">
+            </div>
+          </div>
         </div>
 
         <div class="form-group">
@@ -1016,6 +1049,7 @@
                   <option value="job">Get Dream Job</option>
                   <option value="debt">Clear Financial Debt</option>
                   <option value="marriage">Get Married / Relationship Harmony</option>
+                  <option value="baby">Planning for Baby / Progeny</option>
                   <option value="business">Start or Grow Business</option>
                   <option value="custom">Resolve Major Life Issue</option>
                 </select>
@@ -1024,6 +1058,38 @@
               <div id="coach-custom-issue-group" class="form-group" style="display: none;">
                 <label>Describe Your Specific Issue</label>
                 <input type="text" id="c-custom-issue" placeholder="e.g. Visa delay, legal dispute, health concerns, etc." oninput="checkCoachCustomIssueKeywords(this.value)">
+              </div>
+
+              <!-- Coach Baby Planning Fields -->
+              <div id="coach-baby-group" style="display: none; border: 1px solid rgba(232, 200, 121, 0.2); padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
+                <h4 style="color: var(--gold); margin: 0 0 12px 0; font-size: 0.95rem;">Planning for Baby Details</h4>
+                
+                <div class="form-group">
+                  <label>Which baby are you planning for?</label>
+                  <select id="c-baby-number" onchange="toggleBabyFields('c', this.value)" style="width: 100%;">
+                    <option value="1">1st Baby</option>
+                    <option value="2">2nd Baby</option>
+                    <option value="3">3rd Baby</option>
+                  </select>
+                </div>
+                
+                <!-- 2nd Baby: 1st Baby DOB -->
+                <div id="c-baby-dob-group" style="display: none;" class="form-group">
+                  <label>1st Baby's Date of Birth</label>
+                  <input type="date" id="c-first-baby-dob">
+                </div>
+                
+                <!-- 3rd Baby: 1st & 2nd Baby Ages -->
+                <div id="c-baby-ages-group" style="display: none;">
+                  <div class="form-group">
+                    <label>1st Baby's Age (Years)</label>
+                    <input type="number" id="c-first-baby-age" min="0" placeholder="e.g. 5">
+                  </div>
+                  <div class="form-group">
+                    <label>2nd Baby's Age (Years)</label>
+                    <input type="number" id="c-second-baby-age" min="0" placeholder="e.g. 2">
+                  </div>
+                </div>
               </div>
 
               <div class="form-group">
@@ -1418,6 +1484,33 @@
       const goal = document.getElementById('c-goal').value;
       const profession = document.getElementById('c-profession').value;
 
+      // Resolve baby planning configurations
+      let babyDetailsText = "";
+      let firstBabyAge = 0;
+      let firstBabyDobVal = "";
+      let secondBabyAge = 0;
+      let babyNum = "1";
+      
+      if (goal === 'baby') {
+        babyNum = document.getElementById('c-baby-number').value;
+        if (babyNum === "1") {
+          babyDetailsText = "planning for your first baby";
+        } else if (babyNum === "2") {
+          firstBabyDobVal = document.getElementById('c-first-baby-dob').value;
+          if (firstBabyDobVal) {
+            const birth = new Date(firstBabyDobVal);
+            const ageDiff = Date.now() - birth.getTime();
+            firstBabyAge = Math.floor(ageDiff / (1000 * 60 * 60 * 24 * 365.25));
+            if (firstBabyAge < 0) firstBabyAge = 0;
+          }
+          babyDetailsText = `planning for your second baby (your first child is ${firstBabyAge} years old)`;
+        } else if (babyNum === "3") {
+          firstBabyAge = parseInt(document.getElementById('c-first-baby-age').value) || 5;
+          secondBabyAge = parseInt(document.getElementById('c-second-baby-age').value) || 2;
+          babyDetailsText = `planning for your third baby (your first child is ${firstBabyAge} and second is ${secondBabyAge} years old)`;
+        }
+      }
+
       let city = coachSelectedCity;
       if (coachSelectedCity.name !== cityName) {
         const controller = new AbortController();
@@ -1631,6 +1724,10 @@
           "Donate yellow sweets, chana dal, or turmeric to a temple priest on Thursday mornings.",
           "Feed fresh green grass or spinach to a cow, or donate green items to young girls on Wednesdays."
         ],
+        "baby": [
+          "Donate yellow fruits (like bananas) or yellow sweets to a temple on Thursdays (strengthens Jupiter, ruler of progeny/Santan).",
+          "Both you and your partner should offer milk or sweet water to a banyan tree root together to invite new life energy."
+        ],
         "business": [
           "Keep a small, solid piece of silver in your wallet, locker, or cash register at your workplace.",
           "Donate black sesame seeds or mustard oil to the needy on Saturday evenings."
@@ -1705,6 +1802,7 @@
         "job": "Ensure your study or work desk is placed in the North or North-East zone of your room. Keep the desk clean, clutter-free, and place a green aventurine crystal or a small plant here.",
         "debt": "Place a small running water fountain or a picture of serene water flow in the North direction of your house. Ensure there are no heavy iron items or garbage in the North-East zone.",
         "marriage": "Place a pair of decorative pink/gold lovebirds or a rose quartz crystal in the South-West corner of your bedroom. Avoid using dark blue or black bedsheets.",
+        "baby": "Keep the East and North-East zone of your bedroom light, clean, and place fresh flowers here to support health and fertility.",
         "business": "Keep the main entrance of your shop, office, or workshop clean, well-lit, and decorated with a swastika symbol. Position your sitting chair facing East or North.",
         "custom_job": "Position your work desk facing East or North-East, and place a small bamboo or green plant on it to invite career growth.",
         "custom_money": "Ensure the North zone of your house is clean, light, and free of heavy iron or trash to allow cash flow energy to enter.",
@@ -1724,7 +1822,19 @@
         vastuGoal = "custom_" + customCategory;
       }
       let vastuText = vastuSuggestions[vastuGoal] || vastuSuggestions["job"];
-      if (hasPartner) {
+      if (goal === 'baby') {
+        if (hasPartner) {
+          if (babyNum === "1") {
+            vastuText = `Ensure your shared bed is placed in the South-West direction. Avoid using aggressive colors (like red or dark blue) in your bedroom; prefer warm cream, pastel pink, or light yellow tones to support pregnancy vibrations.`;
+          } else if (babyNum === "2") {
+            vastuText = `Ensure the North-East zone of your home is clean. Keep your first child's toys away from your bedroom to maintain tranquil pregnancy vibes.`;
+          } else if (babyNum === "3") {
+            vastuText = `Place a healthy green plant or a family portrait in the East zone of your shared living space to invite growing domestic progeny energies.`;
+          }
+        } else {
+          vastuText = vastuSuggestions["baby"];
+        }
+      } else if (hasPartner) {
         if (customCategory === "pregnancy") {
           vastuText = `Ensure your shared bed is placed in the South-West direction. Avoid using aggressive colors (like red or dark blue) in your bedroom; prefer warm cream, pastel pink, or light yellow tones to support pregnancy vibrations.`;
         } else if (customCategory === "property") {
@@ -1760,6 +1870,12 @@
           `Review your pricing structure for ${profession} services to ensure your profit margin accounts for current operational inflation.`,
           `Design a simple case study post showcasing a recent successful project you completed as a ${profession} and share it on your social media feeds.`,
           `Spend 30 minutes analyzing your accounts ledger to trace and eliminate leakage in your business operational cash flow.`
+        ],
+        "baby": [
+          `Prepare a nutritious diet chart rich in folic acid, iron, and green vegetables, and track your meals today.`,
+          `Research and shortlist highly rated gynecologists or maternity hospitals in your local city area.`,
+          `Spend 20 minutes doing light breathing exercises (Pranayama) or mindfulness yoga to reduce bodily cortisol.`,
+          `Create a daily health tracking diary to log your fertility, body temperature, or prenatal vitamin intakes.`
         ],
         "custom_job": [
           `Search job listings on LinkedIn or specialized portals matching your background as a ${profession} and apply to at least 3 roles.`,
@@ -1834,7 +1950,56 @@
         actionsGoal = "custom_" + customCategory;
       }
       let actions = [...(practicalActions[actionsGoal] || practicalActions["job"])];
-      if (hasPartner) {
+      
+      if (goal === 'baby') {
+        if (hasPartner) {
+          if (babyNum === "1") {
+            actions = [
+              `Self: Maintain a healthy prenatal diet and log your daily vitamin intake today.`,
+              `Partner (${partnerName}): Assist in organizing domestic tasks to minimize physical strain for your spouse.`,
+              `Joint Action: Both you and ${partnerName} spend 15 minutes doing light meditation together to align relationship energies.`,
+              `Joint Planning: Shortlist 3 local healthcare clinics or maternity centers to visit together this month.`
+            ];
+          } else if (babyNum === "2") {
+            actions = [
+              `Self: Spend 15 minutes tracking health metrics and post-pregnancy recovery signs today.`,
+              `Partner (${partnerName}): Spend 30 minutes playing with or caring for your first child (age: ${firstBabyAge}) to give your spouse some personal rest.`,
+              `Joint Action: Spend 15 minutes talking with ${partnerName} on how to prepare your first child emotionally for a sibling.`,
+              `Joint Planning: Inspect which baby gear (stroller, crib, clothes) from your first child is reusable.`
+            ];
+          } else if (babyNum === "3") {
+            actions = [
+              `Self: Take 20 minutes to rest, practice light stretching, and log nutrition metrics today.`,
+              `Partner (${partnerName}): Take charge of organizing the daily schedules and study routines of your first two children (ages: ${firstBabyAge} & ${secondBabyAge}) today.`,
+              `Joint Action: Sit with ${partnerName} for 20 minutes to map out the financial adjustments required for a family of five.`,
+              `Joint Planning: Discuss bedroom reorganization or space distribution to accommodate three children.`
+            ];
+          }
+        } else {
+          if (babyNum === "1") {
+            actions = [
+              `Plan a nutrient-rich menu focusing on prenatal health, folic acid, and iron today.`,
+              `Research and shortlist highly-rated gynecologists or prenatal specialists in your local city area.`,
+              `Spend 20 minutes doing light breathing exercises (Pranayama) to reduce body stress levels.`,
+              `Start keeping a daily health calendar to track cycle indicators and fertility windows.`
+            ];
+          } else if (babyNum === "2") {
+            actions = [
+              `Consult with a pediatrician or doctor to review health markers since your first pregnancy (first child is ${firstBabyAge} years old).`,
+              `Create a checklist of baby essentials and gear you can reuse from your first child.`,
+              `Dedicate 20 minutes to read about managing parenting schedules and routines with multiple children.`,
+              `Schedule a routine health check-up to assess prenatal compatibility and health markers.`
+            ];
+          } else if (babyNum === "3") {
+            actions = [
+              `Review your monthly family budget ledger to account for the expenses of raising three children (existing ages: ${firstBabyAge} & ${secondBabyAge}).`,
+              `Set aside 30 minutes to discuss space/room distribution for all three children.`,
+              `Practice a 15-minute mindfulness session to cultivate mental resilience for a larger family.`,
+              `Schedule a primary healthcare consultation to review maternal health pointers.`
+            ];
+          }
+        }
+      } else if (hasPartner) {
         if (customCategory === "pregnancy") {
           actions = [
             `Self (Female Partner): Track your physical health indicators, keep a pregnancy diary, and take prenatal vitamins.`,
@@ -1873,7 +2038,9 @@
 
       // Update title
       let titleText = `${name}'s Daily Astro Mission`;
-      if (hasPartner) {
+      if (goal === 'baby') {
+        titleText = hasPartner ? `${name} & ${partnerName}'s Baby Planning Mission` : `${name}'s Baby Planning Mission`;
+      } else if (hasPartner) {
         titleText = `${name} & ${partnerName}'s Aligned Daily Astro Mission`;
       }
       document.getElementById('coach-result-title').innerText = titleText;
@@ -2239,9 +2406,17 @@
         customInput.value = '';
       }
 
-      // Automatically display partner toggle if Marriage is selected
+      // Toggle onboarding baby fields
+      const babyGroup = document.getElementById('onboarding-baby-group');
+      if (goal === 'baby') {
+        babyGroup.style.display = 'block';
+      } else {
+        babyGroup.style.display = 'none';
+      }
+
+      // Automatically display partner toggle if Marriage or Baby is selected
       const toggleContainer = document.getElementById('partner-toggle-container');
-      if (goal === 'marriage') {
+      if (goal === 'marriage' || goal === 'baby') {
         toggleContainer.style.display = 'flex';
       } else {
         toggleContainer.style.display = 'none';
@@ -2574,6 +2749,21 @@
         const customVal = document.getElementById('o-custom-issue').value;
         document.getElementById('c-custom-issue').value = customVal;
       }
+      
+      // Sync baby details if goal is baby
+      if (goal === 'baby') {
+        const babyNum = document.getElementById('o-baby-number').value;
+        document.getElementById('c-baby-number').value = babyNum;
+        toggleBabyFields('c', babyNum);
+        
+        if (babyNum === "2") {
+          document.getElementById('c-first-baby-dob').value = document.getElementById('o-first-baby-dob').value;
+        } else if (babyNum === "3") {
+          document.getElementById('c-first-baby-age').value = document.getElementById('o-first-baby-age').value;
+          document.getElementById('c-second-baby-age').value = document.getElementById('o-second-baby-age').value;
+        }
+      }
+      
       toggleCoachCustomIssueField(goal);
 
       // Sync partner details if toggle is checked
@@ -2622,13 +2812,48 @@
         input.value = '';
       }
       
+      const babyGroup = document.getElementById('coach-baby-group');
+      if (val === 'baby') {
+        babyGroup.style.display = 'block';
+      } else {
+        babyGroup.style.display = 'none';
+      }
+      
       const toggleContainer = document.getElementById('coach-partner-toggle-container');
-      if (val === 'marriage') {
+      if (val === 'marriage' || val === 'baby') {
         toggleContainer.style.display = 'flex';
       } else {
         toggleContainer.style.display = 'none';
         document.getElementById('c-partner-toggle').checked = false;
         toggleCoachPartnerFields(false);
+      }
+    }
+
+    function toggleBabyFields(prefix, val) {
+      const dobGroup = document.getElementById(`${prefix}-baby-dob-group`);
+      const agesGroup = document.getElementById(`${prefix}-baby-ages-group`);
+      const firstDobInput = document.getElementById(`${prefix}-first-baby-dob`);
+      const firstAgeInput = document.getElementById(`${prefix}-first-baby-age`);
+      const secondAgeInput = document.getElementById(`${prefix}-second-baby-age`);
+
+      if (val === "1") {
+        dobGroup.style.display = "none";
+        agesGroup.style.display = "none";
+        if (firstDobInput) firstDobInput.required = false;
+        if (firstAgeInput) firstAgeInput.required = false;
+        if (secondAgeInput) secondAgeInput.required = false;
+      } else if (val === "2") {
+        dobGroup.style.display = "block";
+        agesGroup.style.display = "none";
+        if (firstDobInput) firstDobInput.required = true;
+        if (firstAgeInput) firstAgeInput.required = false;
+        if (secondAgeInput) secondAgeInput.required = false;
+      } else if (val === "3") {
+        dobGroup.style.display = "none";
+        agesGroup.style.display = "block";
+        if (firstDobInput) firstDobInput.required = false;
+        if (firstAgeInput) firstAgeInput.required = true;
+        if (secondAgeInput) secondAgeInput.required = true;
       }
     }
 
