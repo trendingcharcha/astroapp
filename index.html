@@ -1244,15 +1244,13 @@
         "Jupiter": { mantra: "Om Guruve Namah", text: "Read the Guru Stotra or Vishnu Sahasranama to expand knowledge, wisdom, and unlock fortunes." },
         "Venus": { mantra: "Om Shukraya Namah", text: "Read Lakshmi Chalisa to attract luxury, creative elegance, and harmonious partnerships." },
         "Saturn": { mantra: "Om Sham Shanaishcharaya Namah", text: "Read Shiva Panchakshari Stotra to build resilience, discipline, and patience in your career." }
-      };
-
       const lordDetails = vedicMantras[rulingLord] || vedicMantras["Sun"];
       const vedicListHTML = `
         <li style="margin-bottom: 10px;"><strong>Mantra Chanting:</strong> Chant the ruling planet mantra <strong>"${lordDetails.mantra}"</strong> exactly 108 times (1 Mala) in the morning facing East.</li>
         <li><strong>Sacred Reading:</strong> ${lordDetails.text}</li>
       `;
 
-      // Resolve custom issue categorization
+      // Resolve custom issue categorization with comprehensive keyword matrix (supporting English, Hindi, Hinglish)
       let customCategory = "general";
       let issueText = "your issue";
       if (goal === 'custom') {
@@ -1267,13 +1265,33 @@
         }
         
         const text = issueText.toLowerCase();
-        if (text.includes("health") || text.includes("ill") || text.includes("disease") || text.includes("body") || text.includes("sick") || text.includes("physic") || text.includes("hospital") || text.includes("doctor")) {
+        
+        // Define Keyword Sets
+        const jobKeys = ["job", "career", "work", "promotion", "office", "salary", "boss", "interview", "nokri", "naukri", "naukar", "business", "vyapar", "dhanda", "dhandha", "नौकरी", "व्यवसाय", "काम", "नौकरी"];
+        const moneyKeys = ["money", "finance", "debt", "loan", "wealth", "paisa", "payse", "karz", "udhaar", "bank", "loss", "nuksan", "nuksaan", "credit", "कर्ज", "धन", "पैसा", "उधार"];
+        const marriageKeys = ["marriage", "love", "relationship", "divorce", "spouse", "shadi", "shaadi", "vivah", "patni", "pati", "gf", "bf", "breakup", "relationship", "शादी", "प्यार", "विवाह", "पति", "पत्नी"];
+        const educationKeys = ["education", "exam", "study", "college", "student", "board", "exam", "paper", "pass", "fail", "padhai", "padhai", "school", "study", "परीक्षा", "पढ़ाई", "कॉलेज", "स्कूल"];
+        const healthKeys = ["health", "disease", "ill", "body", "sick", "hospital", "doctor", "physical", "pain", "medicine", "dard", "bimari", "beemari", "ilaj", "ilaaj", "fever", "बीमारी", "स्वास्थ्य", "इलाज", "डॉक्टर"];
+        const visaKeys = ["visa", "foreign", "travel", "abroad", "passport", "flight", "canada", "usa", "uk", "airport", "videsh", "yatra", "विदेश", "यात्रा", "वीजा"];
+        const courtKeys = ["court", "legal", "case", "dispute", "police", "property", "justice", "fir", "advocate", "mukadma", "muqadma", "vivad", "zamin", "jameen", "कोर्ट", "केस", "मुकदमा", "विवाद", "पुलिस"];
+        const mentalKeys = ["mental", "depress", "anxiety", "stress", "sad", "fear", "sleep", "insomnia", "tension", "ghabrahat", "darr", "neend", "depression", "تनाव", "तनाव", "चिंता", "मानसिक", "नींद"];
+
+        // Check Matches
+        if (jobKeys.some(key => text.includes(key))) {
+          customCategory = "job";
+        } else if (moneyKeys.some(key => text.includes(key))) {
+          customCategory = "money";
+        } else if (marriageKeys.some(key => text.includes(key))) {
+          customCategory = "marriage";
+        } else if (educationKeys.some(key => text.includes(key))) {
+          customCategory = "education";
+        } else if (healthKeys.some(key => text.includes(key))) {
           customCategory = "health";
-        } else if (text.includes("visa") || text.includes("foreign") || text.includes("travel") || text.includes("abroad") || text.includes("immigr") || text.includes("country")) {
+        } else if (visaKeys.some(key => text.includes(key))) {
           customCategory = "visa";
-        } else if (text.includes("court") || text.includes("legal") || text.includes("case") || text.includes("law") || text.includes("dispute") || text.includes("police") || text.includes("judge")) {
+        } else if (courtKeys.some(key => text.includes(key))) {
           customCategory = "legal";
-        } else if (text.includes("depress") || text.includes("anxiety") || text.includes("mental") || text.includes("stress") || text.includes("sad") || text.includes("fear") || text.includes("sleep")) {
+        } else if (mentalKeys.some(key => text.includes(key))) {
           customCategory = "mental";
         }
       }
@@ -1296,12 +1314,28 @@
           "Keep a small, solid piece of silver in your wallet, locker, or cash register at your workplace.",
           "Donate black sesame seeds or mustard oil to the needy on Saturday evenings."
         ],
+        "custom_job": [
+          "Offer fresh water with a pinch of red flowers or vermilion to the rising Sun from a copper vessel to boost authority.",
+          "Feed green grass or spinach to a cow on Wednesdays to invoke business & job opportunities."
+        ],
+        "custom_money": [
+          "Keep a small, solid piece of silver in your wallet, safe, or work desk to align wealth energy.",
+          "Avoid taking loans or major credit transactions on Tuesdays; repay a small debt on Tuesday instead."
+        ],
+        "custom_marriage": [
+          "Donate turmeric, yellow sweets, or gold colored items to a temple priest on Thursday mornings.",
+          "Donate milk, rice, or silver ornaments to girls on Monday mornings to invite partnership harmony."
+        ],
+        "custom_education": [
+          "Donate educational books, stationery, or pens to poor children on Thursday mornings.",
+          "Chant the Saraswati Gayatri mantra or invoke wisdom in the early hours facing East."
+        ],
         "custom_health": [
           "Donate pure water or milk to travelers, and feed fresh green grass to a cow in the morning to balance Mercury/Moon.",
-          "Keep a copper coin or a small piece of solid silver on your person for protective energy."
+          "Keep a copper coin or a small piece of solid silver on your person for protective vitality."
         ],
         "custom_visa": [
-          "Keep some barley grains under your pillow overnight and feed them to birds or place them in flowing water in the morning.",
+          "Keep some barley grains under your pillow overnight and feed them to birds or place them in flowing water in the morning to bypass blockages.",
           "Feed green fodder to a bull or donate black sesame seeds to the needy to pacify Rahu obstacles."
         ],
         "custom_legal": [
@@ -1334,10 +1368,14 @@
         "debt": "Place a small running water fountain or a picture of serene water flow in the North direction of your house. Ensure there are no heavy iron items or garbage in the North-East zone.",
         "marriage": "Place a pair of decorative pink/gold lovebirds or a rose quartz crystal in the South-West corner of your bedroom. Avoid using dark blue or black bedsheets.",
         "business": "Keep the main entrance of your shop, office, or workshop clean, well-lit, and decorated with a swastika symbol. Position your sitting chair facing East or North.",
+        "custom_job": "Position your work desk facing East or North-East, and place a small bamboo or green plant on it to invite career growth.",
+        "custom_money": "Ensure the North zone of your house is clean, light, and free of heavy iron or trash to allow cash flow energy to enter.",
+        "custom_marriage": "Place a pair of rose quartz crystal spheres in the South-West corner of your bedroom to nurture mutual love.",
+        "custom_education": "Keep your study table in the North-East or East direction. Avoid placing heavy books directly above your sitting head space.",
         "custom_health": "Ensure your sleeping bed headboard points towards the South or East. Clear any cluttered items or dust from the North-East zone of your house to maintain pure health flows.",
-        "custom_visa": "Place your passport, travel documents, or study files in the North-West (Vayu/Air corner) of your home to accelerate transit energy.",
+        "custom_visa": "Place your passport, travel documents, or visa applications in the North-West corner (Vayu/Transit zone) of your room to accelerate transit energy.",
         "custom_legal": "Store all court case files, legal letters, and dispute documents in the South or South-West corner of your office or bedroom to ensure stability.",
-        "custom_mental": "Ensure the North-West area of your bedroom is clean, free of heavy storage blocks, and well-lit to promote stable mental air currents.",
+        "custom_mental": "Ensure the North-West area of your bedroom is clean, free of heavy storage blocks, and well-ventilated to promote stable mental air currents.",
         "custom_general": `Sit facing East while planning steps to resolve: '${issueText}', and ensure your work chair has a solid wall backing behind it.`
       };
 
@@ -1372,6 +1410,30 @@
           `Review your pricing structure for ${profession} services to ensure your profit margin accounts for current operational inflation.`,
           `Design a simple case study post showcasing a recent successful project you completed as a ${profession} and share it on your social media feeds.`,
           `Spend 30 minutes analyzing your accounts ledger to trace and eliminate leakage in your business operational cash flow.`
+        ],
+        "custom_job": [
+          `Search job listings on LinkedIn or specialized portals matching your background as a ${profession} and apply to at least 3 roles.`,
+          `Revise your resume specifically highlighting your key accomplishments and skills in relation to your goal: "${issueText}".`,
+          `Reach out to 3 professionals or recruiters in your target ${profession} field on LinkedIn and request a short informational chat.`,
+          `Upskill by reading a technical blog post or learning a new tool relevant to your ${profession} field.`
+        ],
+        "custom_money": [
+          `Audit your bank accounts and record all your monthly income and expenses to understand your exact cash flow.`,
+          `Create a monthly budget sheet and identify 2 non-essential expenses you can cut to save money today.`,
+          `Investigate 2 low-risk mutual funds or savings plans to automate your recurring monthly investments.`,
+          `Write down a detailed list of all active debts and draft a plan prioritizing the repayment of the highest-interest debt.`
+        ],
+        "custom_marriage": [
+          `Write down 3 qualities you value most in your partner or relationship and focus on expressing them today.`,
+          `Take 15 minutes to have an honest, compassionate, and uninterrupted conversation with your partner or a family member.`,
+          `Surprise your loved one with a small, thoughtful gesture (like a warm text, favorite flower, or preparing a meal).`,
+          `Reflect on your personal boundaries and list 3 healthy ways you can communicate them constructively in your relationship.`
+        ],
+        "custom_education": [
+          `Define a specific study goal for today and study for at least 2 hours in focused 30-minute blocks (Pomodoro technique).`,
+          `Write a concise summary of the most complex topic you studied today in your own words.`,
+          `Practice solving 3 sample questions or test exercises related to your target subject to test your grasp.`,
+          `Organize your study table, clear all non-essential items, and keep only current reference books to boost focus.`
         ],
         "custom_health": [
           `Drink at least 3 liters of water today and record your consumption to flush bodily toxins.`,
