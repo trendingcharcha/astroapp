@@ -536,6 +536,44 @@
     }
       @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
+
+    /* PRINT / PDF STYLESHEET FOR KUNDLI REPORT */
+    @media print {
+      body, html {
+        background: #ffffff !important;
+        color: #000000 !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      .phone-shell {
+        max-width: 100% !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .nav-bar, .chart-toggle, .btn, button, #k-lang-en, #k-lang-hi, #kr-lang-en, #kr-lang-hi, #header-title {
+        display: none !important;
+      }
+      .card {
+        background: #ffffff !important;
+        border: 1px solid #cccccc !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+        margin-bottom: 15px !important;
+      }
+      h1, h2, h3, h4, strong, p, span, td, th {
+        color: #000000 !important;
+      }
+      canvas#chartCanvas {
+        border: 1px solid #000000 !important;
+        background: #ffffff !important;
+      }
+      #tab-kundli, #kundli-result-view {
+        display: block !important;
+      }
+    }
+
 </head>
 <body>
   <div class="phone-shell">
@@ -899,6 +937,21 @@
           </div>
         </div>
 
+        <!-- Multi-Goal Management Card -->
+        <div id="active-goals-card" class="card" style="border: 1px solid rgba(232, 200, 121, 0.25); margin-bottom: 20px; background: rgba(20, 16, 44, 0.85); text-align: left;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h4 style="margin: 0; color: var(--gold); font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+              Active Life Goals (<span id="active-goals-count">1</span>)
+            </h4>
+            <button class="btn" style="width: auto; padding: 4px 10px; font-size: 0.75rem;" onclick="openAddGoalModal()">+ ADD GOAL</button>
+          </div>
+          <p style="margin: 0 0 10px 0; font-size: 0.75rem; color: var(--text-muted);">Set multiple goals — daily mantras &amp; action steps will automatically unify without duplicate tasks.</p>
+          <div id="active-goals-list" style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <!-- Active goal badges rendered by JS -->
+          </div>
+        </div>
+
         <!-- Today's Quests -->
         <div id="quests-section" style="margin-bottom: 25px; text-align: left; display: none;">
           <h3 style="margin-bottom: 12px; font-size: 1.1rem; display: flex; justify-content: space-between; align-items: center;">
@@ -1140,12 +1193,16 @@
             </div>
           </div>
 
-          <div class="chart-toggle" style="margin-bottom:14px;">
+          <div class="chart-toggle" style="margin-bottom:14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
             <button class="btn btn-outline" style="width:auto; padding:5px 12px; font-size:0.8rem; margin:0;" onclick="toggleChartStyle(true)">
               <span class="k-lbl-en">North Indian</span><span class="k-lbl-hi" style="display:none;">उत्तर भारतीय</span>
             </button>
             <button class="btn btn-outline" style="width:auto; padding:5px 12px; font-size:0.8rem; margin:0;" onclick="toggleChartStyle(false)">
               <span class="k-lbl-en">South Indian</span><span class="k-lbl-hi" style="display:none;">दक्षिण भारतीय</span>
+            </button>
+            <button class="btn" style="width:auto; padding:5px 14px; font-size:0.8rem; margin:0; background:linear-gradient(135deg, var(--gold), #f39c12); color:#000; font-weight:bold; display:inline-flex; align-items:center; gap:5px;" onclick="downloadKundliPDF()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span class="k-lbl-en">Download PDF</span><span class="k-lbl-hi" style="display:none;">पीडीएफ डाउनलोड</span>
             </button>
           </div>
 
@@ -2627,6 +2684,17 @@
       document.getElementById('q-vastu-card').classList.remove('completed');
       document.getElementById('q-practical-card').classList.remove('completed');
 
+      // Populate Active Goals UI
+      if (typeof renderActiveGoalsUI === 'function') renderActiveGoalsUI();
+
+      // SMART MULTI-GOAL DE-DUPLICATION FOR HOME DASHBOARD
+      const activeGoalsList = (typeof getActiveGoals === 'function') ? getActiveGoals() : [normalizedGoal];
+      const activeGoalNames = activeGoalsList.map(g => goalLabels[g] || g).join(', ');
+
+      // De-duplicated Vedic Task (combines ruling planet & active goals into 1 non-repeating chanting quest)
+      const unifiedVedicText = `Ruling Planet Mantra: Chant "${lordDetails.mantra}" 108 times each morning facing East. (Energizes all active goals: ${activeGoalNames}). Sacred Text: ${lordDetails.text}`;
+      localStorage.setItem('today_quest_vedic_text', unifiedVedicText);
+
       // Populate Home Quest Cards texts
       document.getElementById('q-vedic-text').innerText = localStorage.getItem('today_quest_vedic_text');
       document.getElementById('q-lalkitab-text').innerText = localStorage.getItem('today_quest_lalkitab_text');
@@ -2663,7 +2731,103 @@
     let moodCheckedDate = localStorage.getItem('user_mood_checked_date') || '';
     let questsState = JSON.parse(localStorage.getItem('user_quests_state') || '{"vedic":false,"lalkitab":false,"vastu":false,"practical":false}');
 
-    function getFormattedDate(d = new Date()) {
+    
+    // ═══════════════════════════════════════════════════════════════
+    // PDF DOWNLOAD FOR KUNDLI REPORT
+    // ═══════════════════════════════════════════════════════════════
+    function downloadKundliPDF() {
+      window.print();
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // MULTI-GOAL MANAGEMENT & SMART DE-DUPLICATION ENGINE
+    // ═══════════════════════════════════════════════════════════════
+    function getActiveGoals() {
+      try {
+        const saved = localStorage.getItem('user_active_goals');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (e) {}
+      const primaryGoal = localStorage.getItem('user_goal') || onboardingGoal || 'job';
+      return [primaryGoal];
+    }
+
+    function setActiveGoals(goalsList) {
+      localStorage.setItem('user_active_goals', JSON.stringify(goalsList));
+      renderActiveGoalsUI();
+    }
+
+    function addActiveGoal(goalKey) {
+      let current = getActiveGoals();
+      if (!current.includes(goalKey)) {
+        current.push(goalKey);
+        setActiveGoals(current);
+        closeAddGoalModal();
+        // Regenerate unified action plan across all goals
+        generateCoachMission();
+      }
+    }
+
+    function removeActiveGoal(goalKey) {
+      let current = getActiveGoals();
+      if (current.length <= 1) {
+        alert("You must keep at least one active goal!");
+        return;
+      }
+      current = current.filter(g => g !== goalKey);
+      setActiveGoals(current);
+      generateCoachMission();
+    }
+
+    function renderActiveGoalsUI() {
+      const goalsListEl = document.getElementById('active-goals-list');
+      const countEl = document.getElementById('active-goals-count');
+      if (!goalsListEl) return;
+
+      const activeGoals = getActiveGoals();
+      if (countEl) countEl.textContent = activeGoals.length;
+
+      goalsListEl.innerHTML = activeGoals.map(gKey => {
+        const label = goalLabels[gKey] || gKey;
+        return `
+          <div style="display:flex; align-items:center; gap:6px; background:rgba(232,200,121,0.1); border:1px solid rgba(232,200,121,0.3); border-radius:16px; padding:6px 12px; font-size:0.78rem; color:var(--gold);">
+            <span>🎯 ${label}</span>
+            <span style="cursor:pointer; opacity:0.7; font-weight:bold; margin-left:4px;" onclick="removeActiveGoal('${gKey}')" title="Remove Goal">×</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openAddGoalModal() {
+      const modal = document.getElementById('add-goal-modal');
+      const container = document.getElementById('add-goal-options');
+      if (!modal || !container) return;
+
+      const activeGoals = getActiveGoals();
+      const allGoals = Object.keys(goalLabels);
+
+      container.innerHTML = allGoals.map(gKey => {
+        const isAdded = activeGoals.includes(gKey);
+        const label = goalLabels[gKey];
+        return `
+          <button class="btn btn-outline" style="display:flex; justify-content:space-between; align-items:center; padding:12px; text-align:left; ${isAdded ? 'opacity:0.5; cursor:default;' : ''}" ${isAdded ? 'disabled' : ''} onclick="addActiveGoal('${gKey}')">
+            <span>${label}</span>
+            <span style="font-size:0.75rem; font-weight:bold; color:${isAdded ? 'var(--text-muted)' : 'var(--gold)'};">${isAdded ? 'ADDED' : '+ ADD'}</span>
+          </button>
+        `;
+      }).join('');
+
+      modal.style.display = 'flex';
+    }
+
+    function closeAddGoalModal() {
+      const modal = document.getElementById('add-goal-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+function getFormattedDate(d = new Date()) {
       const y = d.getFullYear();
       const m = String(d.getMonth() + 1).padStart(2, '0');
       const day = String(d.getDate()).padStart(2, '0');
@@ -5176,5 +5340,20 @@
     }
   </script>
   </div>
+
+  <!-- Add Goal Modal Overlay -->
+  <div id="add-goal-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 20px;">
+    <div class="auth-card" style="max-height: 80vh; overflow-y: auto; width: 100%; border: 1px solid var(--gold);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;">Add Another Life Goal</h3>
+        <button class="btn" style="width: auto; padding: 4px 10px; font-size: 0.75rem;" onclick="closeAddGoalModal()">X</button>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Select a new goal to add to your daily karmic transformation plan:</p>
+      <div id="add-goal-options" style="display: flex; flex-direction: column; gap: 10px;">
+        <!-- Goal choices rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
