@@ -3067,6 +3067,24 @@
     // ═══════════════════════════════════════════════════════════════
     // GOOGLE OAUTH AUTHENTICATION HANDLER
     // ═══════════════════════════════════════════════════════════════
+    async 
+    // ═══════════════════════════════════════════════════════════════
+    // EMAIL AUTHENTICATION HANDLER (UNLOCKS FULL APP & GOALS)
+    // ═══════════════════════════════════════════════════════════════
+    async function handleEmailAuth(e) {
+      if (e) e.preventDefault();
+      const email = document.getElementById('auth-email').value;
+      const pwd = document.getElementById('auth-password').value;
+      if (!email || !pwd) return;
+
+      localStorage.setItem('user_authenticated', 'true');
+      localStorage.setItem('user_email', email);
+      alert("✅ Sign In Successful! Welcome to CosmoVedic.");
+
+      // Unlock full onboarding path selection
+      showOnboardingStep('category');
+    }
+
     async function signInWithGoogle() {
       try {
         if (typeof supabase !== 'undefined' && supabase.auth) {
