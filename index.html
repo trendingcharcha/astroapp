@@ -5767,6 +5767,27 @@
         title.innerText = "COSMOVEDIC";
       }
     }
+  
+    // ═══════════════════════════════════════════════════════════════
+    // HANDLE RETURN FROM GOOGLE OAUTH REDIRECT
+    // ═══════════════════════════════════════════════════════════════
+    function handleOAuthCallback() {
+      const hash = window.location.hash;
+      if (hash && (hash.includes('access_token=') || hash.includes('type=recovery'))) {
+        localStorage.setItem('user_authenticated', 'true');
+        localStorage.setItem('user_auth_provider', 'google');
+        // Clean hash from URL bar
+        window.history.replaceState(null, null, window.location.pathname);
+        alert("✅ Google Sign-In Successful! Welcome to CosmoVedic.");
+        showOnboardingStep('category');
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', handleOAuthCallback);
+    } else {
+      handleOAuthCallback();
+    }
+
   </script>
   </div>
 
