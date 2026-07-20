@@ -681,6 +681,44 @@
         <button class="btn" style="width: auto; padding: 6px 16px; font-size: 0.78rem; margin-top: 8px; align-self: center;" onclick="showOnboardingStep('path')">BACK TO SIGN IN</button>
       </div>
     </div>
+        <!-- ── STEP A.5: Choose Your Path (Single vs Couple) ── -->
+    <div id="onboarding-step-select-path" class="auth-card" style="text-align: center; width: 100%; display: none;">
+      <div style="margin-bottom: 16px;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.5">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <h2 style="margin-bottom: 8px; color: #FFFFFF; font-size: 1.35rem;">Choose Your Path</h2>
+      <p style="color: var(--text-muted); font-size: 0.83rem; margin-bottom: 22px;">Select how you wish to align your 90-day karmic journey</p>
+      
+      <div style="display: flex; flex-direction: column; gap: 14px; width: 100%;">
+        <!-- Option A: Single Goal Path -->
+        <button class="btn btn-outline" style="text-align: left; padding: 16px; display: flex; align-items: center; gap: 14px; border-color: rgba(232,200,121,0.4);" onclick="setOnboardingPath('single')">
+          <span style="flex-shrink:0;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          </span>
+          <div>
+            <strong style="color: var(--gold); display: block; font-size: 0.95rem; margin-bottom: 2px;">Single Goal Path</strong>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Personal health, career, finance, assets or relationships.</span>
+          </div>
+        </button>
+
+        <!-- Option B: Couple Goal Path -->
+        <button class="btn btn-outline" style="text-align: left; padding: 16px; display: flex; align-items: center; gap: 14px; border-color: rgba(232,200,121,0.4);" onclick="setOnboardingPath('couple')">
+          <span style="flex-shrink:0;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3.5"/><path d="M1 20c0-3.5 3-6 7-6s7 2.5 7 6"/><circle cx="17" cy="8" r="2.8"/><path d="M15 20c0-2 1.5-3.5 3.5-4.2"/></svg>
+          </span>
+          <div>
+            <strong style="color: var(--gold); display: block; font-size: 0.95rem; margin-bottom: 2px;">Couple Goal Path</strong>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Baby planning, joint assets, business, relationship harmony.</span>
+          </div>
+        </button>
+      </div>
+    </div>
+
     <!-- ── STEP B: Choose Category ──────────────────────── -->
     <div id="onboarding-step-category" class="auth-card" style="text-align: center; width: 100%; display: none;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; width: 100%;">
@@ -3653,7 +3691,7 @@
       if (lbl) lbl.textContent = path === 'couple'
         ? 'Couple Path — choose a joint life focus area'
         : 'Single Path — choose your personal focus area';
-      showOnboardingStep('category');
+      showOnboardingStep('select-path');
     }
 
     function buildCategoryGrid(path) {
@@ -3832,7 +3870,7 @@
     }
 
     function showOnboardingStep(stepNum) {
-      const steps = ['onboarding-step-path','onboarding-step-category','onboarding-step-1','onboarding-step-2','guest-choice-screen'];
+      const steps = ['onboarding-step-path','onboarding-step-select-path','onboarding-step-category','onboarding-step-1','onboarding-step-2','guest-choice-screen'];
       steps.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
@@ -3841,6 +3879,8 @@
       let target = null;
       if (stepNum === 'path' || stepNum === 1 && selectedCategoryKey === '') {
         target = 'onboarding-step-path';
+      } else if (stepNum === 'select-path') {
+        target = 'onboarding-step-select-path';
       } else if (stepNum === 'category') {
         onboardingPath = onboardingPath || 'single';
         buildCategoryGrid(onboardingPath);
