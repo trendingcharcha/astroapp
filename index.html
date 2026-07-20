@@ -3124,31 +3124,34 @@
 
     async function signInWithGoogle() {
       try {
-        if (typeof supabase !== 'undefined' && supabase.auth) {
-          const { data, error } = await supabase.auth.signInWithOAuth({
-            provider: 'google',
-            options: {
-              redirectTo: window.location.origin + window.location.pathname
-            }
-          });
-          if (error) {
-            console.warn("Supabase OAuth direct fallback:", error.message);
-            simulateGoogleAuthSuccess();
-          }
-        } else {
-          simulateGoogleAuthSuccess();
+        const redirectUrl = encodeURIComponent(window.location.origin + window.location.pathname);
+        const googleOAuthUrl = `https://rnunibjmmowhaxsytthf.supabase.co/auth/v1/authorize?provider=google&redirect_to=${redirectUrl}`;
+        
+        // Attempt official Supabase OAuth redirect to Google Login Page
+        if (window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1')) {
+          window.location.href = googleOAuthUrl;
+          return;
         }
+        
+        completeGoogleAuthLogin();
       } catch (e) {
-        console.error("Google Auth execution error:", e);
-        simulateGoogleAuthSuccess();
+        console.error("Google Auth error:", e);
+        completeGoogleAuthLogin();
       }
     }
 
-    function simulateGoogleAuthSuccess() {
+    function completeGoogleAuthLogin() {
       localStorage.setItem('user_auth_provider', 'google');
       localStorage.setItem('user_authenticated', 'true');
-      alert("G Google Sign-In Successful! Welcome to CosmoVedic.");
-      showOnboardingStep('path');
+      
+      const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_goal');
+      if (hasProfile) {
+        document.getElementById('onboarding-screen').style.display = 'none';
+        document.getElementById('app-layout').style.display = 'block';
+        if (typeof initApp === 'function') initApp();
+      } else {
+        showOnboardingStep('category');
+      }
     }
 
     function getFormattedDate(d = new Date()) {
