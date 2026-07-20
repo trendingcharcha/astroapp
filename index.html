@@ -971,7 +971,13 @@
     <main>
       <!-- TAB 1: HOME -->
       <div id="tab-home" class="tab-content active">
-        <h3 style="margin-bottom: 15px;">Cosmic Dashboard</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <h3 style="margin: 0;">Cosmic Dashboard</h3>
+          <button class="btn btn-outline" style="width: auto; padding: 6px 12px; font-size: 0.78rem; border-color: rgba(142,111,214,0.5); color: #c39bd3; display: flex; align-items: center; gap: 6px;" onclick="switchTab(4, document.querySelectorAll('.nav-item')[4])">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c39bd3" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            <span>🎓 Detailed Coach Predictions</span>
+          </button>
+        </div>
         
         <!-- Cosmic Progress Dashboard -->
         <div class="card gamified-card" style="position: relative; overflow: hidden; border: 1px solid rgba(232, 200, 121, 0.4); background: linear-gradient(135deg, rgba(23, 18, 48, 0.95), rgba(42, 36, 78, 0.7));">
@@ -4711,6 +4717,14 @@
     }
 
     // Tab Switching — Unified Single-Route System
+    
+    function scrollToTaskNavigator() {
+      setTimeout(() => {
+        const nav = document.getElementById('journey-day-navigator');
+        if (nav) nav.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 150);
+    }
+
     function switchTab(index, btn) {
       // Deactivate other tabs
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
