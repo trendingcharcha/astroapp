@@ -3156,8 +3156,8 @@
       localStorage.setItem('user_email', email);
       alert("✅ Sign In Successful! Welcome to CosmoVedic.");
 
-      // Unlock full onboarding path selection
-      setOnboardingPath('single');
+      // Unlock full onboarding path selection — Show Choose Your Path screen first
+      showOnboardingStep('select-path');
     }
 
     async function signInWithGoogle() {
@@ -3194,7 +3194,7 @@
         document.getElementById('app-layout').style.display = 'block';
         if (typeof initApp === 'function') initApp();
       } else {
-        setOnboardingPath('single');
+        showOnboardingStep('select-path');
       }
     }
 
