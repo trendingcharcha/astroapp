@@ -519,6 +519,7 @@
         <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('debt')">🔴 Clear Financial Debt</button>
         <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('marriage')">💍 Get Married / Relationship Harmony</button>
         <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('business')">🚀 Start or Grow Business</button>
+        <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('custom')">⚠️ Resolve Major Life Issue</button>
       </div>
     </div>
 
@@ -533,6 +534,11 @@
         <div class="form-group">
           <label>Full Name</label>
           <input type="text" id="o-name" required placeholder="Your Name">
+        </div>
+
+        <div id="onboarding-custom-issue-group" class="form-group" style="display: none;">
+          <label>Describe Your Specific Issue</label>
+          <input type="text" id="o-custom-issue" placeholder="e.g. Visa delay, legal dispute, health concerns, etc.">
         </div>
         
         <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
@@ -792,12 +798,18 @@
 
               <div class="form-group">
                 <label>Your Focus Goal</label>
-                <select id="c-goal" required>
+                <select id="c-goal" required onchange="toggleCoachCustomIssueField(this.value)">
                   <option value="job">Get Dream Job</option>
                   <option value="debt">Clear Financial Debt</option>
                   <option value="marriage">Get Married / Relationship Harmony</option>
                   <option value="business">Start or Grow Business</option>
+                  <option value="custom">Resolve Major Life Issue</option>
                 </select>
+              </div>
+
+              <div id="coach-custom-issue-group" class="form-group" style="display: none;">
+                <label>Describe Your Specific Issue</label>
+                <input type="text" id="c-custom-issue" placeholder="e.g. Visa delay, legal dispute, health concerns, etc.">
               </div>
 
               <div class="form-group">
@@ -1237,6 +1249,32 @@
         <li><strong>Sacred Reading:</strong> ${lordDetails.text}</li>
       `;
 
+      // Resolve custom issue categorization
+      let customCategory = "general";
+      let issueText = "your issue";
+      if (goal === 'custom') {
+        const customField = document.getElementById('c-custom-issue');
+        if (customField && customField.value.trim().length > 0) {
+          issueText = customField.value.trim();
+        } else {
+          const onboardingCustomField = document.getElementById('o-custom-issue');
+          if (onboardingCustomField && onboardingCustomField.value.trim().length > 0) {
+            issueText = onboardingCustomField.value.trim();
+          }
+        }
+        
+        const text = issueText.toLowerCase();
+        if (text.includes("health") || text.includes("ill") || text.includes("disease") || text.includes("body") || text.includes("sick") || text.includes("physic") || text.includes("hospital") || text.includes("doctor")) {
+          customCategory = "health";
+        } else if (text.includes("visa") || text.includes("foreign") || text.includes("travel") || text.includes("abroad") || text.includes("immigr") || text.includes("country")) {
+          customCategory = "visa";
+        } else if (text.includes("court") || text.includes("legal") || text.includes("case") || text.includes("law") || text.includes("dispute") || text.includes("police") || text.includes("judge")) {
+          customCategory = "legal";
+        } else if (text.includes("depress") || text.includes("anxiety") || text.includes("mental") || text.includes("stress") || text.includes("sad") || text.includes("fear") || text.includes("sleep")) {
+          customCategory = "mental";
+        }
+      }
+
       // Lal Kitab remedies
       const lalkitabRemedies = {
         "job": [
@@ -1254,10 +1292,34 @@
         "business": [
           "Keep a small, solid piece of silver in your wallet, locker, or cash register at your workplace.",
           "Donate black sesame seeds or mustard oil to the needy on Saturday evenings."
+        ],
+        "custom_health": [
+          "Donate pure water or milk to travelers, and feed fresh green grass to a cow in the morning to balance Mercury/Moon.",
+          "Keep a copper coin or a small piece of solid silver on your person for protective energy."
+        ],
+        "custom_visa": [
+          "Keep some barley grains under your pillow overnight and feed them to birds or place them in flowing water in the morning.",
+          "Feed green fodder to a bull or donate black sesame seeds to the needy to pacify Rahu obstacles."
+        ],
+        "custom_legal": [
+          "Feed sweet baked bread or rotis to black stray dogs on the street to pacify Saturn and Rahu.",
+          "Pour a few drops of mustard oil on raw soil in the morning to ground negative planetary influences."
+        ],
+        "custom_mental": [
+          "Avoid consuming milk late at night; instead, offer milk or food to stray dogs in the morning.",
+          "Keep a glass of water near your bedside table at night and pour it into a plant's roots in the morning."
+        ],
+        "custom_general": [
+          "Feed birds with mixed grains (Satnaja) on your terrace or open balcony to remove daily obstacles.",
+          "Offer fresh water with a pinch of sugar to the rising Sun from a copper vessel."
         ]
       };
 
-      const remedies = lalkitabRemedies[goal] || lalkitabRemedies["job"];
+      let remediesGoal = goal;
+      if (goal === 'custom') {
+        remediesGoal = "custom_" + customCategory;
+      }
+      const remedies = lalkitabRemedies[remediesGoal] || lalkitabRemedies["job"];
       const lalkitabListHTML = `
         <li style="margin-bottom: 10px;"><strong>Remedy 1:</strong> ${remedies[0]}</li>
         <li><strong>Remedy 2:</strong> ${remedies[1]}</li>
@@ -1268,10 +1330,19 @@
         "job": "Ensure your study or work desk is placed in the North or North-East zone of your room. Keep the desk clean, clutter-free, and place a green aventurine crystal or a small plant here.",
         "debt": "Place a small running water fountain or a picture of serene water flow in the North direction of your house. Ensure there are no heavy iron items or garbage in the North-East zone.",
         "marriage": "Place a pair of decorative pink/gold lovebirds or a rose quartz crystal in the South-West corner of your bedroom. Avoid using dark blue or black bedsheets.",
-        "business": "Keep the main entrance of your shop, office, or workshop clean, well-lit, and decorated with a swastika symbol. Position your sitting chair facing East or North."
+        "business": "Keep the main entrance of your shop, office, or workshop clean, well-lit, and decorated with a swastika symbol. Position your sitting chair facing East or North.",
+        "custom_health": "Ensure your sleeping bed headboard points towards the South or East. Clear any cluttered items or dust from the North-East zone of your house to maintain pure health flows.",
+        "custom_visa": "Place your passport, travel documents, or study files in the North-West (Vayu/Air corner) of your home to accelerate transit energy.",
+        "custom_legal": "Store all court case files, legal letters, and dispute documents in the South or South-West corner of your office or bedroom to ensure stability.",
+        "custom_mental": "Ensure the North-West area of your bedroom is clean, free of heavy storage blocks, and well-lit to promote stable mental air currents.",
+        "custom_general": `Sit facing East while planning steps to resolve: '${issueText}', and ensure your work chair has a solid wall backing behind it.`
       };
 
-      const vastuListHTML = `<li>${vastuSuggestions[goal] || vastuSuggestions["job"]}</li>`;
+      let vastuGoal = goal;
+      if (goal === 'custom') {
+        vastuGoal = "custom_" + customCategory;
+      }
+      const vastuListHTML = `<li>${vastuSuggestions[vastuGoal] || vastuSuggestions["job"]}</li>`;
 
       // Practical Actions
       const practicalActions = {
@@ -1298,15 +1369,49 @@
           `Review your pricing structure for ${profession} services to ensure your profit margin accounts for current operational inflation.`,
           `Design a simple case study post showcasing a recent successful project you completed as a ${profession} and share it on your social media feeds.`,
           `Spend 30 minutes analyzing your accounts ledger to trace and eliminate leakage in your business operational cash flow.`
+        ],
+        "custom_health": [
+          `Drink at least 3 liters of water today and record your consumption to flush bodily toxins.`,
+          `Spend 25 minutes doing simple stretching or walking outdoors to release physical and mental stress.`,
+          `Research or schedule an appointment with a professional specialist regarding your health concern: "${issueText}".`,
+          `Write down a daily menu focusing on clean, unprocessed, high-fiber food for the next 7 days.`
+        ],
+        "custom_visa": [
+          `Log in to the official immigration portal and review the checklist status of your issue: "${issueText}".`,
+          `Double-check all submission files to ensure stamps, signatures, and dates are valid.`,
+          `Read or post on an immigration forum/community to check recent processing times for similar travel cases.`,
+          `Prepare all travel documents in a secure folder, and update your personal travel budget spreadsheet.`
+        ],
+        "custom_legal": [
+          `Draft a concise status update email to your legal consultant/lawyer regarding: "${issueText}".`,
+          `Organize all evidentiary documents and correspondence chronologically in a digital folder today.`,
+          `List 3 key potential compromise points or resolution outcomes for this dispute to discuss next.`,
+          `Spend 20 minutes reviewing current laws or similar case precedents online to stay informed.`
+        ],
+        "custom_mental": [
+          `Dedicate 10 minutes to deep breathing exercises (Pranayama) or mindfulness meditation to calm your mind today.`,
+          `Write down 3 items you are deeply grateful for in a journal to shift focus from: "${issueText}".`,
+          `Reach out and talk to a supportive friend, family member, or professional counselor to express your feelings.`,
+          `Disconnect from social media and electronic screens for at least 2 hours before going to sleep tonight.`
+        ],
+        "custom_general": [
+          `Write down a clear list of 3 specific actions you can take today to address the issue: "${issueText}".`,
+          `Execute the most immediate or simplest action from your list today to gain momentum.`,
+          `Dedicate 30 minutes to search online or read books for solutions from experts who solved the issue: "${issueText}".`,
+          `Create a tracking file or note to record daily improvements and actions related to this goal.`
         ]
       };
 
-      const actions = practicalActions[goal] || practicalActions["job"];
+      let actionsGoal = goal;
+      if (goal === 'custom') {
+        actionsGoal = "custom_" + customCategory;
+      }
+      const actions = practicalActions[actionsGoal] || practicalActions["job"];
       const practicalListHTML = `
-        <li style="margin-bottom: 10px;"><strong>Application Step:</strong> ${actions[0]}</li>
-        <li style="margin-bottom: 10px;"><strong>Resume & Profile:</strong> ${actions[1]}</li>
-        <li style="margin-bottom: 10px;"><strong>Networking:</strong> ${actions[2]}</li>
-        <li><strong>Skill & Cashflow:</strong> ${actions[3]}</li>
+        <li style="margin-bottom: 10px;"><strong>Action Step 1:</strong> ${actions[0]}</li>
+        <li style="margin-bottom: 10px;"><strong>Action Step 2:</strong> ${actions[1]}</li>
+        <li style="margin-bottom: 10px;"><strong>Action Step 3:</strong> ${actions[2]}</li>
+        <li><strong>Action Step 4:</strong> ${actions[3]}</li>
       `;
 
       // Populate list elements
@@ -1399,6 +1504,18 @@
     let onboardingGoal = 'job';
     function setOnboardingGoal(goal) {
       onboardingGoal = goal;
+      
+      const customGroup = document.getElementById('onboarding-custom-issue-group');
+      const customInput = document.getElementById('o-custom-issue');
+      if (goal === 'custom') {
+        customGroup.style.display = 'block';
+        customInput.required = true;
+      } else {
+        customGroup.style.display = 'none';
+        customInput.required = false;
+        customInput.value = '';
+      }
+      
       showOnboardingStep(2);
     }
 
@@ -1513,6 +1630,12 @@
       document.getElementById('c-profession').value = profession;
       coachSelectedCity = onboardingSelectedCity;
 
+      if (goal === 'custom') {
+        const customVal = document.getElementById('o-custom-issue').value;
+        document.getElementById('c-custom-issue').value = customVal;
+      }
+      toggleCoachCustomIssueField(goal);
+
       // Run generation
       await generateCoachMission({
         preventDefault: () => {},
@@ -1533,6 +1656,19 @@
       // Set Coach as active tab
       const coachBtn = document.querySelectorAll('.nav-item')[4];
       switchTab(4, coachBtn);
+    }
+
+    function toggleCoachCustomIssueField(val) {
+      const group = document.getElementById('coach-custom-issue-group');
+      const input = document.getElementById('c-custom-issue');
+      if (val === 'custom') {
+        group.style.display = 'block';
+        input.required = true;
+      } else {
+        group.style.display = 'none';
+        input.required = false;
+        input.value = '';
+      }
     }
 
     function logout() {
