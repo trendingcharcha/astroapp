@@ -20,6 +20,10 @@ class SupabaseService {
     return await client.auth.signInAnonymously();
   }
 
+  static Future<bool> signInWithGoogle() async {
+    return await client.auth.signInWithOAuth(OAuthProvider.google);
+  }
+
   static Future<void> signOut() async {
     await client.auth.signOut();
   }
