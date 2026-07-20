@@ -3775,112 +3775,150 @@
         btn.disabled = true;
       }
 
-      const name = document.getElementById('o-name').value;
-      const gender = document.getElementById('o-gender').value;
-      const date = document.getElementById('o-date').value;
-      const time = document.getElementById('o-time').value;
-      const cityName = document.getElementById('o-city').value;
-      const goal = onboardingGoal;
-      const profession = document.getElementById('o-profession').value;
-      const propertyNumber = document.getElementById('o-property-number') ? document.getElementById('o-property-number').value : '';
-      const propertyType = document.getElementById('o-property-type') ? document.getElementById('o-property-type').value : '';
-      const propertyCity = document.getElementById('o-property-city') ? document.getElementById('o-property-city').value : '';
-
-      // Save onboarding data to localStorage for coach context
-      localStorage.setItem('user_gender', gender);
-      localStorage.setItem('user_goal', goal);
-      localStorage.setItem('onboarding_path', onboardingPath);
-      if (propertyNumber) localStorage.setItem('property_number', propertyNumber);
-      if (propertyType) localStorage.setItem('property_type', propertyType);
-      if (propertyCity) localStorage.setItem('property_city', propertyCity);
-
-      // Sync onboarding values to Coach tab forms
-      document.getElementById('c-name').value = name;
-      document.getElementById('c-date').value = date;
-      document.getElementById('c-time').value = time;
-      document.getElementById('c-city').value = cityName;
-      document.getElementById('c-goal').value = goal.startsWith('property') ? 'property' : goal.startsWith('marriage') ? 'marriage' : goal;
-      document.getElementById('c-profession').value = profession;
-      coachSelectedCity = onboardingSelectedCity;
-
-      if (goal === 'custom') {
-        const customVal = document.getElementById('o-custom-issue').value;
-        document.getElementById('c-custom-issue').value = customVal;
-      }
-      
-      // Sync baby details if goal is baby
-      if (goal === 'baby') {
-        const babyNum = document.getElementById('o-baby-number-val').value || '1';
-        if (document.getElementById('c-baby-number')) {
-          document.getElementById('c-baby-number').value = babyNum;
-          toggleBabyFields('c', babyNum);
-        }
-        if (babyNum === "2") {
-          const el = document.getElementById('c-first-baby-dob');
-          if (el) el.value = document.getElementById('o-first-baby-dob').value;
-        } else if (babyNum === "3") {
-          const el1 = document.getElementById('c-first-baby-age');
-          const el2 = document.getElementById('c-second-baby-age');
-          if (el1) el1.value = document.getElementById('o-first-baby-age').value;
-          if (el2) el2.value = document.getElementById('o-second-baby-age').value;
-        }
-      }
-      
-      toggleCoachCustomIssueField(goal);
-
-      // Sync path mode value
-      if (document.getElementById('c-path-mode')) {
-        document.getElementById('c-path-mode').value = onboardingPath;
-      }
-
-      // Sync partner details (couple path auto-shows partner section)
-      const isCouplePath = onboardingPath === 'couple';
-      const partnerToggleEl = document.getElementById('o-partner-toggle');
-      const partnerToggleChecked = isCouplePath || (partnerToggleEl && partnerToggleEl.checked);
-      
-      const coachPartnerToggle = document.getElementById('c-partner-toggle');
-      if (coachPartnerToggle) {
-        coachPartnerToggle.checked = partnerToggleChecked;
-        toggleCoachPartnerFields(partnerToggleChecked);
-      }
-      
-      if (partnerToggleChecked) {
-        const pName = document.getElementById('o-p-name');
-        const pDate = document.getElementById('o-p-date');
-        const pTime = document.getElementById('o-p-time');
-        const pCity = document.getElementById('o-p-city');
-        const pGender = document.getElementById('o-p-gender');
-        if (pName && document.getElementById('c-p-name')) document.getElementById('c-p-name').value = pName.value;
-        if (pDate && document.getElementById('c-p-date')) document.getElementById('c-p-date').value = pDate.value;
-        if (pTime && document.getElementById('c-p-time')) document.getElementById('c-p-time').value = pTime.value;
-        if (pCity && document.getElementById('c-p-city')) document.getElementById('c-p-city').value = pCity.value;
-        coachPartnerSelectedCity = partnerSelectedCity;
-        if (pGender) localStorage.setItem('partner_gender', pGender.value);
-      }
-
-      // Run generation with robust error catching & screen transition
       try {
+        // Safe input extractions with fallbacks
+        const nameInput = document.getElementById('o-name');
+        const name = (nameInput && nameInput.value) ? nameInput.value.trim() : 'Seeker';
+
+        const genderInput = document.getElementById('o-gender');
+        const gender = (genderInput && genderInput.value) ? genderInput.value : 'M';
+
+        const dateInput = document.getElementById('o-date');
+        const date = (dateInput && dateInput.value) ? dateInput.value : '1990-01-01';
+
+        const timeInput = document.getElementById('o-time');
+        const time = (timeInput && timeInput.value) ? timeInput.value : '12:00';
+
+        const cityInput = document.getElementById('o-city');
+        const cityName = (cityInput && cityInput.value) ? cityInput.value.trim() : 'New Delhi';
+
+        const goal = onboardingGoal || 'job';
+
+        const profInput = document.getElementById('o-profession');
+        const profession = (profInput && profInput.value) ? profInput.value.trim() : 'Seeker';
+
+        const propertyNumber = document.getElementById('o-property-number') ? document.getElementById('o-property-number').value : '';
+        const propertyType = document.getElementById('o-property-type') ? document.getElementById('o-property-type').value : '';
+        const propertyCity = document.getElementById('o-property-city') ? document.getElementById('o-property-city').value : '';
+
+        // Save onboarding data to localStorage for coach context
+        localStorage.setItem('user_gender', gender);
+        localStorage.setItem('user_goal', goal);
+        localStorage.setItem('onboarding_path', onboardingPath || 'single');
+        if (propertyNumber) localStorage.setItem('property_number', propertyNumber);
+        if (propertyType) localStorage.setItem('property_type', propertyType);
+        if (propertyCity) localStorage.setItem('property_city', propertyCity);
+
+        // Sync onboarding values to Coach tab forms safely
+        const cName = document.getElementById('c-name'); if (cName) cName.value = name;
+        const cDate = document.getElementById('c-date'); if (cDate) cDate.value = date;
+        const cTime = document.getElementById('c-time'); if (cTime) cTime.value = time;
+        const cCity = document.getElementById('c-city'); if (cCity) cCity.value = cityName;
+        const cGoal = document.getElementById('c-goal'); 
+        if (cGoal) {
+          const gVal = (goal && typeof goal === 'string' && goal.startsWith('property')) ? 'property' : (goal && typeof goal === 'string' && goal.startsWith('marriage')) ? 'marriage' : goal;
+          cGoal.value = gVal;
+        }
+        const cProf = document.getElementById('c-profession'); if (cProf) cProf.value = profession;
+        coachSelectedCity = onboardingSelectedCity || { name: cityName, lat: 28.6139, lng: 77.2090, tz: 5.5 };
+
+        if (goal === 'custom') {
+          const customVal = document.getElementById('o-custom-issue') ? document.getElementById('o-custom-issue').value : '';
+          const cCustom = document.getElementById('c-custom-issue');
+          if (cCustom) cCustom.value = customVal;
+        }
+        
+        // Sync baby details if goal is baby
+        if (goal === 'baby') {
+          const babyValEl = document.getElementById('o-baby-number-val');
+          const babyNum = (babyValEl && babyValEl.value) ? babyValEl.value : '1';
+          if (document.getElementById('c-baby-number')) {
+            document.getElementById('c-baby-number').value = babyNum;
+            toggleBabyFields('c', babyNum);
+          }
+          if (babyNum === "2") {
+            const el = document.getElementById('c-first-baby-dob');
+            const oEl = document.getElementById('o-first-baby-dob');
+            if (el && oEl) el.value = oEl.value;
+          } else if (babyNum === "3") {
+            const el1 = document.getElementById('c-first-baby-age');
+            const el2 = document.getElementById('c-second-baby-age');
+            const oEl1 = document.getElementById('o-first-baby-age');
+            const oEl2 = document.getElementById('o-second-baby-age');
+            if (el1 && oEl1) el1.value = oEl1.value;
+            if (el2 && oEl2) el2.value = oEl2.value;
+          }
+        }
+        
+        if (typeof toggleCoachCustomIssueField === 'function') {
+          toggleCoachCustomIssueField(goal);
+        }
+
+        // Sync path mode value
+        if (document.getElementById('c-path-mode')) {
+          document.getElementById('c-path-mode').value = onboardingPath || 'single';
+        }
+
+        // Sync partner details (couple path auto-shows partner section)
+        const isCouplePath = (onboardingPath === 'couple');
+        const partnerToggleEl = document.getElementById('o-partner-toggle');
+        const partnerToggleChecked = isCouplePath || (partnerToggleEl && partnerToggleEl.checked);
+        
+        const coachPartnerToggle = document.getElementById('c-partner-toggle');
+        if (coachPartnerToggle) {
+          coachPartnerToggle.checked = partnerToggleChecked;
+          if (typeof toggleCoachPartnerFields === 'function') {
+            toggleCoachPartnerFields(partnerToggleChecked);
+          }
+        }
+        
+        if (partnerToggleChecked) {
+          const pName = document.getElementById('o-p-name');
+          const pDate = document.getElementById('o-p-date');
+          const pTime = document.getElementById('o-p-time');
+          const pCity = document.getElementById('o-p-city');
+          const pGender = document.getElementById('o-p-gender');
+          if (pName && document.getElementById('c-p-name')) document.getElementById('c-p-name').value = pName.value;
+          if (pDate && document.getElementById('c-p-date')) document.getElementById('c-p-date').value = pDate.value;
+          if (pTime && document.getElementById('c-p-time')) document.getElementById('c-p-time').value = pTime.value;
+          if (pCity && document.getElementById('c-p-city')) document.getElementById('c-p-city').value = pCity.value;
+          coachPartnerSelectedCity = partnerSelectedCity || { name: 'Mumbai', lat: 19.0760, lng: 72.8777, tz: 5.5 };
+          if (pGender && pGender.value) localStorage.setItem('partner_gender', pGender.value);
+        }
+
+        // Run mission generation
         await generateCoachMission({
           preventDefault: () => {},
           target: btn
         });
+
       } catch (err) {
         console.error("Coach Mission Generation Error:", err);
       } finally {
+        // Restore button state
         if (btn) {
           btn.innerText = originalText;
           btn.disabled = false;
         }
+
+        // GUARANTEED SCREEN TRANSITION
+        const onboardingScreen = document.getElementById('onboarding-screen');
+        if (onboardingScreen) onboardingScreen.style.display = 'none';
+
+        const appLayout = document.getElementById('app-layout');
+        if (appLayout) appLayout.style.display = 'flex';
+
+        if (typeof initApp === 'function') {
+          try { initApp(); } catch(e) { console.error("initApp error:", e); }
+        }
+
+        // Set Coach as active tab
+        const navItems = document.querySelectorAll('.nav-item');
+        const coachBtn = navItems[4] || navItems[0];
+        if (typeof switchTab === 'function') {
+          switchTab(4, coachBtn);
+        }
       }
-
-      // Guaranteed switch to main dashboard
-      document.getElementById('onboarding-screen').style.display = 'none';
-      document.getElementById('app-layout').style.display = 'flex';
-      initApp();
-
-      // Set Coach as active tab
-      const coachBtn = document.querySelectorAll('.nav-item')[4];
-      switchTab(4, coachBtn);
     }
 
     function toggleCoachCustomIssueField(val) {
