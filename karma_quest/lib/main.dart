@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'screens/home_dashboard.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Basic Firebase setup code (wrapped in try-catch to run locally without setup)
+  // Initialize Supabase 24/7 Live Cloud Database
   try {
-    await Firebase.initializeApp();
+    await Supabase.initialize(
+      url: 'https://rnunibjmmowhaxsytthf.supabase.co',
+      anonKey: 'sb_publishable_jjYnowJojZtzDjqEmVXACg_C7J1PGlq',
+    );
   } catch (e) {
-    debugPrint("Firebase not configured yet: $e");
+    debugPrint("Failed to initialize Supabase client: $e");
   }
   
   runApp(const KarmaQuestApp());
