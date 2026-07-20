@@ -968,7 +968,7 @@
                   <strong style="color: var(--gold); font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3 0-5 2-5 4s2 4 5 4c-1 2-3 4-6 5"/><path d="M14 10c1 2 2 4 2 6a4 4 0 0 1-4 4"/><path d="M12 2c3 0 5 2 5 4"/><circle cx="17" cy="7" r="1" fill="#E8C879"/></svg> Vedic Mantra Chanting</strong>
                   <span style="font-size: 0.75rem; background: rgba(232, 200, 121, 0.15); color: var(--gold); padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+20 XP</span>
                 </div>
-                <p id="q-vedic-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;"></p>
+                <div id="q-vedic-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;"></div>
               </div>
             </div>
 
@@ -980,7 +980,7 @@
                   <strong style="color: #ff6b6b; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="6" x2="16" y2="6"/><line x1="12" y1="10" x2="16" y2="10"/></svg> Lal Kitab Remedy</strong>
                   <span style="font-size: 0.75rem; background: rgba(255, 107, 107, 0.15); color: #ff6b6b; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+15 XP</span>
                 </div>
-                <p id="q-lalkitab-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;"></p>
+                <div id="q-lalkitab-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;"></div>
               </div>
             </div>
 
@@ -992,7 +992,7 @@
                   <strong style="color: #5dade2; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> Vastu Alignment</strong>
                   <span style="font-size: 0.75rem; background: rgba(93, 173, 226, 0.15); color: #5dade2; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+15 XP</span>
                 </div>
-                <p id="q-vastu-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;"></p>
+                <div id="q-vastu-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;"></div>
               </div>
             </div>
 
@@ -1004,7 +1004,7 @@
                   <strong style="color: #2ecc71; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Coaching Action Item</strong>
                   <span style="font-size: 0.75rem; background: rgba(46, 204, 113, 0.15); color: #2ecc71; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+30 XP</span>
                 </div>
-                <p id="q-practical-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;"></p>
+                <div id="q-practical-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;"></div>
               </div>
             </div>
           </div>
@@ -2695,11 +2695,11 @@
       const unifiedVedicText = `Ruling Planet Mantra: Chant "${lordDetails.mantra}" 108 times each morning facing East. (Energizes all active goals: ${activeGoalNames}). Sacred Text: ${lordDetails.text}`;
       localStorage.setItem('today_quest_vedic_text', unifiedVedicText);
 
-      // Populate Home Quest Cards texts
-      document.getElementById('q-vedic-text').innerText = localStorage.getItem('today_quest_vedic_text');
-      document.getElementById('q-lalkitab-text').innerText = localStorage.getItem('today_quest_lalkitab_text');
-      document.getElementById('q-vastu-text').innerText = localStorage.getItem('today_quest_vastu_text');
-      document.getElementById('q-practical-text').innerText = localStorage.getItem('today_quest_practical_text');
+      // Populate Home Quest Cards with clean multi-line HTML formatting
+      document.getElementById('q-vedic-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_vedic_text'));
+      document.getElementById('q-lalkitab-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_lalkitab_text'));
+      document.getElementById('q-vastu-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_vastu_text'));
+      document.getElementById('q-practical-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_practical_text'));
 
       // Show Quests Section on Home, Hide prompt
       document.getElementById('quest-unlock-prompt').style.display = 'none';
@@ -2827,7 +2827,30 @@
       if (modal) modal.style.display = 'none';
     }
 
-function getFormattedDate(d = new Date()) {
+
+    // ═══════════════════════════════════════════════════════════════
+    // PROFESSIONAL QUEST TEXT FORMATTER (NEW LINES PER ITEM)
+    // ═══════════════════════════════════════════════════════════════
+    function formatQuestHTML(text) {
+      if (!text || typeof text !== 'string') return '';
+      let formatted = text.trim();
+      
+      // Insert line breaks before numbered points & headers
+      formatted = formatted.replace(/(Remedy \d+:)/g, '<br/><span style="color:#ff6b6b; font-weight:600; display:inline-block; margin-top:6px;">$1</span>');
+      formatted = formatted.replace(/(Action Step \d+:)/g, '<br/><span style="color:#2ecc71; font-weight:600; display:inline-block; margin-top:6px;">$1</span>');
+      formatted = formatted.replace(/(Ruling Planet Mantra:)/g, '<span style="color:var(--gold); font-weight:600; display:inline-block;">$1</span>');
+      formatted = formatted.replace(/(Sacred Text:)/g, '<br/><span style="color:#5dade2; font-weight:600; display:inline-block; margin-top:6px;">$1</span>');
+      formatted = formatted.replace(/(Goal Ritual:)/g, '<br/><span style="color:var(--gold); font-weight:600; display:inline-block; margin-top:6px;">$1</span>');
+      formatted = formatted.replace(/(Ekadashi Fast:)/g, '<br/><span style="color:#8e44ad; font-weight:600; display:inline-block; margin-top:6px;">$1</span>');
+
+      // Strip leading <br/> if any
+      if (formatted.startsWith('<br/>')) {
+        formatted = formatted.substring(5);
+      }
+      return formatted;
+    }
+
+    function getFormattedDate(d = new Date()) {
       const y = d.getFullYear();
       const m = String(d.getMonth() + 1).padStart(2, '0');
       const day = String(d.getDate()).padStart(2, '0');
@@ -4212,10 +4235,10 @@ function getFormattedDate(d = new Date()) {
       }
 
       if (todayMissionDate === todayStr) {
-        document.getElementById('q-vedic-text').innerText = localStorage.getItem('today_quest_vedic_text') || '';
-        document.getElementById('q-lalkitab-text').innerText = localStorage.getItem('today_quest_lalkitab_text') || '';
-        document.getElementById('q-vastu-text').innerText = localStorage.getItem('today_quest_vastu_text') || '';
-        document.getElementById('q-practical-text').innerText = localStorage.getItem('today_quest_practical_text') || '';
+        document.getElementById('q-vedic-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_vedic_text') || '');
+        document.getElementById('q-lalkitab-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_lalkitab_text') || '');
+        document.getElementById('q-vastu-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_vastu_text') || '');
+        document.getElementById('q-practical-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_practical_text') || '');
 
         document.getElementById('q-vedic').checked = questsState.vedic;
         document.getElementById('q-lalkitab').checked = questsState.lalkitab;
