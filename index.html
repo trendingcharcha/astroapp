@@ -946,7 +946,7 @@
         </div>
 
         <!-- Today's Quests -->
-        <div id="quests-section" style="margin-bottom: 25px; text-align: left; display: none;">
+        <div id="quests-section" style="margin-bottom: 25px; text-align: left; display: block;">
           <h3 style="margin-bottom: 12px; font-size: 1.1rem; display: flex; justify-content: space-between; align-items: center;">
             <span>Today's Daily Quests</span>
             <span id="quests-completed-count" style="font-size: 0.8rem; color: var(--gold); font-weight: normal;">0 / 4 Complete</span>
@@ -1003,13 +1003,7 @@
           </div>
         </div>
 
-        <!-- Quest Unlock Prompt -->
-        <div id="quest-unlock-prompt" class="card" style="text-align: center; border: 1px solid rgba(232, 200, 121, 0.2); padding: 30px 20px; margin-bottom: 25px;">
-          <span style="display:block;margin-bottom:6px;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span>
-          <h4 style="color: var(--gold); margin: 10px 0 5px 0;">No Daily Quests Yet</h4>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 15px 0;">Generate your daily astro coach mission to unlock today's active quests!</p>
-          <button class="btn" onclick="goToCoachTab()" style="width: auto; padding: 8px 20px;">GENERATE QUESTS NOW</button>
-        </div>
+<!-- Quest section always unlocked automatically -->
 
         <!-- 90-Day Karmic Transformation Journey -->
         <div class="card" style="border: 1px solid rgba(232, 200, 121, 0.3); background: linear-gradient(135deg, rgba(20,16,44,0.9), rgba(10,8,25,0.95));">
@@ -4274,29 +4268,42 @@
         if (resultView) resultView.style.display = 'block';
       }
 
-      if (todayMissionDate === todayStr) {
-        document.getElementById('q-vedic-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_vedic_text') || '');
-        document.getElementById('q-lalkitab-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_lalkitab_text') || '');
-        document.getElementById('q-vastu-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_vastu_text') || '');
-        document.getElementById('q-practical-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_practical_text') || '');
-
-        document.getElementById('q-vedic').checked = questsState.vedic;
-        document.getElementById('q-lalkitab').checked = questsState.lalkitab;
-        document.getElementById('q-vastu').checked = questsState.vastu;
-        document.getElementById('q-practical').checked = questsState.practical;
-
-        if (questsState.vedic) document.getElementById('q-vedic-card').classList.add('completed');
-        if (questsState.lalkitab) document.getElementById('q-lalkitab-card').classList.add('completed');
-        if (questsState.vastu) document.getElementById('q-vastu-card').classList.add('completed');
-        if (questsState.practical) document.getElementById('q-practical-card').classList.add('completed');
-
-        document.getElementById('quest-unlock-prompt').style.display = 'none';
-        document.getElementById('quests-section').style.display = 'block';
-        updateQuestCompletionCount();
+      // ALWAYS AUTO-GENERATE OR RESTORE TODAY'S QUESTS AUTOMATICALLY
+      if (todayMissionDate !== todayStr) {
+        // Automatically generate today's active mission & daily quests from user goals
+        try {
+          if (typeof generateCoachMission === 'function') {
+            generateCoachMission({ preventDefault: () => {} });
+          }
+        } catch (e) {
+          console.error("Auto quest generation error:", e);
+        }
       } else {
-        document.getElementById('quest-unlock-prompt').style.display = 'block';
-        document.getElementById('quests-section').style.display = 'none';
+        const vText = localStorage.getItem('today_quest_vedic_text');
+        const lText = localStorage.getItem('today_quest_lalkitab_text');
+        const vaText = localStorage.getItem('today_quest_vastu_text');
+        const pText = localStorage.getItem('today_quest_practical_text');
+
+        if (vText && document.getElementById('q-vedic-text')) document.getElementById('q-vedic-text').innerHTML = formatQuestHTML(vText);
+        if (lText && document.getElementById('q-lalkitab-text')) document.getElementById('q-lalkitab-text').innerHTML = formatQuestHTML(lText);
+        if (vaText && document.getElementById('q-vastu-text')) document.getElementById('q-vastu-text').innerHTML = formatQuestHTML(vaText);
+        if (pText && document.getElementById('q-practical-text')) document.getElementById('q-practical-text').innerHTML = formatQuestHTML(pText);
+
+        if (document.getElementById('q-vedic')) document.getElementById('q-vedic').checked = questsState.vedic;
+        if (document.getElementById('q-lalkitab')) document.getElementById('q-lalkitab').checked = questsState.lalkitab;
+        if (document.getElementById('q-vastu')) document.getElementById('q-vastu').checked = questsState.vastu;
+        if (document.getElementById('q-practical')) document.getElementById('q-practical').checked = questsState.practical;
+
+        if (questsState.vedic && document.getElementById('q-vedic-card')) document.getElementById('q-vedic-card').classList.add('completed');
+        if (questsState.lalkitab && document.getElementById('q-lalkitab-card')) document.getElementById('q-lalkitab-card').classList.add('completed');
+        if (questsState.vastu && document.getElementById('q-vastu-card')) document.getElementById('q-vastu-card').classList.add('completed');
+        if (questsState.practical && document.getElementById('q-practical-card')) document.getElementById('q-practical-card').classList.add('completed');
+
+        updateQuestCompletionCount();
       }
+
+      const qSec = document.getElementById('quests-section');
+      if (qSec) qSec.style.display = 'block';
     }
 
     // Tab Switching — Unified Single-Route System
