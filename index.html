@@ -3842,11 +3842,15 @@
       if (stepNum === 'path' || stepNum === 1 && selectedCategoryKey === '') {
         target = 'onboarding-step-path';
       } else if (stepNum === 'category') {
+        onboardingPath = onboardingPath || 'single';
+        buildCategoryGrid(onboardingPath);
         target = 'onboarding-step-category';
       } else if (stepNum === 1) {
         target = 'onboarding-step-1';
       } else if (stepNum === 2) {
-        // BACK from goal list → go to category
+        // BACK from goal list -> go to category
+        onboardingPath = onboardingPath || 'single';
+        buildCategoryGrid(onboardingPath);
         target = 'onboarding-step-category';
       } else if (stepNum === 3) {
         target = 'onboarding-step-2';
@@ -3856,7 +3860,6 @@
         const el = document.getElementById(target);
         if (el) {
           el.style.display = 'block';
-          // Scroll to top of onboarding screen
           const screen = document.getElementById('onboarding-screen');
           if (screen) screen.scrollTop = 0;
         }
