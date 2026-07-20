@@ -723,7 +723,7 @@
     <div id="onboarding-step-category" class="auth-card" style="text-align: center; width: 100%; display: none;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; width: 100%;">
         <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;">Your Focus Area</h3>
-        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep('path')">BACK</button>
+        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep('select-path')">BACK</button>
       </div>
       <p id="onboarding-category-label" style="font-size:0.78rem;color:var(--text-muted);margin:0 0 16px 0;text-align:left;"></p>
       <div id="category-grid" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
@@ -3485,9 +3485,16 @@
             if (onboarding) onboarding.style.display = 'none';
             if (appLayout) appLayout.style.display = 'block';
             if (typeof initApp === 'function') initApp();
-          } else {
+          } else if (isAuth) {
+            // User is already logged in -> Skip Sign In screen & open Choose Your Path
             if (appLayout) appLayout.style.display = 'none';
             if (onboarding) onboarding.style.display = 'flex';
+            showOnboardingStep('select-path');
+          } else {
+            // Guest / Not logged in -> Show Sign In Gateway
+            if (appLayout) appLayout.style.display = 'none';
+            if (onboarding) onboarding.style.display = 'flex';
+            showOnboardingStep('path');
           }
         }, 600);
       }
