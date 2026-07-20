@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -28,25 +28,29 @@
       font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
-    body {
-      background-color: #04030a; /* Dark void background outside of the phone shell */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      min-height: 100dvh;
+    html, body {
+      height: 100%;
+      height: 100dvh;
       margin: 0;
       padding: 0;
       overflow: hidden;
+      background-color: #04030a;
       color: var(--text);
     }
 
+    body {
+      display: flex;
+      align-items: stretch; /* shell fills full height */
+      justify-content: center;
+    }
+
+    /* ─── APP SHELL: full-height, mobile-width only ─────────────────────── */
     .phone-shell {
       position: relative;
       width: 100%;
-      max-width: 430px; /* Modern smartphone viewport width */
-      height: 100vh; /* Fills screen on mobile (fallback) */
-      height: 100dvh; /* Dynamic viewport height to prevent browser toolbar cutting off bottom buttons */
+      max-width: 430px;          /* Mobile app width cap */
+      flex: 1 1 auto;            /* Stretch to fill full body height */
+      min-height: 0;             /* Flex child needs this to allow inner scroll */
       background-color: var(--bg-color);
       background-image: 
         radial-gradient(circle at 20% 30%, rgba(142, 111, 214, 0.1) 0%, transparent 40%),
@@ -55,17 +59,8 @@
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
-      box-shadow: 0 0 50px rgba(0,0,0,0.5);
-    }
-
-    @media (min-width: 480px) {
-      .phone-shell {
-        height: 850px; /* Simulated smartphone screen height */
-        border-radius: 40px;
-        border: 14px solid #201A3D; /* Sleek mock phone border */
-        margin: 20px auto;
-        box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(142, 111, 214, 0.15);
-      }
+      /* Subtle side shadow on desktop — no phone border frame */
+      box-shadow: 0 0 60px rgba(0,0,0,0.7), 0 0 30px rgba(142, 111, 214, 0.08);
     }
 
     /* Splash Screen - absolute inside phone shell */
