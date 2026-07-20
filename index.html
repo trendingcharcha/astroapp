@@ -3383,14 +3383,38 @@
       if (progressFill) progressFill.style.width = `${Math.max(1, percent)}%`;
     }
 
-    // Transition Splash to Auth
-    setTimeout(() => {
-      document.getElementById('splash-screen').style.opacity = 0;
-      setTimeout(() => {
-        document.getElementById('splash-screen').style.display = 'none';
-        document.getElementById('auth-screen').style.display = 'flex';
-      }, 800);
-    }, 2500);
+    // Smooth Transition Splash to Onboarding / Auth Screen
+    function dismissSplashScreen() {
+      const splash = document.getElementById('splash-screen');
+      const onboarding = document.getElementById('onboarding-screen');
+      const appLayout = document.getElementById('app-layout');
+
+      if (splash) {
+        splash.style.opacity = '0';
+        setTimeout(() => {
+          splash.style.display = 'none';
+          
+          const isAuth = localStorage.getItem('user_authenticated') === 'true';
+          const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_goal');
+
+          if (isAuth && hasProfile) {
+            if (onboarding) onboarding.style.display = 'none';
+            if (appLayout) appLayout.style.display = 'block';
+            if (typeof initApp === 'function') initApp();
+          } else {
+            if (appLayout) appLayout.style.display = 'none';
+            if (onboarding) onboarding.style.display = 'flex';
+          }
+        }, 600);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => setTimeout(dismissSplashScreen, 1000));
+    } else {
+      setTimeout(dismissSplashScreen, 1000);
+    }
+    setTimeout(dismissSplashScreen, 2000);
 
     // Global Supabase client variables
     let supabaseClient = null;
