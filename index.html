@@ -539,7 +539,8 @@
       transform: scale(1.1);
       box-shadow: 0 0 10px rgba(232, 200, 121, 0.3);
     }
-  </style>
+      @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
 </head>
 <body>
   <div class="phone-shell">
@@ -1071,66 +1072,244 @@
 
       <!-- TAB 2: KUNDLI -->
       <div id="tab-kundli" class="tab-content">
+
+        <!-- KUNDLI FORM VIEW -->
         <div id="kundli-form-view">
-          <h3 style="margin-bottom: 15px;">Generate Birth Chart</h3>
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+            <div>
+              <h3 style="margin:0; font-size:1.2rem; display:flex; align-items:center; gap:8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                Janma Kundli / जन्म कुंडली
+              </h3>
+              <p style="color:var(--text-muted); font-size:0.78rem; margin:4px 0 0 28px;">Vedic Astrology Birth Chart Report</p>
+            </div>
+            <div style="display:flex; gap:6px;">
+              <button id="k-lang-en" onclick="setKundliLang('en')" style="padding:4px 12px; border-radius:20px; border:1px solid var(--gold); background:var(--gold); color:#0C0922; font-size:0.72rem; font-weight:700; cursor:pointer;">EN</button>
+              <button id="k-lang-hi" onclick="setKundliLang('hi')" style="padding:4px 12px; border-radius:20px; border:1px solid rgba(232,200,121,0.3); background:transparent; color:var(--gold); font-size:0.72rem; font-weight:700; cursor:pointer;">हिंदी</button>
+            </div>
+          </div>
+
+          <div id="k-autofill-banner" style="display:none; background:linear-gradient(135deg,rgba(46,204,113,0.12),rgba(142,111,214,0.1)); border:1px solid rgba(46,204,113,0.3); border-radius:12px; padding:10px 14px; margin-bottom:14px; font-size:0.82rem; color:#2ecc71;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2" style="vertical-align:middle; margin-right:6px;"><polyline points="20 6 9 17 4 12"/></svg>
+            <span id="k-autofill-text">Details pre-filled from your profile. Tap Generate to view your Kundli.</span>
+          </div>
+
           <div class="card">
             <form onsubmit="generateChart(event)">
               <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" id="k-name" required placeholder="Name">
+                <label><span class="k-lbl-en">Full Name</span><span class="k-lbl-hi" style="display:none;">पूरा नाम</span></label>
+                <input type="text" id="k-name" required placeholder="Your name / आपका नाम">
               </div>
-              <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+
+              <div class="form-group">
+                <label><span class="k-lbl-en">Gender</span><span class="k-lbl-hi" style="display:none;">लिंग</span></label>
+                <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px;">
+                  <label id="k-g-M" onclick="selectKundliGender(this,'M')" style="cursor:pointer; text-align:center; padding:10px 4px; border:1px solid rgba(255,255,255,0.1); border-radius:10px; font-size:0.82rem; transition:all 0.2s; user-select:none;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:block; margin:0 auto 4px;"><circle cx="10" cy="10" r="6"/><line x1="14.5" y1="14.5" x2="20" y2="20"/><line x1="17" y1="20" x2="20" y2="20"/><line x1="20" y1="17" x2="20" y2="20"/></svg>
+                    <span class="k-lbl-en">Male</span><span class="k-lbl-hi" style="display:none;">पुरुष</span>
+                  </label>
+                  <label id="k-g-F" onclick="selectKundliGender(this,'F')" style="cursor:pointer; text-align:center; padding:10px 4px; border:1px solid rgba(255,255,255,0.1); border-radius:10px; font-size:0.82rem; transition:all 0.2s; user-select:none;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:block; margin:0 auto 4px;"><circle cx="12" cy="8" r="5"/><line x1="12" y1="13" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/></svg>
+                    <span class="k-lbl-en">Female</span><span class="k-lbl-hi" style="display:none;">महिला</span>
+                  </label>
+                  <label id="k-g-O" onclick="selectKundliGender(this,'O')" style="cursor:pointer; text-align:center; padding:10px 4px; border:1px solid rgba(255,255,255,0.1); border-radius:10px; font-size:0.82rem; transition:all 0.2s; user-select:none;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:block; margin:0 auto 4px;"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="2" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="22" y2="12"/></svg>
+                    <span class="k-lbl-en">Other</span><span class="k-lbl-hi" style="display:none;">अन्य</span>
+                  </label>
+                </div>
+                <input type="hidden" id="k-gender" value="M">
+              </div>
+
+              <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
                 <div>
-                  <label>Birth Date</label>
+                  <label><span class="k-lbl-en">Birth Date</span><span class="k-lbl-hi" style="display:none;">जन्म तिथि</span></label>
                   <input type="date" id="k-date" required>
                 </div>
                 <div>
-                  <label>Birth Time</label>
+                  <label><span class="k-lbl-en">Birth Time</span><span class="k-lbl-hi" style="display:none;">जन्म समय</span></label>
                   <input type="time" id="k-time" required>
                 </div>
               </div>
-              <div class="form-group" style="position: relative;">
-                <label>Birth Place (City)</label>
-                <input type="text" id="k-city" required placeholder="Type city (e.g. New Delhi)" oninput="filterCitiesDebounced(this.value)" onblur="setTimeout(() => { document.getElementById('city-suggestions').style.display = 'none'; }, 200)" autocomplete="off">
-                <div id="city-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1px solid #2A244E; border-radius: 10px; z-index: 1000; max-height: 180px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
+              <div class="form-group" style="position:relative;">
+                <label><span class="k-lbl-en">Birth Place (City)</span><span class="k-lbl-hi" style="display:none;">जन्म स्थान</span></label>
+                <input type="text" id="k-city" required placeholder="Type city / शहर टाइप करें" oninput="filterCitiesDebounced(this.value)" onblur="setTimeout(() => { document.getElementById('city-suggestions').style.display = 'none'; }, 200)" autocomplete="off">
+                <div id="city-suggestions" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--card-bg); border:1px solid #2A244E; border-radius:10px; z-index:1000; max-height:180px; overflow-y:auto; box-shadow:0 10px 25px rgba(0,0,0,0.5);"></div>
               </div>
-              <button type="submit" class="btn" style="margin-top: 10px;">GENERATE KUNDLI</button>
+              <div class="form-group">
+                <label><span class="k-lbl-en">Primary Goal (for prediction)</span><span class="k-lbl-hi" style="display:none;">मुख्य लक्ष्य (भविष्यवाणी हेतु)</span></label>
+                <select id="k-goal" style="background:var(--card-bg); color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:10px 14px; width:100%; font-size:0.88rem;">
+                  <option value="job">Career / Job — करियर / नौकरी</option>
+                  <option value="marriage">Marriage / Relationship — विवाह</option>
+                  <option value="baby">Baby / Progeny — संतान</option>
+                  <option value="property">Property / Home — संपत्ति</option>
+                  <option value="debt">Finance / Wealth — वित्त / धन</option>
+                  <option value="business">Business — व्यवसाय</option>
+                  <option value="health">Health — स्वास्थ्य</option>
+                  <option value="general">General Life — सामान्य जीवन</option>
+                </select>
+              </div>
+              <button type="submit" class="btn" style="margin-top:10px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:6px;"><circle cx="12" cy="12" r="10"/><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <span class="k-lbl-en">GENERATE KUNDLI</span><span class="k-lbl-hi" style="display:none;">कुंडली बनाएं</span>
+              </button>
             </form>
           </div>
         </div>
 
-        <div id="kundli-result-view" style="display: none;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3 id="result-name">Kundli Results</h3>
-            <button class="btn" style="width: auto; padding: 6px 12px; font-size: 0.8rem;" onclick="showKundliForm()">BACK</button>
-          </div>
-          
-          <div class="chart-toggle">
-            <button class="btn btn-outline" style="width: auto; padding: 4px 10px; font-size: 0.8rem; margin:0;" onclick="toggleChartStyle(true)">North Indian</button>
-            <button class="btn btn-outline" style="width: auto; padding: 4px 10px; font-size: 0.8rem; margin:0;" onclick="toggleChartStyle(false)">South Indian</button>
+        <!-- KUNDLI RESULT VIEW -->
+        <div id="kundli-result-view" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+            <div>
+              <h3 id="result-name" style="margin:0; font-size:1.1rem;"></h3>
+              <p id="result-subtitle" style="color:var(--text-muted); font-size:0.78rem; margin:3px 0 0;"></p>
+            </div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button id="kr-lang-en" onclick="setKundliLang('en')" style="padding:4px 12px; border-radius:20px; border:1px solid var(--gold); background:var(--gold); color:#0C0922; font-size:0.72rem; font-weight:700; cursor:pointer;">EN</button>
+              <button id="kr-lang-hi" onclick="setKundliLang('hi')" style="padding:4px 12px; border-radius:20px; border:1px solid rgba(232,200,121,0.3); background:transparent; color:var(--gold); font-size:0.72rem; font-weight:700; cursor:pointer;">हिंदी</button>
+              <button class="btn" style="width:auto; padding:6px 14px; font-size:0.78rem;" onclick="showKundliForm()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back
+              </button>
+            </div>
           </div>
 
-          <div class="chart-container">
+          <div class="chart-toggle" style="margin-bottom:14px;">
+            <button class="btn btn-outline" style="width:auto; padding:5px 12px; font-size:0.8rem; margin:0;" onclick="toggleChartStyle(true)">
+              <span class="k-lbl-en">North Indian</span><span class="k-lbl-hi" style="display:none;">उत्तर भारतीय</span>
+            </button>
+            <button class="btn btn-outline" style="width:auto; padding:5px 12px; font-size:0.8rem; margin:0;" onclick="toggleChartStyle(false)">
+              <span class="k-lbl-en">South Indian</span><span class="k-lbl-hi" style="display:none;">दक्षिण भारतीय</span>
+            </button>
+          </div>
+
+          <div class="chart-container" style="margin-bottom:18px;">
             <canvas id="chartCanvas" width="400" height="400"></canvas>
           </div>
 
-          <div class="card">
-            <h4 style="color: var(--gold); margin-bottom: 10px;">Placements</h4>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Planet</th>
-                  <th>Sign</th>
-                  <th>Degree</th>
-                </tr>
-              </thead>
-              <tbody id="placements-tbody">
-                <!-- Placed dynamically -->
-              </tbody>
-            </table>
+          <!-- LAGNA CARD -->
+          <div class="card" style="background:linear-gradient(135deg,rgba(142,111,214,0.12),rgba(232,200,121,0.06)); border:1px solid rgba(142,111,214,0.3); margin-bottom:14px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <div>
+                <h4 style="margin:0; color:var(--purple); font-size:0.9rem;"><span class="k-lbl-en">Your Lagna (Ascendant)</span><span class="k-lbl-hi" style="display:none;">आपकी लग्न</span></h4>
+                <p id="k-lagna-name" style="margin:2px 0 0; color:var(--gold); font-weight:700; font-size:1.05rem;"></p>
+              </div>
+            </div>
+            <p id="k-lagna-meaning-en" style="color:var(--text-muted); font-size:0.87rem; line-height:1.65; margin:0;"></p>
+            <p id="k-lagna-meaning-hi" style="color:var(--text-muted); font-size:0.87rem; line-height:1.65; margin:0; display:none;"></p>
+            <div style="margin-top:10px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.07); display:flex; flex-wrap:wrap; gap:14px;">
+              <div><span style="color:var(--text-muted); font-size:0.75rem;"><span class="k-lbl-en">Lord / स्वामी:</span><span class="k-lbl-hi" style="display:none;">लग्न स्वामी:</span></span> <span id="k-lagna-lord" style="color:var(--gold); font-weight:700; font-size:0.85rem; margin-left:4px;"></span></div>
+              <div><span style="color:var(--text-muted); font-size:0.75rem;"><span class="k-lbl-en">Nakshatra:</span><span class="k-lbl-hi" style="display:none;">नक्षत्र:</span></span> <span id="k-lagna-nakshatra" style="color:#5dade2; font-weight:700; font-size:0.85rem; margin-left:4px;"></span></div>
+              <div><span style="color:var(--text-muted); font-size:0.75rem;"><span class="k-lbl-en">Element:</span><span class="k-lbl-hi" style="display:none;">तत्व:</span></span> <span id="k-lagna-element" style="color:#2ecc71; font-weight:700; font-size:0.85rem; margin-left:4px;"></span></div>
+            </div>
           </div>
-        </div>
-      </div>
+
+          <!-- PLANETS TABLE -->
+          <div class="card" style="margin-bottom:14px; padding:0; overflow:hidden;">
+            <div style="padding:12px 16px; background:rgba(232,200,121,0.05); border-bottom:1px solid rgba(255,255,255,0.06);">
+              <h4 style="margin:0; color:var(--gold); font-size:0.92rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" style="vertical-align:middle; margin-right:6px;"><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/></svg>
+                <span class="k-lbl-en">Graha Sthiti (Planetary Placements)</span>
+                <span class="k-lbl-hi" style="display:none;">ग्रह स्थिति</span>
+              </h4>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="table" style="margin:0; font-size:0.8rem;">
+                <thead>
+                  <tr>
+                    <th><span class="k-lbl-en">Planet / ग्रह</span><span class="k-lbl-hi" style="display:none;">ग्रह</span></th>
+                    <th><span class="k-lbl-en">Rashi / Sign</span><span class="k-lbl-hi" style="display:none;">राशि</span></th>
+                    <th><span class="k-lbl-en">Nakshatra</span><span class="k-lbl-hi" style="display:none;">नक्षत्र</span></th>
+                    <th><span class="k-lbl-en">House</span><span class="k-lbl-hi" style="display:none;">भाव</span></th>
+                    <th><span class="k-lbl-en">Deg</span><span class="k-lbl-hi" style="display:none;">अंश</span></th>
+                    <th><span class="k-lbl-en">Status</span><span class="k-lbl-hi" style="display:none;">स्थिति</span></th>
+                  </tr>
+                </thead>
+                <tbody id="placements-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- NAKSHATRA & DASHA -->
+          <div class="card" style="margin-bottom:14px; background:linear-gradient(135deg,rgba(93,173,226,0.08),rgba(142,111,214,0.05));">
+            <h4 style="color:#5dade2; margin-bottom:12px; font-size:0.92rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="2" style="vertical-align:middle; margin-right:6px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              <span class="k-lbl-en">Moon Nakshatra & Vimshottari Dasha</span>
+              <span class="k-lbl-hi" style="display:none;">चन्द्र नक्षत्र एवं विंशोत्तरी दशा</span>
+            </h4>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+              <div style="background:rgba(255,255,255,0.03); border-radius:10px; padding:12px;">
+                <p style="color:var(--text-muted); font-size:0.72rem; margin:0 0 4px;"><span class="k-lbl-en">Birth Nakshatra</span><span class="k-lbl-hi" style="display:none;">जन्म नक्षत्र</span></p>
+                <p id="k-moon-nakshatra" style="color:#fff; font-weight:700; font-size:0.95rem; margin:0;"></p>
+                <p id="k-moon-nakshatra-hi" style="color:#5dade2; font-size:0.8rem; margin:3px 0 0; display:none;"></p>
+                <p id="k-moon-nakshatra-lord" style="color:#5dade2; font-size:0.78rem; margin:4px 0 0;"></p>
+              </div>
+              <div style="background:rgba(255,255,255,0.03); border-radius:10px; padding:12px;">
+                <p style="color:var(--text-muted); font-size:0.72rem; margin:0 0 4px;"><span class="k-lbl-en">Current Mahadasha</span><span class="k-lbl-hi" style="display:none;">वर्तमान महादशा</span></p>
+                <p id="k-current-dasha" style="color:var(--gold); font-weight:700; font-size:0.95rem; margin:0;"></p>
+                <p id="k-dasha-period" style="color:var(--text-muted); font-size:0.78rem; margin:4px 0 0;"></p>
+              </div>
+            </div>
+            <p id="k-dasha-meaning-en" style="color:var(--text-muted); font-size:0.85rem; line-height:1.6; margin:0;"></p>
+            <p id="k-dasha-meaning-hi" style="color:var(--text-muted); font-size:0.85rem; line-height:1.6; margin:8px 0 0; display:none;"></p>
+          </div>
+
+          <!-- DOSHA -->
+          <div class="card" style="margin-bottom:14px;">
+            <h4 style="color:var(--gold); margin-bottom:12px; font-size:0.92rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" style="vertical-align:middle; margin-right:6px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span class="k-lbl-en">Dosha Analysis</span>
+              <span class="k-lbl-hi" style="display:none;">दोष विश्लेषण</span>
+            </h4>
+            <div id="k-dosha-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+          </div>
+
+          <!-- HOUSE READINGS -->
+          <div class="card" style="margin-bottom:14px; padding:0; overflow:hidden;">
+            <div style="padding:12px 16px; background:rgba(142,111,214,0.06); border-bottom:1px solid rgba(255,255,255,0.06);">
+              <h4 style="margin:0; color:var(--purple); font-size:0.92rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" style="vertical-align:middle; margin-right:6px;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span class="k-lbl-en">Key House Readings (Bhava Phala)</span>
+                <span class="k-lbl-hi" style="display:none;">भाव फल — घरों का विश्लेषण</span>
+              </h4>
+            </div>
+            <div id="k-houses-list" style="padding:12px 16px; display:flex; flex-direction:column; gap:12px;"></div>
+          </div>
+
+          <!-- PLANETARY STRENGTH -->
+          <div class="card" style="margin-bottom:14px;">
+            <h4 style="color:var(--gold); margin-bottom:12px; font-size:0.92rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" style="vertical-align:middle; margin-right:6px;"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <span class="k-lbl-en">Planetary Strength (Graha Bala)</span>
+              <span class="k-lbl-hi" style="display:none;">ग्रह बल</span>
+            </h4>
+            <div id="k-strength-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+          </div>
+
+          <!-- GOAL PREDICTION -->
+          <div class="card" style="background:linear-gradient(135deg,rgba(232,200,121,0.1),rgba(142,111,214,0.08)); border:1px solid rgba(232,200,121,0.25); margin-bottom:14px;">
+            <h4 style="color:var(--gold); margin-bottom:10px; font-size:0.92rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" style="vertical-align:middle; margin-right:6px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <span class="k-lbl-en">Your Cosmic Goal Prediction</span>
+              <span class="k-lbl-hi" style="display:none;">आपकी लक्ष्य भविष्यवाणी</span>
+            </h4>
+            <p id="k-goal-label-tag" style="display:inline-block; padding:3px 10px; border-radius:20px; background:rgba(232,200,121,0.15); color:var(--gold); font-size:0.75rem; font-weight:700; margin-bottom:10px;"></p>
+            <p id="k-prediction-en" style="color:var(--text-muted); font-size:0.87rem; line-height:1.7; margin:0;"></p>
+            <p id="k-prediction-hi" style="color:var(--text-muted); font-size:0.87rem; line-height:1.7; margin:8px 0 0; display:none;"></p>
+          </div>
+
+          <!-- KUNDALI SUMMARY -->
+          <div class="card" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); margin-bottom:6px;">
+            <h4 style="color:#5dade2; margin-bottom:10px; font-size:0.92rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="2" style="vertical-align:middle; margin-right:6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span class="k-lbl-en">Kundali Summary</span>
+              <span class="k-lbl-hi" style="display:none;">कुंडली सारांश</span>
+            </h4>
+            <div id="k-summary-en" style="color:var(--text-muted); font-size:0.84rem; line-height:1.8;"></div>
+            <div id="k-summary-hi" style="color:var(--text-muted); font-size:0.84rem; line-height:1.8; display:none;"></div>
+          </div>
+
+        </div><!-- /kundli-result-view -->
+      </div><!-- /tab-kundli -->
 
       <!-- TAB 3: MATCHING -->
       <div id="tab-matching" class="tab-content">
@@ -1234,11 +1413,17 @@
               <div class="form-group">
                 <label>Your Focus Goal</label>
                 <select id="c-goal" required onchange="toggleCoachCustomIssueField(this.value)">
-                  <option value="job">Get Dream Job</option>
-                  <option value="debt">Clear Financial Debt</option>
-                  <option value="marriage">Get Married / Relationship Harmony</option>
+                  <option value="job">Career / Dream Job</option>
+                  <option value="debt">Clear Financial Debt / Wealth</option>
+                  <option value="marriage">Marriage / Relationship Harmony</option>
+                  <option value="marriage-single">Marriage Prediction (Single)</option>
+                  <option value="marriage-couple">Marriage Harmony (Couple)</option>
                   <option value="baby">Planning for Baby / Progeny</option>
                   <option value="business">Start or Grow Business</option>
+                  <option value="property">Buy Home / Property</option>
+                  <option value="property-single">Buy Home (Single)</option>
+                  <option value="property-couple">Buy Home (Couple)</option>
+                  <option value="health">Health &amp; Wellbeing</option>
                   <option value="custom">Resolve Major Life Issue</option>
                 </select>
               </div>
@@ -1671,6 +1856,59 @@
       btn.innerText = "ALIGNING STARS...";
       btn.disabled = true;
 
+      // Resolve custom issue categorization with comprehensive keyword matrix (supporting English, Hindi, Hinglish)
+      let customCategory = "general";
+      let issueText = "your issue";
+      if (goal === 'custom') {
+        const customField = document.getElementById('c-custom-issue');
+        if (customField && customField.value.trim().length > 0) {
+          issueText = customField.value.trim();
+        } else {
+          const onboardingCustomField = document.getElementById('o-custom-issue');
+          if (onboardingCustomField && onboardingCustomField.value.trim().length > 0) {
+            issueText = onboardingCustomField.value.trim();
+          }
+        }
+        
+        const text = issueText.toLowerCase();
+        
+        // Define Keyword Sets
+        const propertyKeys = ["home", "house", "property", "flat", "apartment", "land", "plot", "rent", "buy", "ghar", "makan", "makkan", "zameen", "building", "construction", "decor", "villa", "घर", "जमीन", "मकान"];
+        const pregnancyKeys = ["pregnancy", "childbirth", "child", "baby", "conceive", "fertility", "pregnant", "santan", "baccha", "bacha", "beta", "beti", "delivery", "conceiving", "गर्भावस्था", "संतान", "बच्चा"];
+        const jobKeys = ["job", "career", "work", "promotion", "office", "salary", "boss", "interview", "nokri", "naukri", "naukar", "business", "vyapar", "dhanda", "dhandha", "नौकरी", "व्यवसाय", "काम", "नौकरी"];
+        const moneyKeys = ["money", "finance", "debt", "loan", "wealth", "paisa", "payse", "karz", "udhaar", "bank", "loss", "nuksan", "nuksaan", "credit", "कर्ज", "धन", "पैसा", "उधार"];
+        const marriageKeys = ["marriage", "love", "relationship", "divorce", "spouse", "shadi", "shaadi", "vivah", "patni", "pati", "gf", "bf", "breakup", "relationship", "शादी", "प्यार", "विवाह", "पति", "पत्नी"];
+        const educationKeys = ["education", "exam", "study", "college", "student", "board", "exam", "paper", "pass", "fail", "padhai", "padhai", "school", "study", "परीक्षा", "पढ़ाई", "कॉलेज", "स्कूल"];
+        const healthKeys = ["health", "disease", "ill", "body", "sick", "hospital", "doctor", "physical", "pain", "medicine", "dard", "bimari", "beemari", "ilaj", "ilaaj", "fever", "बीमारी", "स्वास्थ्य", "इलाज", "डॉक्टर"];
+        const visaKeys = ["visa", "foreign", "travel", "abroad", "passport", "flight", "canada", "usa", "uk", "airport", "videsh", "yatra", "विदेश", "यात्रा", "वीजा"];
+        const courtKeys = ["court", "legal", "case", "dispute", "police", "property", "justice", "fir", "advocate", "mukadma", "muqadma", "vivad", "zamin", "jameen", "कोर्ट", "केस", "मुकदमा", "विवाद", "पुलिस"];
+        const mentalKeys = ["mental", "depress", "anxiety", "stress", "sad", "fear", "sleep", "insomnia", "tension", "ghabrahat", "darr", "neend", "depression", "تनाव", "तनाव", "चिंता", "मानसिक", "नींद"];
+
+        // Check Matches
+        if (pregnancyKeys.some(key => text.includes(key))) {
+          customCategory = "pregnancy";
+        } else if (propertyKeys.some(key => text.includes(key))) {
+          customCategory = "property";
+        } else if (jobKeys.some(key => text.includes(key))) {
+          customCategory = "job";
+        } else if (moneyKeys.some(key => text.includes(key))) {
+          customCategory = "money";
+        } else if (marriageKeys.some(key => text.includes(key))) {
+          customCategory = "marriage";
+        } else if (educationKeys.some(key => text.includes(key))) {
+          customCategory = "education";
+        } else if (healthKeys.some(key => text.includes(key))) {
+          customCategory = "health";
+        } else if (visaKeys.some(key => text.includes(key))) {
+          customCategory = "visa";
+        } else if (courtKeys.some(key => text.includes(key))) {
+          customCategory = "legal";
+        } else if (mentalKeys.some(key => text.includes(key))) {
+          customCategory = "mental";
+        }
+      }
+
+
       const name = document.getElementById('c-name').value;
       const date = document.getElementById('c-date').value;
       const time = document.getElementById('c-time').value;
@@ -1678,19 +1916,40 @@
       const goal = document.getElementById('c-goal').value;
       const profession = document.getElementById('c-profession').value;
 
-      // Resolve baby planning configurations
+      // ---------------------------------------------------------------
+      // NORMALIZE goal from new onboarding sub-types to dictionary keys
+      // ---------------------------------------------------------------
+      let normalizedGoal = goal;
+      if (goal === 'marriage-single' || goal === 'marriage-couple') normalizedGoal = 'marriage';
+      if (goal === 'property-single' || goal === 'property-couple') normalizedGoal = 'property';
+      if (goal === 'health') normalizedGoal = 'health';
+      // Store for path context
+      const isCouplePath = onboardingPath === 'couple' || localStorage.getItem('onboarding_path') === 'couple';
+      const isSingleMarriage = goal === 'marriage-single';
+      const isCoupleMarriage = goal === 'marriage-couple';
+      const isPropertyGoal = goal === 'property-single' || goal === 'property-couple';
+      const propertyNumber = localStorage.getItem('property_number') || '1st';
+      const propertyType = localStorage.getItem('property_type') || 'home';
+      const propertyCity = localStorage.getItem('property_city') || cityName;
+
+      // ---------------------------------------------------------------
+      // RESOLVE baby planning configurations
+      // ---------------------------------------------------------------
       let babyDetailsText = "";
       let firstBabyAge = 0;
       let firstBabyDobVal = "";
       let secondBabyAge = 0;
       let babyNum = "1";
       
-      if (goal === 'baby') {
-        babyNum = document.getElementById('c-baby-number').value;
+      if (normalizedGoal === 'baby') {
+        // Try new hidden input first, then old select
+        const babyValEl = document.getElementById('o-baby-number-val');
+        const babySelectEl = document.getElementById('c-baby-number');
+        babyNum = (babyValEl && babyValEl.value) || (babySelectEl && babySelectEl.value) || '1';
         if (babyNum === "1") {
           babyDetailsText = "planning for your first baby";
         } else if (babyNum === "2") {
-          firstBabyDobVal = document.getElementById('c-first-baby-dob').value;
+          firstBabyDobVal = (document.getElementById('o-first-baby-dob') || {}).value || (document.getElementById('c-first-baby-dob') || {}).value || '';
           if (firstBabyDobVal) {
             const birth = new Date(firstBabyDobVal);
             const ageDiff = Date.now() - birth.getTime();
@@ -1699,8 +1958,8 @@
           }
           babyDetailsText = `planning for your second baby (your first child is ${firstBabyAge} years old)`;
         } else if (babyNum === "3") {
-          firstBabyAge = parseInt(document.getElementById('c-first-baby-age').value) || 5;
-          secondBabyAge = parseInt(document.getElementById('c-second-baby-age').value) || 2;
+          firstBabyAge = parseInt((document.getElementById('o-first-baby-age') || {}).value || (document.getElementById('c-first-baby-age') || {}).value) || 5;
+          secondBabyAge = parseInt((document.getElementById('o-second-baby-age') || {}).value || (document.getElementById('c-second-baby-age') || {}).value) || 2;
           babyDetailsText = `planning for your third baby (your first child is ${firstBabyAge} and second is ${secondBabyAge} years old)`;
         }
       }
@@ -1761,8 +2020,12 @@
       const rasiLords = ["Mars", "Venus", "Mercury", "Moon", "Sun", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Saturn", "Jupiter"];
       const rulingLord = rasiLords[lagnaSignNum] || "Sun";
 
-      // Check if Partner Details are included
-      const hasPartner = document.getElementById('c-partner-toggle').checked;
+      // ---------------------------------------------------------------
+      // DETECT hasPartner — works for both couple path AND single path with optional toggle
+      // ---------------------------------------------------------------
+      const partnerToggleEl = document.getElementById('c-partner-toggle');
+      const partnerSectionVisible = document.getElementById('onboarding-partner-section') && document.getElementById('onboarding-partner-section').style.display !== 'none';
+      const hasPartner = isCouplePath || partnerSectionVisible || (partnerToggleEl && partnerToggleEl.checked);
       let partnerName = "";
       let partnerRulingLord = "Sun";
       let partnerLagnaSignNum = 0;
@@ -1837,204 +2100,260 @@
         "Saturn": { mantra: "Om Sham Shanaishcharaya Namah", text: "Read Shiva Panchakshari Stotra to build resilience, discipline, and patience in your career." }
       };
       
+      // ---------------------------------------------------------------
+      // VEDIC TASKS — extended with goal-specific context
+      // ---------------------------------------------------------------
       const lordDetails = vedicMantras[rulingLord] || vedicMantras["Sun"];
-      let vedicListHTML = `
-        <li style="margin-bottom: 10px;"><strong>Mantra Chanting:</strong> Chant the ruling planet mantra <strong>"${lordDetails.mantra}"</strong> exactly 108 times (1 Mala) in the morning facing East.</li>
-        <li><strong>Sacred Reading:</strong> ${lordDetails.text}</li>
-      `;
-      
-      if (hasPartner) {
-        const partnerLordDetails = vedicMantras[partnerRulingLord] || vedicMantras["Sun"];
+      let vedicListHTML;
+
+      if (!hasPartner) {
+        // Single user vedic tasks — goal context aware
+        const goalVedicContext = {
+          job: `Perform Surya Namaskaar (12 rounds) before sunrise to activate career and authority vibrations.`,
+          debt: `Recite the Shiva Panchakshari mantra "Om Namah Shivaya" 108 times before meals to dissolve financial anxieties.`,
+          marriage: `Recite the Katyayani mantra "Om Katyayanyai Namah" 108 times on a Friday morning to attract your destined partner.`,
+          baby: `Both partners should recite the Santan Gopal mantra "Om Devaki Sut Govind..." 108 times together each morning.`,
+          business: `Perform Ganesh puja on Wednesdays and light incense (dhoop) at your business entrance.`,
+          property: `Recite the Bhoomi Sukta prayer (from Atharvaveda) before property visits. Also chant "Om Bhaumaya Namah" 11 times for Mars blessings on property.`,
+          health: `Perform Surya Namaskar (sun salutation) at sunrise and drink copper vessel water in the morning for vitality.`,
+          custom: `Perform an evening puja with incense and a ghee lamp, focusing your intention on resolving: "${issueText}".`
+        };
+        const contextKey = ['property-single','property-couple'].includes(goal) ? 'property' : ['marriage-single','marriage-couple'].includes(goal) ? 'marriage' : (normalizedGoal in goalVedicContext ? normalizedGoal : 'custom');
         vedicListHTML = `
-          <li style="margin-bottom: 10px;"><strong>Self Mantra Chanting:</strong> Chant your ruling planet mantra <strong>"${lordDetails.mantra}"</strong> exactly 108 times in the morning.</li>
-          <li style="margin-bottom: 10px;"><strong>Partner Mantra Chanting:</strong> Chant ${partnerName || "your partner"}'s ruling planet mantra <strong>"${partnerLordDetails.mantra}"</strong> 108 times to align relationship harmony.</li>
-          <li><strong>Shared Reading:</strong> Read the Guru Stotra or Shiva Purana together to invite divine support.</li>
+          <li style="margin-bottom: 10px;"><strong>Ruling Planet Mantra:</strong> Chant <strong>"${lordDetails.mantra}"</strong> exactly 108 times each morning facing East for 40 consecutive days.</li>
+          <li style="margin-bottom: 10px;"><strong>Sacred Text:</strong> ${lordDetails.text}</li>
+          <li style="margin-bottom: 10px;"><strong>Goal Ritual:</strong> ${goalVedicContext[contextKey] || goalVedicContext.custom}</li>
+          <li><strong>Ekadashi Fast:</strong> Observe at least one Ekadashi (11th lunar day) fast per month, drinking only fruit or water, to burn karmic debt aligned with your goal.</li>
+        `;
+      } else {
+        // Couple vedic tasks
+        const partnerLordDetails = vedicMantras[partnerRulingLord] || vedicMantras["Sun"];
+        const coupleGoalRituals = {
+          marriage: `Both partners should recite the Vivah Sukta verses from the Rigveda together each morning and offer flowers to Lord Vishnu on Thursdays.`,
+          baby: `Both partners should recite the Santan Gopal mantra "Om Devaki Sut Govind Vasudev Jagat Pate Dehi Me Tanayam Krishna Tvam Aham Sharanam Gatah" 108 times together each morning.`,
+          property: `Both partners should offer water, a flower, and a pinch of turmeric to a rising sun, and chant "Om Bhaumaya Namah" 11 times together before any property visits.`,
+          debt: `Both partners should recite the Shiva Panchakshari mantra together 108 times on Monday mornings while holding water in cupped hands.`,
+          custom: `Both partners should perform evening puja together with ghee lamp, flowers, and focused collective intention on resolving the shared challenge.`
+        };
+        const coupleContextKey = normalizedGoal in coupleGoalRituals ? normalizedGoal : 'custom';
+        vedicListHTML = `
+          <li style="margin-bottom: 10px;"><strong>${name}'s Mantra:</strong> Chant <strong>"${lordDetails.mantra}"</strong> 108 times each morning (ruler of your Lagna: ${rulingLord}).</li>
+          <li style="margin-bottom: 10px;"><strong>${partnerName || 'Partner'}'s Mantra:</strong> Chant <strong>"${partnerLordDetails.mantra}"</strong> 108 times each morning (ruler of their Lagna: ${partnerRulingLord}).</li>
+          <li style="margin-bottom: 10px;"><strong>Couple Goal Ritual:</strong> ${coupleGoalRituals[coupleContextKey]}</li>
+          <li style="margin-bottom: 10px;"><strong>Shared Sacred Text:</strong> Read the Guru Stotra or Shiva Purana together each evening to invite divine support for your shared goal.</li>
+          <li><strong>Ekadashi Fast:</strong> Both observe Ekadashi fast together at least once this month to align collective karmic energies.</li>
         `;
       }
 
-      // Resolve custom issue categorization with comprehensive keyword matrix (supporting English, Hindi, Hinglish)
-      let customCategory = "general";
-      let issueText = "your issue";
-      if (goal === 'custom') {
-        const customField = document.getElementById('c-custom-issue');
-        if (customField && customField.value.trim().length > 0) {
-          issueText = customField.value.trim();
-        } else {
-          const onboardingCustomField = document.getElementById('o-custom-issue');
-          if (onboardingCustomField && onboardingCustomField.value.trim().length > 0) {
-            issueText = onboardingCustomField.value.trim();
-          }
-        }
-        
-        const text = issueText.toLowerCase();
-        
-        // Define Keyword Sets
-        const propertyKeys = ["home", "house", "property", "flat", "apartment", "land", "plot", "rent", "buy", "ghar", "makan", "makkan", "zameen", "building", "construction", "decor", "villa", "घर", "जमीन", "मकान"];
-        const pregnancyKeys = ["pregnancy", "childbirth", "child", "baby", "conceive", "fertility", "pregnant", "santan", "baccha", "bacha", "beta", "beti", "delivery", "conceiving", "गर्भावस्था", "संतान", "बच्चा"];
-        const jobKeys = ["job", "career", "work", "promotion", "office", "salary", "boss", "interview", "nokri", "naukri", "naukar", "business", "vyapar", "dhanda", "dhandha", "नौकरी", "व्यवसाय", "काम", "नौकरी"];
-        const moneyKeys = ["money", "finance", "debt", "loan", "wealth", "paisa", "payse", "karz", "udhaar", "bank", "loss", "nuksan", "nuksaan", "credit", "कर्ज", "धन", "पैसा", "उधार"];
-        const marriageKeys = ["marriage", "love", "relationship", "divorce", "spouse", "shadi", "shaadi", "vivah", "patni", "pati", "gf", "bf", "breakup", "relationship", "शादी", "प्यार", "विवाह", "पति", "पत्नी"];
-        const educationKeys = ["education", "exam", "study", "college", "student", "board", "exam", "paper", "pass", "fail", "padhai", "padhai", "school", "study", "परीक्षा", "पढ़ाई", "कॉलेज", "स्कूल"];
-        const healthKeys = ["health", "disease", "ill", "body", "sick", "hospital", "doctor", "physical", "pain", "medicine", "dard", "bimari", "beemari", "ilaj", "ilaaj", "fever", "बीमारी", "स्वास्थ्य", "इलाज", "डॉक्टर"];
-        const visaKeys = ["visa", "foreign", "travel", "abroad", "passport", "flight", "canada", "usa", "uk", "airport", "videsh", "yatra", "विदेश", "यात्रा", "वीजा"];
-        const courtKeys = ["court", "legal", "case", "dispute", "police", "property", "justice", "fir", "advocate", "mukadma", "muqadma", "vivad", "zamin", "jameen", "कोर्ट", "केस", "मुकदमा", "विवाद", "पुलिस"];
-        const mentalKeys = ["mental", "depress", "anxiety", "stress", "sad", "fear", "sleep", "insomnia", "tension", "ghabrahat", "darr", "neend", "depression", "تनाव", "तनाव", "चिंता", "मानसिक", "नींद"];
+      
 
-        // Check Matches
-        if (pregnancyKeys.some(key => text.includes(key))) {
-          customCategory = "pregnancy";
-        } else if (propertyKeys.some(key => text.includes(key))) {
-          customCategory = "property";
-        } else if (jobKeys.some(key => text.includes(key))) {
-          customCategory = "job";
-        } else if (moneyKeys.some(key => text.includes(key))) {
-          customCategory = "money";
-        } else if (marriageKeys.some(key => text.includes(key))) {
-          customCategory = "marriage";
-        } else if (educationKeys.some(key => text.includes(key))) {
-          customCategory = "education";
-        } else if (healthKeys.some(key => text.includes(key))) {
-          customCategory = "health";
-        } else if (visaKeys.some(key => text.includes(key))) {
-          customCategory = "visa";
-        } else if (courtKeys.some(key => text.includes(key))) {
-          customCategory = "legal";
-        } else if (mentalKeys.some(key => text.includes(key))) {
-          customCategory = "mental";
-        }
-      }
-
-      // Lal Kitab remedies
+      // ---------------------------------------------------------------
+      // LAL KITAB REMEDIES — extended dictionaries with all new goal types
+      // ---------------------------------------------------------------
       const lalkitabRemedies = {
         "job": [
-          "Feed birds with 7 types of grains (Satnaja) every morning on your terrace or balcony to resolve professional blocks.",
-          "Offer water containing red flowers or a pinch of vermilion to the rising Sun from a copper vessel."
+          "Feed birds with 7 types of grains (Satnaja) every morning to resolve professional blocks.",
+          "Offer water containing red flowers or a pinch of vermilion to the rising Sun from a copper vessel.",
+          "Keep a whole coconut wrapped in red cloth in your office drawer — replace after 40 days.",
+          "Donate wheat flour or whole wheat bread to the needy on Sundays to strengthen Sun's authority.",
+          "Avoid wearing black on interview or appraisal days; prefer maroon, gold, or saffron colors.",
+          "Keep your desk facing East or North; never keep a broken clock or dead plant at your work station."
         ],
         "debt": [
           "Offer sweet milk to a banyan tree root and apply a small tilak of the wet soil on your forehead.",
-          "Avoid taking loans or credit on Tuesdays. Instead, pay back a small installment of any existing debt on Tuesday morning."
+          "Avoid taking loans on Tuesdays. Pay back a small installment on Tuesday mornings.",
+          "Keep a whole piece of silver in your wallet or safe — never let it touch iron.",
+          "Donate mustard oil to a temple or the needy on Saturdays to calm Saturn's debt pressures.",
+          "Bury a piece of turmeric root at the base of a peepal tree on Thursday mornings.",
+          "Avoid lending money on new moon (Amavasya) or full moon (Poornima) days."
         ],
         "marriage": [
           "Donate yellow sweets, chana dal, or turmeric to a temple priest on Thursday mornings.",
-          "Feed fresh green grass or spinach to a cow, or donate green items to young girls on Wednesdays."
+          "Feed fresh green grass or spinach to a cow on Wednesdays to strengthen Venus and Moon.",
+          "Offer white flowers and milk at a Shiva temple on Mondays to attract compatible relationships.",
+          "Donate gold or yellow colored items to a needy girl on Fridays to strengthen Venus.",
+          "Keep a rose quartz crystal sphere under your pillow or in the South-West of your bedroom.",
+          "Avoid wearing black or dark blue on Fridays; prefer white, pink, or cream colors."
         ],
         "baby": [
           "Donate yellow fruits (like bananas) or yellow sweets to a temple on Thursdays (strengthens Jupiter, ruler of progeny/Santan).",
-          "Both you and your partner should offer milk or sweet water to a banyan tree root together to invite new life energy."
+          "Both you and your partner should offer milk or sweet water to a banyan tree root together to invite new life energy.",
+          "Feed a cow with green grass and jaggery on Wednesdays and touch her feet with reverence.",
+          "Keep a copper Santan Gopal yantra in your bedroom's North-East corner wrapped in yellow cloth.",
+          "Donate a small copper vessel filled with water and saffron to a temple on Thursdays.",
+          "Avoid consuming alcohol, non-vegetarian food, or sour food on Thursdays during this period."
         ],
         "business": [
           "Keep a small, solid piece of silver in your wallet, locker, or cash register at your workplace.",
-          "Donate black sesame seeds or mustard oil to the needy on Saturday evenings."
+          "Donate black sesame seeds or mustard oil to the needy on Saturday evenings.",
+          "Light a ghee lamp at your shop or business entrance on Tuesday and Friday evenings.",
+          "Keep a whole coconut at your business entrance; replace every 40 days for continuous prosperity.",
+          "Donate green lentils or whole green moong on Wednesdays to strengthen Mercury (intelligence and business).",
+          "Avoid starting any new business transaction or signing contracts on Saturdays or Tuesdays."
+        ],
+        "property": [
+          "Offer fresh water mixed with a spoon of honey to the rising Sun each morning to invoke Mars (ruler of land/property).",
+          "Feed sweet baked bread (roti with ghee and jaggery) to black stray dogs to pacify Saturn and Rahu in property matters.",
+          "Plant a Tulsi or Neem sapling in or near your home/office to invite positive property vibrations.",
+          "Donate red lentils (masoor dal) or copper items to the needy on Tuesdays to strengthen Mars for property decisions.",
+          "Before signing any property document, offer a pinch of turmeric and saffron mixed in water to the earth.",
+          "Keep the main entrance of your prospective home clean, well-lit, and place a Swastika symbol above the door."
+        ],
+        "health": [
+          "Drink water stored overnight in a copper vessel every morning to balance Moon and body fluids.",
+          "Donate food to a stray dog in the morning to pacify Saturn (chronic ailments).",
+          "Feed green fodder and jaggery to a cow on Wednesdays to harmonize Mercury and digestive health.",
+          "Light a sesame (til) oil lamp at a Shani temple on Saturday evenings for protection from chronic illness.",
+          "Avoid consuming food after sunset on Tuesdays as a fast day to cleanse Mars-related body heat.",
+          "Keep a piece of raw turmeric root in your pocket or under your pillow for protective health vibrations."
         ],
         "custom_job": [
           "Offer fresh water with a pinch of red flowers or vermilion to the rising Sun from a copper vessel to boost authority.",
-          "Feed green grass or spinach to a cow on Wednesdays to invoke business & job opportunities."
+          "Feed green grass or spinach to a cow on Wednesdays to invoke business & job opportunities.",
+          "Keep a whole coconut wrapped in red cloth in your desk drawer.",
+          "Donate wheat flour or whole wheat to the needy on Sundays."
         ],
         "custom_money": [
           "Keep a small, solid piece of silver in your wallet, safe, or work desk to align wealth energy.",
-          "Avoid taking loans or major credit transactions on Tuesdays; repay a small debt on Tuesday instead."
+          "Avoid taking loans or major credit transactions on Tuesdays; repay a small debt on Tuesday instead.",
+          "Donate mustard oil on Saturday evenings.",
+          "Bury a turmeric root at a peepal tree base on Thursday morning."
         ],
         "custom_marriage": [
           "Donate turmeric, yellow sweets, or gold colored items to a temple priest on Thursday mornings.",
-          "Donate milk, rice, or silver ornaments to girls on Monday mornings to invite partnership harmony."
+          "Donate milk, rice, or silver ornaments to girls on Monday mornings to invite partnership harmony.",
+          "Keep a rose quartz crystal in the South-West of your bedroom.",
+          "Offer white flowers and milk at a Shiva temple on Mondays."
         ],
         "custom_education": [
           "Donate educational books, stationery, or pens to poor children on Thursday mornings.",
-          "Chant the Saraswati Gayatri mantra or invoke wisdom in the early hours facing East."
+          "Chant the Saraswati Gayatri mantra or invoke wisdom in the early hours facing East.",
+          "Feed green moong or green lentils to the needy on Wednesdays to strengthen Mercury.",
+          "Keep a small piece of raw turmeric at your study desk wrapped in yellow cloth."
         ],
         "custom_health": [
-          "Donate pure water or milk to travelers, and feed fresh green grass to a cow in the morning to balance Mercury/Moon.",
-          "Keep a copper coin or a small piece of solid silver on your person for protective vitality."
+          "Drink water stored overnight in a copper vessel every morning.",
+          "Donate food to a stray dog every morning.",
+          "Feed green grass and jaggery to a cow on Wednesday mornings.",
+          "Keep a piece of raw turmeric root in your pocket for protection."
         ],
         "custom_visa": [
-          "Keep some barley grains under your pillow overnight and feed them to birds or place them in flowing water in the morning to bypass blockages.",
-          "Feed green fodder to a bull or donate black sesame seeds to the needy to pacify Rahu obstacles."
+          "Keep some barley grains under your pillow overnight and feed them to birds or place them in flowing water in the morning.",
+          "Feed green fodder to a bull or donate black sesame seeds to the needy to pacify Rahu obstacles.",
+          "Keep your travel documents in the North-West corner of your room (Vayu/transit zone).",
+          "Donate green lentils on Wednesdays to strengthen Mercury (communication, travel)."
         ],
         "custom_legal": [
           "Feed sweet baked bread or rotis to black stray dogs on the street to pacify Saturn and Rahu.",
-          "Pour a few drops of mustard oil on raw soil in the morning to ground negative planetary influences."
+          "Pour a few drops of mustard oil on raw soil in the morning to ground negative planetary influences.",
+          "Donate black sesame seeds on Saturdays for legal dispute relief.",
+          "Keep all case documents in the South or South-West corner of your workspace."
         ],
         "custom_mental": [
           "Avoid consuming milk late at night; instead, offer milk or food to stray dogs in the morning.",
-          "Keep a glass of water near your bedside table at night and pour it into a plant's roots in the morning."
+          "Keep a glass of water near your bedside table at night and pour it into a plant's roots in the morning.",
+          "Donate white or cream colored sweets on Mondays to strengthen Moon (mental peace).",
+          "Keep a small selenite or moonstone crystal near your bed for calming vibrations."
         ],
         "custom_property": [
+          "Offer fresh water with a pinch of honey to the rising Sun to invoke Mars (Mars represents Bhumi/Land).",
           "Feed sweet baked bread or rotis to black stray dogs on the street to pacify Saturn and Rahu (rulers of land/property).",
-          "Offer fresh water with a pinch of honey to the rising Sun to invoke Mars (Mars represents Bhumi/Land)."
+          "Donate red lentils (masoor dal) or copper items on Tuesdays.",
+          "Plant a Tulsi sapling at or near your prospective home/plot."
         ],
         "custom_pregnancy": [
           "Donate a copper vessel filled with sugar or yellow sweets to a temple or charity on Sundays to strengthen Jupiter and Sun.",
-          "Feed fresh green grass or spinach to a cow on Wednesday mornings to harmonize progeny configurations."
+          "Feed fresh green grass or spinach to a cow on Wednesday mornings to harmonize progeny configurations.",
+          "Both partners should offer sweet water to a banyan tree root together.",
+          "Keep a copper Santan Gopal yantra in the North-East of the bedroom."
         ],
         "custom_general": [
           "Feed birds with mixed grains (Satnaja) on your terrace or open balcony to remove daily obstacles.",
-          "Offer fresh water with a pinch of sugar to the rising Sun from a copper vessel."
+          "Offer fresh water with a pinch of sugar to the rising Sun from a copper vessel.",
+          "Donate wheat flour or food to the needy on Sundays for general karmic clearance.",
+          "Light a ghee lamp at home every evening and pray for resolution of your current challenges."
         ]
       };
 
-      let remediesGoal = goal;
-      if (goal === 'custom') {
+      let remediesGoal = normalizedGoal;
+      if (normalizedGoal === 'custom') {
         remediesGoal = "custom_" + customCategory;
       }
       let remedies = [...(lalkitabRemedies[remediesGoal] || lalkitabRemedies["job"])];
       if (hasPartner) {
-        if (customCategory === "pregnancy") {
-          remedies[1] = `Both you and ${partnerName} should offer milk or sweet water to a banyan tree root together and apply the wet soil tilak on your foreheads to strengthen progeny blessings.`;
-        } else if (customCategory === "property") {
-          remedies[1] = `Both you and ${partnerName} should offer fresh water mixed with a small spoon of honey to the rising Sun together to invoke collective Mars/land energy.`;
+        if (normalizedGoal === 'baby' || customCategory === 'pregnancy') {
+          remedies[1] = `Both you and ${partnerName || 'your partner'} should offer milk or sweet water to a banyan tree root together and apply the wet soil tilak on your foreheads to strengthen progeny blessings.`;
+        } else if (normalizedGoal === 'property' || customCategory === 'property') {
+          remedies[1] = `Both you and ${partnerName || 'your partner'} should offer fresh water mixed with a small spoon of honey to the rising Sun together to invoke collective Mars/land energy.`;
+        } else if (normalizedGoal === 'marriage') {
+          remedies[1] = `Both you and ${partnerName || 'your partner'} should light a ghee lamp at a Vishnu temple together on Thursday evenings for harmonious marital vibrations.`;
         } else {
-          remedies[1] = `Both you and ${partnerName} should feed a white cow, or donate rice and milk on Monday mornings to strengthen Venus/Moon compatibilities.`;
+          remedies[1] = `Both you and ${partnerName || 'your partner'} should feed a white cow or donate rice and milk on Monday mornings to strengthen Venus/Moon compatibilities.`;
         }
       }
-      const lalkitabListHTML = `
-        <li style="margin-bottom: 10px;"><strong>Remedy 1:</strong> ${remedies[0]}</li>
-        <li><strong>Remedy 2:</strong> ${remedies[1]}</li>
-      `;
+      // Build extended lalkitab HTML (show up to 6 items)
+      const lalkitabListHTML = remedies.slice(0, 6).map((r, i) =>
+        `<li style="margin-bottom: 10px;"><strong>Remedy ${i+1}:</strong> ${r}</li>`
+      ).join('');
 
-      // Vastu Suggestion
+      // ---------------------------------------------------------------
+      // VASTU SUGGESTIONS — all goal types
+      // ---------------------------------------------------------------
       const vastuSuggestions = {
-        "job": "Ensure your study or work desk is placed in the North or North-East zone of your room. Keep the desk clean, clutter-free, and place a green aventurine crystal or a small plant here.",
-        "debt": "Place a small running water fountain or a picture of serene water flow in the North direction of your house. Ensure there are no heavy iron items or garbage in the North-East zone.",
-        "marriage": "Place a pair of decorative pink/gold lovebirds or a rose quartz crystal in the South-West corner of your bedroom. Avoid using dark blue or black bedsheets.",
-        "baby": "Keep the East and North-East zone of your bedroom light, clean, and place fresh flowers here to support health and fertility.",
-        "business": "Keep the main entrance of your shop, office, or workshop clean, well-lit, and decorated with a swastika symbol. Position your sitting chair facing East or North.",
+        "job": "Ensure your study or work desk is placed in the North or North-East zone of your room. Keep the desk clean, clutter-free, and place a green aventurine crystal or a small plant here. Avoid sitting with your back facing the main door.",
+        "debt": "Place a small running water fountain or a picture of serene water flow in the North direction of your house. Ensure there are no heavy iron items or garbage in the North-East zone. Keep the locker/safe in the South-West and always facing North when opened.",
+        "marriage": "Place a pair of decorative pink/gold lovebirds or a rose quartz crystal in the South-West corner of your bedroom. Avoid using dark blue or black bedsheets. Ensure there are no broken mirrors or cracked glass in your bedroom or living area.",
+        "baby": "Keep the East and North-East zone of your bedroom light, clean, and place fresh flowers here to support health and fertility. Avoid sleeping under a heavy concrete beam.",
+        "business": "Keep the main entrance of your shop, office, or workshop clean, well-lit, and decorated with a swastika symbol. Position your sitting chair facing East or North. Avoid keeping shoes or waste near the entrance.",
+        "property": `Ensure the North-East zone of your prospective home/plot is open, light, and free of heavy clutter. Prefer a property on ${propertyNumber} purchase with an East or North-facing main door for ${propertyType} type. Place a Vastu kalash near the main entrance during property visit for positive energy reading.`,
+        "health": "Ensure your sleeping bed headboard points towards South. Clear any dust or cluttered items from the North-East zone of your bedroom. Keep the bathroom/toilet door always closed and well-ventilated. Place a Tulsi plant in the East-facing window for healing solar energy.",
         "custom_job": "Position your work desk facing East or North-East, and place a small bamboo or green plant on it to invite career growth.",
-        "custom_money": "Ensure the North zone of your house is clean, light, and free of heavy iron or trash to allow cash flow energy to enter.",
-        "custom_marriage": "Place a pair of rose quartz crystal spheres in the South-West corner of your bedroom to nurture mutual love.",
-        "custom_education": "Keep your study table in the North-East or East direction. Avoid placing heavy books directly above your sitting head space.",
+        "custom_money": "Ensure the North zone of your house is clean, light, and free of heavy iron or trash to allow cash flow energy to enter. Keep your financial documents in the South-West.",
+        "custom_marriage": "Place a pair of rose quartz crystal spheres in the South-West corner of your bedroom to nurture mutual love. Avoid sleeping with feet pointing toward the main door.",
+        "custom_education": "Keep your study table in the North-East or East direction. Avoid placing heavy books directly above your sitting head space. Keep the study room clean and well-lit.",
         "custom_health": "Ensure your sleeping bed headboard points towards the South or East. Clear any cluttered items or dust from the North-East zone of your house to maintain pure health flows.",
         "custom_visa": "Place your passport, travel documents, or visa applications in the North-West corner (Vayu/Transit zone) of your room to accelerate transit energy.",
         "custom_legal": "Store all court case files, legal letters, and dispute documents in the South or South-West corner of your office or bedroom to ensure stability.",
-        "custom_mental": "Ensure the North-West area of your bedroom is clean, free of heavy storage blocks, and well-ventilated to promote stable mental air currents.",
+        "custom_mental": "Ensure the North-West area of your bedroom is clean, free of heavy storage blocks, and well-ventilated to promote stable mental air currents. Burn lavender or sandalwood incense daily.",
         "custom_property": "Ensure the West or South-West zone of your room is clean, free of dust, and well-lit to attract stable property transactions.",
         "custom_pregnancy": "Keep the East and North-East zone of your bedroom light, clean, and place fresh flowers here. Avoid sleeping directly under a heavy concrete structural beam.",
         "custom_general": `Sit facing East while planning steps to resolve: '${issueText}', and ensure your work chair has a solid wall backing behind it.`
       };
 
-      let vastuGoal = goal;
-      if (goal === 'custom') {
+      let vastuGoal = normalizedGoal;
+      if (normalizedGoal === 'custom') {
         vastuGoal = "custom_" + customCategory;
       }
       let vastuText = vastuSuggestions[vastuGoal] || vastuSuggestions["job"];
-      if (goal === 'baby') {
+      if (normalizedGoal === 'baby') {
         if (hasPartner) {
           if (babyNum === "1") {
-            vastuText = `Ensure your shared bed is placed in the South-West direction. Avoid using aggressive colors (like red or dark blue) in your bedroom; prefer warm cream, pastel pink, or light yellow tones to support pregnancy vibrations.`;
+            vastuText = `Ensure your shared bed is placed in the South-West direction. Avoid using aggressive colors (like red or dark blue) in your bedroom; prefer warm cream, pastel pink, or light yellow tones to support pregnancy vibrations. Keep North-East zone clean and fresh.`;
           } else if (babyNum === "2") {
-            vastuText = `Ensure the North-East zone of your home is clean. Keep your first child's toys away from your bedroom to maintain tranquil pregnancy vibes.`;
+            vastuText = `Ensure the North-East zone of your home is clean. Keep your first child's toys away from your bedroom to maintain tranquil pregnancy vibes. Place fresh white flowers in the East zone of your bedroom.`;
           } else if (babyNum === "3") {
-            vastuText = `Place a healthy green plant or a family portrait in the East zone of your shared living space to invite growing domestic progeny energies.`;
+            vastuText = `Place a healthy green plant or a family portrait in the East zone of your shared living space to invite growing domestic progeny energies. Ensure the children's room has East or North-facing windows.`;
           }
         } else {
           vastuText = vastuSuggestions["baby"];
         }
+      } else if (normalizedGoal === 'property') {
+        if (hasPartner) {
+          vastuText = `Both of you should visit the prospective ${propertyType} together and assess: main door direction (prefer East/North), North-East zone (should be open/light), kitchen (should be in South-East). Avoid properties with toilets in North-East or beams over the main sitting/sleeping area.`;
+        }
+      } else if (normalizedGoal === 'marriage') {
+        if (hasPartner) {
+          vastuText = `Ensure the South-West (relationship zone) of your shared bedroom is clean, has a rose quartz sphere, and contains no mirrors directly reflecting the bed. Remove any broken decor items.`;
+        } else {
+          vastuText = `Place a pair of pink or gold lovebirds figurine in the South-West corner of your bedroom. Avoid clutter in the South-West. Light rose or jasmine incense every Friday evening.`;
+        }
       } else if (hasPartner) {
         if (customCategory === "pregnancy") {
-          vastuText = `Ensure your shared bed is placed in the South-West direction. Avoid using aggressive colors (like red or dark blue) in your bedroom; prefer warm cream, pastel pink, or light yellow tones to support pregnancy vibrations.`;
+          vastuText = `Ensure your shared bed is placed in the South-West direction. Avoid using aggressive colors in your bedroom; prefer warm cream, pastel pink, or light yellow tones.`;
         } else if (customCategory === "property") {
-          vastuText = `Ensure the North-East zone of your shared living space is kept light and clean, and place a picture of a flourishing green forest in the East direction of your living room to invite collective growth.`;
+          vastuText = `Ensure the North-East zone of your shared living space is kept light and clean. Place a picture of a flourishing green forest in the East direction of your living room.`;
         } else {
-          vastuText = `Ensure the South-West (relationship and stability zone) of your shared bedroom is clean, has a rose quartz sphere or a pair of pink lovebirds, and contains no mirrors directly reflecting the bed.`;
+          vastuText = `Ensure the South-West (relationship and stability zone) of your shared bedroom is clean, has a rose quartz sphere, and contains no mirrors directly reflecting the bed.`;
         }
       }
       const vastuListHTML = `<li>${vastuText}</li>`;
@@ -2043,33 +2362,69 @@
       const practicalActions = {
         "job": [
           `Open job boards (Naukri, LinkedIn, or specialized portals) and apply to at least 3 relevant roles matching your profile as a ${profession}.`,
-          `Rewrite your resume headline and summary to explicitly emphasize your key technical competencies as a ${profession}.`,
-          `Identify 5 recruitment managers or industry seniors in the ${profession} domain on LinkedIn and send them a tailored connection request with a polite introduction.`,
-          `Spend 45 minutes upskilling or learning a trending tool, framework, or concept required for advanced ${profession} roles.`
+          `Rewrite your resume headline to explicitly emphasize your key technical competencies as a ${profession}.`,
+          `Identify 5 recruitment managers in the ${profession} domain on LinkedIn and send tailored connection requests.`,
+          `Spend 45 minutes upskilling — learn a trending tool or concept required for advanced ${profession} roles.`,
+          `Record your daily progress: list 3 applications sent today and track response timelines.`,
+          `Ask one senior colleague, mentor, or professional contact for a candid review of your resume or interview performance.`
         ],
         "debt": [
-          `List all your active debts in a spreadsheet, ordering them by interest rate. Focus on allocating extra payments toward the highest-interest debt first.`,
-          `Review your subscriptions and daily operational software spend relative to your ${profession} work, and cancel one non-essential service today.`,
-          `Contact one of your creditors or bank representatives to negotiate a lower interest rate, consolidated plan, or waiver of fee charges.`,
-          `Set aside a small emergency fund buffer (e.g., 500-1000 Rs) before planning any recreational or discretionary expenses today.`
+          `List all your active debts in a spreadsheet, ordering them by interest rate — focus extra payments on highest-interest debt first (Avalanche method).`,
+          `Review your ${profession} work expenses and cancel one non-essential subscription or service today.`,
+          `Contact one creditor or bank representative to negotiate a lower interest rate, consolidated plan, or fee waiver.`,
+          `Set aside a small emergency buffer (Rs. 500–1000) before any discretionary spending today.`,
+          `Set up an automatic monthly SIP (Systematic Investment Plan) of any amount to a debt repayment fund.`,
+          `Calculate your total debt-to-income ratio and write out a 3-month debt clearance milestones list.`
         ],
         "marriage": [
-          `Take 15 minutes to journal about what relationship qualities are most compatible with your busy schedule and lifestyle as a ${profession}.`,
-          `Participate in a community club, hobby class, or professional networking event today where you can meet new individuals organically.`,
-          `Send a warm appreciation text or call a close family member to nurture your domestic emotional foundations (strengthening Venus/Moon).`,
-          `Spend 15 minutes grooming, organizing your wardrobe, and wearing clean, ironed, pleasing colors to project a confident personal aura.`
+          isSingleMarriage ?
+            `Take 15 minutes to journal your ideal partner qualities compatible with your lifestyle as a ${profession}.` :
+            `Take 15 minutes to write down one quality you appreciate most about your partner and share it with them today.`,
+          isSingleMarriage ?
+            `Participate in a community club, hobby class, or professional networking event to meet people organically.` :
+            `Plan one small shared activity or date this week that you both enjoy equally.`,
+          isSingleMarriage ?
+            `Consult with a trusted family elder or astrologer about favorable marriage muhurtas (auspicious timings) for your horoscope.` :
+            `Have an honest 15-minute conversation with your partner about your shared vision for the next 12 months.`,
+          isSingleMarriage ?
+            `Spend 15 minutes grooming and projecting a confident personal aura — wear clean, pleasing, warm colors.` :
+            `Surprise your partner with a small thoughtful gesture (a note, a meal, or a shared memory) today.`,
+          isSingleMarriage ?
+            `Research and shortlist 2–3 compatible horoscope matches or trusted matrimonial platforms suited for a ${profession}.` :
+            `Together, review your shared calendar and plan one important life decision (home, family, travel) for the next quarter.`,
+          `Spend 15 minutes in a calm breathing practice together or individually to strengthen emotional clarity and patience.`
         ],
         "business": [
-          `Compile a list of 3 potential prospects who could benefit from a freelance or agency ${profession} service and send them a cold pitch email.`,
-          `Review your pricing structure for ${profession} services to ensure your profit margin accounts for current operational inflation.`,
-          `Design a simple case study post showcasing a recent successful project you completed as a ${profession} and share it on your social media feeds.`,
-          `Spend 30 minutes analyzing your accounts ledger to trace and eliminate leakage in your business operational cash flow.`
+          `Compile a list of 3 potential prospects who could benefit from ${profession} services and send them a cold pitch email today.`,
+          `Review your pricing structure to ensure profit margin accounts for current operational inflation.`,
+          `Design a simple case study post showcasing a recent successful project and share it on social media.`,
+          `Spend 30 minutes analyzing your accounts ledger to trace and eliminate leakage in cash flow.`,
+          `Research one new market segment or industry trend relevant to your ${profession} business growth.`,
+          `Follow up with one previous client for feedback, referral, or repeat engagement opportunity.`
         ],
         "baby": [
           `Prepare a nutritious diet chart rich in folic acid, iron, and green vegetables, and track your meals today.`,
           `Research and shortlist highly rated gynecologists or maternity hospitals in your local city area.`,
           `Spend 20 minutes doing light breathing exercises (Pranayama) or mindfulness yoga to reduce bodily cortisol.`,
-          `Create a daily health tracking diary to log your fertility, body temperature, or prenatal vitamin intakes.`
+          `Create a daily health tracking diary to log fertility, body temperature, or prenatal vitamin intakes.`,
+          `Research the latest guidance on prenatal nutrition and schedule a preconception health check-up this week.`,
+          `Identify and remove any environmental stressors (excess screen time, processed food, irregular sleep) from your current routine.`
+        ],
+        "property": [
+          `Search property platforms (MagicBricks, 99acres, Housing.com) for ${propertyType} options in ${propertyCity || cityName} and shortlist 3 matches.`,
+          `Write a detailed checklist of must-have requirements: location, size, proximity to work/school, budget range.`,
+          `Contact at least 2 real estate agents or builders to schedule site visits for this week.`,
+          `Calculate your loan eligibility using your bank's home loan calculator and prepare the required documentation list (income proof, ID, address proof).`,
+          `Research upcoming infrastructure projects (metro, highway, RERA projects) near your target property location to evaluate future appreciation.`,
+          `Identify if a Vastu expert consultation before final property selection would be valuable — shortlist one locally.`
+        ],
+        "health": [
+          `Drink at least 3 liters of water today and keep a hydration log.`,
+          `Spend 30 minutes doing light walking, stretching, or yoga to release physical and mental tension.`,
+          `Prepare a clean, high-fiber, unprocessed meal plan for the next 7 days.`,
+          `Schedule or research an appointment with the appropriate medical specialist for your specific concern.`,
+          `Track your sleep — aim for 7–8 hours and avoid screens 1 hour before bedtime tonight.`,
+          `Research one evidence-based supplement or lifestyle practice recommended for your specific health goal.`
         ],
         "custom_job": [
           `Search job listings on LinkedIn or specialized portals matching your background as a ${profession} and apply to at least 3 roles.`,
@@ -2139,11 +2494,13 @@
         ]
       };
 
-      let actionsGoal = goal;
-      if (goal === 'custom') {
+      let actionsGoal = normalizedGoal;
+      if (normalizedGoal === 'custom') {
         actionsGoal = "custom_" + customCategory;
       }
       let actions = [...(practicalActions[actionsGoal] || practicalActions["job"])];
+      // Replace placeholders that have template literals that were pre-evaluated as 'undefined'
+      actions = actions.filter(a => a !== undefined);
       
       if (goal === 'baby') {
         if (hasPartner) {
@@ -2217,26 +2574,36 @@
           ];
         }
       }
-      const practicalListHTML = `
-        <li style="margin-bottom: 10px;"><strong>Action Step 1:</strong> ${actions[0]}</li>
-        <li style="margin-bottom: 10px;"><strong>Action Step 2:</strong> ${actions[1]}</li>
-        <li style="margin-bottom: 10px;"><strong>Action Step 3:</strong> ${actions[2]}</li>
-        <li><strong>Action Step 4:</strong> ${actions[3]}</li>
-      `;
+      // ---------------------------------------------------------------
+      // BUILD HTML LISTS — render all items (up to 6)
+      // ---------------------------------------------------------------
+      const practicalListHTML = actions.slice(0, 6).map((a, i) =>
+        `<li style="margin-bottom: 10px;"><strong>Action Step ${i+1}:</strong> ${a}</li>`
+      ).join('');
 
-      // Populate list elements
+      // ---------------------------------------------------------------
+      // POPULATE RESULT VIEW
+      // ---------------------------------------------------------------
       document.getElementById('vedic-tasks-list').innerHTML = vedicListHTML;
       document.getElementById('lalkitab-tasks-list').innerHTML = lalkitabListHTML;
       document.getElementById('vastu-tasks-list').innerHTML = vastuListHTML;
       document.getElementById('practical-tasks-list').innerHTML = practicalListHTML;
 
-      // Update title
-      let titleText = `${name}'s Daily Astro Mission`;
-      if (goal === 'baby') {
-        titleText = hasPartner ? `${name} & ${partnerName}'s Baby Planning Mission` : `${name}'s Baby Planning Mission`;
-      } else if (hasPartner) {
-        titleText = `${name} & ${partnerName}'s Aligned Daily Astro Mission`;
-      }
+      // Goal-aware title
+      const goalTitleMap = {
+        'job': 'Career Mission',
+        'debt': 'Wealth Clearing Mission',
+        'marriage': isSingleMarriage ? 'Marriage Prediction Mission' : 'Relationship Harmony Mission',
+        'baby': 'Baby Planning Mission',
+        'business': 'Business Growth Mission',
+        'property': 'Dream Home Mission',
+        'health': 'Health & Healing Mission',
+        'custom': 'Life Resolution Mission'
+      };
+      const missionType = goalTitleMap[normalizedGoal] || 'Daily Astro Mission';
+      let titleText = hasPartner
+        ? `${name} & ${partnerName || 'Partner'}\'s ${missionType}`
+        : `${name}\'s ${missionType}`;
       document.getElementById('coach-result-title').innerText = titleText;
 
       // --- SAVE AND SYNC TO GAMIFICATION DASHBOARD ---
@@ -3411,6 +3778,10 @@
       const tabIds = ['tab-home', 'tab-kundli', 'tab-matching', 'tab-tarot', 'tab-coach', 'tab-settings'];
       document.getElementById(tabIds[index]).classList.add('active');
       btn.classList.add('active');
+      // Auto-fill Kundali from onboarding data when switching to tab
+      if (index === 1) {
+        setTimeout(() => autoFillKundliFromOnboarding(), 100);
+      }
     }
 
     // Show Horoscope Overlay
@@ -3534,43 +3905,449 @@
       return lon;
     }
 
+    // ─── KUNDALI BILINGUAL DATA & CALCULATIONS ───────────────────────────────────
+
+    let kundliLang = 'en';
+
+    function setKundliLang(lang) {
+      kundliLang = lang;
+      // Show/hide EN and HI labels
+      document.querySelectorAll('.k-lbl-en').forEach(el => el.style.display = lang === 'en' ? '' : 'none');
+      document.querySelectorAll('.k-lbl-hi').forEach(el => el.style.display = lang === 'hi' ? '' : 'none');
+      
+      // Toggle result bilingual paragraphs
+      const ids = ['k-lagna-meaning-en', 'k-lagna-meaning-hi', 'k-prediction-en', 'k-prediction-hi', 'k-dasha-meaning-en', 'k-dasha-meaning-hi', 'k-summary-en', 'k-summary-hi'];
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          if (id.endsWith('-en')) {
+            el.style.display = lang === 'en' ? '' : 'none';
+          } else {
+            el.style.display = lang === 'hi' ? '' : 'none';
+          }
+        }
+      });
+      
+      const moonHi = document.getElementById('k-moon-nakshatra-hi');
+      if (moonHi) moonHi.style.display = lang === 'hi' ? '' : 'none';
+      
+      // Update toggle buttons active styles
+      const btnGroup = [
+        { enId: 'k-lang-en', hiId: 'k-lang-hi' },
+        { enId: 'kr-lang-en', hiId: 'kr-lang-hi' }
+      ];
+      btnGroup.forEach(group => {
+        const enBtn = document.getElementById(group.enId);
+        const hiBtn = document.getElementById(group.hiId);
+        if (enBtn && hiBtn) {
+          if (lang === 'en') {
+            enBtn.style.background = 'var(--gold)';
+            enBtn.style.color = '#0C0922';
+            enBtn.style.borderColor = 'var(--gold)';
+            hiBtn.style.background = 'transparent';
+            hiBtn.style.color = 'var(--gold)';
+            hiBtn.style.borderColor = 'rgba(232,200,121,0.3)';
+          } else {
+            hiBtn.style.background = 'var(--gold)';
+            hiBtn.style.color = '#0C0922';
+            hiBtn.style.borderColor = 'var(--gold)';
+            enBtn.style.background = 'transparent';
+            enBtn.style.color = 'var(--gold)';
+            enBtn.style.borderColor = 'rgba(232,200,121,0.3)';
+          }
+        }
+      });
+    }
+
+    function selectKundliGender(el, val) {
+      ['M','F','O'].forEach(g => {
+        const lbl = document.getElementById('k-g-'+g);
+        if (lbl) {
+          lbl.style.borderColor = 'rgba(255,255,255,0.1)';
+          lbl.style.background = 'rgba(255,255,255,0.03)';
+          lbl.style.color = '';
+        }
+      });
+      el.style.borderColor = 'var(--gold)';
+      el.style.background = 'rgba(232,200,121,0.1)';
+      el.style.color = 'var(--gold)';
+      document.getElementById('k-gender').value = val;
+    }
+
+    // Sign translations & info
+    const signNamesHi = ['मेष', 'वृषभ', 'मिथुन', 'कर्क', 'सिंह', 'कन्या', 'तुला', 'वृश्चिक', 'धनु', 'मकर', 'कुम्भ', 'मीन'];
+    const signElements = ['Fire', 'Earth', 'Air', 'Water', 'Fire', 'Earth', 'Air', 'Water', 'Fire', 'Earth', 'Air', 'Water'];
+    const signElementsHi = ['अग्नि', 'पृथ्वी', 'वायु', 'जल', 'अग्नि', 'पृथ्वी', 'वायु', 'जल', 'अग्नि', 'पृथ्वी', 'वायु', 'जल'];
+    const signLords = ['Mars', 'Venus', 'Mercury', 'Moon', 'Sun', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Saturn', 'Jupiter'];
+    const signLordsHi = ['मंगल', 'शुक्र', 'बुध', 'चन्द्र', 'सूर्य', 'बुध', 'शुक्र', 'मंगल', 'गुरु', 'शनि', 'शनि', 'गुरु'];
+    const planetNamesHi = {
+      'Lagna': 'लग्न', 'Sun': 'सूर्य', 'Moon': 'चन्द्र', 'Mars': 'मंगल', 'Mercury': 'बुध', 
+      'Jupiter': 'गुरु', 'Venus': 'शुक्र', 'Saturn': 'शनि', 'Rahu': 'राहु', 'Ketu': 'केतु'
+    };
+
+    // 27 Nakshatras array
+    const nakshatras = [
+      {n:'Ashwini',h:'अश्विनी',lord:'Ketu',lordH:'केतु'},
+      {n:'Bharani',h:'भरणी',lord:'Venus',lordH:'शुक्र'},
+      {n:'Krittika',h:'कृत्तिका',lord:'Sun',lordH:'सूर्य'},
+      {n:'Rohini',h:'रोहिणी',lord:'Moon',lordH:'चन्द्र'},
+      {n:'Mrigashira',h:'मृगशिरा',lord:'Mars',lordH:'मंगल'},
+      {n:'Ardra',h:'आर्द्रा',lord:'Rahu',lordH:'राहु'},
+      {n:'Punarvasu',h:'पुनर्वसु',lord:'Jupiter',lordH:'गुरु'},
+      {n:'Pushya',h:'पुष्य',lord:'Saturn',lordH:'शनि'},
+      {n:'Ashlesha',h:'आश्लेषा',lord:'Mercury',lordH:'बुध'},
+      {n:'Magha',h:'मघा',lord:'Ketu',lordH:'केतु'},
+      {n:'Purva Phalguni',h:'पूर्व फाल्गुनी',lord:'Venus',lordH:'शुक्र'},
+      {n:'Uttara Phalguni',h:'उत्तर फाल्गुनी',lord:'Sun',lordH:'सूर्य'},
+      {n:'Hasta',h:'हस्त',lord:'Moon',lordH:'चन्द्र'},
+      {n:'Chitra',h:'चित्रा',lord:'Mars',lordH:'मंगल'},
+      {n:'Swati',h:'स्वाति',lord:'Rahu',lordH:'राहु'},
+      {n:'Vishakha',h:'विशाखा',lord:'Jupiter',lordH:'गुरु'},
+      {n:'Anuradha',h:'अनुराधा',lord:'Saturn',lordH:'शनि'},
+      {n:'Jyeshtha',h:'ज्येष्ठा',lord:'Mercury',lordH:'बुध'},
+      {n:'Mula',h:'मूल',lord:'Ketu',lordH:'केतु'},
+      {n:'Purva Ashadha',h:'पूर्वाषाढ़',lord:'Venus',lordH:'शुक्र'},
+      {n:'Uttara Ashadha',h:'उत्तराषाढ़',lord:'Sun',lordH:'सूर्य'},
+      {n:'Shravana',h:'श्रवण',lord:'Moon',lordH:'चन्द्र'},
+      {n:'Dhanishtha',h:'धनिष्ठा',lord:'Mars',lordH:'मंगल'},
+      {n:'Shatabhisha',h:'शतभिषा',lord:'Rahu',lordH:'राहु'},
+      {n:'Purva Bhadrapada',h:'पूर्व भाद्रपद',lord:'Jupiter',lordH:'गुरु'},
+      {n:'Uttara Bhadrapada',h:'उत्तर भाद्रपद',lord:'Saturn',lordH:'शनि'},
+      {n:'Revati',h:'रेवती',lord:'Mercury',lordH:'बुध'}
+    ];
+
+    // Vimshottari Dasha periods
+    const dashaPeriods = {Ketu:7, Venus:20, Sun:6, Moon:10, Mars:7, Rahu:18, Jupiter:16, Saturn:19, Mercury:17};
+    const dashaPeriodOrder = ['Ketu','Venus','Sun','Moon','Mars','Rahu','Jupiter','Saturn','Mercury'];
+
+    function getNakshatra(siderealLon) {
+      const idx = Math.floor(siderealLon / (360/27));
+      return nakshatras[Math.min(idx, 26)];
+    }
+
+    function computeDasha(moonLon, birthYear, birthMonth, birthDay) {
+      const nak = getNakshatra(moonLon);
+      const nakLord = nak.lord;
+      const nakDeg = moonLon % (360/27);
+      const nakFraction = nakDeg / (360/27);
+      const totalPeriod = dashaPeriods[nakLord];
+      const remainingAtBirth = totalPeriod * (1 - nakFraction);
+      
+      const birthDate = new Date(birthYear, birthMonth-1, birthDay);
+      const now = new Date();
+      let cursor = new Date(birthDate);
+      let orderIdx = dashaPeriodOrder.indexOf(nakLord);
+      let found = null;
+      let yearsLeft = remainingAtBirth;
+
+      for (let i = 0; i < 20; i++) {
+        const planet = dashaPeriodOrder[(orderIdx + i) % 9];
+        const years = i === 0 ? yearsLeft : dashaPeriods[planet];
+        const endDate = new Date(cursor.getTime() + years * 365.25 * 24 * 3600 * 1000);
+        if (now >= cursor && now < endDate) {
+          found = {planet, start: new Date(cursor), end: endDate};
+          break;
+        }
+        cursor = endDate;
+        if (i === 0) yearsLeft = 0;
+      }
+      return found || {planet: nakLord, start: birthDate, end: new Date(birthDate.getFullYear()+7, birthMonth-1, birthDay)};
+    }
+
+    // Lagna meanings EN+HI
+    const lagnaMeanings = {
+      0: {
+        en: "Aries Lagna (Mesha) — You are dynamic, courageous, and a natural leader. Mars rules your chart, giving you drive, energy, and a pioneering spirit. You tend to be direct, competitive, and enthusiastic about new beginnings.",
+        hi: "मेष लग्न — आप गतिशील, साहसी और स्वाभाविक नेता हैं। मंगल आपके चार्ट का स्वामी है, जो आपको ऊर्जा, साहस और नई शुरुआत की प्रेरणा देता है।"
+      },
+      1: {
+        en: "Taurus Lagna (Vrishabha) — You are stable, sensual, and deeply appreciative of beauty and comfort. Venus rules your ascendant, blessing you with aesthetic sensibility, loyalty, and persistence.",
+        hi: "वृषभ लग्न — आप स्थिर, धैर्यशील और सौंदर्य के प्रेमी हैं। शुक्र आपके लग्न का स्वामी है, जो आपको वफादारी और कलात्मकता प्रदान करता है।"
+      },
+      2: {
+        en: "Gemini Lagna (Mithuna) — You are versatile, communicative, and intellectually curious. Mercury governs your chart, making you quick-witted, adaptive, and skilled at multi-tasking.",
+        hi: "मिथुन लग्न — आप बहुमुखी, संवादशील और जिज्ञासु हैं। बुध आपके चार्ट का स्वामी है, जो आपको वाक्चातुर्य और त्वरित सोच प्रदान करता है।"
+      },
+      3: {
+        en: "Cancer Lagna (Karka) — You are nurturing, intuitive, and deeply emotional. The Moon governs your chart, making you sensitive, protective of loved ones, and strongly attached to home and family.",
+        hi: "कर्क लग्न — आप भावुक, अंतर्ज्ञानी और परिवार के प्रति समर्पित हैं। चन्द्र आपके लग्न का स्वामी है, जो आपको संवेदनशीलता और पोषण की शक्ति देता है।"
+      },
+      4: {
+        en: "Leo Lagna (Simha) — You are charismatic, generous, and born to lead. The Sun rules your ascendant, giving you natural authority, creative fire, and a magnetic personality that draws others toward you.",
+        hi: "सिंह लग्न — आप करिश्माई, उदार और नेतृत्वकर्ता हैं। सूर्य आपके लग्न का स्वामी है, जो आपको प्रभावशाली व्यक्तित्व और रचनात्मक ऊर्जा प्रदान करता है।"
+      },
+      5: {
+        en: "Virgo Lagna (Kanya) — You are analytical, detail-oriented, and highly systematic. Mercury rules your chart, blessing you with sharp discernment, perfectionist tendencies, and strong service orientation.",
+        hi: "कन्या लग्न — आप विश्लेषणात्मक, सूक्ष्म-दृष्टि संपन्न और व्यवस्थित हैं। बुध आपके लग्न का स्वामी है, जो आपको तीक्ष्ण बुद्धि और सेवाभाव प्रदान करता है।"
+      },
+      6: {
+        en: "Libra Lagna (Tula) — You are diplomatic, charming, and strongly drawn toward balance and beauty. Venus rules your ascendant, gifting you with social grace, artistic talent, and a natural ability to bring harmony.",
+        hi: "तुला लग्न — आप कूटनीतिक, आकर्षक और संतुलन के प्रेमी हैं। शुक्र आपके लग्न का स्वामी है, जो आपको सौंदर्यबोध और सामाजिक कुशलता देता है।"
+      },
+      7: {
+        en: "Scorpio Lagna (Vrishchika) — You are intense, transformative, and deeply perceptive. Mars governs your chart, granting you extraordinary willpower, investigative instincts, and the ability to reinvent yourself.",
+        hi: "वृश्चिक लग्न — आप तीव्र, रूपांतरणकारी और गहरे अंतर्दृष्टि संपन्न हैं। मंगल आपके लग्न का स्वामी है, जो आपको अपार इच्छाशक्ति और खोजी प्रवृत्ति देता है।"
+      },
+      8: {
+        en: "Sagittarius Lagna (Dhanus) — You are adventurous, philosophical, and truth-seeking. Jupiter governs your chart, blessing you with optimism, wisdom, and a natural gift for teaching and higher learning.",
+        hi: "धनु लग्न — आप साहसी, दार्शनिक और सत्य के खोजी हैं। गुरु आपके लग्न का स्वामी है, जो आपको आशावाद, ज्ञान और शिक्षण का वरदान देता है।"
+      },
+      9: {
+        en: "Capricorn Lagna (Makara) — You are disciplined, ambitious, and pragmatic. Saturn governs your chart, giving you endurance, responsibility, and the ability to achieve lasting success through consistent effort.",
+        hi: "मकर लग्न — आप अनुशासित, महत्वाकांक्षी और व्यावहारिक हैं। शनि आपके लग्न का स्वामी है, जो आपको धैर्य, कठोर परिश्रम और दीर्घकालिक सफलता की क्षमता देता है।"
+      },
+      10: {
+        en: "Aquarius Lagna (Kumbha) — You are innovative, humanitarian, and forward-thinking. Saturn governs your chart, granting you originality, community consciousness, and a vision for a better future.",
+        hi: "कुम्भ लग्न — आप नवीन विचारक, मानवतावादी और भविष्यदर्शी हैं। शनि आपके लग्न का स्वामी है, जो आपको मौलिकता और समाज-सेवा की दृष्टि प्रदान करता है।"
+      },
+      11: {
+        en: "Pisces Lagna (Meena) — You are empathetic, imaginative, and spiritually inclined. Jupiter governs your chart, endowing you with compassion, intuitive gifts, artistic sensitivity, and deep spiritual wisdom.",
+        hi: "मीन लग्न — आप सहानुभूतिशील, कल्पनाशील और आध्यात्मिक प्रवृत्ति के हैं। गुरु आपके लग्न का स्वामी है, जो आपको करुणा, अंतर्ज्ञान और कलात्मक संवेदनशीलता देता है।"
+      }
+    };
+
+    // Dasha meanings EN+HI
+    const dashaMeanings = {
+      Sun: {
+        en: "Sun Mahadasha — A period of authority, self-expression, and career prominence. Excellent for leadership roles, government work, and building personal reputation. Duration: 6 years.",
+        hi: "सूर्य महादशा — अधिकार, आत्म-अभिव्यक्ति और करियर में प्रमुखता का समय। सरकारी कार्य, नेतृत्व और व्यक्तिगत प्रतिष्ठा के लिए उत्कृष्ट काल। अवधि: 6 वर्ष।"
+      },
+      Moon: {
+        en: "Moon Mahadasha — A period of emotional richness, travel, and nurturing relationships. Strong for intuitive growth, domestic harmony, and creative endeavors. Duration: 10 years.",
+        hi: "चन्द्र महादशा — भावनात्मक विकास, यात्रा और पारिवारिक सुख का समय। अंतर्ज्ञान, गृह-सौहार्द और रचनात्मकता के लिए अनुकूल। अवधि: 10 वर्ष।"
+      },
+      Mars: {
+        en: "Mars Mahadasha — A period of energy, drive, and assertive action. Favorable for sports, real estate, technical work, and overcoming obstacles. Duration: 7 years.",
+        hi: "मंगल महादशा — ऊर्जा, संघर्ष और साहसिक कार्यों का समय। संपत्ति, तकनीकी कार्य और बाधाओं को पार करने के लिए अनुकूल। अवधि: 7 वर्ष।"
+      },
+      Mercury: {
+        en: "Mercury Mahadasha — A period of intelligence, communication, business, and skill development. Excellent for education, writing, trading, and networking. Duration: 17 years.",
+        hi: "बुध महादशा — बुद्धि, संचार, व्यापार और कौशल विकास का समय। शिक्षा, लेखन और व्यापार के लिए उत्कृष्ट। अवधि: 17 वर्ष।"
+      },
+      Jupiter: {
+        en: "Jupiter Mahadasha — The most auspicious dasha of all. A period of wisdom, expansion, marriage, children, wealth, and spiritual growth. Duration: 16 years.",
+        hi: "गुरु महादशा — सर्वश्रेष्ठ दशाओं में से एक। ज्ञान, विस्तार, विवाह, संतान, धन और आध्यात्मिक विकास का काल। अवधि: 16 वर्ष।"
+      },
+      Venus: {
+        en: "Venus Mahadasha — A period of luxury, love, relationships, creativity, and material abundance. Highly favorable for marriage, art, entertainment, and business ventures. Duration: 20 years.",
+        hi: "शुक्र महादशा — विलासिता, प्रेम, कला और भौतिक समृद्धि का सुदीर्घ काल। विवाह, व्यवसाय और रचनात्मकता के लिए अत्यंत अनुकूल। अवधि: 20 वर्ष।"
+      },
+      Saturn: {
+        en: "Saturn Mahadasha — A period of discipline, karmic lessons, and steady hard work. Challenges build character and lasting achievements. Success comes slowly but surely. Duration: 19 years.",
+        hi: "शनि महादशा — अनुशासन, कर्मिक सीख और निरंतर परिश्रम का समय। कठिनाइयाँ चरित्र निर्माण करती हैं और स्थायी सफलता मिलती है। अवधि: 19 वर्ष।"
+      },
+      Rahu: {
+        en: "Rahu Mahadasha — A period of ambition, illusion, sudden changes, and unconventional paths. Favorable for foreign connections, technology, and breaking social boundaries. Duration: 18 years.",
+        hi: "राहु महादशा — महत्वाकांक्षा, भ्रम, अचानक परिवर्तन और अपरंपरागत मार्गों का समय। विदेश, तकनीक और सामाजिक सीमाओं को तोड़ने के लिए अनुकूल। अवधि: 18 वर्ष।"
+      },
+      Ketu: {
+        en: "Ketu Mahadasha — A period of spiritual awakening, detachment, and inner transformation. May bring sudden changes and help release past karmic patterns. Duration: 7 years.",
+        hi: "केतु महादशा — आध्यात्मिक जागरण, वैराग्य और आंतरिक परिवर्तन का समय। पूर्व कर्मों के बंधनों से मुक्ति मिलती है। अवधि: 7 वर्ष।"
+      }
+    };
+
+    // House meanings EN+HI
+    const houseMeanings = [
+      {num:1, en:"1st House (Lagna Bhava) — Self, personality, physical body, and overall life direction.",
+       hi:"प्रथम भाव — स्वयं, व्यक्तित्व, शरीर और जीवन की दिशा।"},
+      {num:4, en:"4th House (Sukha Bhava) — Home, mother, property, emotional foundation, and domestic peace.",
+       hi:"चतुर्थ भाव — घर, माता, संपत्ति और पारिवारिक सुख।"},
+      {num:5, en:"5th House (Putra Bhava) — Children, intelligence, creativity, love affairs, and education.",
+       hi:"पंचम भाव — संतान, बुद्धि, रचनात्मकता, प्रेम और शिक्षा।"},
+      {num:7, en:"7th House (Kalatra Bhava) — Marriage, partnerships, spouse, business relationships.",
+       hi:"सप्तम भाव — विवाह, जीवनसाथी, साझेदारी और व्यावसायिक संबंध।"},
+      {num:10, en:"10th House (Karma Bhava) — Career, profession, social status, authority, and public reputation.",
+       hi:"दशम भाव — करियर, व्यवसाय, सामाजिक स्थिति और यश।"},
+      {num:11, en:"11th House (Labha Bhava) — Income, gains, social network, elder siblings, and fulfillment of desires.",
+       hi:"एकादश भाव — आय, लाभ, सामाजिक नेटवर्क और इच्छापूर्ति।"},
+      {num:2, en:"2nd House (Dhana Bhava) — Wealth, savings, family values, speech, and early childhood.",
+       hi:"द्वितीय भाव — धन, बचत, परिवार, वाणी और बचपन।"},
+      {num:9, en:"9th House (Dharma Bhava) — Fortune, higher education, religion, philosophy, and spiritual blessings.",
+       hi:"नवम भाव — भाग्य, उच्च शिक्षा, धर्म और आध्यात्मिक आशीर्वाद।"}
+    ];
+
+    // Goal predictions EN+HI
+    const goalPredictions = {
+      job: {
+        en: "Your 10th house lord and its position in the chart indicate the nature of your career path. The Sun's placement brings authority roles; Mercury favors communication, IT, and writing; Saturn indicates discipline-based fields like law, government, or engineering. Your current Mahadasha ruler significantly influences whether promotions or new opportunities will materialize in the next 12–18 months. Strengthening your 10th house through Surya mantras and career-focused rituals will accelerate professional progress.",
+        hi: "आपके दशम भाव के स्वामी और सूर्य की स्थिति करियर की प्रकृति निर्धारित करती है। वर्तमान महादशा के ग्रह का प्रभाव अगले 12-18 महीनों में पदोन्नति या नई संभावनाएं लाएगा। सूर्य मंत्र और करियर-केंद्रित अनुष्ठान से व्यावसायिक प्रगति तेज होगी।",
+        label: "Career / Job"
+      },
+      marriage: {
+        en: "The 7th house is the primary indicator of marriage and partnerships. Venus as the natural karaka of marriage, along with the 7th house lord's placement, shows the timing and quality of your union. Jupiter's aspect on the 7th house or Venus is highly auspicious for marriage prospects. Your Mahadasha and Antardasha planets play the most critical role — Venus, Moon, or Jupiter dashas typically trigger marriage events.",
+        hi: "सप्तम भाव विवाह का प्राथमिक संकेतक है। शुक्र और सप्तम भाव के स्वामी की स्थिति विवाह का समय और गुणवत्ता निर्धारित करती है। गुरु का सप्तम भाव पर दृष्टि विवाह संभावनाओं के लिए अत्यंत शुभ है।",
+        label: "Marriage / Relationship"
+      },
+      baby: {
+        en: "The 5th house governs progeny, and Jupiter is the primary natural significator (karaka) for children. The 5th house lord's strength, Jupiter's placement, and the current dasha ruler's connection to the 5th house are the key indicators of conception timing. If the 5th house is strong with benefic planets (Jupiter, Venus, Moon), children come naturally. Purification rituals and Santan Gopal mantra chanting over 40 consecutive days can strengthen progeny yoga.",
+        hi: "पंचम भाव संतान का कारक है और गुरु संतान के नैसर्गिक कारक हैं। पंचम भाव के स्वामी की शक्ति और वर्तमान दशा का पंचम भाव से संबंध गर्भधारण के समय का मुख्य संकेत है। संतान गोपाल मंत्र का 40 दिन तक जाप संतान योग को बलवान बनाता है।",
+        label: "Baby / Progeny"
+      },
+      property: {
+        en: "The 4th house represents home, property, and real estate. Its lord's placement and Mars (natural karaka for property and land) determine your property acquisition timing. A strong 4th house lord in a kendra or trikona, combined with an auspicious Mars placement, indicates favorable property purchase prospects. The best time for property decisions is typically during Mars, Moon, or the 4th house lord's dasha or antardasha periods.",
+        hi: "चतुर्थ भाव घर और संपत्ति का कारक है। इसके स्वामी और मंगल (भूमि के नैसर्गिक कारक) की स्थिति संपत्ति प्राप्ति का समय निर्धारित करती है। मंगल, चन्द्र या चतुर्थेश की दशा-अंतर्दशा में संपत्ति निर्णय लेना श्रेष्ठ होता है।",
+        label: "Property / Home"
+      },
+      debt: {
+        en: "The 2nd house rules wealth accumulation, and the 11th house governs income and gains. Saturn's placement often indicates financial discipline requirements. If Rahu or malefic planets afflict the 2nd or 12th house, financial leakage and debt patterns emerge. Your Saturn dasha or Rahu periods may intensify financial obligations. Key remedies include donating silver on Saturdays and strengthening your 2nd house lord through consistent ritual practice.",
+        hi: "द्वितीय भाव धन संचय और एकादश भाव आय का कारक है। शनि की स्थिति वित्तीय अनुशासन की आवश्यकता दर्शाती है। शनिवार को चांदी का दान और द्वितयेश को बलवान करने से वित्तीय उपाय होते हैं।",
+        label: "Finance / Debt"
+      },
+      business: {
+        en: "The 10th house governs profession and public standing, while the 7th house indicates business partnerships. Mercury-ruled individuals excel in trade, communication, and intellectual businesses. Jupiter's placement in a kendra brings large-scale success. If the 10th lord is strong in the birth chart, business ventures initiated during the 10th lord's dasha period have the highest probability of sustained success.",
+        hi: "दशम भाव व्यवसाय और सप्तम भाव व्यापारिक साझेदारी का कारक है। बुध-प्रधान व्यक्ति व्यापार, संचार और बौद्धिक व्यवसाय में सफल होते हैं। दशमेश की दशा में शुरू किया व्यवसाय सर्वाधिक सफल रहता है।",
+        label: "Business"
+      },
+      health: {
+        en: "The 1st house (vitality), 6th house (disease and healing), and 8th house (chronic illness and longevity) are the key health indicators. A strong Lagna lord and Sun indicate robust vitality. Afflictions from malefic planets (Mars, Saturn, Rahu, Ketu) to the 1st, 6th, or 8th house lords can indicate areas of health vulnerability. The Moon's placement strongly influences mental health and emotional wellbeing.",
+        hi: "लग्न (जीवन शक्ति), षष्ठ भाव (रोग) और अष्टम भाव (दीर्घायु) स्वास्थ्य के प्रमुख संकेतक हैं। बलवान लग्न स्वामी और सूर्य उत्तम स्वास्थ्य देते हैं। चन्द्र की स्थिति मानसिक स्वास्थ्य को सर्वाधिक प्रभावित करती है।",
+        label: "Health"
+      },
+      general: {
+        en: "Your overall Kundali shows the unique karmic blueprint of your current life journey. The strength of the Lagna lord, benefic vs. malefic planet balance, and the current Mahadasha all shape the primary themes of this phase of your life. Key upcoming transits of Jupiter and Saturn will mark the most significant turning points in the next 2–3 years.",
+        hi: "आपकी समग्र कुंडली वर्तमान जीवन यात्रा का अद्वितीय कर्मिक नक्शा दर्शाती है। लग्न स्वामी की शक्ति, शुभ-अशुभ ग्रहों का संतुलन और वर्तमान महादशा इस चरण के प्रमुख विषयों को आकार देते हैं।",
+        label: "General Life"
+      }
+    };
+
+    // Planet exaltation/debilitation
+    const planetStrength = {
+      Sun:    {exalt:0, debil:6, own:[4]},
+      Moon:   {exalt:1, debil:7, own:[3]},
+      Mars:   {exalt:9, debil:3, own:[0,7]},
+      Mercury:{exalt:5, debil:11, own:[2,5]},
+      Jupiter:{exalt:3, debil:9, own:[8,11]},
+      Venus:  {exalt:11, debil:5, own:[1,6]},
+      Saturn: {exalt:6, debil:0, own:[9,10]},
+      Rahu:   {exalt:1, debil:7, own:[]},
+      Ketu:   {exalt:7, debil:1, own:[]}
+    };
+
+    function getPlanetStatus(pName, sign) {
+      const s = planetStrength[pName];
+      if (!s) return {en:'Neutral', hi:'सामान्य', color:'#aaa'};
+      if (s.exalt === sign) return {en:'Exalted ↑', hi:'उच्च ↑', color:'#2ecc71'};
+      if (s.debil === sign) return {en:'Debilitated ↓', hi:'नीच ↓', color:'#ff6b6b'};
+      if (s.own.includes(sign)) return {en:'Own Sign ★', hi:'स्वगृही ★', color:'var(--gold)'};
+      return {en:'Neutral', hi:'सामान्य', color:'#aaa'};
+    }
+
+    // Dosha calculations
+    function computeDoshas(placements, lagnaSign) {
+      const doshas = [];
+      const get = name => placements.find(p => p.name === name);
+      const mars = get('Mars');
+      const saturn = get('Saturn');
+      const rahu = get('Rahu');
+      const moon = get('Moon');
+
+      // Mangal Dosha
+      if (mars) {
+        const marsHouse = ((mars.sign - lagnaSign + 12) % 12) + 1;
+        if ([1,2,4,7,8,12].includes(marsHouse)) {
+          doshas.push({
+            name: 'Mangal Dosha (Kuja Dosha)',
+            nameHi: 'मंगल दोष (कुज दोष)',
+            present: true,
+            en: 'Mars is placed in the ' + marsHouse + ' house from Lagna — a Mangal Dosha is present. This can create delays in marriage or cause friction in relationships. Remedies: Chant Om Angarakaya Namah 108 times daily; visit Hanuman temple on Tuesdays; perform Mangal Shanti puja.',
+            hi: 'मंगल लग्न से ' + marsHouse + 'वें भाव में है — मंगल दोष विद्यमान है। यह विवाह में देरी या वैवाहिक जीवन में कलह उत्पन्न कर सकता है। उपाय: मंगलवार को हनुमान मंदिर जाएं; ॐ अंगारकाय नमः का 108 बार जाप करें; मंगल शांति पूजा करवाएं।'
+          });
+        }
+      }
+
+      // Shani Sade Sati
+      if (saturn && moon) {
+        const satMoonDiff = ((saturn.sign - moon.sign + 12) % 12);
+        if ([0,1,11].includes(satMoonDiff)) {
+          doshas.push({
+            name: 'Shani Sade Sati',
+            nameHi: 'शनि साढ़े साती',
+            present: true,
+            en: 'Saturn is transiting near your Moon sign — this is the Sade Sati period. This can bring challenges, slow progress, and increased responsibilities. Remedy: Worship Shiva on Mondays; donate black sesame seeds on Saturdays; chant Om Sham Shanaishcharaya Namah 108 times.',
+            hi: 'शनि आपके चन्द्र राशि के समीप है — यह साढ़े साती काल है। इससे चुनौतियाँ, प्रगति में मंदी और जिम्मेदारियाँ बढ़ सकती हैं। उपाय: सोमवार को शिव पूजा; शनिवार को काले तिल दान; ॐ शं शनैश्चराय नमः का 108 बार जाप।'
+          });
+        }
+      }
+
+      // Kaal Sarp Dosha
+      if (rahu && get('Ketu')) {
+        const rahuSign = rahu.sign;
+        const planetSigns = ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn'].map(n => get(n)?.sign).filter(s => s !== undefined);
+        const allBetween = planetSigns.every(s => {
+          let d = (s - rahuSign + 12) % 12;
+          return d > 0 && d < 6;
+        });
+        if (allBetween) {
+          doshas.push({
+            name: 'Kaal Sarp Dosha',
+            nameHi: 'काल सर्प दोष',
+            present: true,
+            en: 'All planets are hemmed between Rahu and Ketu — Kaal Sarp Dosha is present. This can create repeated obstacles, karmic delays, and a sense of unfulfilled potential. Remedy: Perform Kaal Sarp Shanti puja; visit Trimbakeshwar or Ujjain for the special ritual; chant Om Nagabhyam Namah 108 times.',
+            hi: 'सभी ग्रह राहु और केतु के बीच हैं — काल सर्प दोष विद्यमान है। यह बाधाएं, कर्मिक विलंब और अधूरी संभावनाओं का अहसास दे सकता है। उपाय: काल सर्प शांति पूजा; त्र्यंबकेश्वर या उज्जैन में विशेष अनुष्ठान; ॐ नागभ्यां नमः का जाप।'
+          });
+        }
+      }
+
+      if (doshas.length === 0) {
+        doshas.push({
+          name: 'No Major Doshas Found',
+          nameHi: 'कोई प्रमुख दोष नहीं',
+          present: false,
+          en: 'Your chart does not show any major planetary doshas. This is a favorable indication for a relatively smooth life path. Continue strengthening your chart through your ruling planet\'s mantra and regular spiritual practice.',
+          hi: 'आपकी कुंडली में कोई प्रमुख दोष नहीं है। यह एक अनुकूल संकेत है। नियमित आध्यात्मिक साधना और अपने लग्न स्वामी के मंत्र जाप से जीवन और उज्जवल होगा।'
+        });
+      }
+      return doshas;
+    }
+
+    // Overhauled bilingual generateChart
     async function generateChart(e) {
       e.preventDefault();
-      
       const btn = e.target.querySelector('button[type="submit"]');
-      const originalText = btn.innerText;
-      btn.innerText = "CALCULATING...";
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:6px; animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><span class="k-lbl-en">Calculating...</span><span class="k-lbl-hi" style="display:none;">गणना हो रही है...</span>';
       btn.disabled = true;
 
+      // Force view labels refresh
+      setKundliLang(kundliLang);
+
       const name = document.getElementById('k-name').value;
+      const gender = document.getElementById('k-gender').value || 'M';
       const date = document.getElementById('k-date').value;
       const time = document.getElementById('k-time').value;
       const cityName = document.getElementById('k-city').value;
-      
+      const goal = document.getElementById('k-goal').value;
+
+      // Sync variables to local storage
+      localStorage.setItem('kundli_name', name);
+      localStorage.setItem('kundli_gender', gender);
+      localStorage.setItem('kundli_date', date);
+      localStorage.setItem('kundli_time', time);
+      localStorage.setItem('kundli_city', cityName);
+      localStorage.setItem('kundli_goal', goal);
+
+      // Geocode birth place
       let city = selectedCity;
-      if (selectedCity.name !== cityName) {
+      if (!city || city.name !== cityName) {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 2500); // 2.5 seconds timeout
-        
+        const tid = setTimeout(() => controller.abort(), 2500);
         try {
-          const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cityName)}&limit=1`, { signal: controller.signal });
-          clearTimeout(timeoutId);
-          const data = await response.json();
+          const resp = await fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(cityName) + '&limit=1', {signal: controller.signal});
+          clearTimeout(tid);
+          const data = await resp.json();
           if (data && data.length > 0) {
-            const item = data[0];
             city = {
-              name: item.display_name,
-              lat: parseFloat(item.lat),
-              lng: parseFloat(item.lon),
-              tz: getTimezoneFromCoordinates(parseFloat(item.lat), parseFloat(item.lon), item.display_name)
+              name: data[0].display_name,
+              lat: parseFloat(data[0].lat),
+              lng: parseFloat(data[0].lon),
+              tz: getTimezoneFromCoordinates(parseFloat(data[0].lat), parseFloat(data[0].lon), data[0].display_name)
             };
           } else {
-            city = { name: cityName, lat: 28.6139, lng: 77.2090, tz: 5.5 };
+            city = {name: cityName, lat: 28.6139, lng: 77.2090, tz: 5.5};
           }
-        } catch (err) {
-          clearTimeout(timeoutId);
-          console.error("Geocoding fetch failed or timed out:", err);
-          city = { name: cityName, lat: 28.6139, lng: 77.2090, tz: 5.5 };
+        } catch(err) {
+          clearTimeout(tid);
+          city = {name: cityName, lat: 28.6139, lng: 77.2090, tz: 5.5};
         }
       }
 
@@ -3587,10 +4364,10 @@
           month = parseInt(parts[1]);
           day = parseInt(parts[0]);
         }
-        const timeParts = time.split(":");
+        const timeParts = time.split(':');
         hour = parseInt(timeParts[0]);
         min = parseInt(timeParts[1]);
-      } catch (err) {
+      } catch(e) {
         const now = new Date();
         year = now.getFullYear();
         month = now.getMonth() + 1;
@@ -3599,72 +4376,303 @@
         min = now.getMinutes();
       }
 
-      // 1. Calculate Julian Day (UT)
+      // Calculations
       const jd = getJulianDay(year, month, day, hour, min, city.tz);
-
-      // 2. Calculate Lahiri Ayanamsa
       const ayanamsa = getLahiriAyanamsa(jd);
-
-      // 3. Calculate Obliquity of Ecliptic
       const t = (jd - 2451545.0) / 36525.0;
       const obliquity = 23.439291 - 0.013004167 * t;
-
-      // 4. Calculate Lagna (Ascendant)
       const lst = getLocalSiderealTime(jd, city.lng);
       const tropicalAsc = getAscendant(lst, city.lat, obliquity);
       const siderealAsc = (tropicalAsc - ayanamsa + 360) % 360;
       const lagnaSignNum = Math.floor(siderealAsc / 30.0);
+      const lagnaDegree = siderealAsc % 30.0;
+      const lagnaNak = getNakshatra(siderealAsc);
 
-      // 5. Calculate Sidereal Placements for all planets
-      const planets = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Rahu", "Ketu"];
-      const placementsList = [];
-
-      // Add Lagna first
-      placementsList.push({
-        name: "Lagna",
-        sign: lagnaSignNum,
-        degree: siderealAsc % 30.0
+      const planetsList = [{name: 'Lagna', sign: lagnaSignNum, degree: lagnaDegree}];
+      const planetKeys = ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn','Rahu','Ketu'];
+      planetKeys.forEach(pName => {
+        const tropLon = getPlanetLongitude(pName, jd);
+        const sidLon = (tropLon - ayanamsa + 360) % 360;
+        planetsList.push({
+          name: pName,
+          sign: Math.floor(sidLon / 30.0),
+          degree: sidLon % 30.0,
+          sidLon: sidLon
+        });
       });
+      currentPlacements = planetsList;
+      const placementsList = planetsList; // alias for compatibility
 
-      planets.forEach(pName => {
-        const tropicalLon = getPlanetLongitude(pName, jd);
-        const siderealLon = (tropicalLon - ayanamsa + 360) % 360;
-        const sign = Math.floor(siderealLon / 30.0);
-        const degree = siderealLon % 30.0;
-        placementsList.push({ name: pName, sign, degree });
-      });
+      // Moon details & Dasha
+      const moonPl = placementsList.find(p => p.name === 'Moon');
+      const moonSidLon = moonPl ? (moonPl.sidLon || (moonPl.sign * 30.0 + moonPl.degree)) : 0;
+      const moonNak = getNakshatra(moonSidLon);
+      const dashaInfo = computeDasha(moonSidLon, year, month, day);
+      const doshas = computeDoshas(placementsList, lagnaSignNum);
 
-      currentPlacements = placementsList;
+      // Render Titles
+      const genderText = gender === 'M' ? '(Male / पुरुष)' : gender === 'F' ? '(Female / महिला)' : '(Other / अन्य)';
+      document.getElementById('result-name').innerText = name + "'s Kundli / कुंडली";
+      document.getElementById('result-subtitle').innerText = signNames[lagnaSignNum] + ' Lagna • ' + city.name.split(',')[0] + ' • ' + date + ' ' + time + ' ' + genderText;
 
-      // Restore button state
-      btn.innerText = originalText;
-      btn.disabled = false;
+      // Render Lagna Card
+      const lagnaData = lagnaMeanings[lagnaSignNum] || lagnaMeanings[0];
+      document.getElementById('k-lagna-name').innerText = signNames[lagnaSignNum] + ' (' + signNamesHi[lagnaSignNum] + ')';
+      document.getElementById('k-lagna-meaning-en').innerHTML = lagnaData.en;
+      document.getElementById('k-lagna-meaning-hi').innerHTML = lagnaData.hi;
+      document.getElementById('k-lagna-lord').innerText = signLords[lagnaSignNum] + ' / ' + signLordsHi[lagnaSignNum];
+      document.getElementById('k-lagna-nakshatra').innerText = lagnaNak.n + ' / ' + lagnaNak.h;
+      document.getElementById('k-lagna-element').innerText = signElements[lagnaSignNum] + ' / ' + signElementsHi[lagnaSignNum];
 
-      // Show Results View
-      document.getElementById('result-name').innerText = `${name}'s Kundli`;
-      document.getElementById('kundli-form-view').style.display = 'none';
-      document.getElementById('kundli-result-view').style.display = 'block';
-
-      // Populate Placements table
+      // Render Table Placements
       const tbody = document.getElementById('placements-tbody');
-      tbody.innerHTML = "";
-      currentPlacements.forEach(p => {
+      tbody.innerHTML = '';
+      placementsList.forEach(p => {
+        const houseNum = ((p.sign - lagnaSignNum + 12) % 12) + 1;
+        const nak = p.name === 'Lagna' ? lagnaNak : getNakshatra(p.sidLon || (p.sign * 30 + p.degree));
+        const status = p.name === 'Lagna' ? {en: '—', hi: '—', color: '#aaa'} : getPlanetStatus(p.name, p.sign);
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td style="color: var(--gold); font-weight: bold;">${p.name}</td>
-          <td>${signNames[p.sign]}</td>
-          <td>${Math.floor(p.degree)}° ${Math.round((p.degree % 1) * 60)}'</td>
+          <td style="color:var(--gold); font-weight:700;">
+            <span class="k-lbl-en">${p.name}</span>
+            <span class="k-lbl-hi" style="display:none;">${planetNamesHi[p.name] || p.name}</span>
+          </td>
+          <td>
+            <span class="k-lbl-en">${signNames[p.sign]}</span>
+            <span class="k-lbl-hi" style="display:none;">${signNamesHi[p.sign]}</span>
+          </td>
+          <td style="font-size:0.78rem;">
+            <span class="k-lbl-en">${nak.n}</span>
+            <span class="k-lbl-hi" style="display:none;">${nak.h}</span>
+          </td>
+          <td style="color:var(--purple); font-weight:bold;">${houseNum}</td>
+          <td style="color:var(--text-muted);">${Math.floor(p.degree)}°${Math.round((p.degree % 1) * 60)}'</td>
+          <td style="color:${status.color}; font-size:0.78rem; font-weight:600;">
+            <span class="k-lbl-en">${status.en}</span>
+            <span class="k-lbl-hi" style="display:none;">${status.hi}</span>
+          </td>
         `;
         tbody.appendChild(row);
       });
 
+      // Render Moon Nakshatra & Dasha Card
+      const dashaElEN = document.getElementById('k-moon-nakshatra');
+      if (dashaElEN) dashaElEN.textContent = moonNak.n + ' / ' + moonNak.h;
+      const moonHi = document.getElementById('k-moon-nakshatra-hi');
+      if (moonHi) moonHi.textContent = moonNak.h;
+      const dashaLord = document.getElementById('k-moon-nakshatra-lord');
+      if (dashaLord) dashaLord.textContent = 'Lord: ' + moonNak.lord + ' / ' + moonNak.lordH;
+      const currentDashaEl = document.getElementById('k-current-dasha');
+      if (currentDashaEl) currentDashaEl.textContent = dashaInfo.planet + ' / ' + (planetNamesHi[dashaInfo.planet] || dashaInfo.planet) + ' Mahadasha';
+      const endY = dashaInfo.end.getFullYear();
+      const endM = String(dashaInfo.end.getMonth() + 1).padStart(2, '0');
+      const dashaPeriodEl = document.getElementById('k-dasha-period');
+      if (dashaPeriodEl) dashaPeriodEl.textContent = 'Until: ' + endM + '/' + endY;
+      const dm = dashaMeanings[dashaInfo.planet] || dashaMeanings['Sun'];
+      const meaningEnEl = document.getElementById('k-dasha-meaning-en');
+      if (meaningEnEl) meaningEnEl.innerHTML = dm.en;
+      const meaningHiEl = document.getElementById('k-dasha-meaning-hi');
+      if (meaningHiEl) meaningHiEl.innerHTML = dm.hi;
+
+      // Render Dosha Card
+      const doshaList = document.getElementById('k-dosha-list');
+      if (doshaList) {
+        doshaList.innerHTML = '';
+        doshas.forEach(d => {
+          const color = d.present ? '#ff6b6b' : '#2ecc71';
+          const icon = d.present
+            ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+            : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="' + color + '" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+          doshaList.innerHTML += `
+            <div style="background:rgba(255,255,255,0.03); border:1px solid ${color}22; border-left:3px solid ${color}; border-radius:10px; padding:12px;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                ${icon}
+                <strong style="color:${color}; font-size:0.85rem;">
+                  <span class="k-lbl-en">${d.name}</span>
+                  <span class="k-lbl-hi" style="display:none;">${d.nameHi}</span>
+                </strong>
+              </div>
+              <p class="k-lbl-en" style="color:var(--text-muted); font-size:0.82rem; line-height:1.6; margin:0;">${d.en}</p>
+              <p class="k-lbl-hi" style="color:var(--text-muted); font-size:0.82rem; line-height:1.6; margin:0; display:none;">${d.hi}</p>
+            </div>
+          `;
+        });
+      }
+
+      // Render House Readings Card
+      const housesList = document.getElementById('k-houses-list');
+      if (housesList) {
+        housesList.innerHTML = '';
+        houseMeanings.forEach(hm => {
+          const houseSignNum = (lagnaSignNum + hm.num - 1) % 12;
+          const planetsInHouse = placementsList.filter(p => p.name !== 'Lagna' && p.sign === houseSignNum).map(p => p.name);
+          const planetsInHouseHi = planetsInHouse.map(n => planetNamesHi[n] || n);
+          const houseSign = signNames[houseSignNum] + ' / ' + signNamesHi[houseSignNum];
+          housesList.innerHTML += `
+            <div style="border-left:2px solid rgba(142,111,214,0.4); padding-left:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:4px;">
+                <strong style="color:var(--purple); font-size:0.82rem;">
+                  <span class="k-lbl-en">${hm.en.split('—')[0].trim()}</span>
+                  <span class="k-lbl-hi" style="display:none;">${hm.hi.split('—')[0].trim()}</span>
+                </strong>
+                <span style="font-size:0.75rem; color:var(--text-muted);">${houseSign}</span>
+              </div>
+              <p style="color:var(--text-muted); font-size:0.8rem; line-height:1.5; margin:4px 0 0;">
+                <span class="k-lbl-en">${hm.en.split('—').slice(1).join('—').trim()}</span>
+                <span class="k-lbl-hi" style="display:none;">${hm.hi.split('—').slice(1).join('—').trim()}</span>
+              </p>
+              ${planetsInHouse.length > 0 ? `<p style="margin:4px 0 0; font-size:0.76rem; color:var(--gold);"><span class="k-lbl-en">Planets: ${planetsInHouse.join(', ')}</span><span class="k-lbl-hi" style="display:none;">ग्रह: ${planetsInHouseHi.join(', ')}</span></p>` : ''}
+            </div>
+          `;
+        });
+      }
+
+      // Render Planetary Strength Report Card
+      const strengthList = document.getElementById('k-strength-list');
+      if (strengthList) {
+        strengthList.innerHTML = '';
+        const scoredPlanets = placementsList.filter(p => p.name !== 'Lagna').map(p => {
+          const s = getPlanetStatus(p.name, p.sign);
+          const score = s.en.includes('Exalted') ? 95 : s.en.includes('Own') ? 80 : s.en.includes('Debilitated') ? 25 : 55;
+          return {
+            name: p.name,
+            sign: p.sign,
+            status: s,
+            score: score
+          };
+        }).sort((a, b) => b.score - a.score);
+
+        scoredPlanets.forEach(p => {
+          strengthList.innerHTML += `
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <span style="font-size:0.82rem; color:#fff; font-weight:600;">
+                  <span class="k-lbl-en">${p.name}</span>
+                  <span class="k-lbl-hi" style="display:none;">${planetNamesHi[p.name] || p.name}</span>
+                  <span style="color:${p.status.color}; font-size:0.75rem; margin-left:6px;">
+                    <span class="k-lbl-en">(${p.status.en})</span>
+                    <span class="k-lbl-hi" style="display:none;">(${p.status.hi})</span>
+                  </span>
+                </span>
+                <span style="color:var(--text-muted); font-size:0.75rem;">${p.score}%</span>
+              </div>
+              <div style="height:6px; background:rgba(255,255,255,0.07); border-radius:3px; overflow:hidden;">
+                <div style="height:100%; width:${p.score}%; background:${p.status.color === '#aaa' ? 'rgba(232,200,121,0.5)' : p.status.color}; border-radius:3px; transition:width 0.8s ease;"></div>
+              </div>
+            </div>
+          `;
+        });
+
+        // Summary Content
+        const strongPlanets = scoredPlanets.filter(p => p.score >= 75).map(p => p.name);
+        const weakPlanets = scoredPlanets.filter(p => p.score <= 30).map(p => p.name);
+        
+        const summaryEn = `
+          <p><strong>Name:</strong> ${name} &nbsp;&nbsp;&nbsp;&nbsp; <strong>Gender:</strong> ${gender === 'M' ? 'Male' : gender === 'F' ? 'Female' : 'Other'}</p>
+          <p><strong>Birth Details:</strong> ${date} at ${time}, ${city.name.split(',')[0]}</p>
+          <p><strong>Lagna (Ascendant):</strong> ${signNames[lagnaSignNum]} (${Math.floor(lagnaDegree)}° ${Math.round((lagnaDegree % 1) * 60)}') ruled by ${signLords[lagnaSignNum]}</p>
+          <p><strong>Moon Sign (Rashi):</strong> ${moonPl ? signNames[moonPl.sign] : 'N/A'}</p>
+          <p><strong>Birth Nakshatra:</strong> ${moonNak.n} (Lord: ${moonNak.lord})</p>
+          <p><strong>Current Mahadasha:</strong> ${dashaInfo.planet} Mahadasha (until ${dashaInfo.end.toDateString()})</p>
+          ${strongPlanets.length > 0 ? `<p><strong>Strong Planets (Highly Beneficial):</strong> ${strongPlanets.join(', ')}</p>` : ''}
+          ${weakPlanets.length > 0 ? `<p><strong>Weak Planets (Strengthening Recommended):</strong> ${weakPlanets.join(', ')}</p>` : ''}
+        `;
+        const summaryHi = `
+          <p><strong>नाम:</strong> ${name} &nbsp;&nbsp;&nbsp;&nbsp; <strong>लिंग:</strong> ${gender === 'M' ? 'पुरुष' : gender === 'F' ? 'महिला' : 'अन्य'}</p>
+          <p><strong>जन्म विवरण:</strong> ${date}, समय ${time}, स्थान: ${city.name.split(',')[0]}</p>
+          <p><strong>लग्न (Ascendant):</strong> ${signNamesHi[lagnaSignNum]} (${Math.floor(lagnaDegree)}° ${Math.round((lagnaDegree % 1) * 60)}') स्वामी: ${signLordsHi[lagnaSignNum]}</p>
+          <p><strong>चन्द्र राशि (Rashi):</strong> ${moonPl ? signNamesHi[moonPl.sign] : 'N/A'}</p>
+          <p><strong>जन्म नक्षत्र:</strong> ${moonNak.h} (स्वामी: ${moonNak.lordH})</p>
+          <p><strong>वर्तमान महादशा:</strong> ${planetNamesHi[dashaInfo.planet] || dashaInfo.planet} महादशा (समाप्ति: ${dashaInfo.end.toLocaleDateString()})</p>
+          ${strongPlanets.length > 0 ? `<p><strong>बलवान ग्रह (अत्यंत शुभ):</strong> ${strongPlanets.map(n => planetNamesHi[n] || n).join(', ')}</p>` : ''}
+          ${weakPlanets.length > 0 ? `<p><strong>कमजोर ग्रह (उपाय आवश्यक):</strong> ${weakPlanets.map(n => planetNamesHi[n] || n).join(', ')}</p>` : ''}
+        `;
+
+        document.getElementById('k-summary-en').innerHTML = summaryEn;
+        document.getElementById('k-summary-hi').innerHTML = summaryHi;
+      }
+
+      // Render Goal Predictions Card
+      const pred = goalPredictions[goal] || goalPredictions['general'];
+      const goalTagEl = document.getElementById('k-goal-label-tag');
+      if (goalTagEl) goalTagEl.textContent = pred.label;
+      const predEnEl = document.getElementById('k-prediction-en');
+      if (predEnEl) predEnEl.innerHTML = pred.en;
+      const predHiEl = document.getElementById('k-prediction-hi');
+      if (predHiEl) predHiEl.innerHTML = pred.hi;
+
+      // Show results view
+      document.getElementById('kundli-form-view').style.display = 'none';
+      document.getElementById('kundli-result-view').style.display = 'block';
+
+      // Restore language style selection
+      setKundliLang(kundliLang);
+
+      // Draw Kundali chart
       drawChart();
+
+      btn.innerHTML = originalText;
+      btn.disabled = false;
     }
 
     function showKundliForm() {
       document.getElementById('kundli-result-view').style.display = 'none';
       document.getElementById('kundli-form-view').style.display = 'block';
     }
+
+    // Auto fill details from user profile/onboarding data
+    function autoFillKundliFromOnboarding() {
+      const name = localStorage.getItem('kundli_name') || localStorage.getItem('user_name') || document.getElementById('c-name')?.value || '';
+      const date = localStorage.getItem('kundli_date') || localStorage.getItem('user_dob') || document.getElementById('c-date')?.value || '';
+      const time = localStorage.getItem('kundli_time') || localStorage.getItem('user_tob') || document.getElementById('c-time')?.value || '';
+      const city = localStorage.getItem('kundli_city') || localStorage.getItem('user_pob') || document.getElementById('c-city')?.value || '';
+      const gender = localStorage.getItem('kundli_gender') || localStorage.getItem('user_gender') || 'M';
+      const goal = localStorage.getItem('kundli_goal') || localStorage.getItem('user_goal') || 'general';
+
+      let filled = false;
+      if (name && document.getElementById('k-name').value === '') {
+        document.getElementById('k-name').value = name;
+        filled = true;
+      }
+      if (date && document.getElementById('k-date').value === '') {
+        document.getElementById('k-date').value = date;
+        filled = true;
+      }
+      if (time && document.getElementById('k-time').value === '') {
+        document.getElementById('k-time').value = time;
+        filled = true;
+      }
+      if (city && document.getElementById('k-city').value === '') {
+        document.getElementById('k-city').value = city;
+        filled = true;
+      }
+      if (gender) {
+        const gLabel = document.getElementById('k-g-' + gender);
+        if (gLabel) selectKundliGender(gLabel, gender);
+      }
+      if (goal) {
+        const goalSel = document.getElementById('k-goal');
+        if (goalSel) {
+          const normGoal = ['marriage-single','marriage-couple'].includes(goal) ? 'marriage' : ['property-single','property-couple'].includes(goal) ? 'property' : goal;
+          for (let i = 0; i < goalSel.options.length; i++) {
+            if (goalSel.options[i].value === normGoal) {
+              goalSel.options[i].selected = true;
+              break;
+            }
+          }
+        }
+      }
+
+      const banner = document.getElementById('k-autofill-banner');
+      if (banner && filled) {
+        banner.style.display = 'block';
+        const txt = document.getElementById('k-autofill-text');
+        if (txt) {
+          txt.textContent = 'Details pre-filled from your profile, ' + name + '! Tap "Generate Kundli" to view your complete birth chart.';
+        }
+      }
+    }
+
 
     // Custom Canvas Painting
     function toggleChartStyle(isNorth) {

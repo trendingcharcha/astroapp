@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import '../services/supabase_service.dart';
 import '../services/ai_service.dart';
+import '../services/hive_service.dart';
+import 'login_screen.dart';
+import 'onboarding_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class KarmaTask {
-  final String? id;
   final String title;
   final String description;
   final int karmaPoints;
   bool isCompleted;
 
   KarmaTask({
-    this.id,
     required this.title,
     required this.description,
     required this.karmaPoints,
@@ -19,12 +21,20 @@ class KarmaTask {
 
   factory KarmaTask.fromMap(Map<String, dynamic> map) {
     return KarmaTask(
-      id: map['id'],
       title: map['title'] ?? '',
       description: map['description'] ?? '',
-      karmaPoints: map['xp'] ?? 0,
+      karmaPoints: map['xp'] ?? 10,
       isCompleted: map['is_completed'] ?? false,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'description': description,
+      'xp': karmaPoints,
+      'is_completed': isCompleted,
+    };
   }
 }
 
@@ -36,10 +46,14 @@ class HomeDashboard extends StatefulWidget {
 }
 
 class _HomeDashboardState extends State<HomeDashboard> {
+  Map<String, dynamic>? _profile;
   List<KarmaTask> _tasks = [];
   bool _isLoading = false;
-  String _aiSuggestion = "Click the button below to ask the Karma AI for a custom daily task!";
+  String _aiSuggestion = "Generating your spiritual daily quests based on planetary alignments...";
   bool _isLoadingAi = false;
+  
+  int _streak = 0;
+  List<bool> _dedicationGrid = List.generate(28, (index) => false); // 28-day lunar cycle grid
 
   int get totalKarma => _tasks.fold(0, (sum, task) => sum + (task.isCompleted ? task.karmaPoints : 0));
   int get maxKarma => _tasks.fold(0, (sum, task) => sum + task.karmaPoints);
@@ -48,44 +62,108 @@ class _HomeDashboardState extends State<HomeDashboard> {
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _loadProfileAndData();
   }
 
-  Future<void> _loadData() async {
+  Future<void> _loadProfileAndData() async {
     setState(() => _isLoading = true);
-    
-    // Auto-login anonymously for testing if no active user session
-    if (SupabaseService.currentUser == null) {
-      try {
-        await SupabaseService.client.auth.signInAnonymously();
-      } catch (e) {
-        debugPrint("Anonymous sign in skipped/failed: $e");
-      }
+
+    // 1. Load Profile from Hive
+    _profile = HiveService.getProfile();
+    if (_profile == null) {
+      // Redirect to onboarding if profile is missing
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+        );
+      });
+      return;
     }
 
-    if (SupabaseService.currentUser != null) {
-      final remoteTasks = await SupabaseService.fetchTasks();
-      if (remoteTasks.isNotEmpty) {
-        setState(() {
-          _tasks = remoteTasks.map((t) => KarmaTask.fromMap(t)).toList();
-          _isLoading = false;
-        });
-        return;
-      }
-    }
-
-    // Default Fallback task list if database is empty
-    setState(() {
-      _tasks = [
-        KarmaTask(title: "Feed Birds", description: "Feed grains to birds in the morning.", karmaPoints: 15),
-        KarmaTask(title: "Clutter-free Desk", description: "Clean your study/work desk in North-East.", karmaPoints: 10),
-        KarmaTask(title: "Chant Mantra", description: "108 chants of Om Suryaya Namah.", karmaPoints: 20),
-        KarmaTask(title: "Help a Colleague", description: "Assist a peer with a technical challenge.", karmaPoints: 25),
+    // 2. Load Streaks & Dedication Grid
+    final prefs = await SharedPreferences.getInstance();
+    _streak = prefs.getInt('user_streak') ?? 3;
+    final gridSaved = prefs.getStringList('dedication_grid');
+    if (gridSaved != null) {
+      _dedicationGrid = gridSaved.map((v) => v == 'true').toList();
+    } else {
+      // Fake some historical data for visual beauty
+      _dedicationGrid = [
+        true, true, false, true, true, true, false,
+        true, true, true, true, false, true, true,
+        false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false,
       ];
+    }
+
+    // 3. Load or generate quests
+    final cachedTasks = HiveService.getTasks();
+    if (cachedTasks.isNotEmpty) {
+      setState(() {
+        _tasks = cachedTasks.map((t) => KarmaTask.fromMap(t)).toList();
+        _isLoading = false;
+      });
+      _getAiSuggestion();
+      return;
+    }
+
+    // Generate fresh tasks based on profile goal
+    await _generateNewDailyQuests();
+  }
+
+  Future<void> _generateNewDailyQuests() async {
+    if (_profile == null) return;
+    
+    setState(() {
+      _isLoading = true;
+      _aiSuggestion = "Syncing with stars...";
+    });
+
+    final goal = _profile!['goal'] ?? 'job';
+    final profession = _profile!['profession'] ?? 'Seeker';
+    final customIssue = _profile!['custom_issue'] ?? '';
+    final path = _profile!['onboarding_path'] ?? 'single';
+    final partnerName = _profile!['partner_name'] ?? '';
+
+    // Generate AI task breakdown
+    final aiResponse = await AIService.generateDailyTask(
+      goal: goal,
+      profession: profession,
+      customIssue: customIssue,
+      path: path,
+      partnerName: partnerName,
+    );
+
+    // Split AI response into 4 distinct quests
+    final lines = aiResponse.split('\n\n');
+    final List<KarmaTask> newTasks = [];
+    
+    if (lines.length >= 4) {
+      newTasks.add(KarmaTask(title: "Vedic Quest", description: lines[0].replaceAll(RegExp(r'^🕉️\s*Vedic:\s*'), ''), karmaPoints: 20));
+      newTasks.add(KarmaTask(title: "Lal Kitab Quest", description: lines[1].replaceAll(RegExp(r'^🔴\s*Lal Kitab:\s*'), ''), karmaPoints: 15));
+      newTasks.add(KarmaTask(title: "Vastu Quest", description: lines[2].replaceAll(RegExp(r'^🏡\s*Vastu:\s*'), ''), karmaPoints: 15));
+      newTasks.add(KarmaTask(title: "Action Quest", description: lines[3].replaceAll(RegExp(r'^💼\s*Action:\s*'), ''), karmaPoints: 30));
+    } else {
+      // Fallback
+      newTasks.addAll([
+        KarmaTask(title: "Vedic Quest", description: "Chant matching mantra 108 times.", karmaPoints: 20),
+        KarmaTask(title: "Lal Kitab Quest", description: "Feed grains to birds or offer water to Sun.", karmaPoints: 15),
+        KarmaTask(title: "Vastu Quest", description: "Clean your North-East work zone.", karmaPoints: 15),
+        KarmaTask(title: "Action Quest", description: "Dedicate 30 mins to active skill building.", karmaPoints: 30),
+      ]);
+    }
+
+    setState(() {
+      _tasks = newTasks;
+      _aiSuggestion = "Planet alignments verified for today! Complete your daily karma quests to level up.";
       _isLoading = false;
     });
 
-    // Save defaults to cloud if logged in
+    // Save to Hive cache
+    await HiveService.saveTasks(_tasks.map((t) => t.toMap()).toList());
+
+    // Save to Supabase Cloud if authenticated
     if (SupabaseService.currentUser != null) {
       for (final t in _tasks) {
         try {
@@ -96,16 +174,33 @@ class _HomeDashboardState extends State<HomeDashboard> {
             isCompleted: t.isCompleted,
           );
         } catch (e) {
-          debugPrint("Failed to save default task to cloud: $e");
+          debugPrint("Supabase sync failed: $e");
         }
       }
-      // Re-fetch to get database IDs for updates
-      final remoteTasks = await SupabaseService.fetchTasks();
-      if (remoteTasks.isNotEmpty) {
-        setState(() {
-          _tasks = remoteTasks.map((t) => KarmaTask.fromMap(t)).toList();
-        });
-      }
+    }
+  }
+
+  Future<void> _getAiSuggestion() async {
+    setState(() => _isLoadingAi = true);
+    try {
+      final goal = _profile?['goal'] ?? 'job';
+      final profession = _profile?['profession'] ?? 'Seeker';
+      final customIssue = _profile?['custom_issue'] ?? '';
+      
+      final advice = await AIService.generateDailyTask(
+        goal: goal,
+        profession: profession,
+        customIssue: customIssue,
+      );
+      setState(() {
+        _aiSuggestion = advice;
+      });
+    } catch (e) {
+      setState(() {
+        _aiSuggestion = "Align your desk North-East and dedicate 30 minutes to your core goals today.";
+      });
+    } finally {
+      setState(() => _isLoadingAi = false);
     }
   }
 
@@ -114,162 +209,367 @@ class _HomeDashboardState extends State<HomeDashboard> {
       task.isCompleted = val ?? false;
     });
 
-    if (task.id != null) {
+    // Save update to local Hive cache
+    await HiveService.saveTasks(_tasks.map((t) => t.toMap()).toList());
+
+    // Update cloud if online
+    if (SupabaseService.currentUser != null) {
       try {
-        await SupabaseService.updateTaskCompletion(task.id!, task.isCompleted);
+        final remoteTasks = await SupabaseService.fetchTasks();
+        final match = remoteTasks.firstWhere((t) => t['title'] == task.title, orElse: () => {});
+        if (match.isNotEmpty && match['id'] != null) {
+          await SupabaseService.updateTaskCompletion(match['id'], task.isCompleted);
+        }
       } catch (e) {
-        debugPrint("Failed to sync task completion: $e");
+        debugPrint("Cloud status update failed: $e");
+      }
+    }
+
+    // Adjust dedication grid index for today if all completed
+    if (progressPercentage >= 1.0) {
+      setState(() {
+        _dedicationGrid[DateTime.now().day % 28] = true;
+        _streak++;
+      });
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('user_streak', _streak);
+      await prefs.setStringList('dedication_grid', _dedicationGrid.map((v) => v.toString()).toList());
+      
+      // Sync XP to Supabase cloud
+      if (SupabaseService.currentUser != null) {
+        await SupabaseService.updateXp(totalKarma);
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("✨ Level Up! Daily Karma Quest Complete! +XP synced to cloud."),
+            backgroundColor: Color(0xFF8E6FD6),
+          ),
+        );
       }
     }
   }
 
-  void _getAiTask() async {
-    setState(() {
-      _isLoadingAi = true;
-      _aiSuggestion = "Reading your stars and career goals...";
+  void _showSettingsModal() {
+    final keyController = TextEditingController();
+    SharedPreferences.getInstance().then((prefs) {
+      keyController.text = prefs.getString('gemini_api_key') ?? '';
     });
 
-    try {
-      final suggestion = await AIService.generateDailyTask(
-        goal: "Get Software Job",
-        profession: "Flutter Developer",
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF14102C),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: const BorderSide(color: Color(0xFF2A244E)),
+          ),
+          title: const Text('Astro Settings', style: TextStyle(color: Color(0xFFE8C879))),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Add your Gemini API Key to unlock live generative Astro Coach daily advices:',
+                style: TextStyle(color: Colors.grey, fontSize: 13),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: keyController,
+                obscureText: true,
+                style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  labelText: 'Gemini API Key',
+                  labelStyle: const TextStyle(color: Colors.grey),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('CANCEL', style: TextStyle(color: Colors.grey)),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setString('gemini_api_key', keyController.text.trim());
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  _generateNewDailyQuests();
+                }
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF8E6FD6)),
+              child: const Text('SAVE KEY', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _handleLogout() async {
+    await SupabaseService.signOut();
+    await HiveService.clearProfile();
+    await HiveService.clearTasks();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('has_completed_onboarding');
+    await prefs.remove('guest_offline_mode');
+
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
-      setState(() {
-        _aiSuggestion = suggestion;
-      });
-    } catch (e) {
-      setState(() {
-        _aiSuggestion = "Failed to load task. Please check your internet connection.";
-      });
-    } finally {
-      setState(() {
-        _isLoadingAi = false;
-      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_profile == null) return const Scaffold(body: Center(child: CircularProgressIndicator()));
+
+    final name = _profile!['name'] ?? 'Seeker';
+    final goalName = _profile!['goal'] ?? 'job';
+    final pathName = _profile!['onboarding_path'] ?? 'single';
+    final partner = _profile!['partner_name'] ?? '';
+
     return Scaffold(
+      backgroundColor: const Color(0xFF09071A),
       appBar: AppBar(
-        title: const Text('KarmaQuest Dashboard', style: TextStyle(color: Color(0xFFE8C879))),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.stars, color: Color(0xFFE8C879), size: 20),
+            const SizedBox(width: 8),
+            Text('$name\'s Karma Dashboard', style: const TextStyle(color: Color(0xFFE8C879), fontSize: 16)),
+          ],
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh, color: Color(0xFFE8C879)),
-            onPressed: _loadData,
+            icon: const Icon(Icons.settings, color: Color(0xFFE8C879)),
+            onPressed: _showSettingsModal,
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.redAccent),
+            onPressed: _handleLogout,
           )
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(color: Color(0xFF8E6FD6)))
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Karma Progress Card
+                  // Partner notice if couple
+                  if (pathName == 'couple' && partner.isNotEmpty) ...[
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.only(bottom: 15),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF8E6FD6).withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: const Color(0xFF8E6FD6).withOpacity(0.3)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.favorite, color: Colors.pinkAccent, size: 18),
+                          const SizedBox(width: 8),
+                          Text(
+                            "Synced with partner: $partner • Couple Path",
+                            style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+
+                  // Karma progress level card
                   Card(
                     color: const Color(0xFF14102C),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      side: const BorderSide(color: Color(0xFF2A244E)),
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text('Your Ecliptic Karma', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                              Text('$totalKarma / $maxKarma XP', style: const TextStyle(color: Color(0xFFE8C879), fontWeight: FontWeight.bold)),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text('DAILY LEVEL', style: TextStyle(fontSize: 11, color: Color(0xFF8E6FD6), fontWeight: FontWeight.bold)),
+                                  Text(
+                                    'Vedic Seeker (Lvl ${_streak ~/ 5 + 1})',
+                                    style: const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const Icon(Icons.local_fire_department, color: Color(0xFFE8C879)),
+                                  const SizedBox(width: 4),
+                                  Text('$_streak Days', style: const TextStyle(color: Color(0xFFE8C879), fontWeight: FontWeight.bold)),
+                                ],
+                              ),
                             ],
                           ),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 20),
                           LinearProgressIndicator(
                             value: progressPercentage,
-                            backgroundColor: Colors.grey[800],
+                            backgroundColor: Colors.grey[950],
                             color: const Color(0xFF8E6FD6),
-                            minHeight: 10,
+                            minHeight: 8,
                           ),
                           const SizedBox(height: 10),
-                          Text(
-                            '${(progressPercentage * 100).toStringAsFixed(0)}% Daily Mission Completed',
-                            style: TextStyle(color: Colors.grey[400], fontSize: 12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '${(progressPercentage * 100).toStringAsFixed(0)}% Daily Quests completed',
+                                style: const TextStyle(color: Colors.grey, fontSize: 12),
+                              ),
+                              Text('$totalKarma / $maxKarma XP', style: const TextStyle(color: Color(0xFFE8C879), fontSize: 12, fontWeight: FontWeight.bold)),
+                            ],
                           ),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 25),
 
-                  // AI Suggestion Box
-                  const Text('AI Astro Coach Advice', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFFE8C879))),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
+
+                  // Dedication Grid Section
+                  const Text('Your 28-Day Dedication Grid', style: TextStyle(color: Color(0xFFE8C879), fontSize: 14, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  Card(
+                    color: const Color(0xFF14102C),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFF2A244E))),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: 28,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 7,
+                          mainAxisSpacing: 8,
+                          crossAxisSpacing: 8,
+                        ),
+                        itemBuilder: (context, index) {
+                          final done = _dedicationGrid[index];
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: done ? const Color(0xFF8E6FD6) : Colors.transparent,
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(color: done ? const Color(0xFF8E6FD6) : const Color(0xFF2A244E), width: 1.5),
+                              boxShadow: done ? [
+                                BoxShadow(color: const Color(0xFF8E6FD6).withOpacity(0.4), blurRadius: 4, spreadRadius: 1)
+                              ] : null,
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${index + 1}',
+                                style: TextStyle(color: done ? Colors.black : Colors.grey, fontSize: 11, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // AI Astro Coach Card
+                  const Text('AI Astro Coach Insights', style: TextStyle(color: Color(0xFFE8C879), fontSize: 14, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
                   Card(
                     color: const Color(0xFF1B163B),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: Color(0xFF2A244E))),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
                             _aiSuggestion,
-                            style: const TextStyle(fontSize: 14, height: 1.4, fontStyle: FontStyle.italic),
+                            style: const TextStyle(fontSize: 13, color: Colors.white, height: 1.4, fontStyle: FontStyle.italic),
                           ),
-                          const SizedBox(height: 15),
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton.icon(
-                              onPressed: _isLoadingAi ? null : _getAiTask,
-                              icon: _isLoadingAi 
-                                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                                  : const Icon(Icons.psychology, color: Colors.black),
-                              label: const Text('Ask Astro Coach', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFE8C879),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                          const SizedBox(height: 12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton.icon(
+                                onPressed: _isLoadingAi ? null : _getAiSuggestion,
+                                icon: _isLoadingAi 
+                                    ? const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFE8C879)))
+                                    : const Icon(Icons.wb_sunny, size: 16, color: Color(0xFFE8C879)),
+                                label: const Text('Refresh Insights', style: TextStyle(color: Color(0xFFE8C879), fontSize: 12, fontWeight: FontWeight.bold)),
                               ),
-                            ),
-                          )
+                            ],
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 25),
 
-                  // Task List Header
-                  const Text('Daily Karma Quests', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFFE8C879))),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 24),
 
-                  // Task List
+                  // Daily Quests Title & Refresh
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Your Daily Quests', style: TextStyle(color: Color(0xFFE8C879), fontSize: 14, fontWeight: FontWeight.bold)),
+                      IconButton(
+                        icon: const Icon(Icons.autorenew, color: Color(0xFFE8C879), size: 20),
+                        onPressed: _generateNewDailyQuests,
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Quests Checklist
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: _tasks.length,
                     itemBuilder: (context, index) {
-                      final task = _tasks[index];
+                      final t = _tasks[index];
                       return Card(
                         color: const Color(0xFF14102C),
-                        margin: const EdgeInsets.only(bottom: 10),
+                        margin: const EdgeInsets.only(bottom: 8),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFF2A244E))),
                         child: ListTile(
                           leading: Checkbox(
-                            value: task.isCompleted,
+                            value: t.isCompleted,
                             activeColor: const Color(0xFF8E6FD6),
-                            onChanged: (val) => _toggleTask(task, val),
+                            onChanged: (val) => _toggleTask(t, val),
                           ),
                           title: Text(
-                            task.title,
+                            t.title,
                             style: TextStyle(
-                              decoration: task.isCompleted ? TextDecoration.lineThrough : null,
-                              color: task.isCompleted ? Colors.grey : Colors.white,
+                              color: t.isCompleted ? Colors.grey : Colors.white,
                               fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              decoration: t.isCompleted ? TextDecoration.lineThrough : null,
                             ),
                           ),
-                          subtitle: Text(task.description, style: TextStyle(color: Colors.grey[400])),
-                          trailing: Text('+${task.karmaPoints} XP', style: const TextStyle(color: Color(0xFFE8C879))),
+                          subtitle: Text(
+                            t.description,
+                            style: TextStyle(color: t.isCompleted ? Colors.grey[600] : Colors.grey[300], fontSize: 12),
+                          ),
+                          trailing: Text('+${t.karmaPoints} XP', style: const TextStyle(color: Color(0xFFE8C879), fontSize: 12, fontWeight: FontWeight.bold)),
                         ),
                       );
                     },

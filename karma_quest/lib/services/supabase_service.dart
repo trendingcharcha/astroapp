@@ -6,7 +6,8 @@ class SupabaseService {
   // Get current user session
   static User? get currentUser => client.auth.currentUser;
 
-  // Auth Operations
+  // ─── AUTH OPERATIONS ──────────────────────────────────────────────────────
+
   static Future<AuthResponse> signUp(String email, String password) async {
     return await client.auth.signUp(email: email, password: password);
   }
@@ -15,15 +16,61 @@ class SupabaseService {
     return await client.auth.signInWithPassword(email: email, password: password);
   }
 
+  static Future<AuthResponse> signInAnonymously() async {
+    return await client.auth.signInAnonymously();
+  }
+
   static Future<void> signOut() async {
     await client.auth.signOut();
   }
 
-  // Database Profile operations
+  // ─── PROFILE OPERATIONS ───────────────────────────────────────────────────
+
+  /// Basic profile upsert for initial setup
+  static Future<void> upsertProfile({
+    required String name,
+    required String goal,
+    required String profession,
+    required int totalXp,
+  }) async {
+    final user = currentUser;
+    if (user == null) return;
+
+    try {
+      await client.from('karma_profiles').upsert({
+        'id': user.id,
+        'name': name,
+        'goal': goal,
+        'profession': profession,
+        'total_xp': totalXp,
+        'updated_at': DateTime.now().toIso8601String(),
+      });
+    } catch (e) {
+      // Silently fail on cloud sync — local Hive is source of truth
+    }
+  }
+
+  /// Full profile upsert including all onboarding data
+  static Future<void> upsertFullProfile(Map<String, dynamic> profileData) async {
+    final user = currentUser;
+    if (user == null) return;
+
+    try {
+      await client.from('karma_profiles').upsert({
+        'id': user.id,
+        ...profileData,
+        'updated_at': DateTime.now().toIso8601String(),
+      });
+    } catch (e) {
+      // Silently fail on cloud sync — local Hive is source of truth
+    }
+  }
+
+  /// Fetch profile from cloud
   static Future<Map<String, dynamic>?> fetchProfile() async {
     final user = currentUser;
     if (user == null) return null;
-    
+
     try {
       final response = await client
           .from('karma_profiles')
@@ -36,25 +83,23 @@ class SupabaseService {
     }
   }
 
-  static Future<void> upsertProfile({
-    required String name,
-    required String goal,
-    required String profession,
-    required int totalXp,
-  }) async {
+  /// Update total XP for user
+  static Future<void> updateXp(int totalXp) async {
     final user = currentUser;
     if (user == null) return;
 
-    await client.from('karma_profiles').upsert({
-      'id': user.id,
-      'name': name,
-      'goal': goal,
-      'profession': profession,
-      'total_xp': totalXp,
-    });
+    try {
+      await client.from('karma_profiles').update({
+        'total_xp': totalXp,
+        'updated_at': DateTime.now().toIso8601String(),
+      }).eq('id', user.id);
+    } catch (e) {
+      // Silently fail
+    }
   }
 
-  // Database Tasks operations
+  // ─── TASK OPERATIONS ──────────────────────────────────────────────────────
+
   static Future<List<Map<String, dynamic>>> fetchTasks() async {
     final user = currentUser;
     if (user == null) return [];
@@ -81,26 +126,49 @@ class SupabaseService {
     final user = currentUser;
     if (user == null) return;
 
-    final taskData = {
-      if (taskId != null) 'id': taskId,
-      'user_id': user.id,
-      'title': title,
-      'description': description,
-      'xp': xp,
-      'is_completed': isCompleted,
-    };
-
-    await client.from('karma_tasks').upsert(taskData);
+    try {
+      final taskData = {
+        if (taskId != null) 'id': taskId,
+        'user_id': user.id,
+        'title': title,
+        'description': description,
+        'xp': xp,
+        'is_completed': isCompleted,
+      };
+      await client.from('karma_tasks').upsert(taskData);
+    } catch (e) {
+      // Silently fail on cloud sync
+    }
   }
 
   static Future<void> updateTaskCompletion(String taskId, bool isCompleted) async {
-    await client
-        .from('karma_tasks')
-        .update({'is_completed': isCompleted})
-        .eq('id', taskId);
+    try {
+      await client
+          .from('karma_tasks')
+          .update({'is_completed': isCompleted})
+          .eq('id', taskId);
+    } catch (e) {
+      // Silently fail
+    }
   }
 
   static Future<void> deleteTask(String taskId) async {
-    await client.from('karma_tasks').delete().eq('id', taskId);
+    try {
+      await client.from('karma_tasks').delete().eq('id', taskId);
+    } catch (e) {
+      // Silently fail
+    }
+  }
+
+  /// Batch clear all tasks for user (used when regenerating fresh daily quests)
+  static Future<void> clearAllTasks() async {
+    final user = currentUser;
+    if (user == null) return;
+
+    try {
+      await client.from('karma_tasks').delete().eq('user_id', user.id);
+    } catch (e) {
+      // Silently fail
+    }
   }
 }
