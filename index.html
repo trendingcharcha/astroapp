@@ -558,16 +558,44 @@
 
   <!-- 2.5. ONBOARDING SCREEN -->
   <div id="onboarding-screen" style="display: none;">
-    <!-- Step 1: Select Goal -->
-    <div id="onboarding-step-1" class="auth-card" style="text-align: center; width: 100%;">
+    <!-- Step 1: Choose Path Mode -->
+    <div id="onboarding-step-path" class="auth-card" style="text-align: center; width: 100%;">
       <div style="margin-bottom: 20px;">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.5">
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M12 2v2M12 20v2M2 12h2M20 12h2"/>
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
         </svg>
       </div>
-      <h2 style="margin-bottom: 10px; color: #FFFFFF;">What is your primary goal?</h2>
-      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 25px;">Align your karmic tasks to focus on your path</p>
+      <h2 style="margin-bottom: 10px; color: #FFFFFF; font-size: 1.4rem;">Choose Your Path</h2>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 25px;">Select how you wish to align your cosmic karma</p>
+      
+      <div style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
+        <button class="btn btn-outline" style="text-align: left; padding: 18px; display: flex; align-items: center; gap: 15px;" onclick="setOnboardingPath('single')">
+          <span style="font-size: 1.8rem;">👤</span>
+          <div>
+            <strong style="color: var(--gold); display: block; margin-bottom: 2px;">Single Goal Path</strong>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Personal career, finance, business, or individual remedies.</span>
+          </div>
+        </button>
+        
+        <button class="btn btn-outline" style="text-align: left; padding: 18px; display: flex; align-items: center; gap: 15px;" onclick="setOnboardingPath('couple')">
+          <span style="font-size: 1.8rem;">👥</span>
+          <div>
+            <strong style="color: var(--gold); display: block; margin-bottom: 2px;">Couple Goal Path</strong>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Relationship harmony, marriage planning, progeny, or joint goals.</span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: Select Goal -->
+    <div id="onboarding-step-1" class="auth-card" style="text-align: center; width: 100%; display: none;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; width: 100%;">
+        <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;">Select Your Goal</h3>
+        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep(1)">BACK</button>
+      </div>
       
       <div style="display: flex; flex-direction: column; gap: 12px; width: 100%;">
         <button class="btn btn-outline" style="text-align: left; padding: 15px;" onclick="setOnboardingGoal('job')">💼 Get Dream Job</button>
@@ -579,11 +607,11 @@
       </div>
     </div>
 
-    <!-- Step 2: Birth Details -->
+    <!-- Step 3: Birth Details -->
     <div id="onboarding-step-2" class="auth-card" style="display: none; width: 100%;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; width: 100%;">
         <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;">Align Your Cosmic Data</h3>
-        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep(1)">BACK</button>
+        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep(2)">BACK</button>
       </div>
       
       <form onsubmit="submitOnboarding(event)">
@@ -1097,10 +1125,16 @@
                 <input type="text" id="c-profession" required placeholder="e.g. Software Engineer, Designer, Student">
               </div>
 
-              <div id="coach-partner-toggle-container" class="form-group" style="display: none; justify-content: space-between; align-items: center; margin-top: 15px;">
-                <label style="margin: 0; color: var(--gold); font-weight: bold;">Include Partner/Spouse details?</label>
-                <input type="checkbox" id="c-partner-toggle" onchange="toggleCoachPartnerFields(this.checked)" style="width: auto; transform: scale(1.2); cursor: pointer;">
+              <div class="form-group" style="margin-top: 15px;">
+                <label style="color: var(--gold); font-weight: bold;">Your Alignment Path</label>
+                <select id="c-path-mode" onchange="handleCoachPathModeChange(this.value)" style="width: 100%;">
+                  <option value="single">Single Path (Individual)</option>
+                  <option value="couple">Couple Path (Shared details)</option>
+                </select>
               </div>
+
+              <!-- Keep original checkbox hidden so no downstream code breaks -->
+              <input type="checkbox" id="c-partner-toggle" onchange="toggleCoachPartnerFields(this.checked)" style="display: none;">
 
               <div id="coach-partner-fields" style="display: none; border-top: 1px solid #2A244E; margin-top: 15px; padding-top: 15px;">
                 <h4 style="color: var(--gold); margin-bottom: 15px; font-size: 0.95rem; text-align: left;">Partner / Spouse Cosmic Data</h4>
@@ -2391,6 +2425,22 @@
       showOnboardingStep(1);
     }
 
+    let onboardingPath = 'single';
+    function setOnboardingPath(path) {
+      onboardingPath = path;
+      
+      const partnerToggle = document.getElementById('o-partner-toggle');
+      if (path === 'couple') {
+        partnerToggle.checked = true;
+        togglePartnerFields(true);
+      } else {
+        partnerToggle.checked = false;
+        togglePartnerFields(false);
+      }
+      
+      showOnboardingStep(2);
+    }
+
     let onboardingGoal = 'job';
     function setOnboardingGoal(goal) {
       onboardingGoal = goal;
@@ -2414,25 +2464,32 @@
         babyGroup.style.display = 'none';
       }
 
-      // Automatically display partner toggle if Marriage or Baby is selected
+      // Force partner toggle view based on the explicit choice in Step 1 (Path Mode)
       const toggleContainer = document.getElementById('partner-toggle-container');
-      if (goal === 'marriage' || goal === 'baby') {
-        toggleContainer.style.display = 'flex';
+      toggleContainer.style.display = 'none'; // Explicitly hide the checkbox since selection is already done!
+      
+      const partnerToggle = document.getElementById('o-partner-toggle');
+      if (onboardingPath === 'couple') {
+        partnerToggle.checked = true;
+        togglePartnerFields(true);
       } else {
-        toggleContainer.style.display = 'none';
-        document.getElementById('o-partner-toggle').checked = false;
+        partnerToggle.checked = false;
         togglePartnerFields(false);
       }
       
-      showOnboardingStep(2);
+      showOnboardingStep(3);
     }
 
     function showOnboardingStep(stepNum) {
+      document.getElementById('onboarding-step-path').style.display = 'none';
+      document.getElementById('onboarding-step-1').style.display = 'none';
+      document.getElementById('onboarding-step-2').style.display = 'none';
+
       if (stepNum === 1) {
+        document.getElementById('onboarding-step-path').style.display = 'block';
+      } else if (stepNum === 2) {
         document.getElementById('onboarding-step-1').style.display = 'block';
-        document.getElementById('onboarding-step-2').style.display = 'none';
-      } else {
-        document.getElementById('onboarding-step-1').style.display = 'none';
+      } else if (stepNum === 3) {
         document.getElementById('onboarding-step-2').style.display = 'block';
       }
     }
@@ -2571,6 +2628,13 @@
           i.value = '';
         });
       }
+    }
+
+    function handleCoachPathModeChange(val) {
+      const checkbox = document.getElementById('c-partner-toggle');
+      const isCouple = (val === 'couple');
+      checkbox.checked = isCouple;
+      toggleCoachPartnerFields(isCouple);
     }
 
     // Partner Geocoding Suggestions
@@ -2765,6 +2829,9 @@
       }
       
       toggleCoachCustomIssueField(goal);
+
+      // Sync path mode value
+      document.getElementById('c-path-mode').value = onboardingPath;
 
       // Sync partner details if toggle is checked
       const partnerToggleChecked = document.getElementById('o-partner-toggle').checked;
