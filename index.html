@@ -2869,6 +2869,59 @@
       return Math.min(Math.max(dayNum, 1), 90);
     }
 
+    
+    // ═══════════════════════════════════════════════════════════════
+    // TAILORED 90-DAY PROGRESSIVE MILESTONE MATRIX (DAYS 1 TO 90)
+    // ═══════════════════════════════════════════════════════════════
+    function get90DayPracticalTask(dayNum, primaryGoal) {
+      const goalStr = (primaryGoal || 'job').toLowerCase();
+      const isJob = goalStr.includes('job') || goalStr.includes('career') || goalStr.includes('business');
+      const isDebt = goalStr.includes('debt') || goalStr.includes('wealth');
+      const isProperty = goalStr.includes('property') || goalStr.includes('asset');
+      const isLove = goalStr.includes('marriage') || goalStr.includes('love');
+
+      if (dayNum === 1) {
+        return isJob ? "Day 1 Action Step: Write down your top 3 target career roles and update your basic resume headline." :
+               isDebt ? "Day 1 Action Step: List all current debts, interest rates, and minimum monthly obligations in your ledger." :
+               isProperty ? "Day 1 Action Step: Define your target property/asset budget, location preferences, and preferred asset type." :
+               "Day 1 Action Step: Write down your core relationship values and key expectations for a life partner.";
+      } else if (dayNum === 2) {
+        return isJob ? "Day 2 Action Step: Search job portals (Naukri/LinkedIn) and shortlist 5 ideal postings matching your skills." :
+               isDebt ? "Day 2 Action Step: Identify your highest interest rate debt to prioritize for early payoff." :
+               isProperty ? "Day 2 Action Step: Search online property/vehicle listings and shortlist 3 choices within budget." :
+               "Day 2 Action Step: Update your social or matrimonial profile with clear, genuine details.";
+      } else if (dayNum === 3) {
+        return isJob ? "Day 3 Action Step: Tailor your resume summary and key technical competencies for your top target role." :
+               isDebt ? "Day 3 Action Step: Call your bank or creditor to inquire about interest rate reduction or loan restructuring." :
+               isProperty ? "Day 3 Action Step: Contact a verified real estate dealer / advisor to inquire about shortlisted properties." :
+               "Day 3 Action Step: Initiate outreach or respond to 2 potential matches with a warm, engaging message.";
+      } else if (dayNum === 4) {
+        return "Day 4 Action Step: Clean & align your North-East workspace corner (Vastu) to welcome positive progress energy.";
+      } else if (dayNum === 5) {
+        return "Day 5 Action Step: Dedicate 20 minutes to professional skill enhancement or financial budget ledger review.";
+      } else if (dayNum === 6) {
+        return "Day 6 Action Step: Prepare documents, certificates, or financial statements required for next week's milestone.";
+      } else if (dayNum === 7) {
+        return "Day 7 (Milestone 1): Review Phase 1 Week 1 achievements and celebrate your initial consistency!";
+      } else if (dayNum <= 14) {
+        return `Day ${dayNum} Action Step: Active Outreach Phase — Submit 2 targeted applications or make 1 key financial query.`;
+      } else if (dayNum <= 21) {
+        return `Day ${dayNum} Action Step: Follow-up Phase — Review responses, schedule initial discussions, & refine strategy.`;
+      } else if (dayNum <= 30) {
+        return `Day ${dayNum} Action Step: Phase 1 Consolidation — Finalize preliminary negotiations & prepare for Phase 2 alignment.`;
+      } else if (dayNum <= 45) {
+        return `Day ${dayNum} (Phase 2 Action): Attend key interviews or conduct site visits during auspicious Abhijit Muhurat.`;
+      } else if (dayNum <= 60) {
+        return `Day ${dayNum} (Phase 2 Momentum): Negotiate terms, finalize agreement paperwork, or make principal debt payments.`;
+      } else if (dayNum <= 75) {
+        return `Day ${dayNum} (Phase 3 Manifestation): Receive final offer letter, sign property deed, or clear major debt fraction!`;
+      } else if (dayNum < 90) {
+        return `Day ${dayNum} (Phase 3 Integration): Establish long-term financial & life management systems for lasting success.`;
+      } else {
+        return "Day 90 (KARMIC TRIUMPH!): Full 90-Day Goal Accomplishment & Gratitude Celebration! 🌟";
+      }
+    }
+
     function navigateRoadmapDay(delta) {
       selectedRoadmapDay = Math.min(Math.max(selectedRoadmapDay + delta, 1), 90);
       renderRoadmapDayTasks(selectedRoadmapDay);
@@ -2942,13 +2995,9 @@
         vaText += `<br/><span style="color:var(--gold);font-weight:600;">Asset Purchasing Muhurat:</span> Upcoming auspicious window on ${dayName} during Abhijit Muhurat (11:45 AM - 12:30 PM).`;
       }
 
-      // Progressive Doable Practical Task (Tailored per Day)
-      let pText = `<span style="color:#2ecc71;font-weight:600;">Doable Action Step ${dayNum}:</span> Spend 15 minutes today organizing your top 3 daily goal priorities.`;
-      if (dayNum === 1) pText = `<span style="color:#2ecc71;font-weight:600;">Day 1 Action Step:</span> Write down your top 3 goal targets and gather relevant documents / ledger.`;
-      else if (dayNum === 2) pText = `<span style="color:#2ecc71;font-weight:600;">Day 2 Action Step:</span> Shortlist 3 specific options / contacts matching your primary goal.`;
-      else if (dayNum === 3) pText = `<span style="color:#2ecc71;font-weight:600;">Day 3 Action Step:</span> Initiate first outreach / draft application or contact your banker/advisor.`;
-      else if (dayNum === 4) pText = `<span style="color:#2ecc71;font-weight:600;">Day 4 Action Step:</span> Review feedback and organize workspace in North/East direction.`;
-      else if (dayNum === 5) pText = `<span style="color:#2ecc71;font-weight:600;">Day 5 Action Step:</span> Dedicate 20 minutes to skill refinement or financial budget review.`;
+      // Progressive Doable Practical Task Matrix (Days 1 to 90)
+      const pTaskStr = get90DayPracticalTask(dayNum, primaryGoal);
+      let pText = `<span style="color:#2ecc71;font-weight:600;">${pTaskStr.split(':')[0]}:</span> ${pTaskStr.split(':').slice(1).join(':')}`;
 
       if (document.getElementById('q-vedic-text')) document.getElementById('q-vedic-text').innerHTML = vText;
       if (document.getElementById('q-lalkitab-text')) document.getElementById('q-lalkitab-text').innerHTML = lText;
