@@ -3119,7 +3119,7 @@
       alert("✅ Sign In Successful! Welcome to CosmoVedic.");
 
       // Unlock full onboarding path selection
-      showOnboardingStep('category');
+      setOnboardingPath('single');
     }
 
     async function signInWithGoogle() {
@@ -3156,7 +3156,7 @@
         document.getElementById('app-layout').style.display = 'block';
         if (typeof initApp === 'function') initApp();
       } else {
-        showOnboardingStep('category');
+        setOnboardingPath('single');
       }
     }
 
