@@ -965,17 +965,37 @@
           <button class="btn" onclick="goToCoachTab()" style="width: auto; padding: 8px 20px;">GENERATE QUESTS NOW</button>
         </div>
 
-        <!-- Dedication Calendar Grid -->
-        <div class="card" style="border: 1px solid rgba(42, 36, 78, 0.8);">
-          <h4 style="color: var(--gold); margin-bottom: 5px; font-size: 0.95rem; text-align: left;">Karmic Dedication (Last 28 Days)</h4>
-          <p style="margin: 0 0 12px 0; font-size: 0.75rem; color: var(--text-muted); text-align: left;">Complete daily missions to light up your cosmic path</p>
-          <div id="dedication-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; max-width: 280px; margin: 0 auto;">
-            <!-- 28 squares generated dynamically by JS -->
+        <!-- 90-Day Karmic Transformation Journey -->
+        <div class="card" style="border: 1px solid rgba(232, 200, 121, 0.3); background: linear-gradient(135deg, rgba(20,16,44,0.9), rgba(10,8,25,0.95));">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h4 style="color: var(--gold); margin: 0; font-size: 0.95rem; display:flex; align-items:center; gap:6px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6"/></svg>
+              90-Day Karmic Journey
+            </h4>
+            <span id="journey-day-badge" style="font-size:0.75rem; background:rgba(232,200,121,0.15); color:var(--gold); padding:2px 8px; border-radius:10px; font-weight:bold;">Day 1 of 90</span>
           </div>
-          <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 12px; font-size: 0.7rem; color: var(--text-muted);">
-            <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: rgba(255,255,255,0.05); border-radius: 2px;"></div> Empty</div>
-            <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: rgba(142, 68, 173, 0.4); border-radius: 2px;"></div> Partial</div>
-            <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: var(--gold); border-radius: 2px;"></div> Complete</div>
+          <p style="margin: 0 0 12px 0; font-size: 0.75rem; color: var(--text-muted); text-align: left;">Your 90-day daily task plan: chant mantras, do Lal Kitab remedies, &amp; complete practical goals</p>
+          
+          <!-- 90-Day Phase Progress Bar -->
+          <div style="margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted); margin-bottom:4px;">
+              <span id="journey-phase-title" style="color:var(--gold); font-weight:600;">Phase 1: Foundation (Days 1-30)</span>
+              <span id="journey-percent">1% Complete</span>
+            </div>
+            <div style="height:6px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden;">
+              <div id="journey-progress-fill" style="height:100%; width:1%; background:linear-gradient(90deg, #8E6FD6, #E8C879); transition:width 0.4s ease;"></div>
+            </div>
+          </div>
+
+          <!-- 90-Day Interactive Grid -->
+          <div id="dedication-grid" style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; max-height: 180px; overflow-y: auto; padding: 4px; border-radius: 8px; background: rgba(0,0,0,0.2);">
+            <!-- 90 squares generated dynamically by JS -->
+          </div>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 0.68rem; color: var(--text-muted);">
+            <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: rgba(255,255,255,0.05); border-radius: 2px;"></div> Pending</div>
+            <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: rgba(142, 68, 173, 0.5); border-radius: 2px;"></div> Partial</div>
+            <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: var(--gold); border-radius: 2px; box-shadow: 0 0 4px var(--gold);"></div> Completed</div>
           </div>
         </div>
 
@@ -1797,17 +1817,42 @@
     }
 
     async function generateCoachMission(e) {
-      e.preventDefault();
+      if (e && e.preventDefault) e.preventDefault();
       
-      const btn = e.target.querySelector('button[type="submit"]');
-      const originalText = btn.innerText;
-      btn.innerText = "ALIGNING STARS...";
-      btn.disabled = true;
+      let btn = null;
+      let originalText = "GENERATE MY COSMIC MISSION";
+      if (e && e.target && e.target.querySelector) {
+        btn = e.target.querySelector('button[type="submit"]');
+      }
+      if (!btn && e && e.target && e.target.tagName === 'BUTTON') {
+        btn = e.target;
+      }
+      if (btn) {
+        originalText = btn.innerText;
+        btn.innerText = "ALIGNING STARS...";
+        btn.disabled = true;
+      }
 
-      // Resolve custom issue categorization with comprehensive keyword matrix (supporting English, Hindi, Hinglish)
+      // ─── 1. SAFE EARLY EXTRACTION OF FORM INPUTS (PREVENTS TDZ ERROR) ───
+      const name = (document.getElementById('c-name') ? document.getElementById('c-name').value : '') || (document.getElementById('o-name') ? document.getElementById('o-name').value : '') || 'Seeker';
+      const date = (document.getElementById('c-date') ? document.getElementById('c-date').value : '') || (document.getElementById('o-date') ? document.getElementById('o-date').value : '') || '';
+      const time = (document.getElementById('c-time') ? document.getElementById('c-time').value : '') || (document.getElementById('o-time') ? document.getElementById('o-time').value : '') || '';
+      const cityName = (document.getElementById('c-city') ? document.getElementById('c-city').value : '') || (document.getElementById('o-city') ? document.getElementById('o-city').value : '') || 'New Delhi';
+      const goal = onboardingGoal || (document.getElementById('c-goal') ? document.getElementById('c-goal').value : 'job');
+      const profession = (document.getElementById('c-profession') ? document.getElementById('c-profession').value : '') || (document.getElementById('o-profession') ? document.getElementById('o-profession').value : '') || 'Seeker';
+
+      // ─── 2. RESOLVE CUSTOM ISSUE CATEGORIZATION ───
       let customCategory = "general";
       let issueText = "your issue";
-      if (goal === 'custom') {
+      const customField = document.getElementById('c-custom-issue');
+      const onboardingCustomField = document.getElementById('o-custom-issue');
+      if (customField && customField.value.trim().length > 0) {
+        issueText = customField.value.trim();
+      } else if (onboardingCustomField && onboardingCustomField.value.trim().length > 0) {
+        issueText = onboardingCustomField.value.trim();
+      }
+
+      if (goal === 'custom' || goal.includes('custom') || issueText !== 'your issue') {
         const customField = document.getElementById('c-custom-issue');
         if (customField && customField.value.trim().length > 0) {
           issueText = customField.value.trim();
@@ -1857,12 +1902,7 @@
       }
 
 
-      const name = document.getElementById('c-name').value;
-      const date = document.getElementById('c-date').value;
-      const time = document.getElementById('c-time').value;
-      const cityName = document.getElementById('c-city').value;
-      const goal = document.getElementById('c-goal').value;
-      const profession = document.getElementById('c-profession').value;
+      // Inputs already safely initialized at function top
 
       // ---------------------------------------------------------------
       // NORMALIZE goal from new onboarding sub-types to dictionary keys
@@ -2809,28 +2849,78 @@
       
       const dedicationHistory = JSON.parse(localStorage.getItem('karma_dedication_history') || '{}');
       
-      for (let i = 27; i >= 0; i--) {
-        const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
+      // Calculate current 90-day plan day start
+      let planStartDate = localStorage.getItem('karma_plan_start_date');
+      if (!planStartDate) {
+        planStartDate = getFormattedDate();
+        localStorage.setItem('karma_plan_start_date', planStartDate);
+      }
+
+      const startDateObj = new Date(planStartDate);
+      const todayObj = new Date();
+      const diffTime = Math.abs(todayObj - startDateObj);
+      let currentDayNum = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+      if (currentDayNum > 90) currentDayNum = 90;
+
+      let completedDaysCount = 0;
+
+      // Update Header Badges & Progress Bar
+      const dayBadge = document.getElementById('journey-day-badge');
+      if (dayBadge) dayBadge.textContent = `Day ${currentDayNum} of 90`;
+
+      const phaseTitle = document.getElementById('journey-phase-title');
+      if (phaseTitle) {
+        if (currentDayNum <= 30) phaseTitle.textContent = "Phase 1: Foundation (Days 1-30)";
+        else if (currentDayNum <= 60) phaseTitle.textContent = "Phase 2: Karmic Alignment (Days 31-60)";
+        else phaseTitle.textContent = "Phase 3: Manifestation (Days 61-90)";
+      }
+
+      // Render 90 Grid Squares
+      for (let day = 1; day <= 90; day++) {
+        const d = new Date(startDateObj.getTime() + (day - 1) * 24 * 60 * 60 * 1000);
         const dateStr = getFormattedDate(d);
         const completedCount = dedicationHistory[dateStr] || 0;
         
+        if (completedCount === 4) completedDaysCount++;
+
         const box = document.createElement('div');
-        box.className = 'dedication-box';
-        box.setAttribute('data-date', `${dateStr}: ${completedCount}/4 Quests`);
-        
+        box.style.height = '20px';
+        box.style.borderRadius = '3px';
+        box.style.fontSize = '0.55rem';
+        box.style.display = 'flex';
+        box.style.alignItems = 'center';
+        box.style.justifyContent = 'center';
+        box.style.cursor = 'pointer';
+        box.style.transition = 'all 0.2s';
+        box.innerText = day;
+
+        if (day === currentDayNum) {
+          box.style.border = '1.5px solid var(--gold)';
+          box.style.fontWeight = 'bold';
+        }
+
         if (completedCount === 0) {
           box.style.backgroundColor = 'rgba(255,255,255,0.05)';
-          box.style.border = '1px solid rgba(255,255,255,0.03)';
+          box.style.color = 'var(--text-muted)';
         } else if (completedCount < 4) {
-          box.style.backgroundColor = 'rgba(142, 68, 173, 0.4)';
-          box.style.border = '1px solid rgba(142, 68, 173, 0.2)';
+          box.style.backgroundColor = 'rgba(142, 68, 173, 0.5)';
+          box.style.color = '#fff';
         } else {
           box.style.backgroundColor = 'var(--gold)';
-          box.style.border = '1px solid var(--gold)';
-          box.style.boxShadow = '0 0 5px rgba(232, 200, 121, 0.4)';
+          box.style.color = '#000';
+          box.style.fontWeight = 'bold';
+          box.style.boxShadow = '0 0 5px rgba(232, 200, 121, 0.5)';
         }
+
+        box.title = `Day ${day} (${dateStr}): ${completedCount}/4 Quests Complete`;
         grid.appendChild(box);
       }
+
+      const percent = Math.round((completedDaysCount / 90) * 100);
+      const percentEl = document.getElementById('journey-percent');
+      const progressFill = document.getElementById('journey-progress-fill');
+      if (percentEl) percentEl.textContent = `${percent}% Complete (${completedDaysCount}/90 Days)`;
+      if (progressFill) progressFill.style.width = `${Math.max(1, percent)}%`;
     }
 
     // Transition Splash to Auth
@@ -3747,19 +3837,22 @@
         if (pGender) localStorage.setItem('partner_gender', pGender.value);
       }
 
-      // Run generation
-      await generateCoachMission({
-        preventDefault: () => {},
-        target: {
-          querySelector: () => btn
+      // Run generation with robust error catching & screen transition
+      try {
+        await generateCoachMission({
+          preventDefault: () => {},
+          target: btn ? { querySelector: () => btn } : null
+        });
+      } catch (err) {
+        console.error("Coach Mission Generation Error:", err);
+      } finally {
+        if (btn) {
+          btn.innerText = originalText;
+          btn.disabled = false;
         }
-      });
+      }
 
-      // Restore button text
-      btn.innerText = originalText;
-      btn.disabled = false;
-
-      // Switch to main dashboard
+      // Guaranteed switch to main dashboard
       document.getElementById('onboarding-screen').style.display = 'none';
       document.getElementById('app-layout').style.display = 'flex';
       initApp();

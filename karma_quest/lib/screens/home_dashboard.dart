@@ -53,7 +53,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
   bool _isLoadingAi = false;
   
   int _streak = 0;
-  List<bool> _dedicationGrid = List.generate(28, (index) => false); // 28-day lunar cycle grid
+  List<bool> _dedicationGrid = List.generate(90, (index) => false); // 90-day karmic transformation grid
 
   int get totalKarma => _tasks.fold(0, (sum, task) => sum + (task.isCompleted ? task.karmaPoints : 0));
   int get maxKarma => _tasks.fold(0, (sum, task) => sum + task.karmaPoints);
@@ -228,7 +228,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
     // Adjust dedication grid index for today if all completed
     if (progressPercentage >= 1.0) {
       setState(() {
-        _dedicationGrid[DateTime.now().day % 28] = true;
+        _dedicationGrid[DateTime.now().day % 90] = true;
         _streak++;
       });
       final prefs = await SharedPreferences.getInstance();
