@@ -1,0 +1,16 @@
+name: Keep Supabase Alive 24/7
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs automatically every day at 12:00 AM UTC
+  workflow_dispatch: # Allows you to run it manually from GitHub if wanted
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send API Ping to Supabase
+        run: |
+          curl -I -s -X GET "https://rnunibjmmowhaxsytthf.supabase.co/rest/v1/" \
+          -H "apikey: sb_publishable_jjYnowJojZtzDjqEmVXACg_C7J1PGlq"
+          echo "Ping sent successfully!"
