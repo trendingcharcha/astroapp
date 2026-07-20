@@ -554,7 +554,8 @@
 
   <!-- 2.5. ONBOARDING SCREEN -->
   <div id="onboarding-screen" style="display: none;">
-    <!-- Step 1: Choose Path Mode -->
+
+    <!-- ── STEP A: Choose Path ──────────────────────────── -->
     <div id="onboarding-step-path" class="auth-card" style="text-align: center; width: 100%;">
       <div style="margin-bottom: 20px;">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.5">
@@ -566,7 +567,6 @@
       </div>
       <h2 style="margin-bottom: 10px; color: #FFFFFF; font-size: 1.4rem;">Choose Your Path</h2>
       <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 25px;">Select how you wish to align your cosmic karma</p>
-      
       <div style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
         <button class="btn btn-outline" style="text-align: left; padding: 18px; display: flex; align-items: center; gap: 15px;" onclick="setOnboardingPath('single')">
           <span style="flex-shrink:0;display:flex;align-items:center;">
@@ -574,100 +574,61 @@
           </span>
           <div>
             <strong style="color: var(--gold); display: block; margin-bottom: 2px;">Single Goal Path</strong>
-            <span style="font-size: 0.75rem; color: var(--text-muted);">Personal career, finance, marriage prediction, or individual remedies.</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Personal health, career, finance, assets or relationships.</span>
           </div>
         </button>
-        
         <button class="btn btn-outline" style="text-align: left; padding: 18px; display: flex; align-items: center; gap: 15px;" onclick="setOnboardingPath('couple')">
           <span style="flex-shrink:0;display:flex;align-items:center;">
             <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3.5"/><path d="M1 20c0-3.5 3-6 7-6s7 2.5 7 6"/><circle cx="17" cy="8" r="2.8"/><path d="M15 20c0-2 1.5-3.5 3.5-4.2"/></svg>
           </span>
           <div>
             <strong style="color: var(--gold); display: block; margin-bottom: 2px;">Couple Goal Path</strong>
-            <span style="font-size: 0.75rem; color: var(--text-muted);">Relationship harmony, baby planning, joint property, or couple remedies.</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Baby planning, joint assets, business, relationship harmony.</span>
           </div>
         </button>
       </div>
     </div>
 
-    <!-- Step 2: Select Goal (dynamically filtered by path) -->
-    <div id="onboarding-step-1" class="auth-card" style="text-align: center; width: 100%; display: none;">
+    <!-- ── STEP B: Choose Category ──────────────────────── -->
+    <div id="onboarding-step-category" class="auth-card" style="text-align: center; width: 100%; display: none;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; width: 100%;">
-        <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;">Select Your Goal</h3>
-        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep(1)">BACK</button>
+        <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;">Your Focus Area</h3>
+        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep('path')">BACK</button>
       </div>
-      <p id="onboarding-path-label" style="font-size:0.78rem;color:var(--text-muted);margin:0 0 16px 0;text-align:left;"></p>
-      
-      <!-- SINGLE goals (shown only for single path) -->
-      <div id="goals-single" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('job')">
-          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></span>
-          <div><strong style="display:block;">Career / Dream Job</strong><small style="color:var(--text-muted);">Job search, promotion, workplace issues</small></div>
-        </button>
-        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('debt')">
-          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9.5c0-1.5 1.3-2.5 3-2.5s3 1 3 2.5-1.3 2.5-3 2.5S9 13.5 9 15s1.3 2.5 3 2.5 3-1 3-2.5"/><line x1="12" y1="7" x2="12" y2="17"/></svg></span>
-          <div><strong style="display:block;">Clear Financial Debt / Wealth</strong><small style="color:var(--text-muted);">Debt clearance, savings, financial growth</small></div>
-        </button>
-        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('marriage-single')">
-          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2-1.5 4.5H5l5 4-1.5 5L12 13l3.5 2.5L14 10.5l5-4h-5.5z"/></svg></span>
-          <div><strong style="display:block;">Marriage Prediction &amp; Timing</strong><small style="color:var(--text-muted);">When will I get married? Astro analysis</small></div>
-        </button>
-        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('business')">
-          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></span>
-          <div><strong style="display:block;">Start or Grow Business</strong><small style="color:var(--text-muted);">Business launch, partnerships, growth</small></div>
-        </button>
-        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('property-single')">
-          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
-          <div><strong style="display:block;">Buy / Find My Dream Home</strong><small style="color:var(--text-muted);">Property search, home buying, auspicious timing</small></div>
-        </button>
-        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('health')">
-          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
-          <div><strong style="display:block;">Health &amp; Wellbeing</strong><small style="color:var(--text-muted);">Chronic issues, energy, healing remedies</small></div>
-        </button>
-        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('custom')">
-          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
-          <div><strong style="display:block;">Resolve Major Life Issue</strong><small style="color:var(--text-muted);">Visa, legal, family disputes, custom issue</small></div>
-        </button>
-      </div>
-
-      <!-- COUPLE goals (shown only for couple path) -->
-      <div id="goals-couple" style="display: none; flex-direction: column; gap: 10px; width: 100%;">
-        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('marriage-couple')">
-          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="7"/><path d="M9 4h6l2 3H7z"/><circle cx="12" cy="14" r="3"/></svg></span>
-          <div><strong style="display:block;">Marriage Harmony &amp; Compatibility</strong><small style="color:var(--text-muted);">Relationship strength, marriage timing as a couple</small></div>
-        </button>
-        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('baby')">
-          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3"/><path d="M8 20v-4a4 4 0 0 1 8 0v4"/><path d="M10 16h4"/></svg></span>
-          <div><strong style="display:block;">Planning for Baby / Progeny</strong><small style="color:var(--text-muted);">1st, 2nd or 3rd child planning, fertility remedies</small></div>
-        </button>
-        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('property-couple')">
-          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
-          <div><strong style="display:block;">Buy / Find Home Together</strong><small style="color:var(--text-muted);">Joint property, home purchase as a couple</small></div>
-        </button>
-        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('debt')">
-          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9.5c0-1.5 1.3-2.5 3-2.5s3 1 3 2.5-1.3 2.5-3 2.5S9 13.5 9 15s1.3 2.5 3 2.5 3-1 3-2.5"/><line x1="12" y1="7" x2="12" y2="17"/></svg></span>
-          <div><strong style="display:block;">Joint Financial / Wealth Goal</strong><small style="color:var(--text-muted);">Combined debt, joint financial planning</small></div>
-        </button>
-        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('custom')">
-          <span style="flex-shrink:0;opacity:0.9;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
-          <div><strong style="display:block;">Resolve Couple / Family Issue</strong><small style="color:var(--text-muted);">Family disputes, legal, in-law conflicts</small></div>
-        </button>
+      <p id="onboarding-category-label" style="font-size:0.78rem;color:var(--text-muted);margin:0 0 16px 0;text-align:left;"></p>
+      <div id="category-grid" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+        <!-- Populated by buildCategoryGrid() -->
       </div>
     </div>
 
-    <!-- Step 3: Birth Details (redesigned with gender, property, baby logic, voice input) -->
+    <!-- ── STEP C: Select Specific Goal ─────────────────── -->
+    <div id="onboarding-step-1" class="auth-card" style="text-align: center; width: 100%; display: none;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; width: 100%;">
+        <div style="text-align:left;">
+          <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;">Select Your Goal</h3>
+          <p id="selected-category-label" style="font-size:0.72rem;color:var(--text-muted);margin:2px 0 0 0;"></p>
+        </div>
+        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep('category')">BACK</button>
+      </div>
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:10px 0 14px;"></div>
+      <div id="goals-dynamic" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+        <!-- Populated by selectCategory() -->
+      </div>
+    </div>
+
+    <!-- ── STEP D: Birth Details ─────────────────────────── -->
     <div id="onboarding-step-2" class="auth-card" style="display: none; width: 100%;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; width: 100%;">
         <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;">Your Cosmic Details</h3>
-        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep(2)">BACK</button>
+        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep(1)">BACK</button>
       </div>
       <p id="onboarding-goal-label" style="font-size:0.78rem;color:var(--gold);background:rgba(232,200,121,0.08);border-radius:8px;padding:6px 10px;margin:0 0 16px 0;text-align:left;"></p>
-      
+
       <form onsubmit="submitOnboarding(event)">
         <!-- YOUR DETAILS -->
         <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px;margin-bottom:14px;">
           <p style="font-size:0.72rem;color:var(--gold);font-weight:bold;letter-spacing:1px;text-transform:uppercase;margin:0 0 12px 0;">Your Details</p>
-          
+
           <div class="form-group">
             <label>Full Name</label>
             <input type="text" id="o-name" required placeholder="Your full name">
@@ -699,7 +660,7 @@
               <input type="time" id="o-time" required>
             </div>
           </div>
-          
+
           <div class="form-group" style="position: relative;">
             <label>Birth Place (City)</label>
             <input type="text" id="o-city" required placeholder="Type city (e.g. New Delhi)" oninput="filterOnboardingCities(this.value)" onblur="setTimeout(() => { document.getElementById('onboarding-city-suggestions').style.display = 'none'; }, 200)" autocomplete="off">
@@ -728,7 +689,7 @@
           </div>
         </div>
 
-        <!-- Property Sub-questions (shown for property-single and property-couple) -->
+        <!-- Property Sub-questions -->
         <div id="onboarding-property-group" style="display:none;background:rgba(93,173,226,0.05);border:1px solid rgba(93,173,226,0.2);border-radius:12px;padding:14px;margin-bottom:14px;">
           <p style="font-size:0.72rem;color:#5dade2;font-weight:bold;letter-spacing:1px;text-transform:uppercase;margin:0 0 12px 0;display:flex;align-items:center;gap:6px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -767,7 +728,7 @@
           </div>
         </div>
 
-        <!-- Baby Sub-questions (COUPLE ONLY - male+female enforced) -->
+        <!-- Baby Sub-questions (COUPLE ONLY) -->
         <div id="onboarding-baby-group" style="display: none; background:rgba(46,204,113,0.05); border: 1px solid rgba(46,204,113,0.2); padding: 14px; border-radius: 12px; margin-bottom: 14px;">
           <p style="font-size:0.72rem;color:#2ecc71;font-weight:bold;letter-spacing:1px;text-transform:uppercase;margin:0 0 12px 0;display:flex;align-items:center;gap:6px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2"><circle cx="12" cy="7" r="3"/><path d="M8 20v-4a4 4 0 0 1 8 0v4"/><path d="M10 16h4"/></svg>
@@ -786,12 +747,10 @@
             </div>
             <input type="hidden" id="o-baby-number-val">
           </div>
-          <!-- 2nd Baby: 1st Baby DOB -->
           <div id="o-baby-dob-group" style="display: none;" class="form-group">
             <label>1st Baby's Date of Birth</label>
             <input type="date" id="o-first-baby-dob">
           </div>
-          <!-- 3rd Baby: 1st & 2nd Baby Ages -->
           <div id="o-baby-ages-group" style="display: none;">
             <div class="form-group">
               <label>1st Baby's Age (Years)</label>
@@ -804,7 +763,7 @@
           </div>
         </div>
 
-        <!-- PARTNER DETAILS (auto-shown for couple path, optional for single) -->
+        <!-- PARTNER DETAILS (auto-shown for couple path ONLY — NEVER for single) -->
         <div id="onboarding-partner-section" style="display:none;">
           <div style="background:rgba(142,111,214,0.06);border:1px solid rgba(142,111,214,0.25);border-radius:12px;padding:14px;margin-bottom:14px;">
             <p style="font-size:0.72rem;color:var(--purple);font-weight:bold;letter-spacing:1px;text-transform:uppercase;margin:0 0 12px 0;">
@@ -845,12 +804,6 @@
               <div id="partner-city-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1px solid #2A244E; border-radius: 10px; z-index: 1000; max-height: 180px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
             </div>
           </div>
-        </div>
-
-        <!-- Optional partner toggle (single path only) -->
-        <div id="partner-toggle-container" class="form-group" style="display: none; justify-content: space-between; align-items: center; margin-top: 5px;">
-          <label style="margin: 0; color: var(--gold); font-weight: bold; font-size:0.9rem;">Include Partner/Spouse details?</label>
-          <input type="checkbox" id="o-partner-toggle" onchange="togglePartnerFields(this.checked)" style="width: auto; transform: scale(1.2); cursor: pointer;">
         </div>
 
         <button type="submit" class="btn" style="margin-top: 18px;">GENERATE MY COSMIC MISSION</button>
@@ -2944,55 +2897,229 @@
     function bypassAuth() {
       document.getElementById('auth-screen').style.display = 'none';
       document.getElementById('onboarding-screen').style.display = 'flex';
-      showOnboardingStep(1);
+      showOnboardingStep('path');
     }
 
-    let onboardingPath = 'single';
-    function setOnboardingPath(path) {
-      onboardingPath = path;
-      
-      // Show correct goal list
-      const singleGoals = document.getElementById('goals-single');
-      const coupleGoals = document.getElementById('goals-couple');
-      const pathLabel = document.getElementById('onboarding-path-label');
-      
-      if (path === 'couple') {
-        singleGoals.style.display = 'none';
-        coupleGoals.style.display = 'flex';
-        pathLabel.textContent = 'Couple Path — choose a joint life goal for both of you';
-      } else {
-        singleGoals.style.display = 'flex';
-        coupleGoals.style.display = 'none';
-        pathLabel.textContent = 'Single Path — choose your personal life goal';
-      }
-      
-      showOnboardingStep(2);
-    }
+    // ═══════════════════════════════════════════════════════════════
+    // GOAL CATEGORIES — path-aware, category-aware goal system
+    // ═══════════════════════════════════════════════════════════════
+    const GOAL_CATEGORIES = {
+      single: [
+        { key:'health', label:'Health & Wellbeing', color:'#e74c3c', desc:'Personal healing, chronic illness, mental & physical health',
+          icon:'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z',
+          goals:[
+            { key:'health', label:'Chronic Illness & Healing', desc:'Long-term disease, recovery, Vedic healing remedies' },
+            { key:'health-mental', label:'Mental Health & Stress', desc:'Anxiety, depression, peace of mind, meditation remedies' },
+            { key:'health-energy', label:'Energy & Immunity Boost', desc:'Low energy, fatigue, immunity, vitality issues' },
+            { key:'health-fitness', label:'Weight & Physical Fitness', desc:'Weight loss, body strength, fitness and stamina' },
+          ]
+        },
+        { key:'career', label:'Career & Growth', color:'#f39c12', desc:'Job, promotion, career change, solo business',
+          icon:'M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z',
+          goals:[
+            { key:'job', label:'Get Dream Job / Promotion', desc:'Job search, promotion, workplace issues and career growth' },
+            { key:'career-change', label:'Career Change', desc:'Switch profession, new field, fresh start in career' },
+            { key:'business', label:'Start / Grow Solo Business', desc:'Freelance, startup, your own solo venture' },
+          ]
+        },
+        { key:'finance', label:'Finance & Wealth', color:'#27ae60', desc:'Debt, savings, financial planning',
+          icon:'M12 1v22M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6',
+          goals:[
+            { key:'debt', label:'Clear Financial Debt', desc:'Loan repayment, debt clearance, financial burden relief' },
+            { key:'savings', label:'Build Savings & Wealth', desc:'Savings goals, passive income, long-term wealth' },
+          ]
+        },
+        { key:'relationship', label:'Relationships', color:'#e91e8c', desc:'Marriage prediction, love, life partner',
+          icon:'m12 2-1.5 4.5H5l5 4-1.5 5L12 13l3.5 2.5L14 10.5l5-4h-5.5z',
+          goals:[
+            { key:'marriage-single', label:'Marriage Prediction & Timing', desc:'When will I get married? Astrological analysis' },
+            { key:'love', label:'Find Life Partner / Love', desc:'Attract right partner, love life guidance, compatibility' },
+          ]
+        },
+        { key:'assets', label:'Assets & Investments', color:'#5dade2', desc:'Home, car, gold, stocks, land — personal acquisition',
+          icon:'m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z',
+          goals:[
+            { key:'property-single', label:'Buy Home / Property', desc:'Home purchase, property search, auspicious timing' },
+            { key:'buy-car', label:'Buy a New Car / Vehicle', desc:'Auspicious muhurat to purchase your own vehicle' },
+            { key:'buy-gold', label:'Buy Gold / Jewellery', desc:'Festival gold, jewellery purchase — best timing' },
+            { key:'stock-market', label:'Invest in Stocks / Mutual Funds', desc:'Best planetary timing for financial investments' },
+            { key:'buy-land', label:'Buy Land / Plot', desc:'Agricultural or residential land purchase timing' },
+          ]
+        },
+        { key:'other', label:'Custom Life Issue', color:'#9b59b6', desc:'Visa, legal disputes, or any unique problem',
+          icon:'m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z',
+          goals:[
+            { key:'custom', label:'Resolve Major Life Issue', desc:'Visa, legal, family disputes, any custom problem' },
+          ]
+        },
+      ],
+      couple: [
+        { key:'family', label:'Family Planning', color:'#2ecc71', desc:'Baby planning, progeny, fertility — couple only',
+          icon:'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2',
+          goals:[
+            { key:'baby', label:'Planning for Baby / Progeny', desc:'1st, 2nd or 3rd child planning, fertility remedies' },
+          ]
+        },
+        { key:'relationship', label:'Relationship & Marriage', color:'#e91e8c', desc:'Harmony, vivah muhurat, compatibility',
+          icon:'m12 2-1.5 4.5H5l5 4-1.5 5L12 13l3.5 2.5L14 10.5l5-4h-5.5z',
+          goals:[
+            { key:'marriage-couple', label:'Marriage Harmony & Compatibility', desc:'Relationship strength, vivah muhurat, couple compatibility' },
+            { key:'love-couple', label:'Strengthen Bond & Resolve Conflicts', desc:'Couple harmony, conflict resolution, deeper connection' },
+          ]
+        },
+        { key:'finance', label:'Joint Finance', color:'#27ae60', desc:'Joint debt, savings, investment planning',
+          icon:'M12 1v22M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6',
+          goals:[
+            { key:'debt', label:'Clear Joint Financial Debt', desc:'Combined debt clearance, loan repayment as a couple' },
+            { key:'savings', label:'Joint Savings & Wealth Plan', desc:'Joint savings goals, combined financial planning' },
+          ]
+        },
+        { key:'business', label:'Joint Business', color:'#f39c12', desc:'Business together, family venture, partnership',
+          icon:'M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z',
+          goals:[
+            { key:'business', label:'Start / Grow Joint Business', desc:'Couple business, family venture, partnership launch' },
+          ]
+        },
+        { key:'assets', label:'Joint Assets', color:'#5dade2', desc:'Home, car, gold, stocks — joint acquisition',
+          icon:'m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z',
+          goals:[
+            { key:'property-couple', label:'Buy Home Together', desc:'Joint property purchase, home buying as a couple' },
+            { key:'buy-car', label:'Buy Family Car / Vehicle', desc:'Auspicious timing to buy vehicle together' },
+            { key:'buy-gold', label:'Buy Gold / Family Jewellery', desc:'Festival gold, family jewellery purchase timing' },
+            { key:'stock-market', label:'Joint Investment / Stocks', desc:'Best planetary timing for combined investments' },
+          ]
+        },
+        { key:'other', label:'Custom Couple / Family Issue', color:'#9b59b6', desc:'Disputes, legal, in-law conflicts',
+          icon:'m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z',
+          goals:[
+            { key:'custom', label:'Resolve Couple / Family Issue', desc:'Family disputes, legal matters, in-law conflicts' },
+          ]
+        },
+      ]
+    };
 
-    let onboardingGoal = 'job';
-
-    // Goal labels for display
     const goalLabels = {
       'job': 'Career / Dream Job',
+      'career-change': 'Career Change',
       'debt': 'Clear Financial Debt / Wealth',
+      'savings': 'Build Savings & Wealth',
       'marriage-single': 'Marriage Prediction & Timing',
       'marriage-couple': 'Marriage Harmony & Compatibility',
+      'love': 'Find Life Partner / Love',
+      'love-couple': 'Strengthen Relationship Bond',
       'baby': 'Planning for Baby / Progeny',
       'business': 'Start or Grow Business',
       'property-single': 'Buy / Find My Dream Home',
       'property-couple': 'Buy / Find Home Together',
       'health': 'Health & Wellbeing',
+      'health-mental': 'Mental Health & Stress Relief',
+      'health-energy': 'Energy & Immunity Boost',
+      'health-fitness': 'Weight & Physical Fitness',
+      'buy-car': 'Buy a New Car / Vehicle',
+      'buy-gold': 'Buy Gold / Jewellery',
+      'stock-market': 'Invest in Stocks / Mutual Funds',
+      'buy-land': 'Buy Land / Plot',
       'custom': 'Resolve Major Life Issue'
     };
 
+    let onboardingPath = 'single';
+    let onboardingGoal = 'job';
+    let selectedCategoryKey = '';
+
+    function setOnboardingPath(path) {
+      onboardingPath = path;
+      buildCategoryGrid(path);
+      const lbl = document.getElementById('onboarding-category-label');
+      if (lbl) lbl.textContent = path === 'couple'
+        ? 'Couple Path — choose a joint life focus area'
+        : 'Single Path — choose your personal focus area';
+      showOnboardingStep('category');
+    }
+
+    function buildCategoryGrid(path) {
+      const grid = document.getElementById('category-grid');
+      if (!grid) return;
+      const cats = GOAL_CATEGORIES[path] || [];
+      grid.innerHTML = cats.map(cat => `
+        <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:12px;text-align:left;padding:14px;border-left:3px solid ${cat.color};" onclick="selectCategory('${cat.key}')">
+          <span style="flex-shrink:0;opacity:0.9;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${cat.color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${cat.icon}"/></svg>
+          </span>
+          <div>
+            <strong style="display:block;color:#FFFFFF;margin-bottom:2px;">${cat.label}</strong>
+            <small style="color:var(--text-muted);">${cat.desc}</small>
+          </div>
+          <svg style="margin-left:auto;flex-shrink:0;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      `).join('');
+    }
+
+    function selectCategory(catKey) {
+      selectedCategoryKey = catKey;
+      const cats = GOAL_CATEGORIES[onboardingPath] || [];
+      const cat = cats.find(c => c.key === catKey);
+      if (!cat) return;
+
+      // Set selected-category-label
+      const selLbl = document.getElementById('selected-category-label');
+      if (selLbl) selLbl.textContent = cat.label + ' — ' + (onboardingPath === 'couple' ? 'Couple Path' : 'Single Path');
+
+      // Build goal buttons
+      const goalDiv = document.getElementById('goals-dynamic');
+      if (!goalDiv) return;
+
+      const iconMap = {
+        'job':             'M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z',
+        'career-change':   'M4 4h16v16H4z M8 4v16 M16 4v16',
+        'debt':            'M12 1v22M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6',
+        'savings':         'M19 7c0-1.1-.9-2-2-2h-2l-2-2H7c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V7z',
+        'marriage-single': 'm12 2-1.5 4.5H5l5 4-1.5 5L12 13l3.5 2.5L14 10.5l5-4h-5.5z',
+        'marriage-couple': 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z',
+        'love':            'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z',
+        'love-couple':     'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z',
+        'baby':            'M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zM8 20v-4a4 4 0 0 1 8 0v4M10 16h4',
+        'business':        'm4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09zm7.5-1.5-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z',
+        'property-single': 'm3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM9 22V12h6v10',
+        'property-couple': 'm3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM9 22V12h6v10',
+        'health':          'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z',
+        'health-mental':   'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z',
+        'health-energy':   'M13 2L3 14h9l-1 8 10-12h-9l1-8z',
+        'health-fitness':  'M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3',
+        'buy-car':         'M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v6a2 2 0 0 1-2 2h-3M14 17a2 2 0 1 0 4 0 2 2 0 0 0-4 0M5 17a2 2 0 1 0 4 0 2 2 0 0 0-4 0',
+        'buy-gold':        'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5',
+        'stock-market':    'M2 20h20M5 20V10l7-7 7 7v10',
+        'buy-land':        'M3 21h18M3 7v1a3 3 0 0 0 6 0V7m0 1a3 3 0 0 0 6 0V7m0 1a3 3 0 0 0 6 0V7H3l2-4h14l2 4',
+        'custom':          'm21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z',
+      };
+
+      goalDiv.innerHTML = cat.goals.map(g => {
+        const iPath = iconMap[g.key] || iconMap['custom'];
+        return `
+          <button class="btn btn-outline goal-btn" style="display:flex;align-items:center;gap:10px;text-align:left;padding:14px;" onclick="setOnboardingGoal('${g.key}')">
+            <span style="flex-shrink:0;opacity:0.9;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${iPath}"/></svg>
+            </span>
+            <div>
+              <strong style="display:block;">${g.label}</strong>
+              <small style="color:var(--text-muted);">${g.desc}</small>
+            </div>
+          </button>
+        `;
+      }).join('');
+
+      showOnboardingStep(1);
+    }
+
     function setOnboardingGoal(goal) {
       onboardingGoal = goal;
-      
-      // Set the displayed goal label
-      const goalLabelEl = document.getElementById('onboarding-goal-label');
-      if (goalLabelEl) goalLabelEl.textContent = 'Goal: ' + (goalLabels[goal] || goal);
 
-      // Custom issue + voice input
+      // Show goal label badge
+      const goalLabelEl = document.getElementById('onboarding-goal-label');
+      const catCurrent = (GOAL_CATEGORIES[onboardingPath] || []).find(c => c.key === selectedCategoryKey);
+      const catLabel = catCurrent ? catCurrent.label + ' › ' : '';
+      if (goalLabelEl) goalLabelEl.textContent = 'Goal: ' + catLabel + (goalLabels[goal] || goal);
+
+      // Custom issue + voice
       const customGroup = document.getElementById('onboarding-custom-issue-group');
       const customInput = document.getElementById('o-custom-issue');
       if (goal === 'custom') {
@@ -3003,7 +3130,7 @@
         if (customInput) { customInput.required = false; customInput.value = ''; }
       }
 
-      // Baby group - COUPLE ONLY
+      // Baby group — COUPLE ONLY, never for single
       const babyGroup = document.getElementById('onboarding-baby-group');
       if (goal === 'baby' && onboardingPath === 'couple') {
         babyGroup.style.display = 'block';
@@ -3019,39 +3146,49 @@
         propertyGroup.style.display = 'none';
       }
 
-      // Partner section: auto-show for couple path, optional for single
+      // ─── PARTNER SECTION RULES ─────────────────────────────────────
+      // COUPLE PATH: always show partner section — no toggle
+      // SINGLE PATH: NEVER show partner section — period
       const partnerSection = document.getElementById('onboarding-partner-section');
-      const toggleContainer = document.getElementById('partner-toggle-container');
-      const partnerToggle = document.getElementById('o-partner-toggle');
-      
       if (onboardingPath === 'couple') {
-        // Auto-show partner fields for couple — no toggle needed
         partnerSection.style.display = 'block';
-        toggleContainer.style.display = 'none';
-        if (partnerToggle) partnerToggle.checked = true;
       } else {
-        // Single path — show optional toggle
+        // Single path — partner fields are COMPLETELY HIDDEN
         partnerSection.style.display = 'none';
-        toggleContainer.style.display = 'flex';
-        if (partnerToggle) {
-          partnerToggle.checked = false;
-        }
       }
-      
+
       showOnboardingStep(3);
     }
 
     function showOnboardingStep(stepNum) {
-      document.getElementById('onboarding-step-path').style.display = 'none';
-      document.getElementById('onboarding-step-1').style.display = 'none';
-      document.getElementById('onboarding-step-2').style.display = 'none';
+      const steps = ['onboarding-step-path','onboarding-step-category','onboarding-step-1','onboarding-step-2'];
+      steps.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
 
-      if (stepNum === 1) {
-        document.getElementById('onboarding-step-path').style.display = 'block';
+      let target = null;
+      if (stepNum === 'path' || stepNum === 1 && selectedCategoryKey === '') {
+        target = 'onboarding-step-path';
+      } else if (stepNum === 'category') {
+        target = 'onboarding-step-category';
+      } else if (stepNum === 1) {
+        target = 'onboarding-step-1';
       } else if (stepNum === 2) {
-        document.getElementById('onboarding-step-1').style.display = 'block';
+        // BACK from goal list → go to category
+        target = 'onboarding-step-category';
       } else if (stepNum === 3) {
-        document.getElementById('onboarding-step-2').style.display = 'block';
+        target = 'onboarding-step-2';
+      }
+
+      if (target) {
+        const el = document.getElementById(target);
+        if (el) {
+          el.style.display = 'block';
+          // Scroll to top of onboarding screen
+          const screen = document.getElementById('onboarding-screen');
+          if (screen) screen.scrollTop = 0;
+        }
       }
     }
 
