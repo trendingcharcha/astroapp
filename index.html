@@ -21,6 +21,42 @@
       --text-muted: #B3B1C9;
     }
 
+    @media print {
+      body, html {
+        background: #ffffff !important;
+        color: #000000 !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      .phone-shell {
+        max-width: 100% !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .nav-bar, .chart-toggle, .btn, button, #k-lang-en, #k-lang-hi, #kr-lang-en, #kr-lang-hi, #header-title {
+        display: none !important;
+      }
+      .card {
+        background: #ffffff !important;
+        border: 1px solid #cccccc !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+        margin-bottom: 15px !important;
+      }
+      h1, h2, h3, h4, strong, p, span, td, th {
+        color: #000000 !important;
+      }
+      canvas#chartCanvas {
+        border: 1px solid #000000 !important;
+        background: #ffffff !important;
+      }
+      #tab-kundli, #kundli-result-view {
+        display: block !important;
+      }
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -535,42 +571,6 @@
       box-shadow: 0 0 10px rgba(232, 200, 121, 0.3);
     }
       @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    /* PRINT / PDF STYLESHEET FOR KUNDLI REPORT */
-    @media print {
-      body, html {
-        background: #ffffff !important;
-        color: #000000 !important;
-        height: auto !important;
-        overflow: visible !important;
-      }
-      .phone-shell {
-        max-width: 100% !important;
-        box-shadow: none !important;
-        background: #ffffff !important;
-        color: #000000 !important;
-      }
-      .nav-bar, .chart-toggle, .btn, button, #k-lang-en, #k-lang-hi, #kr-lang-en, #kr-lang-hi, #header-title {
-        display: none !important;
-      }
-      .card {
-        background: #ffffff !important;
-        border: 1px solid #cccccc !important;
-        color: #000000 !important;
-        box-shadow: none !important;
-        page-break-inside: avoid;
-        margin-bottom: 15px !important;
-      }
-      h1, h2, h3, h4, strong, p, span, td, th {
-        color: #000000 !important;
-      }
-      canvas#chartCanvas {
-        border: 1px solid #000000 !important;
-        background: #ffffff !important;
-      }
-      #tab-kundli, #kundli-result-view {
-        display: block !important;
-      }
-    }
     </style>
 
 </head>
