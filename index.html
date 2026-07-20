@@ -488,6 +488,57 @@
       max-height: 80%;
       overflow-y: auto;
     }
+
+    /* Gamification Animations and Styles */
+    @keyframes popIn {
+      0% { transform: scale(0.7); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+    .quest-card {
+      transition: all 0.3s ease;
+    }
+    .quest-card.completed {
+      background: rgba(232, 200, 121, 0.05) !important;
+      border-color: rgba(232, 200, 121, 0.25) !important;
+      opacity: 0.75;
+    }
+    .quest-card.completed p {
+      text-decoration: line-through;
+      color: rgba(255,255,255,0.3) !important;
+    }
+    .dedication-box {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+      position: relative;
+    }
+    .dedication-box:hover::after {
+      content: attr(data-date);
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #000;
+      color: #fff;
+      font-size: 0.6rem;
+      padding: 2px 4px;
+      border-radius: 4px;
+      white-space: nowrap;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .mood-btn.selected {
+      background: rgba(232, 200, 121, 0.15) !important;
+      border-color: var(--gold) !important;
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(232, 200, 121, 0.3);
+    }
   </style>
 </head>
 <body>
@@ -636,8 +687,128 @@
     <main>
       <!-- TAB 1: HOME -->
       <div id="tab-home" class="tab-content active">
-        <h3 style="margin-bottom: 15px;">Welcome, Cosmic Seeker</h3>
+        <h3 style="margin-bottom: 15px;">Cosmic Dashboard</h3>
         
+        <!-- Cosmic Progress Dashboard -->
+        <div class="card gamified-card" style="position: relative; overflow: hidden; border: 1px solid rgba(232, 200, 121, 0.4); background: linear-gradient(135deg, rgba(23, 18, 48, 0.95), rgba(42, 36, 78, 0.7));">
+          <!-- Glow background effect -->
+          <div style="position: absolute; top: -50px; right: -50px; width: 120px; height: 120px; background: radial-gradient(circle, rgba(232, 200, 121, 0.2) 0%, transparent 70%); pointer-events: none;"></div>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div>
+              <span style="font-size: 0.8rem; color: var(--gold); font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Cosmic Rank</span>
+              <h4 id="user-level-title" style="margin: 2px 0 0 0; color: #fff; font-size: 1.1rem;">Level 1 - Novice Seeker</h4>
+            </div>
+            <div style="display: flex; align-items: center; background: rgba(255, 107, 107, 0.15); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(255, 107, 107, 0.3);">
+              <span style="font-size: 1.1rem; margin-right: 4px;">🔥</span>
+              <strong id="user-streak-text" style="color: #ff6b6b; font-size: 0.9rem;">0 Days</strong>
+            </div>
+          </div>
+
+          <!-- XP Progress Bar -->
+          <div style="margin-bottom: 15px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">
+              <span>Karmic XP</span>
+              <span id="user-xp-detail">0 / 100 XP</span>
+            </div>
+            <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+              <div id="user-xp-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--gold), #ff6b6b); transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);"></div>
+            </div>
+          </div>
+
+          <!-- Daily Mood Check-In -->
+          <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px;">
+            <p style="margin: 0 0 8px 0; font-size: 0.8rem; color: var(--text-muted); text-align: left;">How is your cosmic energy today?</p>
+            <div style="display: flex; justify-content: space-between; gap: 8px;">
+              <button class="mood-btn" onclick="checkInMood(1, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 6px 0; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;">😢</button>
+              <button class="mood-btn" onclick="checkInMood(2, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 6px 0; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;">😕</button>
+              <button class="mood-btn" onclick="checkInMood(3, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 6px 0; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;">😐</button>
+              <button class="mood-btn" onclick="checkInMood(4, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 6px 0; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;">🙂</button>
+              <button class="mood-btn" onclick="checkInMood(5, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 6px 0; font-size: 1.1rem; cursor: pointer; transition: all 0.2s;">🤩</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Today's Quests -->
+        <div id="quests-section" style="margin-bottom: 25px; text-align: left; display: none;">
+          <h3 style="margin-bottom: 12px; font-size: 1.1rem; display: flex; justify-content: space-between; align-items: center;">
+            <span>Today's Daily Quests</span>
+            <span id="quests-completed-count" style="font-size: 0.8rem; color: var(--gold); font-weight: normal;">0 / 4 Complete</span>
+          </h3>
+
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- Quest 1: Vedic -->
+            <div class="quest-card" id="q-vedic-card" style="display: flex; gap: 15px; padding: 15px; background: rgba(255,255,255,0.02); border: 1px solid rgba(42, 36, 78, 0.8); border-radius: 12px; transition: all 0.3s; align-items: center;">
+              <input type="checkbox" id="q-vedic" onchange="toggleQuest('vedic', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
+              <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
+                  <strong style="color: var(--gold); font-size: 0.9rem;">🕉️ Vedic Mantra Chanting</strong>
+                  <span style="font-size: 0.75rem; background: rgba(232, 200, 121, 0.15); color: var(--gold); padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+20 XP</span>
+                </div>
+                <p id="q-vedic-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;"></p>
+              </div>
+            </div>
+
+            <!-- Quest 2: Lal Kitab -->
+            <div class="quest-card" id="q-lalkitab-card" style="display: flex; gap: 15px; padding: 15px; background: rgba(255,255,255,0.02); border: 1px solid rgba(42, 36, 78, 0.8); border-radius: 12px; transition: all 0.3s; align-items: center;">
+              <input type="checkbox" id="q-lalkitab" onchange="toggleQuest('lalkitab', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
+              <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
+                  <strong style="color: #ff6b6b; font-size: 0.9rem;">🔴 Lal Kitab Remedy</strong>
+                  <span style="font-size: 0.75rem; background: rgba(255, 107, 107, 0.15); color: #ff6b6b; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+15 XP</span>
+                </div>
+                <p id="q-lalkitab-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;"></p>
+              </div>
+            </div>
+
+            <!-- Quest 3: Vastu -->
+            <div class="quest-card" id="q-vastu-card" style="display: flex; gap: 15px; padding: 15px; background: rgba(255,255,255,0.02); border: 1px solid rgba(42, 36, 78, 0.8); border-radius: 12px; transition: all 0.3s; align-items: center;">
+              <input type="checkbox" id="q-vastu" onchange="toggleQuest('vastu', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
+              <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
+                  <strong style="color: #5dade2; font-size: 0.9rem;">🏡 Vastu Alignment</strong>
+                  <span style="font-size: 0.75rem; background: rgba(93, 173, 226, 0.15); color: #5dade2; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+15 XP</span>
+                </div>
+                <p id="q-vastu-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;"></p>
+              </div>
+            </div>
+
+            <!-- Quest 4: Practical -->
+            <div class="quest-card" id="q-practical-card" style="display: flex; gap: 15px; padding: 15px; background: rgba(255,255,255,0.02); border: 1px solid rgba(42, 36, 78, 0.8); border-radius: 12px; transition: all 0.3s; align-items: center;">
+              <input type="checkbox" id="q-practical" onchange="toggleQuest('practical', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
+              <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
+                  <strong style="color: #2ecc71; font-size: 0.9rem;">💼 Coaching Action Item</strong>
+                  <span style="font-size: 0.75rem; background: rgba(46, 204, 113, 0.15); color: #2ecc71; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+30 XP</span>
+                </div>
+                <p id="q-practical-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quest Unlock Prompt -->
+        <div id="quest-unlock-prompt" class="card" style="text-align: center; border: 1px solid rgba(232, 200, 121, 0.2); padding: 30px 20px; margin-bottom: 25px;">
+          <span style="font-size: 2rem;">✨</span>
+          <h4 style="color: var(--gold); margin: 10px 0 5px 0;">No Daily Quests Yet</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 15px 0;">Generate your daily astro coach mission to unlock today's active quests!</p>
+          <button class="btn" onclick="goToCoachTab()" style="width: auto; padding: 8px 20px;">GENERATE QUESTS NOW</button>
+        </div>
+
+        <!-- Dedication Calendar Grid -->
+        <div class="card" style="border: 1px solid rgba(42, 36, 78, 0.8);">
+          <h4 style="color: var(--gold); margin-bottom: 5px; font-size: 0.95rem; text-align: left;">Karmic Dedication (Last 28 Days)</h4>
+          <p style="margin: 0 0 12px 0; font-size: 0.75rem; color: var(--text-muted); text-align: left;">Complete daily missions to light up your cosmic path</p>
+          <div id="dedication-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; max-width: 280px; margin: 0 auto;">
+            <!-- 28 squares generated dynamically by JS -->
+          </div>
+          <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 12px; font-size: 0.7rem; color: var(--text-muted);">
+            <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: rgba(255,255,255,0.05); border-radius: 2px;"></div> Empty</div>
+            <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: rgba(142, 68, 173, 0.4); border-radius: 2px;"></div> Partial</div>
+            <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: var(--gold); border-radius: 2px;"></div> Complete</div>
+          </div>
+        </div>
+
         <div class="card">
           <h4 style="color: var(--gold); margin-bottom: 12px;">Today's Panchang</h4>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.9rem;">
@@ -663,6 +834,17 @@
         <h3 style="margin-bottom: 15px;">Daily Horoscope</h3>
         <div class="horoscope-grid" id="horoscope-list">
           <!-- Populated by JS -->
+        </div>
+
+        <!-- Level Up Modal Overlay -->
+        <div id="level-up-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 20px;">
+          <div class="auth-card" style="border: 2px solid var(--gold); background: linear-gradient(135deg, #171230, #2A244E); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+            <span style="font-size: 3.5rem; animation: pulse 1.5s infinite; display: inline-block;">🏆</span>
+            <h2 style="color: var(--gold); margin: 15px 0 5px 0; font-size: 1.5rem; letter-spacing: 1px;">KARMIC LEVEL UP!</h2>
+            <p id="level-up-rank-text" style="color: #fff; font-size: 1.1rem; font-weight: bold; margin: 0 0 10px 0;">Level 2 - Karma Sage</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 20px 0;">You have cleared daily karmic tasks and accumulated spiritual wisdom.</p>
+            <button class="btn" onclick="closeLevelUpModal()" style="width: auto; padding: 8px 30px;">AWESOME</button>
+          </div>
         </div>
       </div>
 
@@ -1696,6 +1878,47 @@
       }
       document.getElementById('coach-result-title').innerText = titleText;
 
+      // --- SAVE AND SYNC TO GAMIFICATION DASHBOARD ---
+      const todayStr = getFormattedDate();
+      localStorage.setItem('today_mission_date', todayStr);
+      localStorage.setItem('today_mission_title', titleText);
+      localStorage.setItem('today_mission_vedic', vedicListHTML);
+      localStorage.setItem('today_mission_lalkitab', lalkitabListHTML);
+      localStorage.setItem('today_mission_vastu', vastuListHTML);
+      localStorage.setItem('today_mission_practical', practicalListHTML);
+
+      // Save raw text for the Home Tab Quest Cards
+      localStorage.setItem('today_quest_vedic_text', document.getElementById('vedic-tasks-list').innerText);
+      localStorage.setItem('today_quest_lalkitab_text', document.getElementById('lalkitab-tasks-list').innerText);
+      localStorage.setItem('today_quest_vastu_text', document.getElementById('vastu-tasks-list').innerText);
+      localStorage.setItem('today_quest_practical_text', document.getElementById('practical-tasks-list').innerText);
+
+      // Reset today's quest completion state in localStorage for the new day's generation
+      questsState = {"vedic":false,"lalkitab":false,"vastu":false,"practical":false};
+      localStorage.setItem('user_quests_state', JSON.stringify(questsState));
+      
+      // Update checkmark UI
+      document.getElementById('q-vedic').checked = false;
+      document.getElementById('q-lalkitab').checked = false;
+      document.getElementById('q-vastu').checked = false;
+      document.getElementById('q-practical').checked = false;
+      
+      document.getElementById('q-vedic-card').classList.remove('completed');
+      document.getElementById('q-lalkitab-card').classList.remove('completed');
+      document.getElementById('q-vastu-card').classList.remove('completed');
+      document.getElementById('q-practical-card').classList.remove('completed');
+
+      // Populate Home Quest Cards texts
+      document.getElementById('q-vedic-text').innerText = localStorage.getItem('today_quest_vedic_text');
+      document.getElementById('q-lalkitab-text').innerText = localStorage.getItem('today_quest_lalkitab_text');
+      document.getElementById('q-vastu-text').innerText = localStorage.getItem('today_quest_vastu_text');
+      document.getElementById('q-practical-text').innerText = localStorage.getItem('today_quest_practical_text');
+
+      // Show Quests Section on Home, Hide prompt
+      document.getElementById('quest-unlock-prompt').style.display = 'none';
+      document.getElementById('quests-section').style.display = 'block';
+      updateQuestCompletionCount();
+
       // Restore button and switch views
       btn.innerText = originalText;
       btn.disabled = false;
@@ -1706,6 +1929,233 @@
     // Global active variables
     let currentPlacements = [];
     let isNorthIndianStyle = true;
+
+    // Gamification state management
+    let xp = parseInt(localStorage.getItem('user_xp') || '0');
+    let level = parseInt(localStorage.getItem('user_level') || '1');
+    let streak = parseInt(localStorage.getItem('user_streak') || '0');
+    let lastActiveDate = localStorage.getItem('user_last_active_date') || '';
+    let moodCheckedDate = localStorage.getItem('user_mood_checked_date') || '';
+    let questsState = JSON.parse(localStorage.getItem('user_quests_state') || '{"vedic":false,"lalkitab":false,"vastu":false,"practical":false}');
+
+    function getFormattedDate(d = new Date()) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    const levelTitles = {
+      1: "Novice Seeker",
+      2: "Astral Initiate",
+      3: "Karmic Adept",
+      4: "Vedic Sage",
+      5: "Cosmic Master",
+      6: "Divine Ascendant"
+    };
+
+    function getLevelTitle(lvl) {
+      return levelTitles[lvl] || `Spiritual Guide Lvl ${lvl}`;
+    }
+
+    function updateGamificationHeader() {
+      const xpNeeded = 100;
+      const progressPercent = Math.min((xp / xpNeeded) * 100, 100);
+      
+      document.getElementById('user-level-title').innerText = `Level ${level} - ${getLevelTitle(level)}`;
+      document.getElementById('user-streak-text').innerText = `${streak} Day${streak === 1 ? '' : 's'}`;
+      document.getElementById('user-xp-detail').innerText = `${xp} / ${xpNeeded} XP`;
+      document.getElementById('user-xp-progress-bar').style.width = `${progressPercent}%`;
+    }
+
+    function checkInMood(rating, btn) {
+      const todayStr = getFormattedDate();
+      if (moodCheckedDate === todayStr) {
+        alert("You have already logged your cosmic energy check-in for today!");
+        return;
+      }
+      
+      document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      
+      moodCheckedDate = todayStr;
+      localStorage.setItem('user_mood_checked_date', todayStr);
+      localStorage.setItem('user_mood_rating', rating);
+      
+      gainXP(10);
+      playSparkle(btn);
+    }
+
+    function gainXP(amount) {
+      xp += amount;
+      const xpNeeded = 100;
+      if (xp >= xpNeeded) {
+        xp -= xpNeeded;
+        level += 1;
+        localStorage.setItem('user_level', level);
+        
+        document.getElementById('level-up-rank-text').innerText = `Level ${level} - ${getLevelTitle(level)}`;
+        document.getElementById('level-up-modal').style.display = 'flex';
+      } else if (xp < 0) {
+        xp = 0;
+      }
+      localStorage.setItem('user_xp', xp);
+      updateGamificationHeader();
+    }
+
+    function closeLevelUpModal() {
+      document.getElementById('level-up-modal').style.display = 'none';
+    }
+
+    function toggleQuest(category, checkbox) {
+      const card = document.getElementById(`q-${category}-card`);
+      const isChecked = checkbox.checked;
+      
+      questsState[category] = isChecked;
+      localStorage.setItem('user_quests_state', JSON.stringify(questsState));
+      
+      const xpValues = {
+        "vedic": 20,
+        "lalkitab": 15,
+        "vastu": 15,
+        "practical": 30
+      };
+      
+      const val = xpValues[category] || 15;
+      
+      if (isChecked) {
+        card.classList.add('completed');
+        gainXP(val);
+        playSparkle(card);
+      } else {
+        card.classList.remove('completed');
+        gainXP(-val);
+      }
+      
+      updateQuestCompletionCount();
+      
+      const todayStr = getFormattedDate();
+      let completedCount = 0;
+      for (const k in questsState) {
+        if (questsState[k]) completedCount++;
+      }
+      
+      let dedicationHistory = JSON.parse(localStorage.getItem('karma_dedication_history') || '{}');
+      dedicationHistory[todayStr] = completedCount;
+      localStorage.setItem('karma_dedication_history', JSON.stringify(dedicationHistory));
+      
+      renderDedicationGrid();
+      
+      if (completedCount === 4) {
+        const completedBonusDate = localStorage.getItem('karma_bonus_date') || '';
+        if (completedBonusDate !== todayStr) {
+          localStorage.setItem('karma_bonus_date', todayStr);
+          gainXP(50);
+          
+          const yesterdayStr = getFormattedDate(new Date(Date.now() - 86400000));
+          if (lastActiveDate === yesterdayStr || lastActiveDate === todayStr) {
+            if (lastActiveDate !== todayStr) {
+              streak += 1;
+            }
+          } else {
+            streak = 1;
+          }
+          lastActiveDate = todayStr;
+          localStorage.setItem('user_last_active_date', todayStr);
+          localStorage.setItem('user_streak', streak);
+          updateGamificationHeader();
+          
+          setTimeout(() => {
+            alert(`🌟 COSMIC TRIUMPH! You completed all daily quests! Enjoy +50 XP bonus and 🔥 Streak Flame increment!`);
+          }, 300);
+        }
+      }
+    }
+
+    function updateQuestCompletionCount() {
+      let count = 0;
+      for (const k in questsState) {
+        if (questsState[k]) count++;
+      }
+      document.getElementById('quests-completed-count').innerText = `${count} / 4 Complete`;
+    }
+
+    function goToCoachTab() {
+      const coachBtn = document.querySelectorAll('.nav-item')[4];
+      switchTab(4, coachBtn);
+    }
+
+    function playSparkle(cardEl) {
+      const rect = cardEl.getBoundingClientRect();
+      for (let i = 0; i < 15; i++) {
+        const particle = document.createElement('div');
+        particle.style.position = 'fixed';
+        particle.style.width = '6px';
+        particle.style.height = '6px';
+        particle.style.backgroundColor = 'var(--gold)';
+        particle.style.borderRadius = '50%';
+        particle.style.pointerEvents = 'none';
+        particle.style.zIndex = '99999';
+        
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 2 + Math.random() * 5;
+        const vx = Math.cos(angle) * speed;
+        const vy = Math.sin(angle) * speed;
+        
+        let x = rect.left + rect.width / 2;
+        let y = rect.top + rect.height / 2;
+        
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        document.body.appendChild(particle);
+        
+        let opacity = 1;
+        const anim = setInterval(() => {
+          x += vx;
+          y += vy;
+          opacity -= 0.04;
+          particle.style.left = x + 'px';
+          particle.style.top = y + 'px';
+          particle.style.opacity = opacity;
+          particle.style.transform = `scale(${opacity * 1.5})`;
+          if (opacity <= 0) {
+            clearInterval(anim);
+            particle.remove();
+          }
+        }, 16);
+      }
+    }
+
+    function renderDedicationGrid() {
+      const grid = document.getElementById('dedication-grid');
+      if (!grid) return;
+      grid.innerHTML = "";
+      
+      const dedicationHistory = JSON.parse(localStorage.getItem('karma_dedication_history') || '{}');
+      
+      for (let i = 27; i >= 0; i--) {
+        const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
+        const dateStr = getFormattedDate(d);
+        const completedCount = dedicationHistory[dateStr] || 0;
+        
+        const box = document.createElement('div');
+        box.className = 'dedication-box';
+        box.setAttribute('data-date', `${dateStr}: ${completedCount}/4 Quests`);
+        
+        if (completedCount === 0) {
+          box.style.backgroundColor = 'rgba(255,255,255,0.05)';
+          box.style.border = '1px solid rgba(255,255,255,0.03)';
+        } else if (completedCount < 4) {
+          box.style.backgroundColor = 'rgba(142, 68, 173, 0.4)';
+          box.style.border = '1px solid rgba(142, 68, 173, 0.2)';
+        } else {
+          box.style.backgroundColor = 'var(--gold)';
+          box.style.border = '1px solid var(--gold)';
+          box.style.boxShadow = '0 0 5px rgba(232, 200, 121, 0.4)';
+        }
+        grid.appendChild(box);
+      }
+    }
 
     // Transition Splash to Auth
     setTimeout(() => {
@@ -2207,6 +2657,53 @@
         `;
         list.appendChild(div);
       });
+
+      // --- INITIALIZE GAMIFICATION AND RESTORE MISSION ---
+      const todayStr = getFormattedDate();
+      if (lastActiveDate) {
+        const yesterdayStr = getFormattedDate(new Date(Date.now() - 86400000));
+        if (lastActiveDate !== todayStr && lastActiveDate !== yesterdayStr) {
+          streak = 0;
+          localStorage.setItem('user_streak', streak);
+        }
+      }
+
+      updateGamificationHeader();
+      renderDedicationGrid();
+
+      const savedMoodRating = localStorage.getItem('user_mood_rating');
+      if (moodCheckedDate === todayStr && savedMoodRating) {
+        const btns = document.querySelectorAll('.mood-btn');
+        const targetBtn = btns[parseInt(savedMoodRating) - 1];
+        if (targetBtn) {
+          targetBtn.classList.add('selected');
+        }
+      }
+
+      const todayMissionDate = localStorage.getItem('today_mission_date');
+      if (todayMissionDate === todayStr) {
+        document.getElementById('q-vedic-text').innerText = localStorage.getItem('today_quest_vedic_text') || '';
+        document.getElementById('q-lalkitab-text').innerText = localStorage.getItem('today_quest_lalkitab_text') || '';
+        document.getElementById('q-vastu-text').innerText = localStorage.getItem('today_quest_vastu_text') || '';
+        document.getElementById('q-practical-text').innerText = localStorage.getItem('today_quest_practical_text') || '';
+
+        document.getElementById('q-vedic').checked = questsState.vedic;
+        document.getElementById('q-lalkitab').checked = questsState.lalkitab;
+        document.getElementById('q-vastu').checked = questsState.vastu;
+        document.getElementById('q-practical').checked = questsState.practical;
+
+        if (questsState.vedic) document.getElementById('q-vedic-card').classList.add('completed');
+        if (questsState.lalkitab) document.getElementById('q-lalkitab-card').classList.add('completed');
+        if (questsState.vastu) document.getElementById('q-vastu-card').classList.add('completed');
+        if (questsState.practical) document.getElementById('q-practical-card').classList.add('completed');
+
+        document.getElementById('quest-unlock-prompt').style.display = 'none';
+        document.getElementById('quests-section').style.display = 'block';
+        updateQuestCompletionCount();
+      } else {
+        document.getElementById('quest-unlock-prompt').style.display = 'block';
+        document.getElementById('quests-section').style.display = 'none';
+      }
     }
 
     // Tab Switching
