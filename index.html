@@ -2085,12 +2085,12 @@
       }
 
       // ─── 1. SAFE EARLY EXTRACTION OF FORM INPUTS (PREVENTS TDZ ERROR) ───
-      const name = (document.getElementById('c-name') ? document.getElementById('c-name').value : '') || (document.getElementById('o-name') ? document.getElementById('o-name').value : '') || 'Seeker';
-      const date = (document.getElementById('c-date') ? document.getElementById('c-date').value : '') || (document.getElementById('o-date') ? document.getElementById('o-date').value : '') || '';
-      const time = (document.getElementById('c-time') ? document.getElementById('c-time').value : '') || (document.getElementById('o-time') ? document.getElementById('o-time').value : '') || '';
-      const cityName = (document.getElementById('c-city') ? document.getElementById('c-city').value : '') || (document.getElementById('o-city') ? document.getElementById('o-city').value : '') || 'New Delhi';
-      const goal = onboardingGoal || (document.getElementById('c-goal') ? document.getElementById('c-goal').value : 'job');
-      const profession = (document.getElementById('c-profession') ? document.getElementById('c-profession').value : '') || (document.getElementById('o-profession') ? document.getElementById('o-profession').value : '') || 'Seeker';
+            const name = (document.getElementById('c-name') && document.getElementById('c-name').value.trim()) || (document.getElementById('o-name') && document.getElementById('o-name').value.trim()) || localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || 'Seeker';
+      const date = (document.getElementById('c-date') && document.getElementById('c-date').value) || (document.getElementById('o-date') && document.getElementById('o-date').value) || localStorage.getItem('user_dob') || localStorage.getItem('kundli_date') || '';
+      const time = (document.getElementById('c-time') && document.getElementById('c-time').value) || (document.getElementById('o-time') && document.getElementById('o-time').value) || localStorage.getItem('user_tob') || localStorage.getItem('kundli_time') || '';
+      const cityName = (document.getElementById('c-city') && document.getElementById('c-city').value.trim()) || (document.getElementById('o-city') && document.getElementById('o-city').value.trim()) || localStorage.getItem('user_pob') || localStorage.getItem('kundli_city') || 'New Delhi';
+      const goal = onboardingGoal || (document.getElementById('c-goal') ? document.getElementById('c-goal').value : '') || localStorage.getItem('user_goal') || 'job';
+      const profession = (document.getElementById('c-profession') && document.getElementById('c-profession').value.trim()) || (document.getElementById('o-profession') && document.getElementById('o-profession').value.trim()) || localStorage.getItem('user_profession') || 'Seeker';
 
       // ─── 2. RESOLVE CUSTOM ISSUE CATEGORIZATION ───
       let customCategory = "general";
@@ -3731,30 +3731,8 @@
       if (progressFill) progressFill.style.width = `${Math.max(1, percent)}%`;
     }
 
-    // ═══════════════════════════════════════════════════════════════
-    // FACTORY RESET v3 — One-time wipe of ALL stale user sessions,
-    // cached profiles, and incomplete onboarding data.
-    // The flag is written BEFORE clearing so it survives localStorage.clear()
-    // and this block runs exactly ONCE per browser, then never again.
-    // ═══════════════════════════════════════════════════════════════
-    (function factoryReset() {
-      const FLAG = 'cosmovedicFactoryReset_v3';
-      if (sessionStorage.getItem(FLAG) === 'done') return; // already ran this tab
-      if (localStorage.getItem(FLAG) === 'done') return;   // already ran before
+    // Session & Profile state managed dynamically via Supabase & LocalStorage
 
-      // Write flag to sessionStorage FIRST — survives localStorage.clear()
-      sessionStorage.setItem(FLAG, 'done');
-
-      // Wipe everything stale
-      localStorage.clear();
-      sessionStorage.clear();
-
-      // Re-set the flag after clear (for future tabs) so it only runs once per device
-      localStorage.setItem(FLAG, 'done');
-      sessionStorage.setItem(FLAG, 'done');
-
-      console.log('🧹 CosmoVedic Factory Reset v3 — All stale data cleared. Starting fresh!');
-    })();
 
 
     // Smooth Transition Splash to Onboarding / Auth Screen
@@ -3813,13 +3791,18 @@
             return;
           }
 
-          // RULE 4: Auto-login ONLY if user is authenticated & active in backend/profile
-          if (isAuthFlag && (validBackendUser || hasLocalProfile)) {
+          // RULE 4: Auto-login to dashboard ONLY if user is authenticated AND HAS COMPLETED THEIR PROFILE DETAILS
+          if (isAuthFlag && hasLocalProfile && (validBackendUser || !supabaseClient)) {
             if (onboarding) onboarding.style.display = 'none';
             if (appLayout) appLayout.style.display = 'block';
             if (typeof initApp === 'function') initApp();
+          } else if (isAuthFlag || validBackendUser) {
+            // Authenticated BUT profile is not completed yet (new sign up) -> Route to Choose Goal Path screen!
+            if (appLayout) appLayout.style.display = 'none';
+            if (onboarding) onboarding.style.display = 'flex';
+            showOnboardingStep('select-path');
           } else {
-            localStorage.clear();
+            // Not authenticated -> show Entrance Screen (Smart Auth Gateway)
             if (appLayout) appLayout.style.display = 'none';
             if (onboarding) onboarding.style.display = 'flex';
             showOnboardingStep('path');
