@@ -945,29 +945,59 @@
   </div>
 
   <!-- 2. AUTH SCREEN -->
+  <!-- 2. AUTH SCREEN (SMART AUTH GATEWAY) -->
   <div id="auth-screen">
-    <div class="auth-card">
-      <div style="margin-bottom: 25px;">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.5">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+    <div class="auth-card" style="text-align: center; width: 100%;">
+      <div style="margin-bottom: 12px;">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 2v20M2 12h20"/>
         </svg>
       </div>
-      <h2 style="margin-bottom: 10px;">Access CosmoVedic</h2>
-      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 30px;">Vedic Astro Insights & Predictions</p>
+      <h2 style="margin-bottom: 6px; color: #FFFFFF; font-size: 1.3rem;">Welcome to CosmoVedic</h2>
+      <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 20px;">Sign In or Sign Up to unlock full 90-day goal roadmap &amp; Kundli PDF downloads</p>
 
-      <form id="auth-form" onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" required placeholder="name@domain.com">
+      <!-- Google Authentication Button -->
+      <button class="btn" style="background: #FFFFFF; color: #333333; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px; border-radius: 10px; padding: 12px 20px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.2s;" onclick="signInWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+        <span>Sign in with Google</span>
+      </button>
+
+      <div style="display:flex; align-items:center; gap:10px; margin: 16px 0;">
+        <div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
+        <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Or Email Account</span>
+        <div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
+      </div>
+
+      <!-- Email / Password Authentication Form -->
+      <form onsubmit="handleEmailAuth(event, 'signin')" style="display:flex; flex-direction:column; gap:10px; text-align:left; margin-bottom: 18px;">
+        <div class="form-group" style="margin:0;">
+          <input type="email" id="auth-email-sec" required placeholder="Enter your email address" style="width:100%;">
         </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" required placeholder="••••••">
+        <div class="form-group" style="margin:0;">
+          <input type="password" id="auth-password-sec" required placeholder="Enter password (min 6 chars)" style="width:100%;">
         </div>
-        <button type="submit" class="btn">SIGN IN</button>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px;">
+          <button type="button" class="btn" style="padding:12px; font-weight:bold; background: linear-gradient(135deg, #2ecc71, #27ae60); color: #fff;" onclick="handleEmailAuth(event, 'signin')">SIGN IN</button>
+          <button type="button" class="btn btn-outline" style="padding:12px; font-weight:bold; border-color: var(--gold); color: var(--gold);" onclick="handleEmailAuth(event, 'signup')">NEW SIGN UP</button>
+        </div>
       </form>
 
-      <button onclick="bypassAuth()" class="btn btn-outline">CONTINUE AS GUEST</button>
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+        <div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
+        <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Free Visitor Preview</span>
+        <div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
+      </div>
+
+      <!-- Free Guest Preview Button -->
+      <button class="btn btn-outline" style="width: 100%; padding: 12px; font-weight: 600; border-color: rgba(232,200,121,0.3); color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="showGuestChoiceScreen()">
+        <span>CONTINUE AS GUEST</span>
+      </button>
     </div>
   </div>
 
@@ -5450,12 +5480,35 @@
       // Force view labels refresh
       setKundliLang(kundliLang); setAppLanguage(currentAppLang);
 
-      const name = document.getElementById('k-name').value;
-      const gender = document.getElementById('k-gender').value || 'M';
-      const date = document.getElementById('k-date').value;
-      const time = document.getElementById('k-time').value;
-      const cityName = document.getElementById('k-city').value;
-      const goal = document.getElementById('k-goal').value;
+      // Read real user birth details from input OR stored profile (NEVER fallback to today's date)
+      const storedName = localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || '';
+      const storedDate = localStorage.getItem('user_dob') || localStorage.getItem('kundli_date') || '';
+      const storedTime = localStorage.getItem('user_tob') || localStorage.getItem('kundli_time') || '';
+      const storedCity = localStorage.getItem('user_pob') || localStorage.getItem('kundli_city') || '';
+      const storedGender = localStorage.getItem('user_gender') || localStorage.getItem('kundli_gender') || 'M';
+      const storedGoal = localStorage.getItem('user_goal') || 'job';
+
+      const kNameEl = document.getElementById('k-name');
+      const kDateEl = document.getElementById('k-date');
+      const kTimeEl = document.getElementById('k-time');
+      const kCityEl = document.getElementById('k-city');
+      const kGenderEl = document.getElementById('k-gender');
+      const kGoalEl = document.getElementById('k-goal');
+
+      const name = (kNameEl && kNameEl.value && kNameEl.value.trim()) ? kNameEl.value.trim() : (storedName || 'User');
+      const gender = (kGenderEl && kGenderEl.value) ? kGenderEl.value : storedGender;
+      const date = (kDateEl && kDateEl.value) ? kDateEl.value : (storedDate || '1995-01-01');
+      const time = (kTimeEl && kTimeEl.value) ? kTimeEl.value : (storedTime || '12:00');
+      const cityName = (kCityEl && kCityEl.value && kCityEl.value.trim()) ? kCityEl.value.trim() : (storedCity || 'New Delhi');
+      const goal = (kGoalEl && kGoalEl.value) ? kGoalEl.value : storedGoal;
+
+      // Sync inputs so user sees their actual birth details
+      if (kNameEl) kNameEl.value = name;
+      if (kDateEl) kDateEl.value = date;
+      if (kTimeEl) kTimeEl.value = time;
+      if (kCityEl) kCityEl.value = cityName;
+      if (kGenderEl) kGenderEl.value = gender;
+      if (kGoalEl) kGoalEl.value = goal;
 
       // Sync variables to local storage
       localStorage.setItem('kundli_name', name);
