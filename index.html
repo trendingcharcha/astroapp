@@ -7,76 +7,42 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>CosmoVedic - Premium Vedic Astrology App</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
     // Non-blocking Glassmorphic Toast Helper (Zero popups, auto-dismissing)
-    function showToast(msg, type = 'gold') {
+    function showToast(msg, type) {
+      type = type || 'gold';
       const container = document.getElementById('toast-container');
-      if (!container) return;
+      if (!container) { console.log('[Toast]', msg); return; }
       
       const toast = document.createElement('div');
       const borderCol = type === 'error' ? 'rgba(231,76,60,0.5)' : 'rgba(232,200,121,0.5)';
       const bgCol = type === 'error' ? 'rgba(35, 12, 18, 0.92)' : 'rgba(22, 17, 45, 0.92)';
       const textCol = type === 'error' ? '#ff6b6b' : 'var(--gold)';
-
-      toast.style.cssText = `
-        background: ${bgCol};
-        border: 1px solid ${borderCol};
-        color: ${textCol};
-        padding: 10px 18px;
-        border-radius: 25px;
-        font-size: 0.82rem;
-        font-weight: 600;
-        backdrop-filter: blur(12px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-        opacity: 0;
-        transform: translateY(10px);
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        pointer-events: none;
-        text-align: center;
-      `;
+      toast.style.cssText = 'background:' + bgCol + ';border:1px solid ' + borderCol + ';color:' + textCol + ';padding:10px 18px;border-radius:25px;font-size:0.82rem;font-weight:600;backdrop-filter:blur(12px);box-shadow:0 8px 25px rgba(0,0,0,0.5);opacity:0;transform:translateY(10px);transition:all 0.3s ease;pointer-events:none;text-align:center;max-width:320px;word-break:break-word;';
       toast.innerText = msg;
       container.appendChild(toast);
-
-      requestAnimationFrame(() => {
-        toast.style.opacity = '1';
-        toast.style.transform = 'translateY(0)';
-      });
-
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateY(-10px)';
-        setTimeout(() => toast.remove(), 350);
-      }, 2200);
+      requestAnimationFrame(function() { toast.style.opacity = '1'; toast.style.transform = 'translateY(0)'; });
+      setTimeout(function() {
+        toast.style.opacity = '0'; toast.style.transform = 'translateY(-10px)';
+        setTimeout(function() { if (toast.parentNode) toast.remove(); }, 350);
+      }, 2500);
     }
 
     // Custom Glassmorphic Confirmation Modal
     function showCustomConfirm(title, msg, onConfirm) {
       const modal = document.getElementById('custom-confirm-modal');
+      if (!modal) { if (window.confirm(msg)) onConfirm(); return; }
       const titleEl = document.getElementById('confirm-modal-title');
       const msgEl = document.getElementById('confirm-modal-msg');
       const cancelBtn = document.getElementById('confirm-btn-cancel');
       const okBtn = document.getElementById('confirm-btn-ok');
-
-      if (!modal) {
-        if (confirm(msg)) onConfirm();
-        return;
-      }
-
       if (titleEl) titleEl.innerText = title;
       if (msgEl) msgEl.innerText = msg;
-
       modal.style.display = 'flex';
-
-      cancelBtn.onclick = () => {
-        modal.style.display = 'none';
-      };
-
-      okBtn.onclick = () => {
-        modal.style.display = 'none';
-        onConfirm();
-      };
+      if (cancelBtn) cancelBtn.onclick = function() { modal.style.display = 'none'; };
+      if (okBtn) okBtn.onclick = function() { modal.style.display = 'none'; onConfirm(); };
     }
-
 </script>
   <style>
     /* Premium Cosmic Theme Styles */
@@ -829,7 +795,7 @@
     <div id="onboarding-step-2" class="auth-card" style="display: none; width: 100%;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; width: 100%;">
         <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;">Your Cosmic Details</h3>
-        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep(1)">BACK</button>
+        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep('category')">BACK</button>
       </div>
       <p id="onboarding-goal-label" style="font-size:0.78rem;color:var(--gold);background:rgba(232,200,121,0.08);border-radius:8px;padding:6px 10px;margin:0 0 16px 0;text-align:left;"></p>
 
@@ -1047,10 +1013,10 @@
       <!-- Email / Password Authentication Form -->
       <form onsubmit="handleEmailAuth(event, 'signin')" style="display:flex; flex-direction:column; gap:10px; text-align:left; margin-bottom: 18px;">
         <div class="form-group" style="margin:0;">
-          <input type="email" id="auth-email-sec" required placeholder="Enter your email address" style="width:100%;">
+          <input type="email" id="auth-email" required placeholder="Enter your email address" style="width:100%;">
         </div>
         <div class="form-group" style="margin:0;">
-          <input type="password" id="auth-password-sec" required placeholder="Enter password (min 6 chars)" style="width:100%;">
+          <input type="password" id="auth-password" required placeholder="Enter password (min 6 chars)" style="width:100%;">
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px;">
           <button type="button" class="btn" style="padding:12px; font-weight:bold; background: linear-gradient(135deg, #2ecc71, #27ae60); color: #fff;" onclick="handleEmailAuth(event, 'signin')">SIGN IN</button>
@@ -3372,24 +3338,71 @@
 
     async function handleEmailAuth(e, mode) {
       if (e) e.preventDefault();
-      const email = document.getElementById('auth-email').value;
-      const pwd = document.getElementById('auth-password').value;
+      const email = document.getElementById('auth-email').value.trim();
+      const pwd = document.getElementById('auth-password').value.trim();
       if (!email || !pwd) {
         showToast("Please enter both email and password.", "error");
         return;
       }
+      if (pwd.length < 6) {
+        showToast("Password must be at least 6 characters.", "error");
+        return;
+      }
 
-      localStorage.setItem('user_authenticated', 'true');
-      localStorage.setItem('user_email', email);
-      
-      const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_goal');
+      const submitBtn = document.getElementById('auth-submit-btn');
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = '...'; }
 
-      if (mode === 'signup' || (!hasProfile && mode !== 'signin')) {
-        showToast("✨ Account Created Successfully!");
-        showOnboardingStep('select-path');
-      } else {
-        showToast("✨ Welcome back!");
-        openAppDashboard();
+      try {
+        if (supabaseClient && supabaseClient.auth) {
+          if (mode === 'signup') {
+            const { data, error } = await supabaseClient.auth.signUp({ email, password: pwd });
+            if (error) { showToast(error.message || "Sign up failed.", "error"); return; }
+            localStorage.setItem('user_authenticated', 'true');
+            localStorage.setItem('user_email', email);
+            localStorage.setItem('user_auth_provider', 'email');
+            showToast("✨ Account Created! Choose your Goal Path.");
+            const onboarding = document.getElementById('onboarding-screen');
+            const appLayout = document.getElementById('app-layout');
+            if (appLayout) appLayout.style.display = 'none';
+            if (onboarding) onboarding.style.display = 'flex';
+            showOnboardingStep('select-path');
+          } else {
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password: pwd });
+            if (error) { showToast(error.message || "Sign in failed.", "error"); return; }
+            localStorage.setItem('user_authenticated', 'true');
+            localStorage.setItem('user_email', email);
+            localStorage.setItem('user_auth_provider', 'email');
+            const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
+            if (hasProfile) {
+              showToast("✨ Welcome back!");
+              openAppDashboard();
+            } else {
+              showToast("✨ Signed In! Select your Goal Path.");
+              const onboarding = document.getElementById('onboarding-screen');
+              const appLayout = document.getElementById('app-layout');
+              if (appLayout) appLayout.style.display = 'none';
+              if (onboarding) onboarding.style.display = 'flex';
+              showOnboardingStep('select-path');
+            }
+          }
+        } else {
+          // Offline fallback: allow local-only flow
+          localStorage.setItem('user_authenticated', 'true');
+          localStorage.setItem('user_email', email);
+          const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
+          if (mode === 'signup' || !hasProfile) {
+            showToast("✨ Account created (offline mode)!");
+            showOnboardingStep('select-path');
+          } else {
+            showToast("✨ Welcome back!");
+            openAppDashboard();
+          }
+        }
+      } catch(err) {
+        showToast("Network error. Please try again.", "error");
+        console.error("Auth error:", err);
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'SIGN IN'; }
       }
     }
 
@@ -3432,10 +3445,14 @@
       localStorage.setItem('user_auth_provider', 'google');
       localStorage.setItem('user_authenticated', 'true');
       
-      const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_goal');
+      const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
       if (hasProfile) {
         openAppDashboard();
       } else {
+        const onboarding = document.getElementById('onboarding-screen');
+        const appLayout = document.getElementById('app-layout');
+        if (appLayout) appLayout.style.display = 'none';
+        if (onboarding) onboarding.style.display = 'flex';
         showOnboardingStep('select-path');
       }
     }
@@ -3709,15 +3726,7 @@
       if (progressFill) progressFill.style.width = `${Math.max(1, percent)}%`;
     }
 
-    // One-time Purge All Previous Test User Profiles across Web & Mobile
-    (function purgeAllUserProfiles() {
-      if (localStorage.getItem('app_user_purge_v1') !== 'completed') {
-        localStorage.clear();
-        sessionStorage.clear();
-        localStorage.setItem('app_user_purge_v1', 'completed');
-        console.log("🧹 ALL PREVIOUS USER PROFILES & SESSIONS CLEARED SUCCESSFULLY!");
-      }
-    })();
+    // Persistent user session management — no auto-purge
 
     // Smooth Transition Splash to Onboarding / Auth Screen
     function dismissSplashScreen() {
@@ -4174,7 +4183,8 @@
       });
 
       let target = null;
-      if (stepNum === 'path' || stepNum === 1 && selectedCategoryKey === '') {
+
+      if (stepNum === 'path') {
         target = 'onboarding-step-path';
       } else if (stepNum === 'select-path') {
         target = 'onboarding-step-select-path';
@@ -4183,13 +4193,21 @@
         buildCategoryGrid(onboardingPath);
         target = 'onboarding-step-category';
       } else if (stepNum === 1) {
-        target = 'onboarding-step-1';
+        // Goal list screen
+        if (!selectedCategoryKey) {
+          onboardingPath = onboardingPath || 'single';
+          buildCategoryGrid(onboardingPath);
+          target = 'onboarding-step-category';
+        } else {
+          target = 'onboarding-step-1';
+        }
       } else if (stepNum === 2) {
-        // BACK from goal list -> go to category
-        onboardingPath = onboardingPath || 'single';
-        buildCategoryGrid(onboardingPath);
-        target = 'onboarding-step-category';
+        // Birth Details Form screen
+        target = 'onboarding-step-2';
       } else if (stepNum === 3) {
+        // Legacy alias → also birth details form
+        target = 'onboarding-step-2';
+      } else if (stepNum === 'form') {
         target = 'onboarding-step-2';
       }
 
@@ -4837,11 +4855,16 @@
         }
 
         // Set Home Dashboard as active tab (where gamified 90-day quests live)
-        // Land DIRECTLY on the Coach Page (Tab index 4) for detailed predictions & solutions
+        // Land on Coach tab for signed-in users, Kundli tab for guests
         const navItems = document.querySelectorAll('.nav-item');
-        const coachBtn = navItems[4];
-        if (typeof switchTab === 'function') {
-          switchTab(4, coachBtn);
+        if (typeof isGuestVisitorMode !== 'undefined' && isGuestVisitorMode) {
+          // Guest → show their free Kundli chart
+          const kundliBtn = navItems[1];
+          if (typeof switchTab === 'function') switchTab(1, kundliBtn);
+        } else {
+          // Signed-in user → show Coach predictions
+          const coachBtn = navItems[4];
+          if (typeof switchTab === 'function') switchTab(4, coachBtn);
         }
         // Ensure coach tab shows result view, never second form
         const formView = document.getElementById('coach-form-view');
@@ -6217,12 +6240,14 @@
     }
 
     // Attach Supabase Auth State Change Listener for Instant OAuth Routing
+    let _authListenerFired = false;
     function setupSupabaseAuthListener() {
       if (typeof supabaseClient !== 'undefined' && supabaseClient && supabaseClient.auth) {
         supabaseClient.auth.onAuthStateChange((event, session) => {
-          if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session) {
+          if ((event === 'SIGNED_IN') && session && !_authListenerFired) {
+            _authListenerFired = true;
             localStorage.setItem('user_authenticated', 'true');
-            localStorage.setItem('user_auth_provider', 'google');
+            localStorage.setItem('user_auth_provider', session.user?.app_metadata?.provider || 'google');
 
             const splash = document.getElementById('splash-screen');
             if (splash) splash.style.display = 'none';
@@ -6231,11 +6256,20 @@
             const appLayout = document.getElementById('app-layout');
             const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
 
-            if (hasProfile) {
-              openAppDashboard();
-            } else if (onboardingScreen && onboardingScreen.style.display !== 'none') {
-              showOnboardingStep('select-path');
+            // Only reroute if currently showing onboarding (not already in app)
+            const appVisible = appLayout && (appLayout.style.display === 'block' || appLayout.style.display === 'flex');
+            if (!appVisible) {
+              if (hasProfile) {
+                openAppDashboard();
+              } else {
+                if (onboardingScreen) onboardingScreen.style.display = 'flex';
+                if (appLayout) appLayout.style.display = 'none';
+                showOnboardingStep('select-path');
+              }
             }
+          }
+          if (event === 'SIGNED_OUT') {
+            _authListenerFired = false;
           }
         });
       }

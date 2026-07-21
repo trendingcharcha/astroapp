@@ -27,17 +27,48 @@ void main() async {
     debugPrint("Failed to initialize Supabase client: $e");
   }
   
-  // 3. Resolve start screen path
-  final prefs = await SharedPreferences.getInstance();
-  final hasOnboarded = prefs.getBool('has_completed_onboarding') ?? false;
-  final guestMode = prefs.getBool('guest_offline_mode') ?? false;
-  
+  // 3. Resolve start screen path with STRICT backend session check
   Widget initialScreen = const LoginScreen();
-  
-  if (guestMode) {
-    initialScreen = hasOnboarded ? const HomeDashboard() : const OnboardingScreen();
-  } else if (SupabaseService.currentUser != null) {
-    initialScreen = hasOnboarded ? const HomeDashboard() : const OnboardingScreen();
+
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    final hasManuallyLoggedOut = prefs.getBool('has_manually_logged_out') ?? false;
+    
+    if (hasManuallyLoggedOut) {
+      // User explicitly logged out → always show login screen, never auto-login
+      initialScreen = const LoginScreen();
+    } else {
+      // Check Supabase session is still valid (not deleted from backend)
+      final user = SupabaseService.currentUser;
+      if (user != null) {
+        // Verify session is still alive by checking Supabase
+        try {
+          final session = SupabaseService.client.auth.currentSession;
+          if (session != null && !session.isExpired) {
+            final hasOnboarded = prefs.getBool('has_completed_onboarding') ?? false;
+            initialScreen = hasOnboarded ? const HomeDashboard() : const OnboardingScreen();
+          } else {
+            // Session expired or invalid → sign out cleanly
+            await SupabaseService.client.auth.signOut();
+            initialScreen = const LoginScreen();
+          }
+        } catch (e) {
+          initialScreen = const LoginScreen();
+        }
+      } else {
+        // Check guest mode
+        final guestMode = prefs.getBool('guest_offline_mode') ?? false;
+        if (guestMode) {
+          final hasOnboarded = prefs.getBool('has_completed_onboarding') ?? false;
+          initialScreen = hasOnboarded ? const HomeDashboard() : const OnboardingScreen();
+        } else {
+          initialScreen = const LoginScreen();
+        }
+      }
+    }
+  } catch (e) {
+    debugPrint("Startup routing error: $e");
+    initialScreen = const LoginScreen();
   }
 
   runApp(KarmaQuestApp(startScreen: initialScreen));
@@ -50,7 +81,7 @@ class KarmaQuestApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'KarmaQuest',
+      title: 'CosmoVedic',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,

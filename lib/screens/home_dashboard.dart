@@ -311,10 +311,13 @@ class _HomeDashboardState extends State<HomeDashboard> {
   }
 
   Future<void> _handleLogout() async {
+    // Mark manual logout so auto-login is NEVER triggered on next app open
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('has_manually_logged_out', true);
+
     await SupabaseService.signOut();
     await HiveService.clearProfile();
     await HiveService.clearTasks();
-    final prefs = await SharedPreferences.getInstance();
     await prefs.remove('has_completed_onboarding');
     await prefs.remove('guest_offline_mode');
 
