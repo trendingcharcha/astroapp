@@ -3603,19 +3603,14 @@
           splash.style.display = 'none';
           
           const isAuth = localStorage.getItem('user_authenticated') === 'true';
-          const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_goal');
 
-          if (isAuth && hasProfile) {
+          if (isAuth) {
+            // PREVIOUSLY LOGGED IN / SIGNED UP USER -> AUTO-RELOGIN DIRECTLY TO DASHBOARD ALWAYS!
             if (onboarding) onboarding.style.display = 'none';
             if (appLayout) appLayout.style.display = 'block';
             if (typeof initApp === 'function') initApp();
-          } else if (isAuth) {
-            // User is already logged in -> Skip Sign In screen & open Choose Your Path
-            if (appLayout) appLayout.style.display = 'none';
-            if (onboarding) onboarding.style.display = 'flex';
-            showOnboardingStep('select-path');
           } else {
-            // Guest / Not logged in -> Show Sign In Gateway
+            // NOT LOGGED IN -> SHOW ENTRANCE GATEWAY (SIGN IN / SIGN UP)
             if (appLayout) appLayout.style.display = 'none';
             if (onboarding) onboarding.style.display = 'flex';
             showOnboardingStep('path');
