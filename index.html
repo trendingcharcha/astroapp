@@ -3275,12 +3275,19 @@
       setAppLanguage(nextLang);
     }
 
-    function handleLogout() {
-      if (confirm("Are you sure you want to log out and clear all user data from CosmoVedic?")) {
+    async function handleLogout() {
+      if (confirm("Are you sure you want to log out of CosmoVedic?")) {
+        if (supabaseClient) {
+          try { await supabaseClient.auth.signOut(); } catch(e) {}
+        }
         localStorage.clear();
         sessionStorage.clear();
-        document.getElementById('app-layout').style.display = 'none';
-        document.getElementById('onboarding-screen').style.display = 'flex';
+        localStorage.setItem('user_authenticated', 'false');
+
+        const appLayout = document.getElementById('app-layout');
+        const onboarding = document.getElementById('onboarding-screen');
+        if (appLayout) appLayout.style.display = 'none';
+        if (onboarding) onboarding.style.display = 'flex';
         showOnboardingStep('path');
       }
     }
@@ -3639,19 +3646,51 @@
 
       if (splash) {
         splash.style.opacity = '0';
-        setTimeout(() => {
+        setTimeout(async () => {
           splash.style.display = 'none';
           
-          const isAuth = localStorage.getItem('user_authenticated') === 'true' || localStorage.getItem('user_name') !== null;
+          const isAuthFlag = localStorage.getItem('user_authenticated') === 'true';
 
-          if (isAuth) {
-            // PREVIOUSLY LOGGED IN / SIGNED UP USER -> AUTO-RELOGIN DIRECTLY TO DASHBOARD ALWAYS!
-            localStorage.setItem('user_authenticated', 'true');
+          // RULE 1: If user manually logged out, ALWAYS REQUIRE SIGN IN!
+          if (!isAuthFlag) {
+            if (appLayout) appLayout.style.display = 'none';
+            if (onboarding) onboarding.style.display = 'flex';
+            showOnboardingStep('path');
+            return;
+          }
+
+          // RULE 2: Validate backend user session with Supabase Cloud
+          let validBackendUser = false;
+          if (supabaseClient) {
+            try {
+              const { data: { user }, error } = await supabaseClient.auth.getUser();
+              if (user && !error) {
+                validBackendUser = true;
+              }
+            } catch (err) {
+              console.log("Supabase backend auth check error:", err);
+            }
+          }
+
+          const hasLocalProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
+
+          // RULE 3: If user was DELETED from backend database, wipe local cache & require sign in!
+          if (supabaseClient && !validBackendUser && isAuthFlag && !hasLocalProfile) {
+            localStorage.clear();
+            sessionStorage.clear();
+            if (appLayout) appLayout.style.display = 'none';
+            if (onboarding) onboarding.style.display = 'flex';
+            showOnboardingStep('path');
+            return;
+          }
+
+          // RULE 4: Auto-login ONLY if user is authenticated & active in backend/profile
+          if (isAuthFlag && (validBackendUser || hasLocalProfile)) {
             if (onboarding) onboarding.style.display = 'none';
             if (appLayout) appLayout.style.display = 'block';
             if (typeof initApp === 'function') initApp();
           } else {
-            // NOT LOGGED IN -> SHOW ENTRANCE GATEWAY (SIGN IN / SIGN UP)
+            localStorage.clear();
             if (appLayout) appLayout.style.display = 'none';
             if (onboarding) onboarding.style.display = 'flex';
             showOnboardingStep('path');
