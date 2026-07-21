@@ -3725,6 +3725,16 @@
       const onboarding = document.getElementById('onboarding-screen');
       const appLayout = document.getElementById('app-layout');
 
+      // Check if URL contains Google OAuth Callback tokens/code
+      const hash = window.location.hash;
+      const search = window.location.search;
+      const isOAuthRedirect = (hash && (hash.includes('access_token=') || hash.includes('type='))) || (search && search.includes('code='));
+
+      if (isOAuthRedirect) {
+        if (splash) splash.style.display = 'none';
+        return; // Allow handleOAuthCallback to manage screen routing!
+      }
+
       if (splash) {
         splash.style.opacity = '0';
         setTimeout(async () => {
@@ -6175,23 +6185,63 @@
     // ═══════════════════════════════════════════════════════════════
     function handleOAuthCallback() {
       const hash = window.location.hash;
-      if (hash && (hash.includes('access_token=') || hash.includes('type=recovery'))) {
+      const search = window.location.search;
+      const isOAuth = (hash && (hash.includes('access_token=') || hash.includes('type='))) || (search && search.includes('code='));
+
+      if (isOAuth) {
         localStorage.setItem('user_authenticated', 'true');
         localStorage.setItem('user_auth_provider', 'google');
-        window.history.replaceState(null, null, window.location.pathname);
-        
-        const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_goal');
+
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, null, window.location.pathname);
+        }
+
+        const splash = document.getElementById('splash-screen');
+        if (splash) splash.style.display = 'none';
+
+        const onboardingScreen = document.getElementById('onboarding-screen');
+        const appLayout = document.getElementById('app-layout');
+
+        const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
+
         if (hasProfile) {
           showToast("✨ Welcome back to CosmoVedic!");
           openAppDashboard();
         } else {
-          showToast("✨ Google Sign-In Successful!");
+          showToast("✨ Google Sign-In Successful! Select Goal Path.");
+          if (appLayout) appLayout.style.display = 'none';
+          if (onboardingScreen) onboardingScreen.style.display = 'flex';
           showOnboardingStep('select-path');
         }
       }
     }
+
+    // Attach Supabase Auth State Change Listener for Instant OAuth Routing
+    function setupSupabaseAuthListener() {
+      if (typeof supabaseClient !== 'undefined' && supabaseClient && supabaseClient.auth) {
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+          if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session) {
+            localStorage.setItem('user_authenticated', 'true');
+            localStorage.setItem('user_auth_provider', 'google');
+
+            const splash = document.getElementById('splash-screen');
+            if (splash) splash.style.display = 'none';
+
+            const onboardingScreen = document.getElementById('onboarding-screen');
+            const appLayout = document.getElementById('app-layout');
+            const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
+
+            if (hasProfile) {
+              openAppDashboard();
+            } else if (onboardingScreen && onboardingScreen.style.display !== 'none') {
+              showOnboardingStep('select-path');
+            }
+          }
+        });
+      }
+    }
     // Initialize Supabase Cloud Client immediately on page load
-    try { loadCloudConfig(); } catch(e) {}
+    try { loadCloudConfig(); setupSupabaseAuthListener(); } catch(e) {}
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', handleOAuthCallback);
