@@ -621,14 +621,17 @@
       </div>
 
       <!-- Email / Password Authentication Form -->
-      <form onsubmit="handleEmailAuth(event)" style="display:flex; flex-direction:column; gap:10px; text-align:left; margin-bottom: 18px;">
+      <form onsubmit="handleEmailAuth(event, 'signin')" style="display:flex; flex-direction:column; gap:10px; text-align:left; margin-bottom: 18px;">
         <div class="form-group" style="margin:0;">
           <input type="email" id="auth-email" required placeholder="Enter your email address" style="width:100%;">
         </div>
         <div class="form-group" style="margin:0;">
           <input type="password" id="auth-password" required placeholder="Enter password (min 6 chars)" style="width:100%;">
         </div>
-        <button type="submit" class="btn" style="width:100%; padding:12px; margin-top:4px; font-weight:bold;">SIGN IN / SIGN UP</button>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px;">
+          <button type="button" class="btn" style="padding:12px; font-weight:bold; background: linear-gradient(135deg, #2ecc71, #27ae60); color: #fff;" onclick="handleEmailAuth(event, 'signin')">SIGN IN</button>
+          <button type="button" class="btn btn-outline" style="padding:12px; font-weight:bold; border-color: var(--gold); color: var(--gold);" onclick="handleEmailAuth(event, 'signup')">NEW SIGN UP</button>
+        </div>
       </form>
 
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
@@ -3152,18 +3155,35 @@
     // ═══════════════════════════════════════════════════════════════
     // EMAIL AUTHENTICATION HANDLER (UNLOCKS FULL APP & GOALS)
     // ═══════════════════════════════════════════════════════════════
-    async function handleEmailAuth(e) {
+    function openAppDashboard() {
+      const onboarding = document.getElementById('onboarding-screen');
+      const appLayout = document.getElementById('app-layout');
+      if (onboarding) onboarding.style.display = 'none';
+      if (appLayout) appLayout.style.display = 'block';
+      if (typeof initApp === 'function') initApp();
+    }
+
+    async function handleEmailAuth(e, mode) {
       if (e) e.preventDefault();
       const email = document.getElementById('auth-email').value;
       const pwd = document.getElementById('auth-password').value;
-      if (!email || !pwd) return;
+      if (!email || !pwd) {
+        alert("Please enter both email and password.");
+        return;
+      }
 
       localStorage.setItem('user_authenticated', 'true');
       localStorage.setItem('user_email', email);
-      alert("✅ Sign In Successful! Welcome to CosmoVedic.");
+      
+      const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_goal');
 
-      // Unlock full onboarding path selection — Show Choose Your Path screen first
-      showOnboardingStep('select-path');
+      if (mode === 'signup' || (!hasProfile && mode !== 'signin')) {
+        alert("✅ Account Created! Please choose your Goal Path to begin.");
+        showOnboardingStep('select-path');
+      } else {
+        alert("✅ Welcome Back! Accessing your Dashboard...");
+        openAppDashboard();
+      }
     }
 
     async function signInWithGoogle() {
@@ -3196,9 +3216,7 @@
       
       const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_goal');
       if (hasProfile) {
-        document.getElementById('onboarding-screen').style.display = 'none';
-        document.getElementById('app-layout').style.display = 'block';
-        if (typeof initApp === 'function') initApp();
+        openAppDashboard();
       } else {
         showOnboardingStep('select-path');
       }
@@ -5849,10 +5867,16 @@
       if (hash && (hash.includes('access_token=') || hash.includes('type=recovery'))) {
         localStorage.setItem('user_authenticated', 'true');
         localStorage.setItem('user_auth_provider', 'google');
-        // Clean hash from URL bar
         window.history.replaceState(null, null, window.location.pathname);
-        alert("✅ Google Sign-In Successful! Welcome to CosmoVedic.");
-        showOnboardingStep('select-path');
+        
+        const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_goal');
+        if (hasProfile) {
+          alert("✅ Google Sign-In Successful! Welcome Back.");
+          openAppDashboard();
+        } else {
+          alert("✅ Google Sign-In Successful! Please select your Goal Path.");
+          showOnboardingStep('select-path');
+        }
       }
     }
     if (document.readyState === 'loading') {
