@@ -4543,10 +4543,22 @@
         const propertyType = document.getElementById('o-property-type') ? document.getElementById('o-property-type').value : '';
         const propertyCity = document.getElementById('o-property-city') ? document.getElementById('o-property-city').value : '';
 
-        // Save onboarding data to localStorage for coach context
+        // Save onboarding data to localStorage for permanent session & profile
+        localStorage.setItem('user_authenticated', 'true');
+        localStorage.setItem('user_name', name);
         localStorage.setItem('user_gender', gender);
+        localStorage.setItem('user_dob', date);
+        localStorage.setItem('user_tob', time);
+        localStorage.setItem('user_pob', cityName);
         localStorage.setItem('user_goal', goal);
         localStorage.setItem('onboarding_path', onboardingPath || 'single');
+
+        // Sync to Kundli-specific backup keys
+        localStorage.setItem('kundli_name', name);
+        localStorage.setItem('kundli_date', date);
+        localStorage.setItem('kundli_time', time);
+        localStorage.setItem('kundli_city', cityName);
+        localStorage.setItem('kundli_gender', gender);
         if (propertyNumber) localStorage.setItem('property_number', propertyNumber);
         if (propertyType) localStorage.setItem('property_type', propertyType);
         if (propertyCity) localStorage.setItem('property_city', propertyCity);
@@ -4828,6 +4840,11 @@
 
       const qSec = document.getElementById('quests-section');
       if (qSec) qSec.style.display = 'block';
+
+      // Always auto-generate and draw Kundli chart from stored profile on startup / relogin
+      if (typeof autoFillKundliFromOnboarding === 'function') {
+        autoFillKundliFromOnboarding();
+      }
     }
 
     // Tab Switching — Unified Single-Route System
@@ -5754,8 +5771,8 @@
       if (kRes) kRes.style.display = 'block';
 
       // Generate Kundli directly if not drawn yet
-      if (!window.kundliChartGenerated) {
-        window.kundliChartGenerated = true;
+      // Generate Kundli chart and planetary placements directly
+      if (typeof generateChart === 'function') {
         generateChart({ preventDefault: () => {} });
       }
     }
