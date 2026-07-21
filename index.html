@@ -3602,10 +3602,11 @@
         setTimeout(() => {
           splash.style.display = 'none';
           
-          const isAuth = localStorage.getItem('user_authenticated') === 'true';
+          const isAuth = localStorage.getItem('user_authenticated') === 'true' || localStorage.getItem('user_name') !== null;
 
           if (isAuth) {
             // PREVIOUSLY LOGGED IN / SIGNED UP USER -> AUTO-RELOGIN DIRECTLY TO DASHBOARD ALWAYS!
+            localStorage.setItem('user_authenticated', 'true');
             if (onboarding) onboarding.style.display = 'none';
             if (appLayout) appLayout.style.display = 'block';
             if (typeof initApp === 'function') initApp();
