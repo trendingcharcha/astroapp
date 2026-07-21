@@ -7,7 +7,77 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>CosmoVedic - Premium Vedic Astrology App</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    // Non-blocking Glassmorphic Toast Helper (Zero popups, auto-dismissing)
+    function showToast(msg, type = 'gold') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      
+      const toast = document.createElement('div');
+      const borderCol = type === 'error' ? 'rgba(231,76,60,0.5)' : 'rgba(232,200,121,0.5)';
+      const bgCol = type === 'error' ? 'rgba(35, 12, 18, 0.92)' : 'rgba(22, 17, 45, 0.92)';
+      const textCol = type === 'error' ? '#ff6b6b' : 'var(--gold)';
+
+      toast.style.cssText = `
+        background: ${bgCol};
+        border: 1px solid ${borderCol};
+        color: ${textCol};
+        padding: 10px 18px;
+        border-radius: 25px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        pointer-events: none;
+        text-align: center;
+      `;
+      toast.innerText = msg;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+      });
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 350);
+      }, 2200);
+    }
+
+    // Custom Glassmorphic Confirmation Modal
+    function showCustomConfirm(title, msg, onConfirm) {
+      const modal = document.getElementById('custom-confirm-modal');
+      const titleEl = document.getElementById('confirm-modal-title');
+      const msgEl = document.getElementById('confirm-modal-msg');
+      const cancelBtn = document.getElementById('confirm-btn-cancel');
+      const okBtn = document.getElementById('confirm-btn-ok');
+
+      if (!modal) {
+        if (confirm(msg)) onConfirm();
+        return;
+      }
+
+      if (titleEl) titleEl.innerText = title;
+      if (msgEl) msgEl.innerText = msg;
+
+      modal.style.display = 'flex';
+
+      cancelBtn.onclick = () => {
+        modal.style.display = 'none';
+      };
+
+      okBtn.onclick = () => {
+        modal.style.display = 'none';
+        onConfirm();
+      };
+    }
+
+</script>
   <style>
     /* Premium Cosmic Theme Styles */
     :root {
@@ -2953,7 +3023,7 @@
     }
 
     function promptAuthForGoal() {
-      alert("🔐 Sign In or Sign Up Required!\n\nTo set active life goals, track daily mantras, and save your 90-day karmic streak, please sign in or create a free account.");
+      showToast("🔐 Sign In or Sign Up Required!", "error");
       showOnboardingStep('path');
     }
 
@@ -2995,7 +3065,7 @@
     function removeActiveGoal(goalKey) {
       let current = getActiveGoals();
       if (current.length <= 1) {
-        alert("You must keep at least one active goal!");
+        showToast("You must keep at least one active goal!", "error");
         return;
       }
       current = current.filter(g => g !== goalKey);
@@ -3275,8 +3345,8 @@
       setAppLanguage(nextLang);
     }
 
-    async function handleLogout() {
-      if (confirm("Are you sure you want to log out of CosmoVedic?")) {
+    function handleLogout() {
+      showCustomConfirm("Logout Confirmation", "Are you sure you want to log out of CosmoVedic?", async () => {
         if (supabaseClient) {
           try { await supabaseClient.auth.signOut(); } catch(e) {}
         }
@@ -3289,7 +3359,7 @@
         if (appLayout) appLayout.style.display = 'none';
         if (onboarding) onboarding.style.display = 'flex';
         showOnboardingStep('path');
-      }
+      });
     }
 
     function openAppDashboard() {
@@ -3305,7 +3375,7 @@
       const email = document.getElementById('auth-email').value;
       const pwd = document.getElementById('auth-password').value;
       if (!email || !pwd) {
-        alert("Please enter both email and password.");
+        showToast("Please enter both email and password.", "error");
         return;
       }
 
@@ -3315,10 +3385,10 @@
       const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_goal');
 
       if (mode === 'signup' || (!hasProfile && mode !== 'signin')) {
-        alert("✅ Account Created! Please choose your Goal Path to begin.");
+        showToast("✨ Account Created Successfully!");
         showOnboardingStep('select-path');
       } else {
-        alert("✅ Welcome Back! Accessing your Dashboard...");
+        showToast("✨ Welcome back!");
         openAppDashboard();
       }
     }
@@ -3392,7 +3462,7 @@
     function checkInMood(rating, btn) {
       const todayStr = getFormattedDate();
       if (moodCheckedDate === todayStr) {
-        alert("You have already logged your cosmic energy check-in for today!");
+        showToast("Cosmic energy already checked in today!");
         return;
       }
       
@@ -3487,7 +3557,7 @@
           updateGamificationHeader();
           
           setTimeout(() => {
-            alert(`🌟 COSMIC TRIUMPH! You completed all daily quests! Enjoy +50 XP bonus and 🔥 Streak Flame increment!`);
+            showToast("🌟 COSMIC TRIUMPH! All daily quests completed (+50 XP)!");
           }, 300);
         }
       }
@@ -6101,10 +6171,10 @@
         
         const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_goal');
         if (hasProfile) {
-          alert("✅ Google Sign-In Successful! Welcome Back.");
+          showToast("✨ Welcome back to CosmoVedic!");
           openAppDashboard();
         } else {
-          alert("✅ Google Sign-In Successful! Please select your Goal Path.");
+          showToast("✨ Google Sign-In Successful!");
           showOnboardingStep('select-path');
         }
       }
@@ -6132,5 +6202,27 @@
     </div>
   </div>
 
+
+  <!-- Sleek Non-blocking Toast Container -->
+  <div id="toast-container" style="position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); z-index: 99999; pointer-events: none; display: flex; flex-direction: column; gap: 8px; align-items: center; width: 90%; max-width: 400px;"></div>
+
+  <!-- Sleek Glassmorphic Confirmation Modal -->
+  <div id="custom-confirm-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 100000; align-items: center; justify-content: center; backdrop-filter: blur(8px); padding: 20px;">
+    <div class="auth-card" style="max-width: 360px; width: 100%; border: 1px solid rgba(232,200,121,0.4); text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.6);">
+      <div style="margin-bottom: 12px;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+      <h3 id="confirm-modal-title" style="color: var(--gold); margin: 0 0 8px 0; font-size: 1.1rem;">Confirm Action</h3>
+      <p id="confirm-modal-msg" style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 20px;">Are you sure?</p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <button id="confirm-btn-cancel" class="btn btn-outline" style="padding: 10px; font-size: 0.85rem; border-color: rgba(255,255,255,0.2); color: var(--text-muted);">CANCEL</button>
+        <button id="confirm-btn-ok" class="btn" style="padding: 10px; font-size: 0.85rem; background: linear-gradient(135deg, #e74c3c, #c0392b); color: #fff;">LOGOUT</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
