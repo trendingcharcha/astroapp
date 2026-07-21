@@ -3276,9 +3276,9 @@
     }
 
     function handleLogout() {
-      if (confirm("Are you sure you want to log out of CosmoVedic?")) {
-        localStorage.removeItem('user_authenticated');
-        localStorage.removeItem('user_auth_provider');
+      if (confirm("Are you sure you want to log out and clear all user data from CosmoVedic?")) {
+        localStorage.clear();
+        sessionStorage.clear();
         document.getElementById('app-layout').style.display = 'none';
         document.getElementById('onboarding-screen').style.display = 'flex';
         showOnboardingStep('path');
@@ -3620,6 +3620,16 @@
       if (percentEl) percentEl.textContent = `${percent}% Complete (${completedDaysCount}/90 Days)`;
       if (progressFill) progressFill.style.width = `${Math.max(1, percent)}%`;
     }
+
+    // One-time Purge All Previous Test User Profiles across Web & Mobile
+    (function purgeAllUserProfiles() {
+      if (localStorage.getItem('app_user_purge_v1') !== 'completed') {
+        localStorage.clear();
+        sessionStorage.clear();
+        localStorage.setItem('app_user_purge_v1', 'completed');
+        console.log("🧹 ALL PREVIOUS USER PROFILES & SESSIONS CLEARED SUCCESSFULLY!");
+      }
+    })();
 
     // Smooth Transition Splash to Onboarding / Auth Screen
     function dismissSplashScreen() {
