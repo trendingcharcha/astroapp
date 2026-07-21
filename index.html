@@ -5431,11 +5431,21 @@
 
     // Overhauled bilingual generateChart
     async function generateChart(e) {
-      e.preventDefault();
-      const btn = e.target.querySelector('button[type="submit"]');
-      const originalText = btn.innerHTML;
-      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:6px; animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><span class="k-lbl-en">Calculating...</span><span class="k-lbl-hi" style="display:none;">गणना हो रही है...</span>';
-      btn.disabled = true;
+      if (e && typeof e.preventDefault === 'function') e.preventDefault();
+      
+      let btn = null;
+      let originalText = '';
+      if (e && e.target && typeof e.target.querySelector === 'function') {
+        btn = e.target.querySelector('button[type="submit"]');
+      } else {
+        btn = document.querySelector('#kundli-form-view button[type="submit"]');
+      }
+
+      if (btn) {
+        originalText = btn.innerHTML;
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:6px; animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><span class="k-lbl-en">Calculating...</span><span class="k-lbl-hi" style="display:none;">गणना हो रही है...</span>';
+        btn.disabled = true;
+      }
 
       // Force view labels refresh
       setKundliLang(kundliLang); setAppLanguage(currentAppLang);
@@ -5740,8 +5750,10 @@
       // Draw Kundali chart
       drawChart();
 
-      btn.innerHTML = originalText;
-      btn.disabled = false;
+      if (btn) {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
     }
 
     function showKundliForm() {
