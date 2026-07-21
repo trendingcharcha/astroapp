@@ -4746,12 +4746,12 @@
         }
 
         // Set Home Dashboard as active tab (where gamified 90-day quests live)
+        // Land DIRECTLY on the Coach Page (Tab index 4) for detailed predictions & solutions
         const navItems = document.querySelectorAll('.nav-item');
-        const homeBtn = navItems[0];
+        const coachBtn = navItems[4];
         if (typeof switchTab === 'function') {
-          switchTab(0, homeBtn);
+          switchTab(4, coachBtn);
         }
-
         // Ensure coach tab shows result view, never second form
         const formView = document.getElementById('coach-form-view');
         const resultView = document.getElementById('coach-result-view');
