@@ -590,7 +590,13 @@
   </div>
 
   <!-- 2.5. ONBOARDING SCREEN -->
-  <div id="onboarding-screen" style="display: none;">
+  <div id="onboarding-screen" style="display: none; position: relative;">
+    <!-- Language Switcher Pill for Onboarding Screens -->
+    <div style="position: absolute; top: 16px; right: 16px; z-index: 1000;">
+      <button onclick="toggleAppLanguage()" class="lang-toggle-btn" style="background: rgba(232, 200, 121, 0.15); border: 1px solid rgba(232, 200, 121, 0.4); color: var(--gold); padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; backdrop-filter: blur(10px); box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+        🌐 <span class="app-lang-label">EN / हिंदी</span>
+      </button>
+    </div>
 
     <!-- ── STEP A: Smart Auth Gateway ──────────────────────────── -->
     <div id="onboarding-step-path" class="auth-card" style="text-align: center; width: 100%;">
@@ -3155,6 +3161,38 @@
     // ═══════════════════════════════════════════════════════════════
     // EMAIL AUTHENTICATION HANDLER (UNLOCKS FULL APP & GOALS)
     // ═══════════════════════════════════════════════════════════════
+    
+    // ═══════════════════════════════════════════════════════════════
+    // GLOBAL LANGUAGE SWITCHER (EN/HI) & LOGOUT HANDLER
+    // ═══════════════════════════════════════════════════════════════
+    let currentAppLang = localStorage.getItem('app_language') || 'en';
+
+    function setAppLanguage(lang) {
+      currentAppLang = lang;
+      localStorage.setItem('app_language', lang);
+      
+      document.querySelectorAll('.app-lang-label').forEach(el => {
+        el.textContent = lang === 'en' ? 'EN / हिंदी' : 'हिंदी / EN';
+      });
+
+      if (typeof setKundliLang === 'function') setKundliLang(lang);
+    }
+
+    function toggleAppLanguage() {
+      const nextLang = currentAppLang === 'en' ? 'hi' : 'en';
+      setAppLanguage(nextLang);
+    }
+
+    function handleLogout() {
+      if (confirm("Are you sure you want to log out of CosmoVedic?")) {
+        localStorage.removeItem('user_authenticated');
+        localStorage.removeItem('user_auth_provider');
+        document.getElementById('app-layout').style.display = 'none';
+        document.getElementById('onboarding-screen').style.display = 'flex';
+        showOnboardingStep('path');
+      }
+    }
+
     function openAppDashboard() {
       const onboarding = document.getElementById('onboarding-screen');
       const appLayout = document.getElementById('app-layout');
@@ -5322,7 +5360,7 @@
       btn.disabled = true;
 
       // Force view labels refresh
-      setKundliLang(kundliLang);
+      setKundliLang(kundliLang); setAppLanguage(currentAppLang);
 
       const name = document.getElementById('k-name').value;
       const gender = document.getElementById('k-gender').value || 'M';
