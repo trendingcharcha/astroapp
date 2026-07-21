@@ -1252,9 +1252,43 @@
           </div>
         </div>
 
-        <h3 style="margin-bottom: 15px;">Daily Horoscope</h3>
-        <div class="horoscope-grid" id="horoscope-list">
-          <!-- Populated by JS -->
+        <!-- PERSONALIZED KUNDLI RASHI DAILY HOROSCOPE CARD -->
+        <div class="card" id="rashi-horoscope-card" style="border: 1px solid rgba(232, 200, 121, 0.4); background: linear-gradient(135deg, rgba(20, 16, 44, 0.95), rgba(42, 36, 78, 0.8)); margin-top: 20px; margin-bottom: 24px; position: relative; overflow: hidden; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.4);">
+          <div style="position: absolute; top: -40px; right: -40px; width: 120px; height: 120px; background: radial-gradient(circle, rgba(232, 200, 121, 0.18) 0%, transparent 70%); pointer-events: none;"></div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid rgba(232, 200, 121, 0.15); padding-bottom: 10px;">
+            <div>
+              <h3 style="color: var(--gold); margin: 0; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <span>Daily Kundli Rashi Horoscope</span>
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.78rem; margin: 3px 0 0 0;" id="rashi-date-label">Today</p>
+            </div>
+            <div style="background: rgba(142, 111, 214, 0.2); border: 1px solid rgba(142, 111, 214, 0.5); padding: 5px 12px; border-radius: 20px; text-align: right;">
+              <span style="font-size: 0.7rem; color: var(--gold); text-transform: uppercase; font-weight: 700; display: block;" id="rashi-badge-sub">Janma Rashi</span>
+              <span style="font-size: 0.9rem; color: #FFFFFF; font-weight: bold;" id="rashi-badge-name">—</span>
+            </div>
+          </div>
+          <div id="rashi-prediction-content" style="font-size: 0.88rem; line-height: 1.6; color: #E0DFEC; margin-bottom: 16px;">
+            <p id="rashi-prediction-text">Calculating daily astronomical transits for your Kundli Rashi...</p>
+          </div>
+          <div style="background: rgba(232, 200, 121, 0.08); border-left: 3px solid var(--gold); padding: 10px 14px; border-radius: 6px; margin-bottom: 16px;">
+            <span style="font-size: 0.75rem; color: var(--gold); font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 2px;">Daily Rashi Remedy</span>
+            <span style="font-size: 0.84rem; color: #FFFFFF;" id="rashi-remedy-text">Loading...</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(9, 7, 26, 0.6); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
+            <div style="text-align: center;">
+              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Lucky Number</span>
+              <strong style="color: var(--gold); font-size: 1.05rem;" id="rashi-lucky-num">—</strong>
+            </div>
+            <div style="text-align: center; border-left: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1);">
+              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Lucky Color</span>
+              <strong style="color: #4A90E2; font-size: 0.92rem;" id="rashi-lucky-color">—</strong>
+            </div>
+            <div style="text-align: center;">
+              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Transit Focus</span>
+              <strong style="color: #2ECC71; font-size: 0.88rem;" id="rashi-transit-focus">—</strong>
+            </div>
+          </div>
         </div>
 
         <!-- Level Up Modal Overlay -->
@@ -4959,21 +4993,10 @@
       // Load Cloud DB Config
       loadCloudConfig();
 
-      // Setup Horoscope Scroll
-      const list = document.getElementById('horoscope-list');
-      list.innerHTML = "";
-      signNames.forEach(sign => {
-        const div = document.createElement('div');
-        div.className = 'horoscope-item';
-        div.onclick = () => showHoroscope(sign);
-        div.innerHTML = `
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.5">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-          </svg>
-          <h4>${sign}</h4>
-        `;
-        list.appendChild(div);
-      });
+      // Render Personalized Daily Horoscope for User's Kundli Moon Rashi
+      if (typeof renderPersonalizedRashiHoroscope === 'function') {
+        renderPersonalizedRashiHoroscope();
+      }
 
       // --- INITIALIZE GAMIFICATION AND RESTORE MISSION ---
       const todayStr = getFormattedDate();
@@ -5093,6 +5116,85 @@
           generateCoachMission();
         }
       }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // PERSONALIZED KUNDLI RASHI DAILY HOROSCOPE ENGINE
+    // ═══════════════════════════════════════════════════════════════
+    const rashiDailyData = {
+      0: { prediction: "The Moon transit brings dynamic energetic clarity today. Your natural leadership traits are heightened. Focus on initiating pending tasks before noon, as planetary aspects favor decisive moves in your core goal.", luckyNum: "9", luckyColor: "Crimson Red", focus: "Courage & Action", remedy: "Chant Om Kram Kreem Kroum Sah Bhaumaya Namah 11 times and offer water to Surya." },
+      1: { prediction: "Venus and Moon alignment brings financial stability and emotional poise today. Long-term investments and practical planning will yield auspicious results. Avoid hasty arguments in personal relationships.", luckyNum: "6", luckyColor: "Silk White", focus: "Wealth & Harmony", remedy: "Offer white flowers or sugar to a temple and keep a silver coin in your wallet." },
+      2: { prediction: "Mercury transit favors clear communication, intellectual sharpness, and quick problem solving today. Excellent day for negotiations, writing, and strategic networking in your profession.", luckyNum: "5", luckyColor: "Emerald Green", focus: "Communication & Ideas", remedy: "Feed green fodder to cows or birds and chant Om Bum Buddhaya Namah." },
+      3: { prediction: "The Moon, your ruling planet, creates deep intuitive insights today. Trust your inner gut feeling regarding career choices. Family atmosphere remains supportive and peaceful.", luckyNum: "2", luckyColor: "Pearl White", focus: "Intuition & Peace", remedy: "Offer milk mixed with water to Shivling in the morning for mental tranquility." },
+      4: { prediction: "Sun's commanding aspect grants confidence, high energy, and authority today. Outstanding time to present your ideas to superiors or take charge of major projects.", luckyNum: "1", luckyColor: "Golden Yellow", focus: "Authority & Success", remedy: "Chant the Gayatri Mantra 11 times at sunrise and offer water to the Sun God." },
+      5: { prediction: "Analytic precision and attention to detail will elevate your work reputation today. Financial accounting, debt clearing, and health routines are highly favored by planetary transits.", luckyNum: "5", luckyColor: "Light Green", focus: "Precision & Health", remedy: "Keep your workspace clean and donate green vegetables or grains to the needy." },
+      6: { prediction: "Venus creates harmonious cosmic vibrations for partnerships, diplomacy, and creative pursuits today. Balanced decisions made today regarding wealth will bring steady progress.", luckyNum: "6", luckyColor: "Royal Blue", focus: "Balance & Relationships", remedy: "Light a ghee lamp in the evening and chant Om Shukraya Namah." },
+      7: { prediction: "Mars energy gives intense determination and research focus today. Hidden opportunities regarding career growth or legal clarity will surface favorably.", luckyNum: "9", luckyColor: "Maroon Red", focus: "Transformation & Focus", remedy: "Chant Hanuman Chalisa once today for protection and swift obstacle removal." },
+      8: { prediction: "Jupiter's expansive grace brings optimism, higher learning, and spiritual alignment today. A golden day for planning long-term career moves or higher studies.", luckyNum: "3", luckyColor: "Bright Yellow", focus: "Wisdom & Growth", remedy: "Apply yellow sandalwood tilak on your forehead and respect elders/gurus." },
+      9: { prediction: "Saturn's disciplined aspect ensures steady, lasting results for your hard work today. Perseverance in your daily karmic duties will earn long-term recognition.", luckyNum: "8", luckyColor: "Dark Blue", focus: "Discipline & Ambition", remedy: "Light a mustard oil lamp near a Peepal tree or offer black sesame seeds." },
+      10: { prediction: "Innovative thinking and community collaboration are highlighted today. Sudden breakthroughs in your major projects or digital ventures are indicated by cosmic transits.", luckyNum: "8", luckyColor: "Electric Violet", focus: "Innovation & Vision", remedy: "Feed stray dogs or birds in the morning and chant Om Sham Shanaishcharaya Namah." },
+      11: { prediction: "Intuitive perception and spiritual calm dominate your chart today. Art, meditation, and strategic reflection will yield divine solutions to complex issues.", luckyNum: "3", luckyColor: "Sea Green", focus: "Spiritual Vision", remedy: "Chant Om Gram Greem Groum Sah Gurave Namah 11 times and offer yellow sweets." }
+    };
+
+    function getUserRashiIndex() {
+      const cached = localStorage.getItem('user_moon_rashi_idx');
+      if (cached !== null && !isNaN(parseInt(cached))) return parseInt(cached);
+
+      const date = localStorage.getItem('user_dob') || localStorage.getItem('kundli_date') || '1995-01-01';
+      const time = localStorage.getItem('user_tob') || localStorage.getItem('kundli_time') || '12:00';
+      const cityName = localStorage.getItem('user_pob') || localStorage.getItem('kundli_city') || 'New Delhi';
+
+      let year = 1995, month = 1, day = 1, hour = 12, min = 0;
+      try {
+        const dParts = date.split('-');
+        if (dParts.length === 3) { year = parseInt(dParts[0]); month = parseInt(dParts[1]); day = parseInt(dParts[2]); }
+        const tParts = time.split(':');
+        if (tParts.length >= 2) { hour = parseInt(tParts[0]); min = parseInt(tParts[1]); }
+      } catch(e) {}
+
+      const city = (typeof majorCities !== 'undefined' && majorCities.find) ? (majorCities.find(function(c) { return c.name.toLowerCase().indexOf(cityName.toLowerCase()) >= 0; }) || majorCities[0]) : { lat: 28.6139, lng: 77.2090, tz: 5.5 };
+      const jd = getJulianDay(year, month, day, hour, min, city.tz || 5.5);
+      const ayanamsa = getLahiriAyanamsa(jd);
+      const moonTropLon = getPlanetLongitude('Moon', jd);
+      const moonSidLon = (moonTropLon - ayanamsa + 360) % 360;
+      const moonSignIdx = Math.floor(moonSidLon / 30.0);
+      localStorage.setItem('user_moon_rashi_idx', moonSignIdx);
+      return moonSignIdx;
+    }
+
+    function renderPersonalizedRashiHoroscope() {
+      const card = document.getElementById('rashi-horoscope-card');
+      if (!card) return;
+
+      const now = new Date();
+      const dateFormatted = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      const dayName = now.toLocaleDateString('en-GB', { weekday: 'long' });
+      const dateLabel = document.getElementById('rashi-date-label');
+      if (dateLabel) dateLabel.innerText = 'Today \u2022 ' + dateFormatted + ' (' + dayName + ')';
+
+      const rashiIdx = getUserRashiIndex();
+      const nameEn = (typeof signNames !== 'undefined' && signNames[rashiIdx]) ? signNames[rashiIdx] : 'Aries';
+      const nameHi = (typeof signNamesHi !== 'undefined' && signNamesHi[rashiIdx]) ? signNamesHi[rashiIdx] : '';
+
+      const badgeName = document.getElementById('rashi-badge-name');
+      if (badgeName) badgeName.innerText = nameEn + (nameHi ? ' (' + nameHi + ')' : '');
+
+      const data = rashiDailyData[rashiIdx] || rashiDailyData[0];
+      const userName = localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || 'Seeker';
+
+      const predContent = document.getElementById('rashi-prediction-content');
+      if (predContent) {
+        predContent.innerHTML = '<p style="margin:0;"><strong style="color:var(--gold);">' + userName + '</strong>, today\'s planetary transit through <strong>' + nameEn + (nameHi ? ' (' + nameHi + ' \u0930\u093E\u0936\u093F)' : '') + '</strong> indicates: ' + data.prediction + '</p>';
+      }
+
+      const remedyEl = document.getElementById('rashi-remedy-text');
+      if (remedyEl) remedyEl.innerText = data.remedy;
+      const luckyNumEl = document.getElementById('rashi-lucky-num');
+      if (luckyNumEl) luckyNumEl.innerText = data.luckyNum;
+      const luckyColorEl = document.getElementById('rashi-lucky-color');
+      if (luckyColorEl) luckyColorEl.innerText = data.luckyColor;
+      const focusEl = document.getElementById('rashi-transit-focus');
+      if (focusEl) focusEl.innerText = data.focus;
     }
 
     // Show Horoscope Overlay
@@ -5772,6 +5874,10 @@
 
       // Moon details & Dasha
       const moonPl = placementsList.find(p => p.name === 'Moon');
+      if (moonPl && typeof moonPl.sign === 'number') {
+        localStorage.setItem('user_moon_rashi_idx', moonPl.sign);
+        if (typeof renderPersonalizedRashiHoroscope === 'function') renderPersonalizedRashiHoroscope();
+      }
       const moonSidLon = moonPl ? (moonPl.sidLon || (moonPl.sign * 30.0 + moonPl.degree)) : 0;
       const moonNak = getNakshatra(moonSidLon);
       const dashaInfo = computeDasha(moonSidLon, year, month, day);
