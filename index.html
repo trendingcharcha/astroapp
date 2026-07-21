@@ -3394,9 +3394,20 @@
     }
 
     async function signInWithGoogle() {
+      const liveRedirect = 'https://trendingcharcha.github.io/astroapp/';
+      showToast("Connecting to Google Auth...");
+
+      // Ensure Supabase client is active
+      if (!supabaseClient && typeof supabase !== 'undefined' && supabase.createClient) {
+        try {
+          const url = 'https://rnunibjmmowhaxsytthf.supabase.co';
+          const key = 'sb_publishable_jjYnowJojZtzDjqEmVXACg_C7J1PGlq';
+          supabaseClient = supabase.createClient(url, key);
+        } catch(e) {}
+      }
+
       try {
-        const liveRedirect = 'https://trendingcharcha.github.io/astroapp/';
-        if (typeof supabaseClient !== 'undefined' && supabaseClient && supabaseClient.auth) {
+        if (supabaseClient && supabaseClient.auth) {
           const { data, error } = await supabaseClient.auth.signInWithOAuth({
             provider: 'google',
             options: {
@@ -3408,12 +3419,12 @@
             return;
           }
         }
-        
         const googleUrl = `https://rnunibjmmowhaxsytthf.supabase.co/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(liveRedirect)}`;
         window.location.href = googleUrl;
       } catch (e) {
-        console.warn("Google Auth redirect fallback:", e);
-        completeGoogleAuthLogin();
+        console.warn("Google Auth redirect error:", e);
+        const googleUrl = `https://rnunibjmmowhaxsytthf.supabase.co/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(liveRedirect)}`;
+        window.location.href = googleUrl;
       }
     }
 
@@ -6179,6 +6190,9 @@
         }
       }
     }
+    // Initialize Supabase Cloud Client immediately on page load
+    try { loadCloudConfig(); } catch(e) {}
+
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', handleOAuthCallback);
     } else {
