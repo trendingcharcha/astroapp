@@ -3731,7 +3731,31 @@
       if (progressFill) progressFill.style.width = `${Math.max(1, percent)}%`;
     }
 
-    // Persistent user session management — no auto-purge
+    // ═══════════════════════════════════════════════════════════════
+    // FACTORY RESET v3 — One-time wipe of ALL stale user sessions,
+    // cached profiles, and incomplete onboarding data.
+    // The flag is written BEFORE clearing so it survives localStorage.clear()
+    // and this block runs exactly ONCE per browser, then never again.
+    // ═══════════════════════════════════════════════════════════════
+    (function factoryReset() {
+      const FLAG = 'cosmovedicFactoryReset_v3';
+      if (sessionStorage.getItem(FLAG) === 'done') return; // already ran this tab
+      if (localStorage.getItem(FLAG) === 'done') return;   // already ran before
+
+      // Write flag to sessionStorage FIRST — survives localStorage.clear()
+      sessionStorage.setItem(FLAG, 'done');
+
+      // Wipe everything stale
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // Re-set the flag after clear (for future tabs) so it only runs once per device
+      localStorage.setItem(FLAG, 'done');
+      sessionStorage.setItem(FLAG, 'done');
+
+      console.log('🧹 CosmoVedic Factory Reset v3 — All stale data cleared. Starting fresh!');
+    })();
+
 
     // Smooth Transition Splash to Onboarding / Auth Screen
     function dismissSplashScreen() {
