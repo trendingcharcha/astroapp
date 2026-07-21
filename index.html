@@ -8,6 +8,7 @@
   <meta http-equiv="Expires" content="0">
   <title>CosmoVedic - Premium Vedic Astrology App</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
     // Non-blocking Glassmorphic Toast Helper (Zero popups, auto-dismissing)
     function showToast(msg, type) {
@@ -73,18 +74,47 @@
         height: auto !important;
         overflow: visible !important;
       }
+      #splash-screen, #onboarding-screen, #auth-screen, header, .nav-bar, .lang-toggle-btn, .chart-toggle, .btn, button {
+        display: none !important;
+      }
+      #app-layout {
+        display: block !important;
+        position: relative !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      main {
+        position: relative !important;
+        top: 0 !important;
+        bottom: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+        padding: 0 !important;
+      }
       .phone-shell {
         max-width: 100% !important;
         box-shadow: none !important;
         background: #ffffff !important;
         color: #000000 !important;
+        height: auto !important;
+        position: relative !important;
+        overflow: visible !important;
       }
-      .nav-bar, .chart-toggle, .btn, button, #k-lang-en, #k-lang-hi, #kr-lang-en, #kr-lang-hi, #header-title {
+      .tab-content {
         display: none !important;
+      }
+      #tab-kundli {
+        display: block !important;
+      }
+      #kundli-form-view {
+        display: none !important;
+      }
+      #kundli-result-view {
+        display: block !important;
       }
       .card {
         background: #ffffff !important;
-        border: 1px solid #cccccc !important;
+        border: 1px solid #999999 !important;
         color: #000000 !important;
         box-shadow: none !important;
         page-break-inside: avoid;
@@ -96,9 +126,6 @@
       canvas#chartCanvas {
         border: 1px solid #000000 !important;
         background: #ffffff !important;
-      }
-      #tab-kundli, #kundli-result-view {
-        display: block !important;
       }
     }
 
@@ -3154,7 +3181,37 @@
       showOnboardingStep('path');
     }
 
-    function downloadKundliPDF() {
+    async function downloadKundliPDF() {
+      const name = localStorage.getItem('kundli_name') || localStorage.getItem('user_name') || 'User';
+      const cleanName = name.replace(/[^a-zA-Z0-9]/g, '_');
+      const fileName = `CosmoVedic_Kundli_Report_${cleanName}.pdf`;
+
+      showToast("📄 Preparing Kundli PDF Download...", "gold");
+
+      const element = document.getElementById('kundli-result-view');
+      if (!element) {
+        window.print();
+        return;
+      }
+
+      if (typeof html2pdf !== 'undefined') {
+        try {
+          const opt = {
+            margin:       [8, 8, 8, 8],
+            filename:     fileName,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true, logging: false, backgroundColor: '#070514' },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          };
+          
+          await html2pdf().set(opt).from(element).save();
+          showToast("✅ Kundli PDF Downloaded Successfully!", "gold");
+          return;
+        } catch (err) {
+          console.warn("html2pdf generation error, falling back to print dialog:", err);
+        }
+      }
+
       window.print();
     }
 
