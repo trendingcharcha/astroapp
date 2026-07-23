@@ -1586,22 +1586,6 @@
             </div>
           </div>
 
-            <!-- STYLE & DOWNLOAD ACTION ROW -->
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-              <div style="display:flex; gap:6px;">
-                <button id="btn-style-north" class="btn btn-outline" style="width:auto; padding:5px 12px; font-size:0.78rem; margin:0; border-color:var(--gold); color:var(--gold);" onclick="setKundliStyleMode(true)">
-                  <span class="k-lbl-en">North Indian</span><span class="k-lbl-hi" style="display:none;">उत्तर भारतीय</span>
-                </button>
-                <button id="btn-style-south" class="btn btn-outline" style="width:auto; padding:5px 12px; font-size:0.78rem; margin:0;" onclick="setKundliStyleMode(false)">
-                  <span class="k-lbl-en">South Indian</span><span class="k-lbl-hi" style="display:none;">दक्षिण भारतीय</span>
-                </button>
-              </div>
-              <button class="btn" style="width:auto; padding:5px 14px; font-size:0.78rem; margin:0; background:linear-gradient(135deg, var(--gold), #f39c12); color:#000; font-weight:bold; display:inline-flex; align-items:center; gap:5px;" onclick="downloadKundliPDF()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                <span class="k-lbl-en">Download PDF</span><span class="k-lbl-hi" style="display:none;">पीडीएफ डाउनलोड</span>
-              </button>
-            </div>
-          </div>
 
           <div class="chart-container" style="margin-bottom:12px; position:relative;">
             <div id="chart-badge-title" style="position:absolute; top:10px; left:12px; background:rgba(12,9,34,0.85); border:1px solid var(--gold); border-radius:20px; padding:3px 10px; font-size:0.72rem; color:var(--gold); font-weight:bold; backdrop-filter:blur(4px); z-index:5;">
@@ -7673,8 +7657,9 @@
       drawChart();
     }
 
-    function drawChart() {
-      if (!currentPlacements || currentPlacements.length === 0) return;
+        function drawChart() {
+      const activePlacements = getActiveChartPlacements();
+      if (!activePlacements || activePlacements.length === 0) return;
       const canvas = document.getElementById('chartCanvas');
       const ctx = canvas.getContext('2d');
       const w = canvas.width;
@@ -7733,7 +7718,7 @@
         ];
 
         // Draw Sign Numbers
-        const lagnaSign = currentPlacements[0].sign + 1; // 1-based index
+        const lagnaSign = activePlacements[0].sign + 1; // 1-based index
         ctx.fillStyle = '#E8C879';
         ctx.font = 'bold 12px sans-serif';
         ctx.textAlign = 'center';
@@ -7745,8 +7730,8 @@
 
         // Draw Planets grouped by House
         const housePlanets = Array.from({length: 13}, () => []);
-        currentPlacements.forEach(p => {
-          const houseIdx = ((p.sign - currentPlacements[0].sign + 12) % 12) + 1;
+        activePlacements.forEach(p => {
+          const houseIdx = ((p.sign - activePlacements[0].sign + 12) % 12) + 1;
           const short = p.name.substring(0, 2);
           housePlanets[houseIdx].push(short);
         });
@@ -7788,7 +7773,7 @@
 
         // Draw Signs headers & planets
         const signPlanets = Array.from({length: 12}, () => []);
-        currentPlacements.forEach(p => {
+        activePlacements.forEach(p => {
           const short = p.name.substring(0, 2);
           signPlanets[p.sign].push(short);
         });
