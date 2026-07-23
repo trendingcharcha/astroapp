@@ -1202,7 +1202,7 @@
       <div id="tab-home" class="tab-content active">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
           <h3 style="margin: 0;"><span class="k-lbl-en">Cosmic Dashboard</span><span class="k-lbl-hi" style="display:none;">कौस्मिक डैशबोर्ड</span></h3>
-          <button class="btn btn-outline" style="width: auto; padding: 6px 12px; font-size: 0.78rem; border-color: rgba(142,111,214,0.5); color: #c39bd3; display: flex; align-items: center; gap: 6px;" onclick="switchTab(4, document.querySelectorAll('.nav-item')[4])">
+          <button class="btn btn-outline" style="width: auto; padding: 6px 12px; font-size: 0.78rem; border-color: rgba(142,111,214,0.5); color: #c39bd3; display: flex; align-items: center; gap: 6px;" onclick="switchTab(5, document.querySelectorAll('.nav-item')[5])">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c39bd3" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
             <span><span class="k-lbl-en"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2.7 3 6 3s6-1 6-3v-5"/></svg> Detailed Coach Predictions</span><span class="k-lbl-hi" style="display:none;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2.7 3 6 3s6-1 6-3v-5"/></svg> विस्तृत कोच भविष्यवाणियां</span></span>
           </button>
@@ -2003,6 +2003,81 @@
         </div><!-- /kundli-result-view -->
       </div><!-- /tab-kundli -->
 
+      <!-- TAB 2.5: LAL KITAB -->
+      <div id="tab-lalkitab" class="tab-content">
+        <h3 style="margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" style="vertical-align:middle;"><path d="M12 21c-5-1.5-9-6-9-11.5a9 9 0 0 1 18 0c0 5.5-4 10-9 11.5z"/></svg>
+          <span class="k-lbl-en">Lal Kitab Analysis</span>
+          <span class="k-lbl-hi" style="display:none;">लाल किताब विश्लेषण</span>
+        </h3>
+        
+        <!-- Lal Kitab Teva & Basic Info Card -->
+        <div class="card" style="margin-bottom: 20px;">
+          <h4 style="color: var(--gold); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span class="k-lbl-en">Lal Kitab Teva (Fixed Houses)</span>
+            <span class="k-lbl-hi" style="display:none;">लाल किताब टेवा (निश्चित भाव)</span>
+          </h4>
+          <p style="font-size: 0.84rem; line-height: 1.4; color: var(--text-subtle); margin-bottom: 15px;">
+            <span class="k-lbl-en">In Lal Kitab, houses represent fixed zodiac signs (House 1 is always Aries/Mesh). Below is your active planetary placements mapped onto the fixed Lal Kitab Kundli template.</span>
+            <span class="k-lbl-hi" style="display:none;">लाल किताब में, भाव निश्चित राशियों का प्रतिनिधित्व करते हैं (प्रथम भाव हमेशा मेष राशि का होता है)। नीचे आपके सक्रिय ग्रहों की स्थिति को लाल किताब कुंडली टेम्पलेट पर दर्शाया गया है।</span>
+          </p>
+
+          <!-- Lal Kitab North Indian Style Chart Canvas -->
+          <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+            <canvas id="lalkitab-chart-canvas" width="300" height="300" style="max-width: 100%; height: auto; background: rgba(14, 10, 32, 0.5); border: 1px solid rgba(232, 200, 121, 0.2); border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);"></canvas>
+          </div>
+        </div>
+
+        <!-- Section: Mangal (Mars) Detailing -->
+        <div class="card" style="margin-bottom: 15px;">
+          <h4 style="color: #ff6b6b; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20"/></svg>
+            <span class="k-lbl-en">Mangal (Mars) Detailing</span>
+            <span class="k-lbl-hi" style="display:none;">मंगल देव - विस्तृत विवेचन</span>
+          </h4>
+          <div id="lk-mangal-details" style="font-size: 0.86rem; line-height: 1.5; color: var(--text-subtle);">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Section: Budh (Mercury) Detailing -->
+        <div class="card" style="margin-bottom: 15px;">
+          <h4 style="color: #5dade2; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+            <span class="k-lbl-en">Budh (Mercury) Detailing</span>
+            <span class="k-lbl-hi" style="display:none;">बुध देव - बुद्धि एवं व्यापार</span>
+          </h4>
+          <div id="lk-budh-details" style="font-size: 0.86rem; line-height: 1.5; color: var(--text-subtle);">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Section: Special Teva Classification -->
+        <div class="card" style="margin-bottom: 15px;">
+          <h4 style="color: #c39bd3; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span class="k-lbl-en">Teva Classification (Kundali Nature)</span>
+            <span class="k-lbl-hi" style="display:none;">टेवा वर्गीकरण (कुंडली की प्रकृति)</span>
+          </h4>
+          <div id="lk-teva-details" style="font-size: 0.86rem; line-height: 1.5; color: var(--text-subtle);">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Section: Lal Kitab Remedies (Upay) -->
+        <div class="card" style="margin-bottom: 15px;">
+          <h4 style="color: var(--gold); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span class="k-lbl-en">Accurate Lal Kitab Remedies (Upay)</span>
+            <span class="k-lbl-hi" style="display:none;">लाल किताब अचूक उपाय</span>
+          </h4>
+          <div id="lk-remedies-details" style="font-size: 0.86rem; line-height: 1.5; color: var(--text-subtle);">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </div>
+
       <!-- TAB 3: MATCHING -->
       <div id="tab-matching" class="tab-content">
         <h3 style="margin-bottom: 15px;"><span class="k-lbl-en">Kundli Matching</span><span class="k-lbl-hi" style="display:none;">कुंडली मिलान (संगति)</span></h3>
@@ -2299,6 +2374,10 @@
       <button class="nav-item" onclick="switchTab(1, this)">
         <svg viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 3.99L19.53 19H4.47L12 5.99z"/></svg>
         <span><span class="k-lbl-en">Kundli</span><span class="k-lbl-hi" style="display:none;">कुंडली</span></span>
+      </button>
+      <button class="nav-item" onclick="switchTab(6, this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21c-5-1.5-9-6-9-11.5a9 9 0 0 1 18 0c0 5.5-4 10-9 11.5z"/></svg>
+        <span><span class="k-lbl-en">Lal Kitab</span><span class="k-lbl-hi" style="display:none;">लाल किताब</span></span>
       </button>
       <button class="nav-item" onclick="switchTab(2, this)">
         <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
@@ -4788,7 +4867,7 @@
 
     function goToCoachTab() {
       const coachBtn = document.querySelectorAll('.nav-item')[4];
-      switchTab(4, coachBtn);
+      switchTab(5, coachBtn);
     }
 
     function playSparkle(cardEl) {
@@ -6058,7 +6137,7 @@
         } else {
           // Signed-in user → show Coach predictions
           const coachBtn = navItems[4];
-          if (typeof switchTab === 'function') switchTab(4, coachBtn);
+          if (typeof switchTab === 'function') switchTab(5, coachBtn);
         }
         // Ensure coach tab shows result view, never second form
         const formView = document.getElementById('coach-form-view');
@@ -6249,12 +6328,18 @@
     }
 
     function switchTab(index, btn) {
+      // TAB 2: LAL KITAB — Generate report and draw fixed chart
+      if (index === 2) {
+        if (typeof generateLalKitabReport === 'function') {
+          generateLalKitabReport();
+        }
+      }
       // Deactivate other tabs
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
       
       // Activate target tab
-      const tabIds = ['tab-home', 'tab-kundli', 'tab-matching', 'tab-tarot', 'tab-coach', 'tab-settings'];
+      const tabIds = ['tab-home', 'tab-kundli', 'tab-lalkitab', 'tab-matching', 'tab-tarot', 'tab-coach', 'tab-settings'];
       const targetEl = document.getElementById(tabIds[index]);
       if (targetEl) targetEl.classList.add('active');
       if (btn) btn.classList.add('active');
@@ -7686,7 +7771,336 @@
       drawChart();
     }
 
-        function drawChart() {
+            // ═══════════════════════════════════════════════════════════════
+    // LAL KITAB CHARTS & REPORT GENERATOR
+    // ═══════════════════════════════════════════════════════════════
+    function drawLalKitabChart() {
+      if (!cachedPlacementsList || cachedPlacementsList.length === 0) return;
+      const canvas = document.getElementById('lalkitab-chart-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // Clear Canvas
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = '#0C0922';
+      ctx.fillRect(0, 0, w, h);
+
+      // Draw North Indian style (Diamond)
+      ctx.strokeStyle = '#E8C879';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(0, 0, w, h);
+
+      // Draw Diagonals
+      ctx.beginPath();
+      ctx.moveTo(0, 0); ctx.lineTo(w, h);
+      ctx.moveTo(w, 0); ctx.lineTo(0, h);
+      // Draw Diamonds
+      ctx.moveTo(w/2, 0); ctx.lineTo(0, h/2);
+      ctx.lineTo(w/2, h); ctx.lineTo(w, h/2);
+      ctx.lineTo(w/2, 0);
+      ctx.stroke();
+
+      // Placements center coords (12 houses)
+      const houseCenters = [
+        {x: w * 0.5, y: h * 0.28},   // House 1
+        {x: w * 0.25, y: h * 0.16},  // House 2
+        {x: w * 0.16, y: h * 0.25},  // House 3
+        {x: w * 0.28, y: h * 0.5},   // House 4
+        {x: w * 0.16, y: h * 0.75},  // House 5
+        {x: w * 0.25, y: h * 0.84},  // House 6
+        {x: w * 0.5, y: h * 0.72},   // House 7
+        {x: w * 0.75, y: h * 0.84},  // House 8
+        {x: w * 0.84, y: h * 0.75},  // House 9
+        {x: w * 0.72, y: h * 0.5},   // House 10
+        {x: w * 0.84, y: h * 0.25},  // House 11
+        {x: w * 0.75, y: h * 0.16},  // House 12
+      ];
+
+      const signNumberCoords = [
+        {x: w * 0.5, y: h * 0.38},
+        {x: w * 0.33, y: h * 0.22},
+        {x: w * 0.22, y: h * 0.33},
+        {x: w * 0.38, y: h * 0.5},
+        {x: w * 0.22, y: h * 0.67},
+        {x: w * 0.33, y: h * 0.78},
+        {x: w * 0.5, y: h * 0.62},
+        {x: w * 0.67, y: h * 0.78},
+        {x: w * 0.78, y: h * 0.67},
+        {x: w * 0.62, y: h * 0.5},
+        {x: w * 0.78, y: h * 0.33},
+        {x: w * 0.67, y: h * 0.22},
+      ];
+
+      // Draw Sign Numbers (1 to 12)
+      ctx.fillStyle = '#E8C879';
+      ctx.font = 'bold 12px sans-serif';
+      ctx.textAlign = 'center';
+
+      for (let i = 0; i < 12; i++) {
+        const signVal = i + 1; // Always Aries Ascendant style
+        ctx.fillText(signVal.toString(), signNumberCoords[i].x, signNumberCoords[i].y);
+      }
+
+      // Draw Planets grouped by House
+      const housePlanets = Array.from({length: 13}, () => []);
+      cachedPlacementsList.forEach(p => {
+        if (p.name === 'Lagna') return;
+        const houseIdx = ((p.sign - cachedPlacementsList[0].sign + 12) % 12) + 1;
+        const short = p.name.substring(0, 2);
+        housePlanets[houseIdx].push(short);
+      });
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '10px sans-serif';
+      for (let h = 1; h <= 12; h++) {
+        const text = housePlanets[h].join(" ");
+        ctx.fillText(text, houseCenters[h-1].x, houseCenters[h-1].y);
+      }
+    }
+
+    function generateLalKitabReport() {
+      // 1. Auto-fill master details if placements are not generated yet
+      if (!cachedPlacementsList || cachedPlacementsList.length === 0) {
+        autoFillKundliFromOnboarding();
+      }
+      
+      // Draw the Lal Kitab Teva chart
+      drawLalKitabChart();
+
+      if (!cachedPlacementsList || cachedPlacementsList.length === 0) return;
+
+      // Extract Mars & Mercury houses
+      const mars = cachedPlacementsList.find(p => p.name === 'Mars');
+      const marsHouse = mars ? ((mars.sign - cachedPlacementsList[0].sign + 12) % 12) + 1 : 1;
+
+      const mercury = cachedPlacementsList.find(p => p.name === 'Mercury');
+      const mercuryHouse = mercury ? ((mercury.sign - cachedPlacementsList[0].sign + 12) % 12) + 1 : 1;
+
+      const jupiter = cachedPlacementsList.find(p => p.name === 'Jupiter');
+      const jupHouse = jupiter ? ((jupiter.sign - cachedPlacementsList[0].sign + 12) % 12) + 1 : 1;
+
+      const userName = localStorage.getItem('user_name') || 'Seeker';
+
+      // 2. Mangal (Mars) Data Map (Houses 1-12)
+      const mangalData = {
+        1: {
+          status: 'Mangal Nek (Benefic Mars) | मंगल नेक (शुभ मंगल)',
+          en: 'You possess a courageous and protective nature (Mangal Nek). Your energy is highly suited for leadership, initiating ventures, and supporting siblings. You are bold, proactive, and resilient against challenges.',
+          hi: 'आपके पास एक साहसी और सुरक्षात्मक स्वभाव है (मंगल नेक)। आपकी ऊर्जा नेतृत्व करने, नए उद्यम शुरू करने और भाई-बहनों का समर्थन करने के लिए अत्यधिक उपयुक्त है। आप चुनौतियों के प्रति साहसी और सक्रिय हैं।'
+        },
+        2: {
+          status: 'Mangal Nek (Benefic Mars) | मंगल नेक (शुभ मंगल)',
+          en: 'Mars in the 2nd house directs your drive towards wealth accumulation and family support. Keep your speech pleasant and avoid using harsh words under anger to unlock financial abundance.',
+          hi: 'द्वितीय भाव में मंगल आपकी ऊर्जा को धन संचय और पारिवारिक सहायता की ओर निर्देशित करता है। आर्थिक प्रचुरता प्राप्त करने के लिए अपनी वाणी को मधुर रखें और क्रोध में कठोर शब्दों के प्रयोग से बचें।'
+        },
+        3: {
+          status: 'Mangal Nek (Benefic Mars) | मंगल नेक (शुभ मंगल)',
+          en: 'Tremendous courage and strong support from brothers/siblings. You are excellent at hands-on tasks and short travels bring good luck. Avoid disputes with neighbors.',
+          hi: 'अद्भुत साहस और भाइयों/बहनों का मजबूत समर्थन। आप व्यावहारिक कार्यों में उत्कृष्ट हैं और छोटी यात्राएं अच्छा भाग्य लाती हैं। पड़ोसियों के साथ विवादों से बचें।'
+        },
+        4: {
+          status: 'Mangal Bad (Malefic / Mangal Dosha) | मंगल बद (मांगलिक दोष)',
+          en: 'Mars in 4th indicates domestic friction or emotional swings (Mangal Bad). Guard against aggressive behavior inside the house. Remedy: Keep a cup of water at your bedside at night and pour it into a plant in the morning.',
+          hi: 'चतुर्थ भाव में मंगल पारिवारिक तनाव या भावनात्मक उतार-चढ़ाव का संकेत देता है (मंगल बद)। घर के भीतर आक्रामक व्यवहार से बचें। उपाय: रात में अपने सिरहाने एक गिलास पानी रखें और सुबह उसे किसी पौधे में डाल दें।'
+        },
+        5: {
+          status: 'Mangal Neutral | मंगल संतुलित',
+          en: 'Mars here gives sharp intellect but also sudden anger. Avoid speculative gambling. Keep your moral character pure to protect your children and personal health.',
+          hi: 'यहाँ मंगल तीव्र बुद्धि देता है लेकिन अचानक क्रोध भी दिलाता है। सट्टा जुए से बचें। अपने बच्चों और व्यक्तिगत स्वास्थ्य की रक्षा के लिए अपने नैतिक चरित्र को शुद्ध रखें।'
+        },
+        6: {
+          status: 'Mangal Nek (Benefic Mars) | मंगल नेक (शुभ मंगल)',
+          en: 'Excellent position to conquer debts, diseases, and competitors. You excel in services and administrative roles. Challenges serve as fuel for your career growth.',
+          hi: 'ऋण, रोगों और प्रतिस्पर्धियों पर विजय पाने के लिए उत्कृष्ट स्थिति। आप सेवाओं और प्रशासनिक भूमिकाओं में उत्कृष्टता प्राप्त करते हैं। चुनौतियाँ आपके करियर के विकास के लिए ईंधन का काम करती हैं।'
+        },
+        7: {
+          status: 'Mangal Bad (Mangal Dosha) | मंगल बद (मांगलिक दोष)',
+          en: 'Indicates intense energies affecting partnership and marriage harmony. Remedy: Always keep a solid silver ball (made of pure silver) in your wallet or pocket to calm Mars.',
+          hi: 'साझेदारी और विवाह सद्भाव को प्रभावित करने वाली तीव्र ऊर्जा का संकेत देता है। उपाय: मंगल को शांत करने के लिए अपने बटुए या जेब में हमेशा एक ठोस चांदी की गोली (शुद्ध चांदी की बनी) रखें।'
+        },
+        8: {
+          status: 'Mangal Bad (Mangal Dosha) | मंगल बद (मांगलिक दोष)',
+          en: 'Sudden financial swings or health vulnerability. Avoid taking heavy debts or loans. Remedy: Bury sweet honey inside a small clay pot in a quiet, isolated place.',
+          hi: 'अचानक वित्तीय उतार-चढ़ाव या स्वास्थ्य संवेदनशीलता। भारी कर्ज या ऋण लेने से बचें। उपाय: सुनसान जगह पर मिट्टी के छोटे बर्तन में मीठा शहद भरकर भूमि में दबाएं।'
+        },
+        9: {
+          status: 'Mangal Nek (Benefic Mars) | मंगल नेक (शुभ मंगल)',
+          en: 'Fortune rises with spiritual practice and guidance from your father or mentor. Noble efforts are rewarded quickly. A very lucky placement for long travels.',
+          hi: 'आध्यात्मिक साधना और अपने पिता या गुरु के मार्गदर्शन से भाग्य उदय होता है। नेक प्रयासों का फल शीघ्र मिलता है। लंबी यात्राओं के लिए बहुत भाग्यशाली स्थिति।'
+        },
+        10: {
+          status: 'Mangal Nek (Exalted Placement) | मंगल नेक (उच्च स्थिति)',
+          en: 'Highly powerful placement (exaltation house for Mars). Executive power, victory in administration, military-like discipline, and supreme professional success. You will rise to a commanding post.',
+          hi: 'अत्यधिक शक्तिशाली स्थिति (मंगल के लिए उच्च का घर)। प्रशासनिक शक्ति, प्रशासन में विजय, सैन्य अनुशासन और सर्वोच्च व्यावसायिक सफलता। आप एक कमांडिंग पद पर पहुंचेंगे।'
+        },
+        11: {
+          status: 'Mangal Nek (Benefic Mars) | मंगल नेक (शुभ मंगल)',
+          en: 'Multiple sources of income, robust network circle. Never give false testimonies or do injustice, as that will instantly turn Mars malefic.',
+          hi: 'आय के कई स्रोत, मजबूत नेटवर्क चक्र। कभी भी झूठी गवाही न दें या अन्याय न करें, क्योंकि इससे मंगल तुरंत अशुभ हो सकता है।'
+        },
+        12: {
+          status: 'Mangal Bad (Mangal Dosha) | मंगल बद (मांगलिक दोष)',
+          en: 'High expenditure or sleep disturbances due to active subconscious energies. Remedy: Keep a small pouch of sweet fennel seeds (saunf) under your pillow for restful sleep and to align Mars.',
+          hi: 'सक्रिय अवचेतन ऊर्जाओं के कारण उच्च खर्च या नींद में खलल। उपाय: शांतिपूर्ण नींद और मंगल को संरेखित करने के लिए अपने तकिये के नीचे मीठी सौंफ की एक छोटी थैली रखें।'
+        }
+      };
+
+      // 3. Budh (Mercury) Data Map (Houses 1-12)
+      const budhData = {
+        1: {
+          status: 'Budh Nek (Benefic Mercury) | बुध नेक (शुभ बुध)',
+          en: 'Sharp intellect, humorous, and highly adaptable. Excellent for communication, writing, and analytical tasks. Your quick wit is your primary strength.',
+          hi: 'तीव्र बुद्धि, विनोदी और अत्यधिक अनुकूलनशील। संचार, लेखन और विश्लेषणात्मक कार्यों के लिए उत्कृष्ट। आपकी त्वरित हाजिरजवाबी आपकी प्राथमिक ताकत है।'
+        },
+        2: {
+          status: 'Budh Nek (Benefic Mercury) | बुध नेक (शुभ बुध)',
+          en: 'Magnetic and pleasant voice. Gifted with business intelligence and verbal persuasion skills. Best suited for consultation, advisory, or sales roles.',
+          hi: 'चुंबकीय और सुखद आवाज। व्यावसायिक समझ और मौखिक अनुनय कौशल का उपहार। परामर्श, सलाहकार या बिक्री भूमिकाओं के लिए सर्वोत्तम उपयुक्त।'
+        },
+        3: {
+          status: 'Budh Bad (Budh Manda) | बुध बद (मंद बुध)',
+          en: 'Prone to mental anxiety, restlessness, or useless gossiping. Remedy: Avoid writing aggressive remarks or signing documents without thorough verification.',
+          hi: 'मानसिक चिंता, बेचैनी या बेकार गपशप की संभावना। उपाय: आक्रामक टिप्पणियां लिखने या पूरी जांच के बिना दस्तावेजों पर हस्ताक्षर करने से बचें।'
+        },
+        4: {
+          status: 'Budh Nek (Benefic Mercury) | बुध नेक (शुभ बुध)',
+          en: 'Calm mind and intellectual peace. Excellent support from maternal uncle and mother. Good for vehicle comforts and domestic happiness.',
+          hi: 'शांत मन और बौद्धिक शांति। मामा और माता से उत्कृष्ट सहयोग। वाहन सुख और घरेलू सुख के लिए अच्छा।'
+        },
+        5: {
+          status: 'Budh Nek (Benefic Mercury) | बुध नेक (शुभ बुध)',
+          en: 'Deep researcher, creative thinker, and excellent retentive memory. Favorable for academic excellence, publications, and strategic planning.',
+          hi: 'गहरे शोधकर्ता, रचनात्मक विचारक और उत्कृष्ट स्मृति। शैक्षणिक उत्कृष्टता, प्रकाशनों और रणनीतिक योजना के लिए अनुकूल।'
+        },
+        6: {
+          status: 'Budh Bad (Budh Manda) | बुध बद (मंद बुध)',
+          en: 'Logical conflicts or nervous sensitivity. Remedy: Drink water from a silver glass daily to calm Mercury and soothe the nervous system.',
+          hi: 'तार्किक संघर्ष या तंत्रिका संवेदनशीलता। उपाय: बुध को शांत करने और तंत्रिका तंत्र को शांत करने के लिए प्रतिदिन चांदी के गिलास से पानी पिएं।'
+        },
+        7: {
+          status: 'Budh Nek (Benefic Mercury) | बुध नेक (शुभ बुध)',
+          en: 'Highly beneficial for business partnerships, trading, and diplomatic transactions. Speaks pleasant words that win hearts.',
+          hi: 'व्यापारिक साझेदारी, व्यापार और राजनयिक लेनदेन के लिए अत्यधिक लाभकारी। दिल जीतने वाले मधुर वचनों का प्रयोग करते हैं।'
+        },
+        8: {
+          status: 'Budh Bad (Budh Manda) | बुध बद (मंद बुध)',
+          en: 'Sudden blocks in communication, electronics failure, or financial delays. Remedy: Avoid purchasing electronic items on Wednesdays. Keep your promises.',
+          hi: 'संचार में अचानक रुकावट, इलेक्ट्रॉनिक्स की विफलता, या वित्तीय देरी। उपाय: बुधवार को इलेक्ट्रॉनिक सामान खरीदने से बचें। अपने वादों को पूरा करें।'
+        },
+        9: {
+          status: 'Budh Nek (Benefic Mercury) | बुध नेक (शुभ बुध)',
+          en: 'High wisdom. Higher learning and business travel will bring immense wealth and status. Always show deep respect to spiritual mentors.',
+          hi: 'उच्च ज्ञान। उच्च शिक्षा और व्यावसायिक यात्रा से अपार धन और प्रतिष्ठा प्राप्त होगी। आध्यात्मिक गुरुओं के प्रति हमेशा गहरा सम्मान दिखाएं।'
+        },
+        10: {
+          status: 'Budh Nek (Benefic Mercury) | बुध नेक (शुभ बुध)',
+          en: 'Highly successful in commercial planning, analytics, and trade. Good diplomacy brings quick professional growth and corporate heights.',
+          hi: 'व्यावसायिक योजना, विश्लेषण और व्यापार में अत्यधिक सफल। अच्छी कूटनीति त्वरित व्यावसायिक विकास और कॉर्पोरेट ऊंचाइयों को लाती है।'
+        },
+        11: {
+          status: 'Budh Nek (Benefic Mercury) | बुध नेक (शुभ बुध)',
+          en: 'Clever financial strategies and wide networks of friends. Multiple channels of active gains. Ensure to keep sister/daughter relations harmonious.',
+          hi: 'चतुर वित्तीय रणनीतियाँ और मित्रों का विस्तृत नेटवर्क। सक्रिय लाभ के कई चैनल। बहन/बेटी के संबंधों को सौहार्दपूर्ण बनाए रखना सुनिश्चित करें।'
+        },
+        12: {
+          status: 'Budh Bad (Budh Manda) | बुध बद (मंद बुध)',
+          en: 'High expenditure or sleep disturbances due to overthinking. Remedy: Feed green grass to cows or birds on Wednesdays to neutralize Mercury afflictions.',
+          hi: 'अत्यधिक सोचने के कारण उच्च खर्च या नींद में खलल। उपाय: बुध के कष्टों को दूर करने के लिए बुधवार को गायों या पक्षियों को हरी घास खिलाएं।'
+        }
+      };
+
+      // 4. Special Teva Classification Logic
+      let tevaType = 'Normal';
+      if ([1, 5, 9, 10].includes(jupHouse)) {
+        tevaType = 'Dharmi';
+      } else if (marsHouse === 10 && mercuryHouse === 3) {
+        tevaType = 'Andha';
+      }
+
+      const tevaData = {
+        Dharmi: {
+          title: 'Dharmi Teva (Righteous/Protected Chart) | धर्मी तेवा (सुरक्षित कुंडली)',
+          en: 'Your chart is classified as a Dharmi Teva. This means you have strong protective spiritual shields. Even in times of major planetary crises, divine help will arrive automatically to save you. Focus on righteousness.',
+          hi: 'आपकी कुंडली को धर्मी तेवा के रूप में वर्गीकृत किया गया है। इसका मतलब है कि आपके पास मजबूत सुरक्षात्मक आध्यात्मिक ढाल है। बड़े ग्रहों के संकट के समय में भी, आपको बचाने के लिए ईश्वरीय सहायता स्वतः आएगी। धर्म पर ध्यान दें।'
+        },
+        Andha: {
+          title: 'Andha Teva (Blind Chart) | अंधा तेवा (अंधी कुंडली)',
+          en: 'Your chart shows signs of Andha Teva (Blind Chart), suggesting potential sudden career blindspots. Remedy: Always consult trusted family elders or experts before making high-risk investments or career leaps.',
+          hi: 'आपकी कुंडली अंधा तेवा (अंधी कुंडली) के संकेत दिखाती है, जो करियर में अचानक होने वाली गलतियों का सुझाव देती है। उपाय: बड़े वित्तीय निवेश या करियर में बदलाव से पहले हमेशा भरोसेमंद परिवार के बुजुर्गों या विशेषज्ञों से सलाह लें।'
+        },
+        Normal: {
+          title: 'Saadharan Teva (Balanced Chart) | साधारण तेवा (संतुलित कुंडली)',
+          en: 'Your chart is a Saadharan Teva (Balanced Chart). Your progress is directly shaped by your Karma, active goals, and personal efforts. Continuous remedies for Mars and Mercury will keep your path energized.',
+          hi: 'आपकी कुंडली एक साधारण तेवा (संतुलित कुंडली) है। आपकी प्रगति सीधे आपके कर्म, सक्रिय लक्ष्यों और व्यक्तिगत प्रयासों से आकार लेती है। मंगल और बुध के निरंतर उपाय आपके पथ को ऊर्जावान बनाए रखेंगे।'
+        }
+      };
+
+      // 5. Populate HTML dynamically based on Mars and Mercury placements
+      const mInfo = mangalData[marsHouse];
+      const bInfo = budhData[mercuryHouse];
+      const tInfo = tevaData[tevaType];
+
+      // Mangal HTML
+      document.getElementById('lk-mangal-details').innerHTML = `
+        <div style="background: rgba(255, 107, 107, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #ff6b6b; margin-bottom: 10px;">
+          <strong>Status:</strong> ${mInfo.status} (House ${marsHouse})
+        </div>
+        <p class="k-lbl-en">${mInfo.en}</p>
+        <p class="k-lbl-hi" style="display:none;">${mInfo.hi}</p>
+      `;
+
+      // Budh HTML
+      document.getElementById('lk-budh-details').innerHTML = `
+        <div style="background: rgba(93, 173, 226, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #5dade2; margin-bottom: 10px;">
+          <strong>Status:</strong> ${bInfo.status} (House ${mercuryHouse})
+        </div>
+        <p class="k-lbl-en">${bInfo.en}</p>
+        <p class="k-lbl-hi" style="display:none;">${bInfo.hi}</p>
+      `;
+
+      // Teva HTML
+      document.getElementById('lk-teva-details').innerHTML = `
+        <div style="background: rgba(195, 155, 211, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #c39bd3; margin-bottom: 10px;">
+          <strong>Type:</strong> ${tInfo.title}
+        </div>
+        <p class="k-lbl-en">${tInfo.en}</p>
+        <p class="k-lbl-hi" style="display:none;">${tInfo.hi}</p>
+      `;
+
+      // Remedies HTML
+      const isMangalBad = mInfo.status.includes('Mangal Bad') || mInfo.status.includes('मांगलिक दोष');
+      const isBudhBad = bInfo.status.includes('Budh Bad') || bInfo.status.includes('मंद बुध');
+
+      const remediesEn = [
+        `Perform Surya Namaskar (Sun Salutation) in the morning and offer sweet food to birds daily.`,
+        isMangalBad ? `Keep a solid silver ball (pure silver) in your pocket or wallet at all times.` : `Donate sweet tandoori roti (sweet wheat bread) to stray dogs on Tuesdays.`,
+        isBudhBad ? `Drink pure water out of a silver glass/cup daily to strengthen Mercury.` : `Keep a copper coin with a central hole in your pocket or wear it in a thread.`,
+        `Always respect your mother and sister, and maintain a high moral character for continuous prosperity.`
+      ];
+
+      const remediesHi = [
+        `सुबह सूर्य नमस्कार करें और प्रतिदिन पक्षियों को मीठा भोजन खिलाएं।`,
+        isMangalBad ? `हर समय अपनी जेब या बटुए में एक ठोस चांदी की गोली (शुद्ध चांदी) रखें।` : `मंगलवार को आवारा कुत्तों को मीठी तंदूरी रोटी खिलाएं।`,
+        isBudhBad ? `बुध को मजबूत करने के लिए प्रतिदिन चांदी के गिलास से शुद्ध पानी पिएं।` : `अपनी जेब में छेद वाला तांबे का सिक्का रखें या इसे गले में धारण करें।`,
+        `निरंतर समृद्धि के लिए हमेशा अपनी माता और बहन का सम्मान करें और उच्च नैतिक चरित्र बनाए रखें।`
+      ];
+
+      document.getElementById('lk-remedies-details').innerHTML = `
+        <ul style="margin: 0; padding-left: 18px;">
+          ${remediesEn.map((r, i) => `
+            <li class="k-lbl-en" style="margin-bottom: 6px;">${r}</li>
+            <li class="k-lbl-hi" style="display:none; margin-bottom: 6px;">${remediesHi[i]}</li>
+          `).join('')}
+        </ul>
+      `;
+
+      // Refresh language visibility
+      setKundliLang(currentAppLang);
+    }
+
+    function drawChart() {
       const activePlacements = getActiveChartPlacements();
       if (!activePlacements || activePlacements.length === 0) return;
       const canvas = document.getElementById('chartCanvas');
