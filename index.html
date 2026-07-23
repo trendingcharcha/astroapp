@@ -4799,6 +4799,17 @@
       questsState[category] = isChecked;
       localStorage.setItem('user_quests_state', JSON.stringify(questsState));
       
+      // --- FIX: Save per-day task state to karma_daily_roadmap_history ---
+      const categoryOrder = ['vedic', 'lalkitab', 'vastu', 'practical'];
+      const roadmapHistory = JSON.parse(localStorage.getItem('karma_daily_roadmap_history') || '{}');
+      const dayNum = (typeof selectedRoadmapDay !== 'undefined') ? selectedRoadmapDay : 1;
+      const dayState = roadmapHistory[dayNum] || [false, false, false, false];
+      const catIdx = categoryOrder.indexOf(category);
+      if (catIdx !== -1) dayState[catIdx] = isChecked;
+      roadmapHistory[dayNum] = dayState;
+      localStorage.setItem('karma_daily_roadmap_history', JSON.stringify(roadmapHistory));
+      // --- END FIX ---
+
       const xpValues = {
         "vedic": 20,
         "lalkitab": 15,
@@ -4858,11 +4869,14 @@
     }
 
     function updateQuestCompletionCount() {
-      let count = 0;
-      for (const k in questsState) {
-        if (questsState[k]) count++;
-      }
-      document.getElementById('quests-completed-count').innerText = `${count} / 4 Complete`;
+      // Read completion count from per-day karma_daily_roadmap_history
+      // so it stays accurate as the user navigates between days
+      const roadmapHistory = JSON.parse(localStorage.getItem('karma_daily_roadmap_history') || '{}');
+      const dayNum = (typeof selectedRoadmapDay !== 'undefined') ? selectedRoadmapDay : 1;
+      const dayState = roadmapHistory[dayNum] || [false, false, false, false];
+      const count = dayState.filter(Boolean).length;
+      const el = document.getElementById('quests-completed-count');
+      if (el) el.innerText = `${count} / 4 Complete`;
     }
 
     function goToCoachTab() {
@@ -6293,16 +6307,11 @@
         if (vaText && document.getElementById('q-vastu-text')) document.getElementById('q-vastu-text').innerHTML = formatQuestHTML(vaText);
         if (pText && document.getElementById('q-practical-text')) document.getElementById('q-practical-text').innerHTML = formatQuestHTML(pText);
 
-        if (document.getElementById('q-vedic')) document.getElementById('q-vedic').checked = questsState.vedic;
-        if (document.getElementById('q-lalkitab')) document.getElementById('q-lalkitab').checked = questsState.lalkitab;
-        if (document.getElementById('q-vastu')) document.getElementById('q-vastu').checked = questsState.vastu;
-        if (document.getElementById('q-practical')) document.getElementById('q-practical').checked = questsState.practical;
-
-        if (questsState.vedic && document.getElementById('q-vedic-card')) document.getElementById('q-vedic-card').classList.add('completed');
-        if (questsState.lalkitab && document.getElementById('q-lalkitab-card')) document.getElementById('q-lalkitab-card').classList.add('completed');
-        if (questsState.vastu && document.getElementById('q-vastu-card')) document.getElementById('q-vastu-card').classList.add('completed');
-        if (questsState.practical && document.getElementById('q-practical-card')) document.getElementById('q-practical-card').classList.add('completed');
-
+        // NOTE: Checkbox state is intentionally NOT restored from the global questsState here.
+        // renderRoadmapDayTasks() is called right below (line ~6310) and correctly
+        // restores per-day checkbox states from karma_daily_roadmap_history.
+        // Setting checkboxes here from questsState caused the "one tick for all" bug
+        // where Day 3 showed a single checked state for all tasks on first load.
         updateQuestCompletionCount();
       }
 
