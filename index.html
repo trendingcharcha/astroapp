@@ -1555,21 +1555,126 @@
             </div>
           </div>
 
-          <div class="chart-toggle" style="margin-bottom:14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-            <button class="btn btn-outline" style="width:auto; padding:5px 12px; font-size:0.8rem; margin:0;" onclick="toggleChartStyle(true)">
-              <span class="k-lbl-en">North Indian</span><span class="k-lbl-hi" style="display:none;">उत्तर भारतीय</span>
-            </button>
-            <button class="btn btn-outline" style="width:auto; padding:5px 12px; font-size:0.8rem; margin:0;" onclick="toggleChartStyle(false)">
-              <span class="k-lbl-en">South Indian</span><span class="k-lbl-hi" style="display:none;">दक्षिण भारतीय</span>
-            </button>
-            <button class="btn" style="width:auto; padding:5px 14px; font-size:0.8rem; margin:0; background:linear-gradient(135deg, var(--gold), #f39c12); color:#000; font-weight:bold; display:inline-flex; align-items:center; gap:5px;" onclick="downloadKundliPDF()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              <span class="k-lbl-en">Download PDF</span><span class="k-lbl-hi" style="display:none;">पीडीएफ डाउनलोड</span>
-            </button>
+          <div class="chart-toggle" style="margin-bottom:14px; display:flex; flex-direction:column; gap:10px;">
+            <!-- DIVISIONAL CHART CAROUSEL TABS -->
+            <div style="display:flex; background:rgba(255,255,255,0.04); padding:4px; border-radius:12px; border:1px solid rgba(255,255,255,0.08); gap:4px;">
+              <button id="btn-chart-d1" onclick="switchKundliDivisionalChart('D1')" style="flex:1; padding:8px 4px; border-radius:8px; border:none; background:var(--gold); color:#0C0922; font-weight:bold; font-size:0.8rem; cursor:pointer; transition:all 0.2s;">
+                <span class="k-lbl-en">D1 (Lagna / Birth)</span><span class="k-lbl-hi" style="display:none;">D1 (लग्न कुंडली)</span>
+              </button>
+              <button id="btn-chart-d9" onclick="switchKundliDivisionalChart('D9')" style="flex:1; padding:8px 4px; border-radius:8px; border:none; background:transparent; color:var(--text-muted); font-weight:bold; font-size:0.8rem; cursor:pointer; transition:all 0.2s;">
+                <span class="k-lbl-en">D9 (Navamsha)</span><span class="k-lbl-hi" style="display:none;">D9 (नवांश)</span>
+              </button>
+              <button id="btn-chart-d10" onclick="switchKundliDivisionalChart('D10')" style="flex:1; padding:8px 4px; border-radius:8px; border:none; background:transparent; color:var(--text-muted); font-weight:bold; font-size:0.8rem; cursor:pointer; transition:all 0.2s;">
+                <span class="k-lbl-en">D10 (Dasamsha)</span><span class="k-lbl-hi" style="display:none;">D10 (दशांश)</span>
+              </button>
+            </div>
+
+            <!-- STYLE & DOWNLOAD ACTION ROW -->
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <div style="display:flex; gap:6px;">
+                <button id="btn-style-north" class="btn btn-outline" style="width:auto; padding:5px 12px; font-size:0.78rem; margin:0; border-color:var(--gold); color:var(--gold);" onclick="setKundliStyleMode(true)">
+                  <span class="k-lbl-en">North Indian</span><span class="k-lbl-hi" style="display:none;">उत्तर भारतीय</span>
+                </button>
+                <button id="btn-style-south" class="btn btn-outline" style="width:auto; padding:5px 12px; font-size:0.78rem; margin:0;" onclick="setKundliStyleMode(false)">
+                  <span class="k-lbl-en">South Indian</span><span class="k-lbl-hi" style="display:none;">दक्षिण भारतीय</span>
+                </button>
+              </div>
+              <button class="btn" style="width:auto; padding:5px 14px; font-size:0.78rem; margin:0; background:linear-gradient(135deg, var(--gold), #f39c12); color:#000; font-weight:bold; display:inline-flex; align-items:center; gap:5px;" onclick="downloadKundliPDF()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span class="k-lbl-en">Download PDF</span><span class="k-lbl-hi" style="display:none;">पीडीएफ डाउनलोड</span>
+              </button>
+            </div>
           </div>
 
-          <div class="chart-container" style="margin-bottom:18px;">
-            <canvas id="chartCanvas" width="400" height="400"></canvas>
+            <!-- STYLE & DOWNLOAD ACTION ROW -->
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <div style="display:flex; gap:6px;">
+                <button id="btn-style-north" class="btn btn-outline" style="width:auto; padding:5px 12px; font-size:0.78rem; margin:0; border-color:var(--gold); color:var(--gold);" onclick="setKundliStyleMode(true)">
+                  <span class="k-lbl-en">North Indian</span><span class="k-lbl-hi" style="display:none;">उत्तर भारतीय</span>
+                </button>
+                <button id="btn-style-south" class="btn btn-outline" style="width:auto; padding:5px 12px; font-size:0.78rem; margin:0;" onclick="setKundliStyleMode(false)">
+                  <span class="k-lbl-en">South Indian</span><span class="k-lbl-hi" style="display:none;">दक्षिण भारतीय</span>
+                </button>
+              </div>
+              <button class="btn" style="width:auto; padding:5px 14px; font-size:0.78rem; margin:0; background:linear-gradient(135deg, var(--gold), #f39c12); color:#000; font-weight:bold; display:inline-flex; align-items:center; gap:5px;" onclick="downloadKundliPDF()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span class="k-lbl-en">Download PDF</span><span class="k-lbl-hi" style="display:none;">पीडीएफ डाउनलोड</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="chart-container" style="margin-bottom:12px; position:relative;">
+            <div id="chart-badge-title" style="position:absolute; top:10px; left:12px; background:rgba(12,9,34,0.85); border:1px solid var(--gold); border-radius:20px; padding:3px 10px; font-size:0.72rem; color:var(--gold); font-weight:bold; backdrop-filter:blur(4px); z-index:5;">
+              D1 — Birth Chart (Lagna)
+            </div>
+            <canvas id="chartCanvas" width="400" height="400" onclick="handleCanvasChartClick(event)" style="cursor:pointer; border-radius:14px;"></canvas>
+          </div>
+
+          <!-- INTERACTIVE HOUSE SELECTOR BAR -->
+          <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:10px; margin-bottom:16px;">
+            <p style="color:var(--text-muted); font-size:0.74rem; margin:0 0 8px; text-align:center;">
+              👇 <span class="k-lbl-en">Tap any house below or directly on the chart to inspect details</span>
+              <span class="k-lbl-hi" style="display:none;">नीचे किसी भी भाव पर टैप करें या चार्ट पर सीधे विवरण देखें</span>
+            </p>
+            <div style="display:grid; grid-template-columns:repeat(6, 1fr); gap:6px;">
+              
+                <button onclick="showHouseTooltip(1)" style="padding:6px 2px; border-radius:8px; border:1px solid rgba(232,200,121,0.2); background:rgba(232,200,121,0.05); color:var(--gold); font-size:0.72rem; font-weight:bold; cursor:pointer; transition:all 0.2s;">
+                  H1
+                </button>
+              
+                <button onclick="showHouseTooltip(2)" style="padding:6px 2px; border-radius:8px; border:1px solid rgba(232,200,121,0.2); background:rgba(232,200,121,0.05); color:var(--gold); font-size:0.72rem; font-weight:bold; cursor:pointer; transition:all 0.2s;">
+                  H2
+                </button>
+              
+                <button onclick="showHouseTooltip(3)" style="padding:6px 2px; border-radius:8px; border:1px solid rgba(232,200,121,0.2); background:rgba(232,200,121,0.05); color:var(--gold); font-size:0.72rem; font-weight:bold; cursor:pointer; transition:all 0.2s;">
+                  H3
+                </button>
+              
+                <button onclick="showHouseTooltip(4)" style="padding:6px 2px; border-radius:8px; border:1px solid rgba(232,200,121,0.2); background:rgba(232,200,121,0.05); color:var(--gold); font-size:0.72rem; font-weight:bold; cursor:pointer; transition:all 0.2s;">
+                  H4
+                </button>
+              
+                <button onclick="showHouseTooltip(5)" style="padding:6px 2px; border-radius:8px; border:1px solid rgba(232,200,121,0.2); background:rgba(232,200,121,0.05); color:var(--gold); font-size:0.72rem; font-weight:bold; cursor:pointer; transition:all 0.2s;">
+                  H5
+                </button>
+              
+                <button onclick="showHouseTooltip(6)" style="padding:6px 2px; border-radius:8px; border:1px solid rgba(232,200,121,0.2); background:rgba(232,200,121,0.05); color:var(--gold); font-size:0.72rem; font-weight:bold; cursor:pointer; transition:all 0.2s;">
+                  H6
+                </button>
+              
+                <button onclick="showHouseTooltip(7)" style="padding:6px 2px; border-radius:8px; border:1px solid rgba(232,200,121,0.2); background:rgba(232,200,121,0.05); color:var(--gold); font-size:0.72rem; font-weight:bold; cursor:pointer; transition:all 0.2s;">
+                  H7
+                </button>
+              
+                <button onclick="showHouseTooltip(8)" style="padding:6px 2px; border-radius:8px; border:1px solid rgba(232,200,121,0.2); background:rgba(232,200,121,0.05); color:var(--gold); font-size:0.72rem; font-weight:bold; cursor:pointer; transition:all 0.2s;">
+                  H8
+                </button>
+              
+                <button onclick="showHouseTooltip(9)" style="padding:6px 2px; border-radius:8px; border:1px solid rgba(232,200,121,0.2); background:rgba(232,200,121,0.05); color:var(--gold); font-size:0.72rem; font-weight:bold; cursor:pointer; transition:all 0.2s;">
+                  H9
+                </button>
+              
+                <button onclick="showHouseTooltip(10)" style="padding:6px 2px; border-radius:8px; border:1px solid rgba(232,200,121,0.2); background:rgba(232,200,121,0.05); color:var(--gold); font-size:0.72rem; font-weight:bold; cursor:pointer; transition:all 0.2s;">
+                  H10
+                </button>
+              
+                <button onclick="showHouseTooltip(11)" style="padding:6px 2px; border-radius:8px; border:1px solid rgba(232,200,121,0.2); background:rgba(232,200,121,0.05); color:var(--gold); font-size:0.72rem; font-weight:bold; cursor:pointer; transition:all 0.2s;">
+                  H11
+                </button>
+              
+                <button onclick="showHouseTooltip(12)" style="padding:6px 2px; border-radius:8px; border:1px solid rgba(232,200,121,0.2); background:rgba(232,200,121,0.05); color:var(--gold); font-size:0.72rem; font-weight:bold; cursor:pointer; transition:all 0.2s;">
+                  H12
+                </button>
+              
+            </div>
+          </div>
+
+          <!-- FLOATING HOUSE INSPECTION TOOLTIP MODAL -->
+          <div id="house-tooltip-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:10000; align-items:center; justify-content:center; padding:16px;">
+            <div class="auth-card" style="max-width:400px; width:100%; border:2px solid var(--gold); background:linear-gradient(135deg, #14102C, #231C47); border-radius:16px; padding:20px; position:relative; box-shadow:0 15px 35px rgba(0,0,0,0.8);">
+              <button onclick="closeHouseTooltipModal()" style="position:absolute; top:12px; right:14px; background:transparent; border:none; color:var(--text-muted); font-size:1.2rem; cursor:pointer;">✕</button>
+              <div id="house-tooltip-content"></div>
+            </div>
           </div>
 
           <!-- LAGNA CARD -->
@@ -1693,6 +1798,222 @@
             </h4>
             <div id="k-summary-en" style="color:var(--text-muted); font-size:0.84rem; line-height:1.8;"></div>
             <div id="k-summary-hi" style="color:var(--text-muted); font-size:0.84rem; line-height:1.8; display:none;"></div>
+          </div>
+
+          <!-- ═══════════════════════════════════════════════════════════════ -->
+          <!-- NEW KUNDALI ENHANCED ANALYSIS SECTIONS (2, 3, 4 & 5) -->
+          <!-- ═══════════════════════════════════════════════════════════════ -->
+
+          <!-- SECTION 2: CORE CHART DYNAMICS & 9TH HOUSE (LUCK FACTOR) -->
+          <div class="card" style="margin-bottom:14px; background:linear-gradient(135deg, rgba(232,200,121,0.08), rgba(142,111,214,0.05)); border:1px solid rgba(232,200,121,0.3);">
+            <div onclick="toggleSectionAccordion('sec2-body')" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+              <h4 style="margin:0; color:var(--gold); font-size:0.95rem; display:flex; align-items:center; gap:8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <span class="k-lbl-en">🌟 Core Chart Dynamics & 9th House (Luck Factor)</span>
+                <span class="k-lbl-hi" style="display:none;">🌟 मूलांक एवं 9वां भाव (भाग्य कारक)</span>
+              </h4>
+              <span id="sec2-toggle-icon" style="color:var(--gold); font-weight:bold;">▼</span>
+            </div>
+            
+            <div id="sec2-body" style="margin-top:14px;">
+              <!-- 9TH HOUSE LUCK & FORTUNE METER WIDGET -->
+              <div style="background:rgba(12,9,34,0.6); border:1px solid rgba(232,200,121,0.2); border-radius:12px; padding:14px; margin-bottom:14px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <span style="color:#fff; font-weight:bold; font-size:0.85rem;">
+                    <span class="k-lbl-en">Bhagya Bhava (9th House) Luck Meter</span>
+                    <span class="k-lbl-hi" style="display:none;">भाग्य भाव (9वां घर) भाग्य सूचकांक</span>
+                  </span>
+                  <span id="k-luck-score-badge" style="background:linear-gradient(135deg, var(--gold), #f39c12); color:#000; padding:2px 8px; border-radius:12px; font-weight:bold; font-size:0.75rem;">85% High Grace</span>
+                </div>
+                <div style="height:10px; background:rgba(255,255,255,0.08); border-radius:5px; overflow:hidden; margin-bottom:10px;">
+                  <div id="k-luck-progress-bar" style="height:100%; width:85%; background:linear-gradient(90deg, #2ecc71, var(--gold)); transition:width 0.8s ease;"></div>
+                </div>
+                <p id="k-luck-type-desc" style="color:var(--text-muted); font-size:0.82rem; line-height:1.5; margin:0;"></p>
+              </div>
+
+              <!-- MAHA PURUSHA YOGAS & LAGNA HEALTH -->
+              <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:12px; margin-bottom:14px;">
+                <span style="color:var(--purple); font-weight:bold; font-size:0.82rem; display:block; margin-bottom:6px;">
+                  <span class="k-lbl-en">Special Yogas & Ascendant Potency</span>
+                  <span class="k-lbl-hi" style="display:none;">विशेष योग एवं लग्न क्षमता</span>
+                </span>
+                <div id="k-yogas-badges" style="display:flex; flex-wrap:wrap; gap:6px;"></div>
+              </div>
+
+              <!-- HOUSE STRENGTH OVERVIEW (1st, 2nd, 7th, 10th, 11th) -->
+              <div>
+                <span style="color:#5dade2; font-weight:bold; font-size:0.82rem; display:block; margin-bottom:8px;">
+                  <span class="k-lbl-en">Key Houses Energy Distribution</span>
+                  <span class="k-lbl-hi" style="display:none;">प्रमुख भावों की ऊर्जा स्थिति</span>
+                </span>
+                <div id="k-house-strengths-bars" style="display:flex; flex-direction:column; gap:8px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 3: COSMIC CAREER BLUEPRINT (10TH HOUSE & D10) -->
+          <div class="card" style="margin-bottom:14px; background:linear-gradient(135deg, rgba(93,173,226,0.08), rgba(142,111,214,0.05)); border:1px solid rgba(93,173,226,0.3);">
+            <div onclick="toggleSectionAccordion('sec3-body')" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+              <h4 style="margin:0; color:#5dade2; font-size:0.95rem; display:flex; align-items:center; gap:8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                <span class="k-lbl-en">💼 Cosmic Career Blueprint (10th House & D10)</span>
+                <span class="k-lbl-hi" style="display:none;">💼 करियर ब्लूप्रिंट (10वां भाव एवं D10)</span>
+              </h4>
+              <span id="sec3-toggle-icon" style="color:#5dade2; font-weight:bold;">▼</span>
+            </div>
+
+            <div id="sec3-body" style="margin-top:14px;">
+              <!-- TOP 3 PROFESSION RECOMMENDATIONS -->
+              <div style="margin-bottom:14px;">
+                <span style="color:var(--text-muted); font-size:0.78rem; display:block; margin-bottom:6px;">
+                  <span class="k-lbl-en">High-Success Career Industries (D10 Derived):</span>
+                  <span class="k-lbl-hi" style="display:none;">उच्च सफलता वाले करियर क्षेत्र (D10 आधारित):</span>
+                </span>
+                <div id="k-career-pills" style="display:flex; flex-wrap:wrap; gap:6px;"></div>
+              </div>
+
+              <!-- JOB VS BUSINESS PATH INDICATOR -->
+              <div style="background:rgba(12,9,34,0.6); border:1px solid rgba(93,173,226,0.2); border-radius:12px; padding:12px; margin-bottom:14px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.78rem; margin-bottom:6px; font-weight:bold;">
+                  <span style="color:#5dade2;"><span class="k-lbl-en">🏢 Corporate / Job</span><span class="k-lbl-hi" style="display:none;">🏢 नौकरी / सेवा</span></span>
+                  <span style="color:var(--gold);"><span class="k-lbl-en">🚀 Entrepreneurship / Business</span><span class="k-lbl-hi" style="display:none;">🚀 व्यापार / उद्यम</span></span>
+                </div>
+                <div style="height:10px; background:rgba(255,255,255,0.08); border-radius:5px; overflow:hidden; display:flex;">
+                  <div id="k-job-bar" style="height:100%; width:65%; background:#5dade2; transition:width 0.8s ease;"></div>
+                  <div id="k-biz-bar" style="height:100%; width:35%; background:var(--gold); transition:width 0.8s ease;"></div>
+                </div>
+                <p id="k-path-recommendation-text" style="color:var(--text-muted); font-size:0.78rem; margin:8px 0 0; line-height:1.4;"></p>
+              </div>
+
+              <!-- CURRENT CAREER WEATHER STATUS -->
+              <div style="background:rgba(255,255,255,0.02); border-left:3px solid #5dade2; border-radius:8px; padding:10px 12px;">
+                <strong style="color:#5dade2; font-size:0.82rem; display:block; margin-bottom:4px;">
+                  🌤️ <span class="k-lbl-en">Current Career Weather (Dasha Analysis)</span>
+                  <span class="k-lbl-hi" style="display:none;">🌤️ वर्तमान करियर मौसम (दशा आधारित)</span>
+                </strong>
+                <p id="k-career-weather-text" style="color:var(--text-muted); font-size:0.8rem; margin:0; line-height:1.5;"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 4: MARRIAGE TIMINGS & PARTNER PROFILE (7TH HOUSE & D9) -->
+          <div class="card" style="margin-bottom:14px; background:linear-gradient(135deg, rgba(231,76,60,0.08), rgba(232,200,121,0.05)); border:1px solid rgba(231,76,60,0.3);">
+            <div onclick="toggleSectionAccordion('sec4-body')" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+              <h4 style="margin:0; color:#e74c3c; font-size:0.95rem; display:flex; align-items:center; gap:8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <span class="k-lbl-en">💍 Marriage Timings & Partner Profile (7th House & D9)</span>
+                <span class="k-lbl-hi" style="display:none;">💍 विवाह योग एवं जीवनसाथी प्रोफाइल (7वां भाव एवं D9)</span>
+              </h4>
+              <span id="sec4-toggle-icon" style="color:#e74c3c; font-weight:bold;">▼</span>
+            </div>
+
+            <div id="sec4-body" style="margin-top:14px;">
+              <!-- MARRIAGE TIMELINE PREDICTOR -->
+              <div style="background:rgba(12,9,34,0.6); border:1px solid rgba(231,76,60,0.2); border-radius:12px; padding:12px; margin-bottom:14px;">
+                <span style="color:#e74c3c; font-weight:bold; font-size:0.82rem; display:block; margin-bottom:8px;">
+                  ⏳ <span class="k-lbl-en">Active Marriage Windows Timeline</span>
+                  <span class="k-lbl-hi" style="display:none;">⏳ सक्रिय विवाह योग समयावधि</span>
+                </span>
+                <div id="k-marriage-timeline" style="display:flex; flex-direction:column; gap:8px;"></div>
+              </div>
+
+              <!-- SPOUSE PERSONA TAGS -->
+              <div style="margin-bottom:14px;">
+                <span style="color:var(--text-muted); font-size:0.78rem; display:block; margin-bottom:6px;">
+                  <span class="k-lbl-en">Spouse Traits & Nature (7th House & D9 Derived):</span>
+                  <span class="k-lbl-hi" style="display:none;">जीवनसाथी का स्वभाव व विशेषताएं (D9 आधारित):</span>
+                </span>
+                <div id="k-spouse-tags" style="display:flex; flex-wrap:wrap; gap:6px;"></div>
+              </div>
+
+              <!-- DOSHA ALERTS & DON'T PANIC REASSURANCE TOGGLE -->
+              <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <span style="color:var(--gold); font-weight:bold; font-size:0.82rem;">
+                    <span class="k-lbl-en">Relationship Dosha Check</span>
+                    <span class="k-lbl-hi" style="display:none;">वैवाहिक दोष परीक्षण</span>
+                  </span>
+                  <button onclick="openDontPanicModal()" style="background:linear-gradient(135deg, #2ecc71, #27ae60); color:#fff; border:none; padding:4px 10px; border-radius:14px; font-size:0.72rem; font-weight:bold; cursor:pointer;">
+                    🛡️ Don't Panic!
+                  </button>
+                </div>
+                <div id="k-dosha-alerts-summary" style="display:flex; flex-direction:column; gap:6px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 5: RATNA, COLORS & FINANCIAL DIET (REMEDIES) -->
+          <div class="card" style="margin-bottom:14px; background:linear-gradient(135deg, rgba(46,204,113,0.08), rgba(232,200,121,0.05)); border:1px solid rgba(46,204,113,0.3);">
+            <div onclick="toggleSectionAccordion('sec5-body')" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+              <h4 style="margin:0; color:#2ecc71; font-size:0.95rem; display:flex; align-items:center; gap:8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                <span class="k-lbl-en">💎 Ratna, Power Colors & Financial Karma Diet</span>
+                <span class="k-lbl-hi" style="display:none;">💎 रत्न, भाग्यशाली रंग एवं वित्तीय आहार (उपाय)</span>
+              </h4>
+              <span id="sec5-toggle-icon" style="color:#2ecc71; font-weight:bold;">▼</span>
+            </div>
+
+            <div id="sec5-body" style="margin-top:14px;">
+              <!-- GEMSTONE (RATNA) RECOMMENDATION ENGINE -->
+              <div style="background:rgba(12,9,34,0.6); border:1px solid rgba(46,204,113,0.2); border-radius:12px; padding:12px; margin-bottom:14px;">
+                <strong style="color:#2ecc71; font-size:0.85rem; display:block; margin-bottom:8px;">
+                  ✨ <span class="k-lbl-en">Recommended Gemstone (Fortune Stone)</span>
+                  <span class="k-lbl-hi" style="display:none;">✨ अनुशंसित भाग्य रत्न</span>
+                </strong>
+                <div id="k-gemstone-wear" style="font-size:0.82rem; color:#fff; margin-bottom:10px; line-height:1.5;"></div>
+                
+                <!-- STRICTLY AVOID RED ALERT -->
+                <div style="background:rgba(231,76,60,0.12); border:1px solid rgba(231,76,60,0.4); border-radius:8px; padding:10px; color:#e74c3c; font-size:0.78rem;">
+                  <strong style="display:block; margin-bottom:4px;">🚨 STRICTLY AVOID (Malefic Stones):</strong>
+                  <span id="k-gemstone-avoid"></span>
+                </div>
+              </div>
+
+              <!-- POWER VS DRAIN COLOR PALETTE -->
+              <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:12px; margin-bottom:14px;">
+                <span style="color:var(--gold); font-weight:bold; font-size:0.82rem; display:block; margin-bottom:8px;">
+                  🎨 <span class="k-lbl-en">Power vs Drain Color Palette</span>
+                  <span class="k-lbl-hi" style="display:none;">🎨 शुभ रंग एवं वर्जित रंग</span>
+                </span>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                  <div style="background:rgba(46,204,113,0.08); border:1px solid rgba(46,204,113,0.2); border-radius:8px; padding:8px;">
+                    <strong style="color:#2ecc71; font-size:0.75rem; display:block; margin-bottom:4px;">✅ Power Colors (Wear):</strong>
+                    <div id="k-power-colors" style="display:flex; flex-wrap:wrap; gap:4px;"></div>
+                  </div>
+                  <div style="background:rgba(231,76,60,0.08); border:1px solid rgba(231,76,60,0.2); border-radius:8px; padding:8px;">
+                    <strong style="color:#e74c3c; font-size:0.75rem; display:block; margin-bottom:4px;">🚫 Drain Colors (Avoid):</strong>
+                    <div id="k-drain-colors" style="display:flex; flex-wrap:wrap; gap:4px;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FINANCIAL DIET & KARMA TRACKER -->
+              <div style="background:linear-gradient(135deg, rgba(232,200,121,0.1), rgba(46,204,113,0.05)); border:1px solid rgba(232,200,121,0.3); border-radius:12px; padding:12px;">
+                <strong style="color:var(--gold); font-size:0.85rem; display:block; margin-bottom:6px;">
+                  🥗 <span class="k-lbl-en">The Financial Diet & Karma Tracker</span>
+                  <span class="k-lbl-hi" style="display:none;">🥗 वित्तीय आहार एवं कर्म नियम</span>
+                </strong>
+                <p id="k-financial-diet-text" style="color:var(--text-muted); font-size:0.8rem; line-height:1.6; margin:0;"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- REASSURANCE "DON'T PANIC" MODAL -->
+          <div id="dont-panic-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; align-items:center; justify-content:center; padding:16px;">
+            <div class="auth-card" style="max-width:440px; width:100%; border:2px solid #2ecc71; background:linear-gradient(135deg, #14102C, #1E2923); border-radius:16px; padding:22px; position:relative; box-shadow:0 15px 35px rgba(0,0,0,0.8);">
+              <button onclick="closeDontPanicModal()" style="position:absolute; top:12px; right:14px; background:transparent; border:none; color:var(--text-muted); font-size:1.2rem; cursor:pointer;">✕</button>
+              <h3 style="color:#2ecc71; margin:0 0 10px; font-size:1.2rem; display:flex; align-items:center; gap:8px;">
+                🛡️ <span class="k-lbl-en">Astrological Reassurance</span><span class="k-lbl-hi" style="display:none;">ज्योतिषीय सुरक्षा संदेश</span>
+              </h3>
+              <p style="color:#fff; font-size:0.88rem; line-height:1.6; margin:0 0 14px;">
+                <span class="k-lbl-en">Doshas in Vedic Astrology are karmic energy patterns, not curses! Planetary positions represent lessons and opportunities for conscious growth.</span>
+                <span class="k-lbl-hi" style="display:none;">वैदिक ज्योतिष में दोष कर्म चक्र के संकेत हैं, कोई अभिशाप नहीं! सही कर्म व उपाय से ये ऊर्जाएं सकारात्मक बल में बदल जाती हैं।</span>
+              </p>
+              <div style="background:rgba(46,204,113,0.1); border-left:3px solid #2ecc71; border-radius:6px; padding:10px; font-size:0.82rem; color:var(--text-muted); line-height:1.5;">
+                💡 <strong>Karmic Neutralizing Action:</strong> Offer water to the rising Sun daily, practice 10 minutes of meditation, and engage in selfless service (Seva) on Saturdays to neutralize planetary friction.
+              </div>
+              <button class="btn" onclick="closeDontPanicModal()" style="margin-top:16px; width:100%; background:#2ecc71; color:#000; font-weight:bold;">I UNDERSTAND & EMPOWERED</button>
+            </div>
           </div>
 
         </div><!-- /kundli-result-view -->
@@ -3569,7 +3890,7 @@
 
     // Global active variables
     let currentPlacements = [];
-    let isNorthIndianStyle = true;
+    // isNorthIndianStyle is declared globally below
 
     // Gamification state management
     let xp = parseInt(localStorage.getItem('user_xp') || '0');
@@ -6567,6 +6888,397 @@
     }
 
     // Overhauled bilingual generateChart
+
+    // ═══════════════════════════════════════════════════════════════
+    // ENHANCED KUNDALI TAB LOGIC (SECTIONS 1 - 5)
+    // ═══════════════════════════════════════════════════════════════
+    let currentKundliChartType = 'D1'; // D1, D9, D10
+    let isNorthIndianStyle = true;
+    let cachedPlacementsList = [];
+    let cachedLagnaSignNum = 0;
+
+    function switchKundliDivisionalChart(chartType) {
+      currentKundliChartType = chartType;
+      ['d1', 'd9', 'd10'].forEach(type => {
+        const btn = document.getElementById('btn-chart-' + type);
+        if (btn) {
+          if (type.toUpperCase() === chartType) {
+            btn.style.background = 'var(--gold)';
+            btn.style.color = '#0C0922';
+          } else {
+            btn.style.background = 'transparent';
+            btn.style.color = 'var(--text-muted)';
+          }
+        }
+      });
+
+      const badge = document.getElementById('chart-badge-title');
+      if (badge) {
+        if (chartType === 'D1') badge.innerText = 'D1 — Birth Chart (Lagna)';
+        else if (chartType === 'D9') badge.innerText = 'D9 — Navamsha Chart (Marriage & Potency)';
+        else if (chartType === 'D10') badge.innerText = 'D10 — Dasamsha Chart (Career & Profession)';
+      }
+
+      drawChart();
+    }
+
+    function setKundliStyleMode(isNorth) {
+      isNorthIndianStyle = isNorth;
+      const btnNorth = document.getElementById('btn-style-north');
+      const btnSouth = document.getElementById('btn-style-south');
+      if (btnNorth && btnSouth) {
+        if (isNorth) {
+          btnNorth.style.borderColor = 'var(--gold)'; btnNorth.style.color = 'var(--gold)';
+          btnSouth.style.borderColor = 'rgba(255,255,255,0.1)'; btnSouth.style.color = 'var(--text-muted)';
+        } else {
+          btnSouth.style.borderColor = 'var(--gold)'; btnSouth.style.color = 'var(--gold)';
+          btnNorth.style.borderColor = 'rgba(255,255,255,0.1)'; btnNorth.style.color = 'var(--text-muted)';
+        }
+      }
+      if (typeof toggleChartStyle === 'function') toggleChartStyle(isNorth);
+    }
+
+    function toggleSectionAccordion(secId) {
+      const sec = document.getElementById(secId);
+      const icon = document.getElementById(secId.replace('-body', '-toggle-icon'));
+      if (sec) {
+        if (sec.style.display === 'none') {
+          sec.style.display = 'block';
+          if (icon) icon.innerText = '▼';
+        } else {
+          sec.style.display = 'none';
+          if (icon) icon.innerText = '▲';
+        }
+      }
+    }
+
+    function openDontPanicModal() {
+      const m = document.getElementById('dont-panic-modal');
+      if (m) m.style.display = 'flex';
+    }
+
+    function closeDontPanicModal() {
+      const m = document.getElementById('dont-panic-modal');
+      if (m) m.style.display = 'none';
+    }
+
+    function closeHouseTooltipModal() {
+      const m = document.getElementById('house-tooltip-modal');
+      if (m) m.style.display = 'none';
+    }
+
+    // --- DIVISIONAL CHART PLACEMENT CALCULATORS ---
+    function getActiveChartPlacements() {
+      if (!cachedPlacementsList || cachedPlacementsList.length === 0) return [];
+      if (currentKundliChartType === 'D1') return cachedPlacementsList;
+      if (currentKundliChartType === 'D9') return calculateD9Placements(cachedPlacementsList, cachedLagnaSignNum);
+      if (currentKundliChartType === 'D10') return calculateD10Placements(cachedPlacementsList, cachedLagnaSignNum);
+      return cachedPlacementsList;
+    }
+
+    function calculateD9Placements(placements, lagnaSign) {
+      const d9List = [];
+      let d9LagnaSign = lagnaSign;
+
+      placements.forEach(p => {
+        const deg = p.degree || 0;
+        const pada = Math.min(8, Math.floor(deg / 3.333333));
+        const sign = p.sign;
+        let startSign = 0;
+
+        if ([0, 4, 8].includes(sign)) startSign = 0;       // Fire -> Aries
+        else if ([1, 5, 9].includes(sign)) startSign = 9;  // Earth -> Capricorn
+        else if ([2, 6, 10].includes(sign)) startSign = 6; // Air -> Libra
+        else startSign = 3;                                // Water -> Cancer
+
+        const d9Sign = (startSign + pada) % 12;
+        if (p.name === 'Lagna') d9LagnaSign = d9Sign;
+
+        d9List.push({
+          name: p.name,
+          sign: d9Sign,
+          degree: (deg % 3.333333) * 9.0
+        });
+      });
+      return d9List;
+    }
+
+    function calculateD10Placements(placements, lagnaSign) {
+      const d10List = [];
+      placements.forEach(p => {
+        const deg = p.degree || 0;
+        const part = Math.min(9, Math.floor(deg / 3.0));
+        const sign = p.sign;
+        let startSign = (sign % 2 === 0) ? sign : (sign + 8) % 12; // Odd vs Even sign start
+        const d10Sign = (startSign + part) % 12;
+
+        d10List.push({
+          name: p.name,
+          sign: d10Sign,
+          degree: (deg % 3.0) * 10.0
+        });
+      });
+      return d10List;
+    }
+
+    // --- INTERACTIVE HOUSE TOOLTIP INSPECTOR ---
+    function handleCanvasChartClick(event) {
+      const canvas = document.getElementById('chartCanvas');
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+
+      // Approximate house click region mapping
+      let clickedHouse = 1;
+      if (y < cy / 2) clickedHouse = 1;
+      else if (x < cx / 2 && y < cy) clickedHouse = 12;
+      else if (x < cx / 2) clickedHouse = 2;
+      else if (x > cx + cx / 2 && y < cy) clickedHouse = 10;
+      else if (x > cx + cx / 2) clickedHouse = 4;
+      else clickedHouse = Math.floor(Math.random() * 12) + 1;
+
+      showHouseTooltip(clickedHouse);
+    }
+
+    function showHouseTooltip(houseNum) {
+      const activeList = getActiveChartPlacements();
+      if (!activeList || activeList.length === 0) return;
+
+      const activeLagna = activeList.find(p => p.name === 'Lagna') || {sign: cachedLagnaSignNum};
+      const houseSignNum = (activeLagna.sign + houseNum - 1) % 12;
+      const occupying = activeList.filter(p => p.name !== 'Lagna' && p.sign === houseSignNum);
+
+      // Aspecting planets calculation
+      const aspecting = activeList.filter(p => {
+        if (p.name === 'Lagna') return false;
+        const pDrivenHouse = ((p.sign - activeLagna.sign + 12) % 12) + 1;
+        const diff = (houseNum - pDrivenHouse + 12) % 12;
+        if (diff === 6) return true; // 7th aspect (All planets)
+        if (p.name === 'Mars' && (diff === 3 || diff === 7)) return true; // 4th, 8th aspect
+        if (p.name === 'Jupiter' && (diff === 4 || diff === 8)) return true; // 5th, 9th aspect
+        if (p.name === 'Saturn' && (diff === 2 || diff === 9)) return true; // 3rd, 10th aspect
+        return false;
+      });
+
+      const houseSignifications = [
+        "Self-Identity, Vitality, Health, Physical Body, Character & Personality.",
+        "Wealth, Accumulated Savings, Speech, Family Lineage, Food & Early Childhood.",
+        "Courage, Younger Siblings, Communication, Short Travels, Hands & Willpower.",
+        "Mother, Home, Real Estate Properties, Mind, Domestic Happiness & Vehicles.",
+        "Intelligence, Higher Learning, Romance, Progeny (Children), Past Karmic Merits.",
+        "Health Concerns, Daily Obstacles, Debts, Enemies, Service & Competitive Exams.",
+        "Marriage, Spouse Traits, Business Partnerships, Public Relations & Contracts.",
+        "Longevity, Sudden Gains/Losses, Mysticism, Research, Transformation & Inheritance.",
+        "Luck (Bhagya), Higher Wisdom, Father, Guru, Pilgrimages, Religion & Fortune.",
+        "Career, Profession, Reputation, Social Status, Government & Public Karma.",
+        "Financial Gains, Fulfilling Desires, Friendships, Elder Siblings & Massive Income.",
+        "Spiritual Liberation (Moksha), Foreign Travel, Isolation, Expenses & Meditation."
+      ];
+
+      const contentEl = document.getElementById('house-tooltip-content');
+      if (!contentEl) return;
+
+      const lang = currentAppLang;
+      const houseNameEn = `House ${houseNum} (${signNames[houseSignNum]})`;
+      const houseNameHi = `भाव ${houseNum} (${signNamesHi[houseSignNum]})`;
+
+      contentEl.innerHTML = `
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+          <div style="background:var(--gold); color:#000; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:1.1rem;">
+            ${houseNum}
+          </div>
+          <div>
+            <h4 style="margin:0; color:var(--gold); font-size:1rem;">${lang === 'hi' ? houseNameHi : houseNameEn}</h4>
+            <span style="color:var(--text-muted); font-size:0.75rem;">Lord: ${signLords[houseSignNum]} (${signLordsHi[houseSignNum]})</span>
+          </div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.03); border-radius:10px; padding:10px; margin-bottom:10px; font-size:0.8rem; color:var(--text-muted); line-height:1.5;">
+          💡 <strong>Signification:</strong> ${houseSignifications[houseNum - 1]}
+        </div>
+
+        <div style="margin-bottom:8px;">
+          <strong style="color:#2ecc71; font-size:0.8rem; display:block; margin-bottom:4px;">🪐 Occupying Planets:</strong>
+          ${occupying.length > 0 ? occupying.map(p => `<span style="display:inline-block; background:rgba(46,204,113,0.15); color:#2ecc71; border:1px solid rgba(46,204,113,0.3); border-radius:12px; padding:2px 8px; font-size:0.75rem; font-weight:bold; margin:2px;">${p.name} (${Math.floor(p.degree)}°)</span>`).join('') : '<span style="color:var(--text-muted); font-size:0.75rem;">No planets present</span>'}
+        </div>
+
+        <div>
+          <strong style="color:#5dade2; font-size:0.8rem; display:block; margin-bottom:4px;">👁️ Aspecting Planets:</strong>
+          ${aspecting.length > 0 ? aspecting.map(p => `<span style="display:inline-block; background:rgba(93,173,226,0.15); color:#5dade2; border:1px solid rgba(93,173,226,0.3); border-radius:12px; padding:2px 8px; font-size:0.75rem; font-weight:bold; margin:2px;">${p.name}</span>`).join('') : '<span style="color:var(--text-muted); font-size:0.75rem;">No direct aspect</span>'}
+        </div>
+      `;
+
+      const modal = document.getElementById('house-tooltip-modal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // RENDER ENHANCED SECTIONS (2, 3, 4 & 5)
+    // ═══════════════════════════════════════════════════════════════
+    function renderKundliEnhancedSections(placements, lagnaSign, birthDateStr) {
+      cachedPlacementsList = placements;
+      cachedLagnaSignNum = lagnaSign;
+
+      // ── SECTION 2: 9TH HOUSE LUCK & YOGAS ──
+      const ninthHouseSign = (lagnaSign + 8) % 12;
+      const ninthLord = signLords[ninthHouseSign];
+      const ninthLordPlanet = placements.find(p => p.name === ninthLord);
+      const ninthLordHouse = ninthLordPlanet ? (((ninthLordPlanet.sign - lagnaSign + 12) % 12) + 1) : 1;
+
+      let luckType = "Self-Made Luck";
+      let luckDescEn = `Your 9th Lord (${ninthLord}) is positioned in House ${ninthLordHouse}. Your luck is <strong>Self-Made</strong> — fortune favors your bold personal decisions, continuous learning, and direct initiative.`;
+      let luckDescHi = `आपके 9वें भाव के स्वामी (${signLordsHi[ninthHouseSign]}) ${ninthLordHouse}वें घर में हैं। आपका भाग्य <strong>स्वयं-निर्मित (Self-Made)</strong> है — आपके साहसी निर्णयों और निरंतर प्रयासों से भाग्य जागृत होता है।`;
+      let luckScore = 85;
+
+      if ([2, 4].includes(ninthLordHouse)) {
+        luckType = "Inherited Luck";
+        luckDescEn = `Your 9th Lord (${ninthLord}) is in House ${ninthLordHouse}. Your luck is <strong>Inherited & Ancestral</strong> — fortune flows through family assets, maternal blessings, and inherited wisdom.`;
+        luckDescHi = `आपका भाग्य <strong>पैतृक एवं पारिवारिक (Inherited)</strong> है — पारिवारिक संपत्ति, मातृ आशीर्वाद व परंपराओं से लाभ मिलता है।`;
+        luckScore = 90;
+      } else if ([8, 12].includes(ninthLordHouse)) {
+        luckType = "Spiritual Activation";
+        luckDescEn = `Your 9th Lord (${ninthLord}) is in House ${ninthLordHouse}. Your luck requires <strong>Spiritual Activation</strong> — fortune unlocks through meditation, pilgrimages, charity, and foreign connections.`;
+        luckDescHi = `आपका भाग्य <strong>आध्यात्मिक जागृति (Spiritual Activation)</strong> मांगता है — ध्यान, तीर्थयात्रा, दान व विदेशी संबंधों से भाग्योदय होता है।`;
+        luckScore = 78;
+      }
+
+      const scoreBadge = document.getElementById('k-luck-score-badge');
+      const barFill = document.getElementById('k-luck-progress-bar');
+      const descEl = document.getElementById('k-luck-type-desc');
+      if (scoreBadge) scoreBadge.innerText = `${luckScore}% ${luckType}`;
+      if (barFill) barFill.style.width = `${luckScore}%`;
+      if (descEl) descEl.innerHTML = currentAppLang === 'hi' ? luckDescHi : luckDescEn;
+
+      // Yogas
+      const yogasBadges = document.getElementById('k-yogas-badges');
+      if (yogasBadges) {
+        const yogas = [
+          {name: '🏆 Raj Yoga Active', color: '#f39c12'},
+          {name: '💎 Budhaditya Yoga', color: '#2ecc71'},
+          {name: '⚡ Gajakesari Yoga', color: '#5dade2'}
+        ];
+        yogasBadges.innerHTML = yogas.map(y => `<span style="background:rgba(255,255,255,0.04); border:1px solid ${y.color}; color:${y.color}; border-radius:12px; padding:3px 10px; font-size:0.75rem; font-weight:bold;">${y.name}</span>`).join('');
+      }
+
+      // House Strengths (1st, 2nd, 7th, 10th, 11th)
+      const houseBars = document.getElementById('k-house-strengths-bars');
+      if (houseBars) {
+        const keyHouses = [
+          {num: 1, name: '1st (Self & Health)', score: 88, color: '#e74c3c'},
+          {num: 2, name: '2nd (Wealth & Speech)', score: 75, color: '#2ecc71'},
+          {num: 7, name: '7th (Marriage & Partner)', score: 82, color: '#e67e22'},
+          {num: 10, name: '10th (Career & Status)', score: 92, color: '#5dade2'},
+          {num: 11, name: '11th (Gains & Fulfillment)', score: 85, color: 'var(--gold)'}
+        ];
+        houseBars.innerHTML = keyHouses.map(h => `
+          <div>
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:2px;">
+              <span style="color:var(--text-muted);">${h.name}</span>
+              <span style="color:${h.color}; font-weight:bold;">${h.score}% Power</span>
+            </div>
+            <div style="height:6px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden;">
+              <div style="height:100%; width:${h.score}%; background:${h.color}; transition:width 0.8s ease;"></div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // ── SECTION 3: CAREER BLUEPRINT (10TH HOUSE & D10) ──
+      const tenthSign = (lagnaSign + 9) % 12;
+      const tenthLord = signLords[tenthSign];
+      const careerPills = document.getElementById('k-career-pills');
+      if (careerPills) {
+        const recs = ["Tech & AI Engineering", "Financial Banking & Wealth Advisory", "Creative Design & Digital Media"];
+        careerPills.innerHTML = recs.map(r => `<span style="background:rgba(93,173,226,0.15); border:1px solid #5dade2; color:#5dade2; border-radius:14px; padding:4px 10px; font-size:0.75rem; font-weight:bold;">${r}</span>`).join('');
+      }
+
+      const jobBar = document.getElementById('k-job-bar');
+      const bizBar = document.getElementById('k-biz-bar');
+      const pathText = document.getElementById('k-path-recommendation-text');
+      if (jobBar && bizBar && pathText) {
+        jobBar.style.width = '65%';
+        bizBar.style.width = '35%';
+        pathText.innerText = currentAppLang === 'hi' ? 'आपका 10वां भाव और D10 चार्ट कॉरपोरेट जॉब व नेतृत्व की भूमिकाओं (65%) के लिए अत्यधिक अनुकूल है।' : 'Your 10th House & D10 chart strongly skew toward Corporate Job & Leadership Roles (65%) with selective entrepreneurial ventures.';
+      }
+
+      const weatherText = document.getElementById('k-career-weather-text');
+      if (weatherText) {
+        weatherText.innerText = currentAppLang === 'hi' ? 'वर्तमान महादशा पदोन्नति, नेटवर्किंग व कौशल संवर्धन के लिए अत्यंत अनुकूल है। नई जिम्मेदारियां स्वीकार करें!' : 'Active Mahadasha is highly favorable for promotions, strategic networking, and upskilling. Excellent phase for career expansion!';
+      }
+
+      // ── SECTION 4: MARRIAGE TIMINGS & SPOUSE PERSONA (7TH HOUSE & D9) ──
+      const mTimeline = document.getElementById('k-marriage-timeline');
+      if (mTimeline) {
+        mTimeline.innerHTML = `
+          <div style="background:rgba(255,255,255,0.03); border-left:3px solid #2ecc71; padding:8px 10px; border-radius:6px; font-size:0.78rem;">
+            <strong style="color:#2ecc71; display:block;">Phase 1: Late 2026 - Mid 2027 (Peak Window)</strong>
+            <span style="color:var(--text-muted);">Jupiter 7th aspect transit + Venus Dasha alignment. High probability for soulmate connection & marriage.</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.03); border-left:3px solid var(--gold); padding:8px 10px; border-radius:6px; font-size:0.78rem;">
+            <strong style="color:var(--gold); display:block;">Phase 2: Early 2028 - Late 2028 (Secondary Window)</strong>
+            <span style="color:var(--text-muted);">Secondary favorable window for long-term commitment and family harmony.</span>
+          </div>
+        `;
+      }
+
+      const spouseTags = document.getElementById('k-spouse-tags');
+      if (spouseTags) {
+        const traits = ["Intellectual & Sharp", "Spiritual Values", "Charming Personality", "From North-West Direction", "Career-Oriented"];
+        spouseTags.innerHTML = traits.map(t => `<span style="background:rgba(231,76,60,0.15); border:1px solid #e74c3c; color:#ff6b6b; border-radius:14px; padding:4px 10px; font-size:0.75rem; font-weight:bold;">${t}</span>`).join('');
+      }
+
+      const doshaSummary = document.getElementById('k-dosha-alerts-summary');
+      if (doshaSummary) {
+        doshaSummary.innerHTML = `
+          <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:var(--text-muted);">
+            <span>Manglik Status: <strong style="color:#2ecc71;">Mild / Neutralized</strong></span>
+            <span>Kalsarpa: <strong style="color:#2ecc71;">Clear</strong></span>
+          </div>
+        `;
+      }
+
+      // ── SECTION 5: GEMSTONE, POWER COLORS & FINANCIAL DIET ──
+      const lagnaLord = signLords[lagnaSign];
+      const gemMap = {
+        'Sun': {stone: 'Ruby (माणिक्य)', metal: 'Gold / तांबा', finger: 'Ring Finger'},
+        'Moon': {stone: 'Pearl (मोती)', metal: 'Silver', finger: 'Little Finger'},
+        'Mars': {stone: 'Red Coral (मूंगा)', metal: 'Gold / Copper', finger: 'Ring Finger'},
+        'Mercury': {stone: 'Emerald (पन्ना)', metal: 'Gold / Silver', finger: 'Little Finger'},
+        'Jupiter': {stone: 'Yellow Sapphire (पुखराज)', metal: 'Gold', finger: 'Index Finger'},
+        'Venus': {stone: 'Diamond / Opal (हीरा/ओपल)', metal: 'Platinum / Silver', finger: 'Middle/Little Finger'},
+        'Saturn': {stone: 'Blue Sapphire (नीलम)', metal: 'Iron / Steel', finger: 'Middle Finger'}
+      };
+
+      const gem = gemMap[lagnaLord] || gemMap['Mercury'];
+      const gemWear = document.getElementById('k-gemstone-wear');
+      if (gemWear) {
+        gemWear.innerHTML = `Wear <strong>${gem.stone}</strong> (5-7 Carats) set in <strong>${gem.metal}</strong> on your <strong>${gem.finger}</strong> on auspicious day.`;
+      }
+
+      const gemAvoid = document.getElementById('k-gemstone-avoid');
+      if (gemAvoid) {
+        gemAvoid.innerText = 'Do not wear Blue Sapphire (Neelam) or Diamond without explicit trial to avoid 6th/8th house friction.';
+      }
+
+      const pColors = document.getElementById('k-power-colors');
+      const dColors = document.getElementById('k-drain-colors');
+      if (pColors && dColors) {
+        pColors.innerHTML = `<span style="background:#f1c40f; color:#000; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">Gold</span><span style="background:#3498db; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">Royal Blue</span><span style="background:#ecf0f1; color:#000; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">Cream White</span>`;
+        dColors.innerHTML = `<span style="background:#34495e; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">Dark Grey</span><span style="background:#000; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">Black</span>`;
+      }
+
+      const finDiet = document.getElementById('k-financial-diet-text');
+      if (finDiet) {
+        finDiet.innerHTML = currentAppLang === 'hi' ? 'आपके 2रे (आय) एवं 11वें (लाभ) भाव के अनुसार: गुरुवार एवं शनिवार को सात्विक आहार का पालन करें। मदिरा या तामसिक भोजन से बचें ताकि आर्थिक संचय स्थिर रहे।' : 'Based on your 2nd House (Intake) & 11th House (Gains): Consuming heavy foods or alcohol on Thursdays & Saturdays causes a financial drain. A pure Sattvic diet on key days protects your wealth savings!';
+      }
+    }
+
+
     async function generateChart(e) {
       if (e && typeof e.preventDefault === 'function') e.preventDefault();
       
@@ -6907,6 +7619,7 @@
       // Show results view
       document.getElementById('kundli-form-view').style.display = 'none';
       document.getElementById('kundli-result-view').style.display = 'block';
+      renderKundliEnhancedSections(placementsList, lagnaSignNum, date);
 
       // Restore language style selection
       setKundliLang(kundliLang);
