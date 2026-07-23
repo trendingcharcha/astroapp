@@ -140,10 +140,10 @@ class _HomeDashboardState extends State<HomeDashboard> {
     final List<KarmaTask> newTasks = [];
     
     if (lines.length >= 4) {
-      newTasks.add(KarmaTask(title: "Vedic Quest", description: lines[0].replaceAll(RegExp(r'^🕉️\s*Vedic:\s*'), ''), karmaPoints: 20));
-      newTasks.add(KarmaTask(title: "Lal Kitab Quest", description: lines[1].replaceAll(RegExp(r'^🔴\s*Lal Kitab:\s*'), ''), karmaPoints: 15));
-      newTasks.add(KarmaTask(title: "Vastu Quest", description: lines[2].replaceAll(RegExp(r'^🏡\s*Vastu:\s*'), ''), karmaPoints: 15));
-      newTasks.add(KarmaTask(title: "Action Quest", description: lines[3].replaceAll(RegExp(r'^💼\s*Action:\s*'), ''), karmaPoints: 30));
+      newTasks.add(KarmaTask(title: "Vedic Quest", description: lines[0].replaceAll(RegExp(r'^(🕉️|)\s*Vedic:\s*'), ''), karmaPoints: 20));
+      newTasks.add(KarmaTask(title: "Lal Kitab Quest", description: lines[1].replaceAll(RegExp(r'^(🔴|)\s*Lal Kitab:\s*'), ''), karmaPoints: 15));
+      newTasks.add(KarmaTask(title: "Vastu Quest", description: lines[2].replaceAll(RegExp(r'^(🏡|)\s*Vastu:\s*'), ''), karmaPoints: 15));
+      newTasks.add(KarmaTask(title: "Action Quest", description: lines[3].replaceAll(RegExp(r'^(💼|)\s*Action:\s*'), ''), karmaPoints: 30));
     } else {
       // Fallback
       newTasks.addAll([
@@ -243,7 +243,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("✨ Level Up! Daily Karma Quest Complete! +XP synced to cloud."),
+            content: Text("Level Up! Daily Karma Quest Complete! +XP synced to cloud."),
             backgroundColor: Color(0xFF8E6FD6),
           ),
         );

@@ -10,6 +10,30 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
+    // Self-Healing Auto-Recovery Cache & Mojibake Buster
+    (function() {
+      let hasGarbled = false;
+      try {
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          const val = localStorage.getItem(key);
+          if ((key && (key.includes('à¤') || key.includes('â€”'))) || (val && (val.includes('à¤') || val.includes('â€”')))) {
+            hasGarbled = true;
+            break;
+          }
+        }
+      } catch (e) {}
+
+      // If this file is the cached garbled version, 'हिंदी' will contain 'à'
+      const testStr = "हिंदी";
+      const isMangled = testStr.includes('à');
+
+      if (hasGarbled || isMangled) {
+        try { localStorage.clear(); } catch (e) {}
+        window.location.replace(window.location.protocol + '//' + window.location.host + window.location.pathname + '?v=' + Date.now());
+      }
+    })();
+
     // Non-blocking Glassmorphic Toast Helper (Zero popups, auto-dismissing)
     function showToast(msg, type) {
       type = type || 'gold';
