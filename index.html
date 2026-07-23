@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -10,27 +10,98 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
-    // Self-Healing Auto-Recovery Cache & Mojibake Buster
+    // ═══════════════════════════════════════════════════════════════
+    // COSMOVEDIC HARD CACHE FLUSH — v20260723
+    // Forces ALL users to receive clean, fresh app data.
+    // Clears: localStorage, sessionStorage, browser HTTP cache, SW cache.
+    // ═══════════════════════════════════════════════════════════════
     (function() {
-      let hasGarbled = false;
+      var APP_CACHE_VER = 'cv_20260723_r3';
+
+      // ── STEP 1: Detect old version or garbled localStorage ──────
+      var storedVer = '';
+      try { storedVer = localStorage.getItem('cosmovedic_cache_ver') || ''; } catch(e) {}
+
+      var isOldVersion = (storedVer !== APP_CACHE_VER);
+
+      // Also scan for garbled mojibake text in any stored value
+      var hasGarbled = false;
       try {
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          const val = localStorage.getItem(key);
-          if ((key && (key.includes('à¤') || key.includes('â€”'))) || (val && (val.includes('à¤') || val.includes('â€”')))) {
+        for (var i = 0; i < localStorage.length; i++) {
+          var k = localStorage.key(i);
+          var v = localStorage.getItem(k);
+          if ((k && (k.includes('\u00e0\u00a4') || k.includes('\u00e2\u0080'))) ||
+              (v && (v.includes('\u00e0\u00a4') || v.includes('\u00e2\u0080') || v.includes('\ufffd')))) {
             hasGarbled = true;
             break;
           }
         }
-      } catch (e) {}
+      } catch(e) {}
 
-      // If this file is the cached garbled version, 'हिंदी' will contain 'à'
-      const testStr = "हिंदी";
-      const isMangled = testStr.includes('à');
+      // Test if the HTML itself was served garbled (old cached copy)
+      var testStr = '\u0939\u093f\u0902\u0926\u0940'; // हिंदी in proper Unicode
+      var isFileMangled = testStr.includes('\u00e0'); // garbled if bytes corrupted
 
-      if (hasGarbled || isMangled) {
-        try { localStorage.clear(); } catch (e) {}
-        window.location.replace(window.location.protocol + '//' + window.location.host + window.location.pathname + '?v=' + Date.now());
+      // ── STEP 2: If old version OR garbled data detected → FULL WIPE ──
+      if (isOldVersion || hasGarbled || isFileMangled) {
+
+        // Rescue critical user keys before wiping
+        var savedKeys = ['user_authenticated','user_email','user_auth_provider',
+                         'user_name','user_dob','user_tob','user_pob','user_gender',
+                         'user_goal','user_category','user_lang',
+                         'kundli_name','kundli_dob','kundli_tob','kundli_pob',
+                         'user_streak','user_xp','user_level','user_moon_rashi_idx'];
+        var rescued = {};
+        try {
+          savedKeys.forEach(function(key) {
+            var val = localStorage.getItem(key);
+            // Only rescue if value is clean (no garbled bytes)
+            if (val && !val.includes('\u00e0\u00a4') && !val.includes('\ufffd') && !val.includes('\u00e2\u0080')) {
+              rescued[key] = val;
+            }
+          });
+        } catch(e) {}
+
+        // Wipe all storage
+        try { localStorage.clear(); } catch(e) {}
+        try { sessionStorage.clear(); } catch(e) {}
+
+        // Restore clean rescued values
+        try {
+          Object.keys(rescued).forEach(function(key) {
+            localStorage.setItem(key, rescued[key]);
+          });
+        } catch(e) {}
+
+        // Set new version marker so this wipe doesn't repeat
+        try { localStorage.setItem('cosmovedic_cache_ver', APP_CACHE_VER); } catch(e) {}
+
+        // ── STEP 3: Clear browser HTTP cache via Cache API if supported ──
+        if ('caches' in window) {
+          caches.keys().then(function(names) {
+            names.forEach(function(name) { caches.delete(name); });
+          }).catch(function(){});
+        }
+
+        // ── STEP 4: Unregister old Service Workers if any ──────────
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function(regs) {
+            regs.forEach(function(reg) { reg.unregister(); });
+          }).catch(function(){});
+        }
+
+        // ── STEP 5: Hard reload with cache-busting timestamp ───────
+        // Only reload if NOT already on a busted URL (prevent infinite loop)
+        if (window.location.href.indexOf('_cb=') === -1) {
+          var cleanUrl = window.location.protocol + '//' +
+                         window.location.host +
+                         window.location.pathname +
+                         '?_cb=' + APP_CACHE_VER;
+          window.location.replace(cleanUrl);
+        }
+      } else {
+        // Version matches and no garbled data — just stamp the version
+        try { localStorage.setItem('cosmovedic_cache_ver', APP_CACHE_VER); } catch(e) {}
       }
     })();
 
