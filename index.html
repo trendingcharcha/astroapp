@@ -2722,6 +2722,29 @@
         }
       }
 
+      let activeGoalsList = (typeof getActiveGoals === 'function') ? getActiveGoals() : [];
+      
+      const goalLabelsEn = {
+        'job': 'Career & Profession',
+        'debt': 'Debt & Finance',
+        'marriage': 'Marriage & Love',
+        'baby': 'Baby & Child planning',
+        'business': 'Business Karma',
+        'property': 'Property & Vehicle',
+        'health': 'Health & Vitality',
+        'custom': 'Custom Life Goal'
+      };
+      const goalLabelsHi = {
+        'job': 'करियर और पेशा',
+        'debt': 'ऋण और वित्त',
+        'marriage': 'विवाह और प्रेम',
+        'baby': 'संतान योजना',
+        'business': 'व्यापार कर्म',
+        'property': 'संपत्ति और वाहन',
+        'health': 'स्वास्थ्य और जीवन शक्ति',
+        'custom': 'कस्टम जीवन लक्ष्य'
+      };
+      
       // Calculation of Lagna to determine the ruling planet
       let year, month, day, hour, min;
       try {
@@ -2751,6 +2774,11 @@
       // Ruling Planet mapping
       const rasiLords = ["Mars", "Venus", "Mercury", "Moon", "Sun", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Saturn", "Jupiter"];
       const rulingLord = rasiLords[lagnaSignNum] || "Sun";
+      
+      const rasiNamesEn = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+      const rasiNamesHi = ["मेष", "वृषभ", "मिथुन", "कर्क", "सिंह", "कन्या", "तुला", "वृश्चिक", "धनु", "मकर", "कुंभ", "मीन"];
+      const lagnaName = rasiNamesEn[lagnaSignNum] || "Aries";
+      const lagnaNameHi = rasiNamesHi[lagnaSignNum] || "मेष";
 
       // ---------------------------------------------------------------
       // DETECT hasPartner — works for both couple path AND single path with optional toggle
@@ -3768,6 +3796,7 @@
       document.getElementById('vastu-tasks-list').innerHTML = targetMission.vVastuHTML;
       document.getElementById('practical-tasks-list').innerHTML = targetMission.pListHTML;
       document.getElementById('coach-result-title').innerText = targetMission.titleText;
+      const astroPredEl = document.getElementById('coach-astrological-prediction');
       if (astroPredEl) astroPredEl.innerHTML = targetMission.predictionHTML;
 
       // --- SAVE BOTH VERSIONS IN LOCAL STORAGE ---
@@ -3844,7 +3873,7 @@
       activeGoalsList = (typeof getActiveGoals === 'function') ? getActiveGoals() : activeGoalsList;
       const activeGoalNames = activeGoalsList.map(g => goalLabels[g] || g).join(', ');
 
-      // De-duplicated Vedic Task (combines ruling planet & active goals into 1 non-repeating chanting quest)
+      const lordDetails = currentAppLang === 'hi' ? (vedicMantrasHi[rulingLord] || vedicMantrasHi["Sun"]) : (vedicMantrasEn[rulingLord] || vedicMantrasEn["Sun"]);
       const unifiedVedicText = `Ruling Planet Mantra: Chant "${lordDetails.mantra}" 108 times each morning facing East. (Energizes all active goals: ${activeGoalNames}). Sacred Text: ${lordDetails.text}`;
       localStorage.setItem('today_quest_vedic_text', unifiedVedicText);
 
