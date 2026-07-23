@@ -793,8 +793,8 @@
           <path d="M12 2v20M2 12h20"/>
         </svg>
       </div>
-      <h2 style="margin-bottom: 6px; color: #FFFFFF; font-size: 1.3rem;">Welcome to CosmoVedic</h2>
-      <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 20px;">Sign In or Sign Up to unlock full 90-day goal roadmap &amp; Kundli PDF downloads</p>
+      <h2 style="margin-bottom: 6px; color: #FFFFFF; font-size: 1.3rem;"><span class="k-lbl-en">Welcome to CosmoVedic</span><span class="k-lbl-hi" style="display:none;">कोस्मोवैदिक में आपका स्वागत है</span></h2>
+      <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 20px;"><span class="k-lbl-en">Sign In or Sign Up to unlock full 90-day goal roadmap &amp; Kundli PDF downloads</span><span class="k-lbl-hi" style="display:none;">पूर्ण 90-दिवसीय लक्ष्य रोडमैप और कुंडली पीडीएफ डाउनलोड अनलॉक करने के लिए साइन इन या साइन अप करें</span></p>
 
       <!-- 1. Google Authentication Button -->
       <button class="btn" style="background: #FFFFFF; color: #333333; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px; border-radius: 10px; padding: 12px 20px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.2s;" onclick="signInWithGoogle()">
@@ -804,12 +804,12 @@
           <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
           <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
         </svg>
-        <span>Sign In / Sign Up with Google</span>
+        <span><span class="k-lbl-en">Sign In / Sign Up with Google</span><span class="k-lbl-hi" style="display:none;">गूगल के साथ साइन इन / साइन अप करें</span></span>
       </button>
 
       <div style="display:flex; align-items:center; gap:10px; margin: 16px 0;">
         <div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
-        <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Or Email Account</span>
+        <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;"><span class="k-lbl-en">Or Email Account</span><span class="k-lbl-hi" style="display:none;">या ईमेल खाता</span></span>
         <div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
       </div>
 
@@ -822,21 +822,21 @@
           <input type="password" id="auth-password" required placeholder="Enter password (min 6 chars)" style="width:100%;">
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px;">
-          <button type="button" class="btn" style="padding:12px; font-weight:bold; background: linear-gradient(135deg, #2ecc71, #27ae60); color: #fff;" onclick="handleEmailAuth(event, 'signin')">SIGN IN</button>
-          <button type="button" class="btn btn-outline" style="padding:12px; font-weight:bold; border-color: var(--gold); color: var(--gold);" onclick="handleEmailAuth(event, 'signup')">NEW SIGN UP</button>
+          <button type="button" class="btn" style="padding:12px; font-weight:bold; background: linear-gradient(135deg, #2ecc71, #27ae60); color: #fff;" onclick="handleEmailAuth(event, 'signin')"><span class="k-lbl-en">SIGN IN</span><span class="k-lbl-hi" style="display:none;">साइन इन करें</span></button>
+          <button type="button" class="btn btn-outline" style="padding:12px; font-weight:bold; border-color: var(--gold); color: var(--gold);" onclick="handleEmailAuth(event, 'signup')"><span class="k-lbl-en">NEW SIGN UP</span><span class="k-lbl-hi" style="display:none;">नया साइन अप</span></button>
         </div>
       </form>
 
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
         <div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
-        <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Free Visitor Preview</span>
+        <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;"><span class="k-lbl-en">Free Visitor Preview</span><span class="k-lbl-hi" style="display:none;">मुफ़्त विज़िटर पूर्वावलोकन</span></span>
         <div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
       </div>
 
       <!-- Free Guest Preview Button -->
       <button class="btn btn-outline" style="width: 100%; padding: 12px; font-weight: 600; border-color: rgba(232,200,121,0.3); color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="showGuestChoiceScreen()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        🔮 Free Guest Kundli Preview (No Download)
+        <span class="k-lbl-en">🔮 Free Guest Kundli Preview (No Download)</span><span class="k-lbl-hi" style="display:none;">🔮 मुफ़्त गेस्ट कुंडली पूर्वावलोकन (कोई डाउनलोड नहीं)</span>
       </button>
     </div>
 
@@ -848,8 +848,8 @@
           <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
         </svg>
       </div>
-      <h3 style="color: var(--gold); margin: 0 0 6px 0; font-size: 1.25rem;">Welcome Cosmic Visitor</h3>
-      <p style="color: var(--text-muted); font-size: 0.82rem; margin: 0 0 20px 0;">Choose how you wish to explore CosmoVedic today:</p>
+      <h3 style="color: var(--gold); margin: 0 0 6px 0; font-size: 1.25rem;"><span class="k-lbl-en">Welcome Cosmic Visitor</span><span class="k-lbl-hi" style="display:none;">ब्रह्मांडीय आगंतुक का स्वागत है</span></h3>
+      <p style="color: var(--text-muted); font-size: 0.82rem; margin: 0 0 20px 0;"><span class="k-lbl-en">Choose how you wish to explore CosmoVedic today:</span><span class="k-lbl-hi" style="display:none;">चुनें कि आप आज कोस्मोवैदिक को कैसे खोजना चाहते हैं:</span></p>
       
       <div style="display: flex; flex-direction: column; gap: 14px; width: 100%;">
         <!-- Choice A: Generate Detailed Kundli -->
@@ -858,8 +858,8 @@
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           </span>
           <div>
-            <strong style="color: var(--gold); display: block; font-size: 0.95rem; margin-bottom: 2px;">🔮 Generate Janma Kundli (Free)</strong>
-            <span style="font-size: 0.75rem; color: var(--text-muted);">Fill birth details &amp; view your 100% detailed birth chart preview instantly.</span>
+            <strong style="color: var(--gold); display: block; font-size: 0.95rem; margin-bottom: 2px;"><span class="k-lbl-en">🔮 Generate Janma Kundli (Free)</span><span class="k-lbl-hi" style="display:none;">🔮 जन्म कुंडली बनाएं (मुफ़्त)</span></strong>
+            <span style="font-size: 0.75rem; color: var(--text-muted);"><span class="k-lbl-en">Fill birth details &amp; view your 100% detailed birth chart preview instantly.</span><span class="k-lbl-hi" style="display:none;">जन्म विवरण भरें और तुरंत अपना 100% विस्तृत जन्म कुंडली पूर्वावलोकन देखें।</span></span>
           </div>
         </button>
 
@@ -869,12 +869,12 @@
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </span>
           <div>
-            <strong style="color: #2ecc71; display: block; font-size: 0.95rem; margin-bottom: 2px;">🎯 Set Goal &amp; 90-Day Plan (Sign Up)</strong>
-            <span style="font-size: 0.75rem; color: var(--text-muted);">Requires free Sign In / Sign Up to set active goals &amp; save daily task streak.</span>
+            <strong style="color: #2ecc71; display: block; font-size: 0.95rem; margin-bottom: 2px;"><span class="k-lbl-en">🎯 Set Goal &amp; 90-Day Plan (Sign Up)</span><span class="k-lbl-hi" style="display:none;">🎯 लक्ष्य और 90-दिवसीय योजना (साइन अप)</span></strong>
+            <span style="font-size: 0.75rem; color: var(--text-muted);"><span class="k-lbl-en">Requires free Sign In / Sign Up to set active goals &amp; save daily task streak.</span><span class="k-lbl-hi" style="display:none;">सक्रिय लक्ष्यों को सेट करने और दैनिक कार्य प्रगति सहेजने के लिए मुफ़्त साइन इन / साइन अप आवश्यक है।</span></span>
           </div>
         </button>
 
-        <button class="btn" style="width: auto; padding: 6px 16px; font-size: 0.78rem; margin-top: 8px; align-self: center;" onclick="showOnboardingStep('path')">BACK TO SIGN IN</button>
+        <button class="btn" style="width: auto; padding: 6px 16px; font-size: 0.78rem; margin-top: 8px; align-self: center;" onclick="showOnboardingStep('path')"><span class="k-lbl-en">BACK TO SIGN IN</span><span class="k-lbl-hi" style="display:none;">साइन इन पर वापस जाएं</span></button>
       </div>
     </div>
         <!-- ── STEP A.5: Choose Your Path (Single vs Couple) ── -->
@@ -887,8 +887,8 @@
           <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
         </svg>
       </div>
-      <h2 style="margin-bottom: 8px; color: #FFFFFF; font-size: 1.35rem;">Choose Your Path</h2>
-      <p style="color: var(--text-muted); font-size: 0.83rem; margin-bottom: 22px;">Select how you wish to align your 90-day karmic journey</p>
+      <h2 style="margin-bottom: 8px; color: #FFFFFF; font-size: 1.35rem;"><span class="k-lbl-en">Choose Your Path</span><span class="k-lbl-hi" style="display:none;">अपना मार्ग चुनें</span></h2>
+      <p style="color: var(--text-muted); font-size: 0.83rem; margin-bottom: 22px;"><span class="k-lbl-en">Select how you wish to align your 90-day karmic journey</span><span class="k-lbl-hi" style="display:none;">चुनें कि आप अपनी 90-दिवसीय कर्म यात्रा को कैसे संरेखित करना चाहते हैं</span></p>
       
       <div style="display: flex; flex-direction: column; gap: 14px; width: 100%;">
         <!-- Option A: Single Goal Path -->
@@ -897,8 +897,8 @@
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
           </span>
           <div>
-            <strong style="color: var(--gold); display: block; font-size: 0.95rem; margin-bottom: 2px;">Single Goal Path</strong>
-            <span style="font-size: 0.75rem; color: var(--text-muted);">Personal health, career, finance, assets or relationships.</span>
+            <strong style="color: var(--gold); display: block; font-size: 0.95rem; margin-bottom: 2px;"><span class="k-lbl-en">Single Goal Path</span><span class="k-lbl-hi" style="display:none;">एकल लक्ष्य मार्ग</span></strong>
+            <span style="font-size: 0.75rem; color: var(--text-muted);"><span class="k-lbl-en">Personal health, career, finance, assets or relationships.</span><span class="k-lbl-hi" style="display:none;">व्यक्तिगत स्वास्थ्य, करियर, वित्त, संपत्ति या संबंध।</span></span>
           </div>
         </button>
 
@@ -908,8 +908,8 @@
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3.5"/><path d="M1 20c0-3.5 3-6 7-6s7 2.5 7 6"/><circle cx="17" cy="8" r="2.8"/><path d="M15 20c0-2 1.5-3.5 3.5-4.2"/></svg>
           </span>
           <div>
-            <strong style="color: var(--gold); display: block; font-size: 0.95rem; margin-bottom: 2px;">Couple Goal Path</strong>
-            <span style="font-size: 0.75rem; color: var(--text-muted);">Baby planning, joint assets, business, relationship harmony.</span>
+            <strong style="color: var(--gold); display: block; font-size: 0.95rem; margin-bottom: 2px;"><span class="k-lbl-en">Couple Goal Path</span><span class="k-lbl-hi" style="display:none;">युगल लक्ष्य मार्ग</span></strong>
+            <span style="font-size: 0.75rem; color: var(--text-muted);"><span class="k-lbl-en">Baby planning, joint assets, business, relationship harmony.</span><span class="k-lbl-hi" style="display:none;">बच्चे की योजना, संयुक्त संपत्ति, व्यवसाय, संबंध सद्भाव।</span></span>
           </div>
         </button>
       </div>
@@ -918,8 +918,8 @@
     <!-- ── STEP B: Choose Category ──────────────────────── -->
     <div id="onboarding-step-category" class="auth-card" style="text-align: center; width: 100%; display: none;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; width: 100%;">
-        <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;">Your Focus Area</h3>
-        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep('select-path')">BACK</button>
+        <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;"><span class="k-lbl-en">Your Focus Area</span><span class="k-lbl-hi" style="display:none;">आपका ध्यान क्षेत्र</span></h3>
+        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep('select-path')"><span class="k-lbl-en">BACK</span><span class="k-lbl-hi" style="display:none;">पीछे</span></button>
       </div>
       <p id="onboarding-category-label" style="font-size:0.78rem;color:var(--text-muted);margin:0 0 16px 0;text-align:left;"></p>
       <div id="category-grid" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
@@ -931,10 +931,10 @@
     <div id="onboarding-step-1" class="auth-card" style="text-align: center; width: 100%; display: none;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; width: 100%;">
         <div style="text-align:left;">
-          <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;">Select Your Goal</h3>
+          <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;"><span class="k-lbl-en">Select Your Goal</span><span class="k-lbl-hi" style="display:none;">अपना लक्ष्य चुनें</span></h3>
           <p id="selected-category-label" style="font-size:0.72rem;color:var(--text-muted);margin:2px 0 0 0;"></p>
         </div>
-        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep('category')">BACK</button>
+        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep('category')"><span class="k-lbl-en">BACK</span><span class="k-lbl-hi" style="display:none;">पीछे</span></button>
       </div>
       <div style="height:1px;background:rgba(255,255,255,0.06);margin:10px 0 14px;"></div>
       <div id="goals-dynamic" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
@@ -945,29 +945,29 @@
     <!-- ── STEP D: Birth Details ─────────────────────────── -->
     <div id="onboarding-step-2" class="auth-card" style="display: none; width: 100%;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; width: 100%;">
-        <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;">Your Cosmic Details</h3>
-        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep('category')">BACK</button>
+        <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;"><span class="k-lbl-en">Your Cosmic Details</span><span class="k-lbl-hi" style="display:none;">आपका ब्रह्मांडीय विवरण</span></h3>
+        <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep('category')"><span class="k-lbl-en">BACK</span><span class="k-lbl-hi" style="display:none;">पीछे</span></button>
       </div>
       <p id="onboarding-goal-label" style="font-size:0.78rem;color:var(--gold);background:rgba(232,200,121,0.08);border-radius:8px;padding:6px 10px;margin:0 0 16px 0;text-align:left;"></p>
 
       <form onsubmit="submitOnboarding(event)">
         <!-- YOUR DETAILS -->
         <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px;margin-bottom:14px;">
-          <p style="font-size:0.72rem;color:var(--gold);font-weight:bold;letter-spacing:1px;text-transform:uppercase;margin:0 0 12px 0;">Your Details</p>
+          <p style="font-size:0.72rem;color:var(--gold);font-weight:bold;letter-spacing:1px;text-transform:uppercase;margin:0 0 12px 0;"><span class="k-lbl-en">Your Details</span><span class="k-lbl-hi" style="display:none;">आपका विवरण</span></p>
 
           <div class="form-group">
-            <label>Full Name</label>
+            <label><span class="k-lbl-en">Full Name</span><span class="k-lbl-hi" style="display:none;">पूरा नाम</span></label>
             <input type="text" id="o-name" required placeholder="Your full name">
           </div>
 
           <div class="form-group">
-            <label>Gender</label>
+            <label><span class="k-lbl-en">Gender</span><span class="k-lbl-hi" style="display:none;">लिंग</span></label>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
               <label style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectGender(this,'M')">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="14" r="6"/><path d="m14.7 9.3 4.3-4.3M22 4h-5m5 0v5"/></svg> Male
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="14" r="6"/><path d="m14.7 9.3 4.3-4.3M22 4h-5m5 0v5"/></svg> <span class="k-lbl-en">Male</span><span class="k-lbl-hi" style="display:none;">पुरुष</span>
               </label>
               <label style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectGender(this,'F')">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><line x1="12" y1="14" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/></svg> Female
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><line x1="12" y1="14" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/></svg> <span class="k-lbl-en">Female</span><span class="k-lbl-hi" style="display:none;">महिला</span>
               </label>
             </div>
             <input type="hidden" id="o-gender" required>
@@ -975,23 +975,23 @@
 
           <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
             <div>
-              <label>Birth Date</label>
+              <label><span class="k-lbl-en">Birth Date</span><span class="k-lbl-hi" style="display:none;">जन्म तिथि</span></label>
               <input type="date" id="o-date" required>
             </div>
             <div>
-              <label>Birth Time</label>
+              <label><span class="k-lbl-en">Birth Time</span><span class="k-lbl-hi" style="display:none;">जन्म समय</span></label>
               <input type="time" id="o-time" required>
             </div>
           </div>
 
           <div class="form-group" style="position: relative;">
-            <label>Birth Place (City)</label>
+            <label><span class="k-lbl-en">Birth Place (City)</span><span class="k-lbl-hi" style="display:none;">जन्म स्थान (शहर)</span></label>
             <input type="text" id="o-city" required placeholder="Type city (e.g. New Delhi)" oninput="filterOnboardingCities(this.value)" onblur="setTimeout(() => { document.getElementById('onboarding-city-suggestions').style.display = 'none'; }, 200)" autocomplete="off">
             <div id="onboarding-city-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1px solid #2A244E; border-radius: 10px; z-index: 1000; max-height: 180px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
           </div>
 
           <div class="form-group" id="o-profession-group">
-            <label id="o-profession-label">Current Profession / Skill Set</label>
+            <label id="o-profession-label"><span class="k-lbl-en">Current Profession / Skill Set</span><span class="k-lbl-hi" style="display:none;">वर्तमान पेशा / कौशल सेट</span></label>
             <input type="text" id="o-profession" placeholder="e.g. Software Engineer, Sales, Student">
           </div>
         </div>
@@ -1001,7 +1001,7 @@
         <!-- Custom Issue + Voice Input -->
         <div id="onboarding-custom-issue-group" style="display: none; margin-bottom:14px;">
           <div class="form-group" style="margin-bottom:0;">
-            <label>Describe Your Specific Issue</label>
+            <label><span class="k-lbl-en">Describe Your Specific Issue</span><span class="k-lbl-hi" style="display:none;">अपनी विशिष्ट समस्या का वर्णन करें</span></label>
             <div style="position:relative;display:flex;gap:8px;align-items:flex-start;">
               <textarea id="o-custom-issue" rows="3" placeholder="Describe your issue clearly... (or use mic)" oninput="checkOnboardingCustomIssueKeywords(this.value)" style="flex:1;resize:vertical;font-family:inherit;"></textarea>
               <button type="button" id="o-mic-btn" onclick="toggleVoiceInput()" title="Voice Input" style="flex-shrink:0;background:rgba(232,200,121,0.1);border:1px solid rgba(232,200,121,0.3);border-radius:8px;padding:10px;cursor:pointer;transition:all 0.2s;margin-top:0;">
@@ -1062,7 +1062,7 @@
             Baby planning requires one Male and one Female partner.
           </div>
           <div class="form-group">
-            <label>Which baby are you planning for?</label>
+            <label><span class="k-lbl-en">Which baby are you planning for?</span><span class="k-lbl-hi" style="display:none;">आप किस बच्चे के लिए योजना बना रहे हैं?</span></label>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
               <label class="baby-num-btn" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectBabyNumber(this,'1')">1st Baby</label>
               <label class="baby-num-btn" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectBabyNumber(this,'2')">2nd Baby</label>
@@ -1071,16 +1071,16 @@
             <input type="hidden" id="o-baby-number-val">
           </div>
           <div id="o-baby-dob-group" style="display: none;" class="form-group">
-            <label>1st Baby's Date of Birth</label>
+            <label><span class="k-lbl-en">1st Baby's Date of Birth</span><span class="k-lbl-hi" style="display:none;">पहले बच्चे की जन्म तिथि</span></label>
             <input type="date" id="o-first-baby-dob">
           </div>
           <div id="o-baby-ages-group" style="display: none;">
             <div class="form-group">
-              <label>1st Baby's Age (Years)</label>
+              <label><span class="k-lbl-en">1st Baby's Age (Years)</span><span class="k-lbl-hi" style="display:none;">पहले बच्चे की उम्र (वर्ष)</span></label>
               <input type="number" id="o-first-baby-age" min="0" placeholder="e.g. 5">
             </div>
             <div class="form-group">
-              <label>2nd Baby's Age (Years)</label>
+              <label><span class="k-lbl-en">2nd Baby's Age (Years)</span><span class="k-lbl-hi" style="display:none;">दूसरे बच्चे की उम्र (वर्ष)</span></label>
               <input type="number" id="o-second-baby-age" min="0" placeholder="e.g. 2">
             </div>
           </div>
@@ -1100,26 +1100,26 @@
               <label>Partner's Gender</label>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
                 <label class="p-gender-btn" style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectPartnerGender(this,'M')">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="14" r="6"/><path d="m14.7 9.3 4.3-4.3M22 4h-5m5 0v5"/></svg> Male
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="14" r="6"/><path d="m14.7 9.3 4.3-4.3M22 4h-5m5 0v5"/></svg> <span class="k-lbl-en">Male</span><span class="k-lbl-hi" style="display:none;">पुरुष</span>
                 </label>
                 <label class="p-gender-btn" style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;" onclick="selectPartnerGender(this,'F')">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><line x1="12" y1="14" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/></svg> Female
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><line x1="12" y1="14" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/></svg> <span class="k-lbl-en">Female</span><span class="k-lbl-hi" style="display:none;">महिला</span>
                 </label>
               </div>
               <input type="hidden" id="o-p-gender">
             </div>
             <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
               <div>
-                <label>Partner's Birth Date</label>
+                <label><span class="k-lbl-en">Partner's Birth Date</span><span class="k-lbl-hi" style="display:none;">साथी की जन्म तिथि</span></label>
                 <input type="date" id="o-p-date">
               </div>
               <div>
-                <label>Partner's Birth Time</label>
+                <label><span class="k-lbl-en">Partner's Birth Time</span><span class="k-lbl-hi" style="display:none;">साथी का जन्म समय</span></label>
                 <input type="time" id="o-p-time">
               </div>
             </div>
             <div class="form-group" style="position: relative;">
-              <label>Partner's Birth Place (City)</label>
+              <label><span class="k-lbl-en">Partner's Birth Place (City)</span><span class="k-lbl-hi" style="display:none;">साथी का जन्म स्थान (शहर)</span></label>
               <input type="text" id="o-p-city" placeholder="Type city (e.g. Mumbai)" oninput="filterPartnerCities(this.value)" onblur="setTimeout(() => { document.getElementById('partner-city-suggestions').style.display = 'none'; }, 200)" autocomplete="off">
               <div id="partner-city-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1px solid #2A244E; border-radius: 10px; z-index: 1000; max-height: 180px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
             </div>
@@ -1141,8 +1141,8 @@
           <path d="M12 2v20M2 12h20"/>
         </svg>
       </div>
-      <h2 style="margin-bottom: 6px; color: #FFFFFF; font-size: 1.3rem;">Welcome to CosmoVedic</h2>
-      <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 20px;">Sign In or Sign Up to unlock full 90-day goal roadmap &amp; Kundli PDF downloads</p>
+      <h2 style="margin-bottom: 6px; color: #FFFFFF; font-size: 1.3rem;"><span class="k-lbl-en">Welcome to CosmoVedic</span><span class="k-lbl-hi" style="display:none;">कोस्मोवैदिक में आपका स्वागत है</span></h2>
+      <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 20px;"><span class="k-lbl-en">Sign In or Sign Up to unlock full 90-day goal roadmap &amp; Kundli PDF downloads</span><span class="k-lbl-hi" style="display:none;">पूर्ण 90-दिवसीय लक्ष्य रोडमैप और कुंडली पीडीएफ डाउनलोड अनलॉक करने के लिए साइन इन या साइन अप करें</span></p>
 
       <!-- Google Authentication Button -->
       <button class="btn" style="background: #FFFFFF; color: #333333; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px; border-radius: 10px; padding: 12px 20px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.2s;" onclick="signInWithGoogle()">
@@ -1152,12 +1152,12 @@
           <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
           <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
         </svg>
-        <span>Sign In / Sign Up with Google</span>
+        <span><span class="k-lbl-en">Sign In / Sign Up with Google</span><span class="k-lbl-hi" style="display:none;">गूगल के साथ साइन इन / साइन अप करें</span></span>
       </button>
 
       <div style="display:flex; align-items:center; gap:10px; margin: 16px 0;">
         <div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
-        <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Or Email Account</span>
+        <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;"><span class="k-lbl-en">Or Email Account</span><span class="k-lbl-hi" style="display:none;">या ईमेल खाता</span></span>
         <div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
       </div>
 
@@ -1170,14 +1170,14 @@
           <input type="password" id="auth-password-2" required placeholder="Enter password (min 6 chars)" style="width:100%;">
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px;">
-          <button type="button" class="btn" style="padding:12px; font-weight:bold; background: linear-gradient(135deg, #2ecc71, #27ae60); color: #fff;" onclick="handleEmailAuth(event, 'signin')">SIGN IN</button>
-          <button type="button" class="btn btn-outline" style="padding:12px; font-weight:bold; border-color: var(--gold); color: var(--gold);" onclick="handleEmailAuth(event, 'signup')">NEW SIGN UP</button>
+          <button type="button" class="btn" style="padding:12px; font-weight:bold; background: linear-gradient(135deg, #2ecc71, #27ae60); color: #fff;" onclick="handleEmailAuth(event, 'signin')"><span class="k-lbl-en">SIGN IN</span><span class="k-lbl-hi" style="display:none;">साइन इन करें</span></button>
+          <button type="button" class="btn btn-outline" style="padding:12px; font-weight:bold; border-color: var(--gold); color: var(--gold);" onclick="handleEmailAuth(event, 'signup')"><span class="k-lbl-en">NEW SIGN UP</span><span class="k-lbl-hi" style="display:none;">नया साइन अप</span></button>
         </div>
       </form>
 
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
         <div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
-        <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Free Visitor Preview</span>
+        <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;"><span class="k-lbl-en">Free Visitor Preview</span><span class="k-lbl-hi" style="display:none;">मुफ़्त विज़िटर पूर्वावलोकन</span></span>
         <div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
       </div>
 
@@ -1201,10 +1201,10 @@
       <!-- TAB 1: HOME -->
       <div id="tab-home" class="tab-content active">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-          <h3 style="margin: 0;">Cosmic Dashboard</h3>
+          <h3 style="margin: 0;"><span class="k-lbl-en">Cosmic Dashboard</span><span class="k-lbl-hi" style="display:none;">कौस्मिक डैशबोर्ड</span></h3>
           <button class="btn btn-outline" style="width: auto; padding: 6px 12px; font-size: 0.78rem; border-color: rgba(142,111,214,0.5); color: #c39bd3; display: flex; align-items: center; gap: 6px;" onclick="switchTab(4, document.querySelectorAll('.nav-item')[4])">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c39bd3" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-            <span>🎓 Detailed Coach Predictions</span>
+            <span><span class="k-lbl-en">🎓 Detailed Coach Predictions</span><span class="k-lbl-hi" style="display:none;">🎓 विस्तृत कोच भविष्यवाणियां</span></span>
           </button>
         </div>
         
@@ -1215,7 +1215,7 @@
           
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
             <div>
-              <span style="font-size: 0.8rem; color: var(--gold); font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Cosmic Rank</span>
+              <span style="font-size: 0.8rem; color: var(--gold); font-weight: bold; letter-spacing: 1px; text-transform: uppercase;"><span class="k-lbl-en">Cosmic Rank</span><span class="k-lbl-hi" style="display:none;">कौस्मिक रैंक</span></span>
               <h4 id="user-level-title" style="margin: 2px 0 0 0; color: #fff; font-size: 1.1rem;">Level 1 - Novice Seeker</h4>
             </div>
             <div style="display: flex; align-items: center; background: rgba(255, 107, 107, 0.15); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(255, 107, 107, 0.3);">
@@ -1227,7 +1227,7 @@
           <!-- XP Progress Bar -->
           <div style="margin-bottom: 15px;">
             <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">
-              <span>Karmic XP</span>
+              <span><span class="k-lbl-en">Karmic XP</span><span class="k-lbl-hi" style="display:none;">कर्मिक एक्सपी</span></span>
               <span id="user-xp-detail">0 / 100 XP</span>
             </div>
             <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
@@ -1237,7 +1237,7 @@
 
           <!-- Daily Mood Check-In -->
           <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px;">
-            <p style="margin: 0 0 8px 0; font-size: 0.8rem; color: var(--text-muted); text-align: left;">How is your cosmic energy today?</p>
+            <p style="margin: 0 0 8px 0; font-size: 0.8rem; color: var(--text-muted); text-align: left;"><span class="k-lbl-en">How is your cosmic energy today?</span><span class="k-lbl-hi" style="display:none;">आज आपकी ब्रह्मांडीय ऊर्जा कैसी है?</span></p>
             <div style="display: flex; justify-content: space-between; gap: 8px;">
               <button class="mood-btn" onclick="checkInMood(1, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 8px 0; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center;" title="Very Low">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
@@ -1263,11 +1263,11 @@
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
             <h4 style="margin: 0; color: var(--gold); font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-              Active Life Goals (<span id="active-goals-count">1</span>)
+              <span class="k-lbl-en">Active Life Goals</span><span class="k-lbl-hi" style="display:none;">सक्रिय जीवन लक्ष्य</span> (<span id="active-goals-count">1</span>)
             </h4>
-            <button class="btn" style="width: auto; padding: 4px 10px; font-size: 0.75rem;" onclick="openAddGoalModal()">+ ADD GOAL</button>
+            <button class="btn" style="width: auto; padding: 4px 10px; font-size: 0.75rem;" onclick="openAddGoalModal()"><span class="k-lbl-en">+ ADD GOAL</span><span class="k-lbl-hi" style="display:none;">+ लक्ष्य जोड़ें</span></button>
           </div>
-          <p style="margin: 0 0 10px 0; font-size: 0.75rem; color: var(--text-muted);">Set multiple goals — daily mantras &amp; action steps will automatically unify without duplicate tasks.</p>
+          <p style="margin: 0 0 10px 0; font-size: 0.75rem; color: var(--text-muted);"><span class="k-lbl-en">Set multiple goals — daily mantras &amp; action steps will automatically unify without duplicate tasks.</span><span class="k-lbl-hi" style="display:none;">अनेक लक्ष्य निर्धारित करें — दैनिक मंत्र और क्रियाएं स्वतः बिना पुनरावृत्ति के संयोजित हो जाएंगी।</span></p>
           <div id="active-goals-list" style="display: flex; flex-wrap: wrap; gap: 8px;">
             <!-- Active goal badges rendered by JS -->
           </div>
@@ -1378,29 +1378,29 @@
           </div>
           
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 0.68rem; color: var(--text-muted);">
-            <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: rgba(255,255,255,0.05); border-radius: 2px;"></div> Pending</div>
-            <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: rgba(142, 68, 173, 0.5); border-radius: 2px;"></div> Partial</div>
-            <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: var(--gold); border-radius: 2px; box-shadow: 0 0 4px var(--gold);"></div> Completed</div>
+            <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: rgba(255,255,255,0.05); border-radius: 2px;"></div> <span class="k-lbl-en">Pending</span><span class="k-lbl-hi" style="display:none;">लंबित</span></div>
+            <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: rgba(142, 68, 173, 0.5); border-radius: 2px;"></div> <span class="k-lbl-en">Partial</span><span class="k-lbl-hi" style="display:none;">आंशिक</span></div>
+            <div style="display: flex; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: var(--gold); border-radius: 2px; box-shadow: 0 0 4px var(--gold);"></div> <span class="k-lbl-en">Completed</span><span class="k-lbl-hi" style="display:none;">पूर्ण</span></div>
           </div>
         </div>
 
         <div class="card">
-          <h4 style="color: var(--gold); margin-bottom: 12px;">Today's Panchang</h4>
+          <h4 style="color: var(--gold); margin-bottom: 12px;"><span class="k-lbl-en">Today's Panchang</span><span class="k-lbl-hi" style="display:none;">आज का पंचांग</span></h4>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.9rem;">
             <div>
-              <p style="color: var(--text-muted); font-size: 0.8rem;">Tithi</p>
+              <p style="color: var(--text-muted); font-size: 0.8rem;"><span class="k-lbl-en">Tithi</span><span class="k-lbl-hi" style="display:none;">तिथि</span></p>
               <strong id="p-tithi">Prathama</strong>
             </div>
             <div>
-              <p style="color: var(--text-muted); font-size: 0.8rem;">Nakshatra</p>
+              <p style="color: var(--text-muted); font-size: 0.8rem;"><span class="k-lbl-en">Nakshatra</span><span class="k-lbl-hi" style="display:none;">नक्षत्र</span></p>
               <strong id="p-nakshatra">Ashwini</strong>
             </div>
             <div>
-              <p style="color: var(--text-muted); font-size: 0.8rem;">Yoga</p>
+              <p style="color: var(--text-muted); font-size: 0.8rem;"><span class="k-lbl-en">Yoga</span><span class="k-lbl-hi" style="display:none;">योग</span></p>
               <strong id="p-yoga">Vishkumbha</strong>
             </div>
             <div>
-              <p style="color: var(--text-muted); font-size: 0.8rem;">Day (Vara)</p>
+              <p style="color: var(--text-muted); font-size: 0.8rem;"><span class="k-lbl-en">Day (Vara)</span><span class="k-lbl-hi" style="display:none;">दिन (वार)</span></p>
               <strong id="p-vara">Monday</strong>
             </div>
           </div>
@@ -1413,12 +1413,12 @@
             <div>
               <h3 style="color: var(--gold); margin: 0; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <span>Daily Kundli Rashi Horoscope</span>
+                <span><span class="k-lbl-en">Daily Kundli Rashi Horoscope</span><span class="k-lbl-hi" style="display:none;">दैनिक कुंडली राशि राशिफल</span></span>
               </h3>
               <p style="color: var(--text-muted); font-size: 0.78rem; margin: 3px 0 0 0;" id="rashi-date-label">Today</p>
             </div>
             <div style="background: rgba(142, 111, 214, 0.2); border: 1px solid rgba(142, 111, 214, 0.5); padding: 5px 12px; border-radius: 20px; text-align: right;">
-              <span style="font-size: 0.7rem; color: var(--gold); text-transform: uppercase; font-weight: 700; display: block;" id="rashi-badge-sub">Janma Rashi</span>
+              <span style="font-size: 0.7rem; color: var(--gold); text-transform: uppercase; font-weight: 700; display: block;"><span class="k-lbl-en">Janma Rashi</span><span class="k-lbl-hi" style="display:none;">जन्म राशि</span></span>
               <span style="font-size: 0.9rem; color: #FFFFFF; font-weight: bold;" id="rashi-badge-name">—</span>
             </div>
           </div>
@@ -1426,20 +1426,20 @@
             <p id="rashi-prediction-text">Calculating daily astronomical transits for your Kundli Rashi...</p>
           </div>
           <div style="background: rgba(232, 200, 121, 0.08); border-left: 3px solid var(--gold); padding: 10px 14px; border-radius: 6px; margin-bottom: 16px;">
-            <span style="font-size: 0.75rem; color: var(--gold); font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 2px;">Daily Rashi Remedy</span>
+            <span style="font-size: 0.75rem; color: var(--gold); font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 2px;"><span class="k-lbl-en">Daily Rashi Remedy</span><span class="k-lbl-hi" style="display:none;">दैनिक राशि उपाय</span></span>
             <span style="font-size: 0.84rem; color: #FFFFFF;" id="rashi-remedy-text">Loading...</span>
           </div>
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(9, 7, 26, 0.6); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
             <div style="text-align: center;">
-              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Lucky Number</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;"><span class="k-lbl-en">Lucky Number</span><span class="k-lbl-hi" style="display:none;">लकी नंबर</span></span>
               <strong style="color: var(--gold); font-size: 1.05rem;" id="rashi-lucky-num">—</strong>
             </div>
             <div style="text-align: center; border-left: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1);">
-              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Lucky Color</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;"><span class="k-lbl-en">Lucky Color</span><span class="k-lbl-hi" style="display:none;">भाग्यशाली रंग</span></span>
               <strong style="color: #4A90E2; font-size: 0.92rem;" id="rashi-lucky-color">—</strong>
             </div>
             <div style="text-align: center;">
-              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Transit Focus</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;"><span class="k-lbl-en">Transit Focus</span><span class="k-lbl-hi" style="display:none;">गोचर फोकस</span></span>
               <strong style="color: #2ECC71; font-size: 0.88rem;" id="rashi-transit-focus">—</strong>
             </div>
           </div>
@@ -1700,10 +1700,10 @@
 
       <!-- TAB 3: MATCHING -->
       <div id="tab-matching" class="tab-content">
-        <h3 style="margin-bottom: 15px;">Kundli Matching</h3>
+        <h3 style="margin-bottom: 15px;"><span class="k-lbl-en">Kundli Matching</span><span class="k-lbl-hi" style="display:none;">कुंडली मिलान (संगति)</span></h3>
         <div class="card">
           <div class="form-group">
-            <label>Bride's Moon Sign</label>
+            <label><span class="k-lbl-en">Bride's Moon Sign</span><span class="k-lbl-hi" style="display:none;">वधू की चंद्र राशि</span></label>
             <select id="m-bride-sign">
               <option value="0">Aries</option>
               <option value="1">Taurus</option>
@@ -1720,7 +1720,7 @@
             </select>
           </div>
           <div class="form-group">
-            <label>Groom's Moon Sign</label>
+            <label><span class="k-lbl-en">Groom's Moon Sign</span><span class="k-lbl-hi" style="display:none;">वर की चंद्र राशि</span></label>
             <select id="m-groom-sign">
               <option value="0">Aries</option>
               <option value="1">Taurus</option>
@@ -1736,14 +1736,14 @@
               <option value="11">Pisces</option>
             </select>
           </div>
-          <button class="btn" onclick="calculateCompatibility()">CHECK COMPATIBILITY</button>
+          <button class="btn" onclick="calculateCompatibility()"><span class="k-lbl-en">CHECK COMPATIBILITY</span><span class="k-lbl-hi" style="display:none;">संगति की जांच करें</span></button>
         </div>
 
         <div id="matching-result" style="display: none;" class="card">
-          <h4 style="color: var(--gold); text-align: center;">Result</h4>
+          <h4 style="color: var(--gold); text-align: center;"><span class="k-lbl-en">Result</span><span class="k-lbl-hi" style="display:none;">परिणाम</span></h4>
           <div class="score-circle">
             <div class="score-num" id="matching-score">24</div>
-            <div style="font-size: 0.75rem; color: var(--text-muted);">out of 36</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);"><span class="k-lbl-en">out of 36</span><span class="k-lbl-hi" style="display:none;">36 में से</span></div>
           </div>
           <p id="matching-verdict" style="text-align: center; font-weight: bold; margin-bottom: 15px;"></p>
         </div>
@@ -1751,8 +1751,8 @@
 
       <!-- TAB 4: TAROT -->
       <div id="tab-tarot" class="tab-content">
-        <h3 style="margin-bottom: 10px;">Tarot Card Reading</h3>
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Focus on your question and select one of the cards below.</p>
+        <h3 style="margin-bottom: 10px;"><span class="k-lbl-en">Tarot Card Reading</span><span class="k-lbl-hi" style="display:none;">टैरो कार्ड रीडिंग</span></h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;"><span class="k-lbl-en">Focus on your question and select one of the cards below.</span><span class="k-lbl-hi" style="display:none;">अपने प्रश्न पर ध्यान केंद्रित करें और नीचे दिए गए कार्डों में से एक चुनें।</span></p>
         
         <div class="tarot-deck" id="tarot-deck">
           <div class="tarot-card" onclick="drawTarot(0)">?</div>
@@ -1764,41 +1764,41 @@
           <h4 style="color: var(--gold); margin-bottom: 8px;" id="tarot-card-name">The Fool</h4>
           <p style="color: var(--purple); font-size: 0.8rem; font-weight: bold; margin-bottom: 15px;" id="tarot-card-arcana">Major Arcana</p>
           <p id="tarot-card-meaning" style="font-size: 0.95rem; line-height: 1.4; color: var(--text-muted); font-style: italic;"></p>
-          <button class="btn btn-outline" onclick="resetTarot()" style="margin-top: 20px;">DRAW ANOTHER</button>
+          <button class="btn btn-outline" onclick="resetTarot()" style="margin-top: 20px;"><span class="k-lbl-en">DRAW ANOTHER</span><span class="k-lbl-hi" style="display:none;">दूसरा ड्रा करें</span></button>
         </div>
       </div>
 
       <!-- TAB 5: COACH -->
       <div id="tab-coach" class="tab-content">
-        <h3 style="margin-bottom: 15px;">Astro Career Coach</h3>
+        <h3 style="margin-bottom: 15px;"><span class="k-lbl-en">Astro Career Coach</span><span class="k-lbl-hi" style="display:none;">एस्ट्रो करियर कोच</span></h3>
         
         <div id="coach-form-view">
           <div class="card">
             <form onsubmit="generateCoachMission(event)">
               <div class="form-group">
-                <label>Full Name</label>
+                <label><span class="k-lbl-en">Full Name</span><span class="k-lbl-hi" style="display:none;">पूरा नाम</span></label>
                 <input type="text" id="c-name" required placeholder="Your Name">
               </div>
               
               <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div>
-                  <label>Birth Date</label>
+                  <label><span class="k-lbl-en">Birth Date</span><span class="k-lbl-hi" style="display:none;">जन्म तिथि</span></label>
                   <input type="date" id="c-date" required>
                 </div>
                 <div>
-                  <label>Birth Time</label>
+                  <label><span class="k-lbl-en">Birth Time</span><span class="k-lbl-hi" style="display:none;">जन्म समय</span></label>
                   <input type="time" id="c-time" required>
                 </div>
               </div>
               
               <div class="form-group" style="position: relative;">
-                <label>Birth Place (City)</label>
+                <label><span class="k-lbl-en">Birth Place (City)</span><span class="k-lbl-hi" style="display:none;">जन्म स्थान (शहर)</span></label>
                 <input type="text" id="c-city" required placeholder="Type city (e.g. New Delhi)" oninput="filterCoachCities(this.value)" onblur="setTimeout(() => { document.getElementById('coach-city-suggestions').style.display = 'none'; }, 200)" autocomplete="off">
                 <div id="coach-city-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1px solid #2A244E; border-radius: 10px; z-index: 1000; max-height: 180px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
               </div>
 
               <div class="form-group">
-                <label>Your Focus Goal</label>
+                <label><span class="k-lbl-en">Your Focus Goal</span><span class="k-lbl-hi" style="display:none;">आपका ध्यान लक्ष्य</span></label>
                 <select id="c-goal" required onchange="toggleCoachCustomIssueField(this.value)">
                   <option value="job">Career / Dream Job</option>
                   <option value="debt">Clear Financial Debt / Wealth</option>
@@ -1816,16 +1816,16 @@
               </div>
 
               <div id="coach-custom-issue-group" class="form-group" style="display: none;">
-                <label>Describe Your Specific Issue</label>
+                <label><span class="k-lbl-en">Describe Your Specific Issue</span><span class="k-lbl-hi" style="display:none;">अपनी विशिष्ट समस्या का वर्णन करें</span></label>
                 <input type="text" id="c-custom-issue" placeholder="e.g. Visa delay, legal dispute, health concerns, etc." oninput="checkCoachCustomIssueKeywords(this.value)">
               </div>
 
               <!-- Coach Baby Planning Fields -->
               <div id="coach-baby-group" style="display: none; border: 1px solid rgba(232, 200, 121, 0.2); padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
-                <h4 style="color: var(--gold); margin: 0 0 12px 0; font-size: 0.95rem;">Planning for Baby Details</h4>
+                <h4 style="color: var(--gold); margin: 0 0 12px 0; font-size: 0.95rem;"><span class="k-lbl-en">Planning for Baby Details</span><span class="k-lbl-hi" style="display:none;">बच्चे के नियोजन का विवरण</span></h4>
                 
                 <div class="form-group">
-                  <label>Which baby are you planning for?</label>
+                  <label><span class="k-lbl-en">Which baby are you planning for?</span><span class="k-lbl-hi" style="display:none;">आप किस बच्चे के लिए योजना बना रहे हैं?</span></label>
                   <select id="c-baby-number" onchange="toggleBabyFields('c', this.value)" style="width: 100%;">
                     <option value="1">1st Baby</option>
                     <option value="2">2nd Baby</option>
@@ -1835,30 +1835,30 @@
                 
                 <!-- 2nd Baby: 1st Baby DOB -->
                 <div id="c-baby-dob-group" style="display: none;" class="form-group">
-                  <label>1st Baby's Date of Birth</label>
+                  <label><span class="k-lbl-en">1st Baby's Date of Birth</span><span class="k-lbl-hi" style="display:none;">पहले बच्चे की जन्म तिथि</span></label>
                   <input type="date" id="c-first-baby-dob">
                 </div>
                 
                 <!-- 3rd Baby: 1st & 2nd Baby Ages -->
                 <div id="c-baby-ages-group" style="display: none;">
                   <div class="form-group">
-                    <label>1st Baby's Age (Years)</label>
+                    <label><span class="k-lbl-en">1st Baby's Age (Years)</span><span class="k-lbl-hi" style="display:none;">पहले बच्चे की उम्र (वर्ष)</span></label>
                     <input type="number" id="c-first-baby-age" min="0" placeholder="e.g. 5">
                   </div>
                   <div class="form-group">
-                    <label>2nd Baby's Age (Years)</label>
+                    <label><span class="k-lbl-en">2nd Baby's Age (Years)</span><span class="k-lbl-hi" style="display:none;">दूसरे बच्चे की उम्र (वर्ष)</span></label>
                     <input type="number" id="c-second-baby-age" min="0" placeholder="e.g. 2">
                   </div>
                 </div>
               </div>
 
               <div class="form-group">
-                <label>Your Profession</label>
+                <label><span class="k-lbl-en">Your Profession</span><span class="k-lbl-hi" style="display:none;">आपका पेशा</span></label>
                 <input type="text" id="c-profession" required placeholder="e.g. Software Engineer, Designer, Student">
               </div>
 
               <div class="form-group" style="margin-top: 15px;">
-                <label style="color: var(--gold); font-weight: bold;">Your Alignment Path</label>
+                <label style="color: var(--gold); font-weight: bold;"><span class="k-lbl-en">Your Alignment Path</span><span class="k-lbl-hi" style="display:none;">आपका संरेखण मार्ग</span></label>
                 <select id="c-path-mode" onchange="handleCoachPathModeChange(this.value)" style="width: 100%;">
                   <option value="single">Single Path (Individual)</option>
                   <option value="couple">Couple Path (Shared details)</option>
@@ -1869,42 +1869,42 @@
               <input type="checkbox" id="c-partner-toggle" onchange="toggleCoachPartnerFields(this.checked)" style="display: none;">
 
               <div id="coach-partner-fields" style="display: none; border-top: 1px solid #2A244E; margin-top: 15px; padding-top: 15px;">
-                <h4 style="color: var(--gold); margin-bottom: 15px; font-size: 0.95rem; text-align: left;">Partner / Spouse Cosmic Data</h4>
+                <h4 style="color: var(--gold); margin-bottom: 15px; font-size: 0.95rem; text-align: left;"><span class="k-lbl-en">Partner / Spouse Cosmic Data</span><span class="k-lbl-hi" style="display:none;">साथी / जीवनसाथी का विवरण</span></h4>
                 <div class="form-group">
-                  <label>Partner's Name</label>
+                  <label><span class="k-lbl-en">Partner's Name</span><span class="k-lbl-hi" style="display:none;">साथी का नाम</span></label>
                   <input type="text" id="c-p-name" placeholder="Partner's Name">
                 </div>
                 <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                   <div>
-                    <label>Partner's Birth Date</label>
+                    <label><span class="k-lbl-en">Partner's Birth Date</span><span class="k-lbl-hi" style="display:none;">साथी की जन्म तिथि</span></label>
                     <input type="date" id="c-p-date">
                   </div>
                   <div>
-                    <label>Partner's Birth Time</label>
+                    <label><span class="k-lbl-en">Partner's Birth Time</span><span class="k-lbl-hi" style="display:none;">साथी का जन्म समय</span></label>
                     <input type="time" id="c-p-time">
                   </div>
                 </div>
                 <div class="form-group" style="position: relative;">
-                  <label>Partner's Birth Place (City)</label>
+                  <label><span class="k-lbl-en">Partner's Birth Place (City)</span><span class="k-lbl-hi" style="display:none;">साथी का जन्म स्थान (शहर)</span></label>
                   <input type="text" id="c-p-city" placeholder="Type city (e.g. Mumbai)" oninput="filterCoachPartnerCities(this.value)" onblur="setTimeout(() => { document.getElementById('coach-partner-city-suggestions').style.display = 'none'; }, 200)" autocomplete="off">
                   <div id="coach-partner-city-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--card-bg); border: 1px solid #2A244E; border-radius: 10px; z-index: 1000; max-height: 180px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
                 </div>
               </div>
 
-              <button type="submit" class="btn" style="margin-top: 15px;">GENERATE MISSION</button>
+              <button type="submit" class="btn" style="margin-top: 15px;"><span class="k-lbl-en">GENERATE MISSION</span><span class="k-lbl-hi" style="display:none;">मिशन उत्पन्न करें</span></button>
             </form>
           </div>
         </div>
 
         <div id="coach-result-view" style="display: none;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-            <h4 id="coach-result-title" style="color: var(--gold); font-size: 1.1rem; margin: 0;">Your Astro Mission</h4>
+            <h4 id="coach-result-title" style="color: var(--gold); font-size: 1.1rem; margin: 0;"><span class="k-lbl-en">Your Astro Mission</span><span class="k-lbl-hi" style="display:none;">आपका एस्ट्रो मिशन</span></h4>
             <div style="display: flex; gap: 8px; align-items: center;">
               <button class="btn btn-outline" style="width: auto; padding: 6px 12px; font-size: 0.78rem; border-color: rgba(232,200,121,0.4); color: var(--gold); display: flex; align-items: center; gap: 6px;" onclick="switchTab(0, document.querySelectorAll('.nav-item')[0]); scrollToTaskNavigator();">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                <span>🗓️ Day-to-Day Tasks</span>
+                <span><span class="k-lbl-en">🗓️ Day-to-Day Tasks</span><span class="k-lbl-hi" style="display:none;">🗓️ दैनिक कार्य</span></span>
               </button>
-              <button class="btn" style="width: auto; padding: 6px 12px; font-size: 0.8rem;" onclick="switchTab(0, document.querySelectorAll('.nav-item')[0])">BACK</button>
+              <button class="btn" style="width: auto; padding: 6px 12px; font-size: 0.8rem;" onclick="switchTab(0, document.querySelectorAll('.nav-item')[0])"><span class="k-lbl-en">BACK</span><span class="k-lbl-hi" style="display:none;">पीछे</span></button>
             </div>
           </div>
 
@@ -1943,23 +1943,23 @@
 
       <!-- TAB 6: SETTINGS -->
       <div id="tab-settings" class="tab-content">
-        <h3 style="margin-bottom: 15px;">System & Settings</h3>
+        <h3 style="margin-bottom: 15px;"><span class="k-lbl-en">System & Settings</span><span class="k-lbl-hi" style="display:none;">सिस्टम और सेटिंग्स</span></h3>
         
         <div class="card">
-          <h4 style="color: var(--gold); margin-bottom: 15px;">Saved Profile</h4>
+          <h4 style="color: var(--gold); margin-bottom: 15px;"><span class="k-lbl-en">Saved Profile</span><span class="k-lbl-hi" style="display:none;">सहेजी गई प्रोफ़ाइल</span></h4>
           <div style="display: flex; align-items: center; gap: 15px;">
             <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--purple); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">S</div>
             <div>
-              <strong>Cosmic Seeker</strong>
-              <p style="color: var(--text-muted); font-size: 0.8rem;">Active Session: Guest Mode</p>
+              <strong id="settings-profile-name">Cosmic Seeker</strong>
+              <p id="settings-profile-session" style="color: var(--text-muted); font-size: 0.8rem;">Active Session: Guest Mode</p>
             </div>
           </div>
         </div>
 
         <div class="card">
-          <h4 style="color: var(--gold); margin-bottom: 15px;">Localization (Language)</h4>
+          <h4 style="color: var(--gold); margin-bottom: 15px;"><span class="k-lbl-en">Localization (Language)</span><span class="k-lbl-hi" style="display:none;">स्थानीयकरण (भाषा)</span></h4>
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span>Toggle Language</span>
+            <span><span class="k-lbl-en">Toggle Language</span><span class="k-lbl-hi" style="display:none;">भाषा बदलें</span></span>
             <select id="lang-select" onchange="changeLanguage()" style="width: auto; background: #1A1438; border: 1px solid #2A244E; color: white; padding: 6px 12px; border-radius: 6px;">
               <option value="en">English</option>
               <option value="hi">हिन्दी (Hindi)</option>
@@ -1981,7 +1981,7 @@
           <p id="cloud-status" style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted); text-align: center;"></p>
         </div>
 
-        <button onclick="logout()" class="btn" style="background: #381414; color: #ff6b6b; box-shadow: none;">LOG OUT</button>
+        <button onclick="logout()" class="btn" style="background: #381414; color: #ff6b6b; box-shadow: none;"><span class="k-lbl-en">LOG OUT</span><span class="k-lbl-hi" style="display:none;">लॉग आउट</span></button>
       </div>
     </main>
 
@@ -2516,8 +2516,8 @@
         partnerRulingLord = rasiLords[partnerLagnaSignNum] || "Sun";
       }
 
-      // Vedic Tasks
-      const vedicMantras = {
+      // Vedic Tasks (Bilingual)
+      const vedicMantrasEn = {
         "Sun": { mantra: "Om Suryaya Namah", text: "Read the Aditya Hridaya Stotra to boost confidence, vitality, and professional leadership." },
         "Moon": { mantra: "Om Somaya Namah", text: "Read chapters of Shiva Purana to bring mental clarity, peace, and emotional stability." },
         "Mars": { mantra: "Om Angarakaya Namah", text: "Read Hanuman Chalisa 3 times to invoke courage, focus, and defeat obstacles in your path." },
@@ -2526,58 +2526,19 @@
         "Venus": { mantra: "Om Shukraya Namah", text: "Read Lakshmi Chalisa to attract luxury, creative elegance, and harmonious partnerships." },
         "Saturn": { mantra: "Om Sham Shanaishcharaya Namah", text: "Read Shiva Panchakshari Stotra to build resilience, discipline, and patience in your career." }
       };
-      
-      // ---------------------------------------------------------------
-      // VEDIC TASKS — extended with goal-specific context
-      // ---------------------------------------------------------------
-      const lordDetails = vedicMantras[rulingLord] || vedicMantras["Sun"];
-      let vedicListHTML;
 
-      if (!hasPartner) {
-        // Single user vedic tasks — goal context aware
-        const goalVedicContext = {
-          job: `Perform Surya Namaskaar (12 rounds) before sunrise to activate career and authority vibrations.`,
-          debt: `Recite the Shiva Panchakshari mantra "Om Namah Shivaya" 108 times before meals to dissolve financial anxieties.`,
-          marriage: `Recite the Katyayani mantra "Om Katyayanyai Namah" 108 times on a Friday morning to attract your destined partner.`,
-          baby: `Both partners should recite the Santan Gopal mantra "Om Devaki Sut Govind..." 108 times together each morning.`,
-          business: `Perform Ganesh puja on Wednesdays and light incense (dhoop) at your business entrance.`,
-          property: `Recite the Bhoomi Sukta prayer (from Atharvaveda) before property visits. Also chant "Om Bhaumaya Namah" 11 times for Mars blessings on property.`,
-          health: `Perform Surya Namaskar (sun salutation) at sunrise and drink copper vessel water in the morning for vitality.`,
-          custom: `Perform an evening puja with incense and a ghee lamp, focusing your intention on resolving: "${issueText}".`
-        };
-        const contextKey = ['property-single','property-couple'].includes(goal) ? 'property' : ['marriage-single','marriage-couple'].includes(goal) ? 'marriage' : (normalizedGoal in goalVedicContext ? normalizedGoal : 'custom');
-        vedicListHTML = `
-          <li style="margin-bottom: 10px;"><strong>Ruling Planet Mantra:</strong> Chant <strong>"${lordDetails.mantra}"</strong> exactly 108 times each morning facing East for 40 consecutive days.</li>
-          <li style="margin-bottom: 10px;"><strong>Sacred Text:</strong> ${lordDetails.text}</li>
-          <li style="margin-bottom: 10px;"><strong>Goal Ritual:</strong> ${goalVedicContext[contextKey] || goalVedicContext.custom}</li>
-          <li><strong>Ekadashi Fast:</strong> Observe at least one Ekadashi (11th lunar day) fast per month, drinking only fruit or water, to burn karmic debt aligned with your goal.</li>
-        `;
-      } else {
-        // Couple vedic tasks
-        const partnerLordDetails = vedicMantras[partnerRulingLord] || vedicMantras["Sun"];
-        const coupleGoalRituals = {
-          marriage: `Both partners should recite the Vivah Sukta verses from the Rigveda together each morning and offer flowers to Lord Vishnu on Thursdays.`,
-          baby: `Both partners should recite the Santan Gopal mantra "Om Devaki Sut Govind Vasudev Jagat Pate Dehi Me Tanayam Krishna Tvam Aham Sharanam Gatah" 108 times together each morning.`,
-          property: `Both partners should offer water, a flower, and a pinch of turmeric to a rising sun, and chant "Om Bhaumaya Namah" 11 times together before any property visits.`,
-          debt: `Both partners should recite the Shiva Panchakshari mantra together 108 times on Monday mornings while holding water in cupped hands.`,
-          custom: `Both partners should perform evening puja together with ghee lamp, flowers, and focused collective intention on resolving the shared challenge.`
-        };
-        const coupleContextKey = normalizedGoal in coupleGoalRituals ? normalizedGoal : 'custom';
-        vedicListHTML = `
-          <li style="margin-bottom: 10px;"><strong>${name}'s Mantra:</strong> Chant <strong>"${lordDetails.mantra}"</strong> 108 times each morning (ruler of your Lagna: ${rulingLord}).</li>
-          <li style="margin-bottom: 10px;"><strong>${partnerName || 'Partner'}'s Mantra:</strong> Chant <strong>"${partnerLordDetails.mantra}"</strong> 108 times each morning (ruler of their Lagna: ${partnerRulingLord}).</li>
-          <li style="margin-bottom: 10px;"><strong>Couple Goal Ritual:</strong> ${coupleGoalRituals[coupleContextKey]}</li>
-          <li style="margin-bottom: 10px;"><strong>Shared Sacred Text:</strong> Read the Guru Stotra or Shiva Purana together each evening to invite divine support for your shared goal.</li>
-          <li><strong>Ekadashi Fast:</strong> Both observe Ekadashi fast together at least once this month to align collective karmic energies.</li>
-        `;
-      }
+      const vedicMantrasHi = {
+        "Sun": { mantra: "ॐ सूर्याय नमः", text: "आत्मविश्वास, जीवंतता और व्यावसायिक नेतृत्व को बढ़ावा देने के लिए आदित्य हृदय स्तोत्र का पाठ करें।" },
+        "Moon": { mantra: "ॐ सोमाय नमः", text: "मानसिक स्पष्टता, शांति और भावनात्मक स्थिरता लाने के लिए शिव पुराण के अध्यायों का पाठ करें।" },
+        "Mars": { mantra: "ॐ अंगारकाय नमः", text: "अपने मार्ग में साहस, ध्यान आकर्षित करने और बाधाओं को दूर करने के लिए हनुमान चालीसा का 3 बार पाठ करें।" },
+        "Mercury": { mantra: "ॐ बुधाय नमः", text: "विश्लेषणात्मक कौशल, बुद्धि और स्मृति को बढ़ाने के लिए विष्णु सहस्रनाम के अध्यायों का पाठ करें।" },
+        "Jupiter": { mantra: "ॐ गुरुवे नमः", text: "ज्ञान, बुद्धि का विस्तार करने और भाग्य को अनलॉक करने के लिए गुरु स्तोत्र या विष्णु सहस्रनाम का पाठ करें।" },
+        "Venus": { mantra: "ॐ शुक्राय नमः", text: "विलासिता, रचनात्मक लालित्य और सामंजस्यपूर्ण साझेदारी को आकर्षित करने के लिए लक्ष्मी चालीसा का पाठ करें।" },
+        "Saturn": { mantra: "ॐ शं शनैश्चराय नमः", text: "अपने करियर में लचीलापन, अनुशासन और धैर्य का निर्माण करने के लिए शिव पंचाक्षरी स्तोत्र का पाठ करें।" }
+      };
 
-      
-
-      // ---------------------------------------------------------------
-      // LAL KITAB REMEDIES — extended dictionaries with all new goal types
-      // ---------------------------------------------------------------
-      const lalkitabRemedies = {
+      // Lal Kitab Remedies (Bilingual)
+      const lalkitabRemediesEn = {
         "job": [
           "Feed birds with 7 types of grains (Satnaja) every morning to resolve professional blocks.",
           "Offer water containing red flowers or a pinch of vermilion to the rising Sun from a copper vessel.",
@@ -2667,7 +2628,7 @@
         "custom_visa": [
           "Keep some barley grains under your pillow overnight and feed them to birds or place them in flowing water in the morning.",
           "Feed green fodder to a bull or donate black sesame seeds to the needy to pacify Rahu obstacles.",
-          "Keep your travel documents in the North-West corner of your room (Vayu/transit zone).",
+          "Keep your travel documents in the North-West corner of your room (Vayu/Transit zone) of your room.",
           "Donate green lentils on Wednesdays to strengthen Mercury (communication, travel)."
         ],
         "custom_legal": [
@@ -2702,76 +2663,133 @@
         ]
       };
 
-      // Collect ALL active goals
-      let activeGoalsList = [];
-      try {
-        const rawGoals = localStorage.getItem('karma_active_goals');
-        if (rawGoals) activeGoalsList = JSON.parse(rawGoals);
-      } catch (err) {}
-      if (!activeGoalsList || activeGoalsList.length === 0) {
-        activeGoalsList = [normalizedGoal];
-      }
-      if (!activeGoalsList.includes(normalizedGoal)) {
-        activeGoalsList.unshift(normalizedGoal);
-      }
+      const lalkitabRemediesHi = {
+        "job": [
+          "व्यावसायिक बाधाओं को दूर करने के लिए हर सुबह पक्षियों को 7 प्रकार के अनाज (सतनाजा) खिलाएं।",
+          "तांबे के बर्तन से उगते सूर्य को लाल फूल या एक चुटकी सिंदूर मिला हुआ जल अर्पित करें।",
+          "अपने कार्यालय के दराज में लाल कपड़े में लिपटा एक पूरा नारियल रखें - 40 दिनों के बाद बदलें।",
+          "सूर्य के अधिकार को मजबूत करने के लिए रविवार को जरूरतमंदों को गेहूं का आटा या साबुत गेहूं की रोटी दान करें।",
+          "साक्षात्कार या मूल्यांकन के दिनों में काले कपड़े पहनने से बचें; मैरून, सोने या केसरिया रंगों को प्राथमिकता दें।",
+          "अपने डेस्क का मुख पूर्व या उत्तर की ओर रखें; अपने कार्यस्थल पर कभी भी टूटी हुई घड़ी या मुरझाया हुआ पौधा न रखें।"
+        ],
+        "debt": [
+          "बरगद के पेड़ की जड़ में मीठा दूध अर्पित करें और गीली मिट्टी का तिलक अपने माथे पर लगाएं।",
+          "मंगलवार को कर्ज लेने से बचें। मंगलवार की सुबह एक छोटी किस्त वापस चुकाएं।",
+          "अपने बटुए या तिजोरी में चांदी का एक पूरा टुकड़ा रखें - इसे कभी लोहे से न छूने दें।",
+          "शनि के ऋण दबाव को शांत करने के लिए शनिवार को मंदिर या जरूरतमंदों को सरसों का तेल दान करें।",
+          "गुरुवार की सुबह पीपल के पेड़ की जड़ में हल्दी की गांठ दबाएं।",
+          "अमावस्या या पूर्णिमा के दिनों में पैसा उधार देने से बचें।"
+        ],
+        "marriage": [
+          "गुरुवार की सुबह मंदिर के पुजारी को पीली मिठाई, चना दाल या हल्दी दान करें।",
+          "बुध और चंद्र को मजबूत करने के लिए बुधवार को गाय को ताजी हरी घास या पालक खिलाएं।",
+          "अनुकूल संबंधों को आकर्षित करने के लिए सोमवार को शिव मंदिर में सफेद फूल और दूध अर्पित करें।",
+          "शुक्र को मजबूत करने के लिए शुक्रवार को किसी जरूरतमंद लड़की को सोने या पीले रंग की वस्तुएं दान करें।",
+          "अपने तकिए के नीचे या अपने बेडरूम के दक्षिण-पश्चिम में रोज़ क्वार्ट्ज क्रिस्टल का गोला रखें।",
+          "शुक्रवार को काले या गहरे नीले रंग के कपड़े पहनने से बचें; सफेद, गुलाबी या क्रीम रंगों को प्राथमिकता दें।"
+        ],
+        "baby": [
+          "गुरुवार को मंदिर में पीले फल (जैसे केले) या पीली मिठाई दान करें (संतान के स्वामी गुरु को मजबूत करता है)।",
+          "नई जीवन ऊर्जा को आमंत्रित करने के लिए आप और आपके साथी दोनों को मिलकर बरगद के पेड़ की जड़ में दूध या मीठा जल अर्पित करना चाहिए।",
+          "बुधवार को गाय को हरी घास और गुड़ खिलाएं और श्रद्धापूर्वक उनके चरण स्पर्श करें।",
+          "अपने बेडरूम के उत्तर-पूर्व कोने में पीले कपड़े में लिपटा तांबे का संतान गोपाल यंत्र रखें।",
+          "गुरुवार को मंदिर में पानी और केसर से भरा छोटा तांबे का बर्तन दान करें।",
+          "इस अवधि के दौरान गुरुवार को शराब, मांसाहारी भोजन या खट्टे भोजन के सेवन से बचें।"
+        ],
+        "business": [
+          "अपने कार्यस्थल पर अपने बटुए, लॉकर या कैश रजिस्टर में चांदी का एक छोटा, ठोस टुकड़ा रखें।",
+          "शनिवार की शाम को जरूरतमंदों को काले तिल या सरसों का तेल दान करें।",
+          "मंगलवार और शुक्रवार की शाम को अपनी दुकान या व्यावसायिक प्रवेश द्वार पर घी का दीपक जलाएं।",
+          "निरंतर समृद्धि के लिए अपने व्यावसायिक प्रवेश द्वार पर एक पूरा नारियल रखें; हर 40 दिनों में बदलें।",
+          "बुध (बुद्धि और व्यवसाय) को मजबूत करने के लिए बुधवार को हरी दाल या साबुत हरी मूंग दान करें।",
+          "शनिवार या मंगलवार को कोई भी नया व्यावसायिक लेन-देन शुरू करने या अनुबंधों पर हस्ताक्षर करने से बचें।"
+        ],
+        "property": [
+          "मंगल (भूमि/संपत्ति के स्वामी) को प्रसन्न करने के लिए हर सुबह उगते सूर्य को एक चम्मच शहद मिला हुआ ताजा जल अर्पित करें।",
+          "संपत्ति के मामलों में शनि और राहु को शांत करने के लिए काले आवारा कुत्तों को मीठी पकी हुई रोटी (घी और गुड़ के साथ) खिलाएं।",
+          "सकारात्मक संपत्ति स्पंदनों को आमंत्रित करने के लिए अपने घर/कार्यालय में या उसके पास तुलसी या नीम का पौधा लगाएं।",
+          "संपत्ति के निर्णयों के लिए मंगल को मजबूत करने के लिए मंगलवार को जरूरतमंदों को लाल मसूर की दाल या तांबे की वस्तुएं दान करें।",
+          "किसी भी संपत्ति के दस्तावेज पर हस्ताक्षर करने से पहले, जमीन पर पानी में मिली एक चुटकी हल्दी और केसर अर्पित करें।",
+          "अपने भावी घर के मुख्य प्रवेश द्वार को साफ, अच्छी तरह से रोशन रखें और दरवाजे के ऊपर स्वस्तिक का चिन्ह लगाएं।"
+        ],
+        "health": [
+          "चंद्रमा और शरीर के तरल पदार्थों को संतुलित करने के लिए हर सुबह तांबे के बर्तन में रात भर रखा पानी पिएं।",
+          "शनि (पुरानी बीमारियों) को शांत करने के लिए सुबह आवारा कुत्ते को भोजन दान करें।",
+          "बुध और पाचन स्वास्थ्य को संरेखित करने के लिए बुधवार को गाय को हरा चारा और गुड़ खिलाएं।",
+          "पुरानी बीमारी से सुरक्षा के लिए शनिवार की शाम को शनि मंदिर में तिल के तेल का दीपक जलाएं।",
+          "मंगल से संबंधित शारीरिक गर्मी को साफ करने के लिए उपवास के रूप में मंगलवार को सूर्यास्त के बाद भोजन करने से बचें।",
+          "सकारात्मक स्वास्थ्य स्पंदनों के लिए अपनी जेब में या अपने तकिए के नीचे कच्ची हल्दी की एक गांठ रखें।"
+        ],
+        "custom_job": [
+          "अधिकार बढ़ाने के लिए तांबे के बर्तन से उगते सूर्य को एक चुटकी लाल फूल या सिंदूर के साथ ताजा जल अर्पित करें।",
+          "व्यापार और नौकरी के अवसरों को आमंत्रित करने के लिए बुधवार को गाय को हरी घास या पालक खिलाएं।",
+          "अपने डेस्क के दराज में लाल कपड़े में लिपटा एक पूरा नारियल रखें।",
+          "रविवार को जरूरतमंदों को गेहूं का आटा या साबुत गेहूं दान करें।"
+        ],
+        "custom_money": [
+          "धन ऊर्जा को संरेखित करने के लिए अपने बटुए, तिजोरी या कार्य डेस्क में चांदी का एक छोटा, ठोस टुकड़ा रखें।",
+          "मंगलवार को कर्ज लेने या बड़े ऋण लेनदेन से बचें; इसके बजाय मंगलवार को एक छोटा कर्ज चुकाएं।",
+          "शनिवार की शाम को सरसों का तेल दान करें।",
+          "गुरुवार की सुबह पीपल के पेड़ की जड़ में हल्दी की गांठ दबाएं।"
+        ],
+        "custom_marriage": [
+          "गुरुवार की सुबह मंदिर के पुजारी को हल्दी, पीली मिठाई या पीले रंग की वस्तुएं दान करें।",
+          "साझेदारी में सद्भाव आमंत्रित करने के लिए सोमवार की सुबह लड़कियों को दूध, चावल या चांदी के गहने दान करें।",
+          "अपने बेडरूम के दक्षिण-पश्चिम में एक रोज़ क्वार्ट्ज क्रिस्टल रखें।",
+          "सोमवार को शिव मंदिर में सफेद फूल और दूध अर्पित करें।"
+        ],
+        "custom_education": [
+          "गुरुवार की सुबह गरीब बच्चों को शैक्षणिक पुस्तकें, स्टेशनरी या पेन दान करें।",
+          "सरस्वती गायत्री मंत्र का जाप करें या सुबह के समय पूर्व की ओर मुख करके बुद्धि का आह्वान करें।",
+          "बुध को मजबूत करने के लिए बुधवार को जरूरतमंदों को हरी मूंग या हरी दाल खिलाएं।",
+          "अपने अध्ययन डेस्क पर पीले कपड़े में लिपटी कच्ची हल्दी की एक छोटी गांठ रखें।"
+        ],
+        "custom_health": [
+          "हर सुबह तांबे के बर्तन में रात भर रखा पानी पिएं।",
+          "हर सुबह आवारा कुत्ते को भोजन दान करें।",
+          "बुधवार की सुबह गाय को हरी घास और गुड़ खिलाएं।",
+          "सुरक्षा के लिए अपनी जेब में कच्ची हल्दी की एक गांठ रखें।"
+        ],
+        "custom_visa": [
+          "रात भर अपने तकिए के नीचे कुछ जौ के दाने रखें और सुबह उन्हें पक्षियों को खिलाएं या बहते पानी में डालें।",
+          "राहु की बाधाओं को शांत करने के लिए सांड को हरा चारा खिलाएं या जरूरतमंदों को काले तिल दान करें।",
+          "अपने यात्रा दस्तावेजों को अपने कमरे के उत्तर-पश्चिम कोने (वायु/पारगमन क्षेत्र) में रखें।",
+          "संचार और यात्रा को मजबूत करने के लिए बुधवार को हरी दाल दान करें।"
+        ],
+        "custom_legal": [
+          "शनि और राहु को शांत करने के लिए सड़क पर काले आवारा कुत्तों को मीठी पकी हुई रोटी या रोटियां खिलाएं।",
+          "नकारात्मक ग्रहों के प्रभावों को शांत करने के लिए सुबह कच्ची मिट्टी पर सरसों के तेल की कुछ बूंदें डालें।",
+          "कानूनी विवाद से राहत के लिए शनिवार को काले तिल दान करें।",
+          "सभी केस दस्तावेजों को अपने कार्यालय या बेडरूम के दक्षिण या दक्षिण-पश्चिम कोने में रखें।"
+        ],
+        "custom_mental": [
+          "रात को देर से दूध पीने से बचें; इसके बजाय सुबह आवारा कुत्तों को दूध या भोजन दें।",
+          "रात को अपने बिस्तर के पास पानी का गिलास रखें और सुबह उसे किसी पौधे की जड़ में डाल दें।",
+          "मानसिक शांति के लिए सोमवार को सफेद या क्रीम रंग की मिठाई दान करें।",
+          "शांत तरंगों के लिए अपने बिस्तर के पास एक छोटा सेलेनाइट या मूनस्टोन क्रिस्टल रखें।"
+        ],
+        "custom_property": [
+          "मंगल (मंगल भूमि/संपत्ति का प्रतिनिधित्व करता है) को प्रसन्न करने के लिए उगते सूर्य को एक चुटकी शहद मिलाकर ताजा जल अर्पित करें।",
+          "भूमि/संपत्ति के स्वामियों को शांत करने के लिए सड़क पर काले आवारा कुत्तों को मीठी पकी हुई रोटी या रोटियां खिलाएं।",
+          "मंगलवार को लाल मसूर की दाल या तांबे की वस्तुएं दान करें।",
+          "अपने संभावित घर/प्लॉट पर या उसके पास तुलसी का पौधा लगाएं।"
+        ],
+        "custom_pregnancy": [
+          "गुरु और सूर्य को मजबूत करने के लिए रविवार को मंदिर या दान में चीनी या पीली मिठाइयों से भरा तांबे का बर्तन दान करें।",
+          "संतान विन्यास को संरेखित करने के लिए बुधवार की सुबह गाय को ताजी हरी घास या पालक खिलाएं।",
+          "दोनों साथी मिलकर बरगद के पेड़ की जड़ में मीठा जल अर्पित करें।",
+          "बेडरूम के उत्तर-पूर्व में तांबे का संतान गोपाल यंत्र रखें।"
+        ],
+        "custom_general": [
+          "दैनिक बाधाओं को दूर करने के लिए अपनी छत या खुली बालकनी पर पक्षियों को मिश्रित अनाज (सतनाजा) खिलाएं।",
+          "तांबे के बर्तन से उगते सूर्य को एक चुटकी चीनी मिलाकर ताजा जल अर्पित करें।",
+          "सामान्य कर्म शुद्धि के लिए रविवार को जरूरतमंदों को गेहूं का आटा या भोजन दान करें।",
+          "हर शाम घर में घी का दीपक जलाएं और अपनी वर्तमान चुनौतियों के समाधान के लिए प्रार्थना करें।"
+        ]
+      };
 
-      // ─── GENERATE DETAILED ASTROLOGICAL PREDICTION TEXT FOR ALL GOALS ───
-      const rasiNames = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
-      const rasiNamesHi = ["मेष", "वृषभ", "मिथुन", "कर्क", "सिंह", "कन्या", "तुला", "वृश्चिक", "धनु", "मकर", "कुंभ", "मीन"];
-      const lagnaName = rasiNames[lagnaSignNum] || "Aries";
-      const lagnaNameHi = rasiNamesHi[lagnaSignNum] || "मेष";
-
-      let astroPredictionHTML = `
-        <p style="margin: 0 0 10px 0;"><strong>Astrological Ascendant (Lagna):</strong> <span style="color: var(--gold);">${lagnaName} (${lagnaNameHi})</span> | <strong>Ruling Planet:</strong> <span style="color: #5dade2;">${rulingLord}</span></p>
-        <p style="margin: 0 0 10px 0;">Your horoscope indicates that your Lagna Lord <strong>${rulingLord}</strong> is currently transmitting strong activating rays towards your 90-day karmic cycle. With dedicated discipline, your personal energy alignment will reach peak manifestation power over the upcoming 90 days.</p>
-        <div style="background: rgba(232, 200, 121, 0.06); padding: 12px; border-radius: 8px; border-left: 3px solid var(--gold); margin-top: 10px;">
-          <strong style="color: var(--gold); display: block; margin-bottom: 4px;">🎯 Active Goals Astrological Forecast:</strong>
-          <ul style="margin: 4px 0 0 18px; padding: 0;">
-            ${activeGoalsList.map(g => {
-              const gLabel = goalLabels[g] || g;
-              return `<li style="margin-bottom: 4px;"><strong>${gLabel}:</strong> Highly favorable planetary support detected under ${rulingLord}'s placement. Follow the remedies below for accelerated success.</li>`;
-            }).join('')}
-          </ul>
-        </div>
-      `;
-      const astroPredEl = document.getElementById('coach-astrological-prediction');
-      if (astroPredEl) astroPredEl.innerHTML = astroPredictionHTML;
-
-      // ─── AGGREGATE LAL KITAB REMEDIES FOR ALL ACTIVE GOALS ───
-      let remedies = [];
-      activeGoalsList.forEach(g => {
-        let rKey = g;
-        if (g === 'marriage-single' || g === 'marriage-couple') rKey = 'marriage';
-        if (g === 'property-single' || g === 'property-couple') rKey = 'property';
-        if (g === 'custom') rKey = "custom_" + customCategory;
-        const goalRems = lalkitabRemedies[rKey] || lalkitabRemedies["job"];
-        if (goalRems && goalRems.length > 0) {
-          remedies.push(...goalRems.slice(0, 2));
-        }
-      });
-      if (remedies.length < 3) {
-        remedies.push(...(lalkitabRemedies[normalizedGoal] || lalkitabRemedies["job"]));
-      }
-      if (hasPartner) {
-        if (normalizedGoal === 'baby' || customCategory === 'pregnancy') {
-          remedies[1] = `Both you and ${partnerName || 'your partner'} should offer milk or sweet water to a banyan tree root together and apply the wet soil tilak on your foreheads to strengthen progeny blessings.`;
-        } else if (normalizedGoal === 'property' || customCategory === 'property') {
-          remedies[1] = `Both you and ${partnerName || 'your partner'} should offer fresh water mixed with a small spoon of honey to the rising Sun together to invoke collective Mars/land energy.`;
-        } else if (normalizedGoal === 'marriage') {
-          remedies[1] = `Both you and ${partnerName || 'your partner'} should light a ghee lamp at a Vishnu temple together on Thursday evenings for harmonious marital vibrations.`;
-        } else {
-          remedies[1] = `Both you and ${partnerName || 'your partner'} should feed a white cow or donate rice and milk on Monday mornings to strengthen Venus/Moon compatibilities.`;
-        }
-      }
-      // Build extended lalkitab HTML (show up to 6 items)
-      const lalkitabListHTML = remedies.slice(0, 6).map((r, i) =>
-        `<li style="margin-bottom: 10px;"><strong>Remedy ${i+1}:</strong> ${r}</li>`
-      ).join('');
-
-      // ---------------------------------------------------------------
-      // VASTU SUGGESTIONS — all goal types
-      // ---------------------------------------------------------------
-      const vastuSuggestions = {
+      // Vastu Suggestions (Bilingual)
+      const vastuSuggestionsEn = {
         "job": "Ensure your study or work desk is placed in the North or North-East zone of your room. Keep the desk clean, clutter-free, and place a green aventurine crystal or a small plant here. Avoid sitting with your back facing the main door.",
         "debt": "Place a small running water fountain or a picture of serene water flow in the North direction of your house. Ensure there are no heavy iron items or garbage in the North-East zone. Keep the locker/safe in the South-West and always facing North when opened.",
         "marriage": "Place a pair of decorative pink/gold lovebirds or a rose quartz crystal in the South-West corner of your bedroom. Avoid using dark blue or black bedsheets. Ensure there are no broken mirrors or cracked glass in your bedroom or living area.",
@@ -2792,308 +2810,714 @@
         "custom_general": `Sit facing East while planning steps to resolve: '${issueText}', and ensure your work chair has a solid wall backing behind it.`
       };
 
-      let vastuGoal = normalizedGoal;
-      if (normalizedGoal === 'custom') {
-        vastuGoal = "custom_" + customCategory;
-      }
-      let vastuText = vastuSuggestions[vastuGoal] || vastuSuggestions["job"];
-      if (normalizedGoal === 'baby') {
-        if (hasPartner) {
-          if (babyNum === "1") {
-            vastuText = `Ensure your shared bed is placed in the South-West direction. Avoid using aggressive colors (like red or dark blue) in your bedroom; prefer warm cream, pastel pink, or light yellow tones to support pregnancy vibrations. Keep North-East zone clean and fresh.`;
-          } else if (babyNum === "2") {
-            vastuText = `Ensure the North-East zone of your home is clean. Keep your first child's toys away from your bedroom to maintain tranquil pregnancy vibes. Place fresh white flowers in the East zone of your bedroom.`;
-          } else if (babyNum === "3") {
-            vastuText = `Place a healthy green plant or a family portrait in the East zone of your shared living space to invite growing domestic progeny energies. Ensure the children's room has East or North-facing windows.`;
-          }
-        } else {
-          vastuText = vastuSuggestions["baby"];
-        }
-      } else if (normalizedGoal === 'property') {
-        if (hasPartner) {
-          vastuText = `Both of you should visit the prospective ${propertyType} together and assess: main door direction (prefer East/North), North-East zone (should be open/light), kitchen (should be in South-East). Avoid properties with toilets in North-East or beams over the main sitting/sleeping area.`;
-        }
-      } else if (normalizedGoal === 'marriage') {
-        if (hasPartner) {
-          vastuText = `Ensure the South-West (relationship zone) of your shared bedroom is clean, has a rose quartz sphere, and contains no mirrors directly reflecting the bed. Remove any broken decor items.`;
-        } else {
-          vastuText = `Place a pair of pink or gold lovebirds figurine in the South-West corner of your bedroom. Avoid clutter in the South-West. Light rose or jasmine incense every Friday evening.`;
-        }
-      } else if (hasPartner) {
-        if (customCategory === "pregnancy") {
-          vastuText = `Ensure your shared bed is placed in the South-West direction. Avoid using aggressive colors in your bedroom; prefer warm cream, pastel pink, or light yellow tones.`;
-        } else if (customCategory === "property") {
-          vastuText = `Ensure the North-East zone of your shared living space is kept light and clean. Place a picture of a flourishing green forest in the East direction of your living room.`;
-        } else {
-          vastuText = `Ensure the South-West (relationship and stability zone) of your shared bedroom is clean, has a rose quartz sphere, and contains no mirrors directly reflecting the bed.`;
-        }
-      }
-      const vastuListHTML = `<li>${vastuText}</li>`;
-
-      // Practical Actions
-      const practicalActions = {
-        "job": [
-          `Open job boards (Naukri, LinkedIn, or specialized portals) and apply to at least 3 relevant roles matching your profile as a ${profession}.`,
-          `Rewrite your resume headline to explicitly emphasize your key technical competencies as a ${profession}.`,
-          `Identify 5 recruitment managers in the ${profession} domain on LinkedIn and send tailored connection requests.`,
-          `Spend 45 minutes upskilling — learn a trending tool or concept required for advanced ${profession} roles.`,
-          `Record your daily progress: list 3 applications sent today and track response timelines.`,
-          `Ask one senior colleague, mentor, or professional contact for a candid review of your resume or interview performance.`
-        ],
-        "debt": [
-          `List all your active debts in a spreadsheet, ordering them by interest rate — focus extra payments on highest-interest debt first (Avalanche method).`,
-          `Review your ${profession} work expenses and cancel one non-essential subscription or service today.`,
-          `Contact one creditor or bank representative to negotiate a lower interest rate, consolidated plan, or fee waiver.`,
-          `Set aside a small emergency buffer (Rs. 500–1000) before any discretionary spending today.`,
-          `Set up an automatic monthly SIP (Systematic Investment Plan) of any amount to a debt repayment fund.`,
-          `Calculate your total debt-to-income ratio and write out a 3-month debt clearance milestones list.`
-        ],
-        "marriage": [
-          isSingleMarriage ?
-            `Take 15 minutes to journal your ideal partner qualities compatible with your lifestyle as a ${profession}.` :
-            `Take 15 minutes to write down one quality you appreciate most about your partner and share it with them today.`,
-          isSingleMarriage ?
-            `Participate in a community club, hobby class, or professional networking event to meet people organically.` :
-            `Plan one small shared activity or date this week that you both enjoy equally.`,
-          isSingleMarriage ?
-            `Consult with a trusted family elder or astrologer about favorable marriage muhurtas (auspicious timings) for your horoscope.` :
-            `Have an honest 15-minute conversation with your partner about your shared vision for the next 12 months.`,
-          isSingleMarriage ?
-            `Spend 15 minutes grooming and projecting a confident personal aura — wear clean, pleasing, warm colors.` :
-            `Surprise your partner with a small thoughtful gesture (a note, a meal, or a shared memory) today.`,
-          isSingleMarriage ?
-            `Research and shortlist 2–3 compatible horoscope matches or trusted matrimonial platforms suited for a ${profession}.` :
-            `Together, review your shared calendar and plan one important life decision (home, family, travel) for the next quarter.`,
-          `Spend 15 minutes in a calm breathing practice together or individually to strengthen emotional clarity and patience.`
-        ],
-        "business": [
-          `Compile a list of 3 potential prospects who could benefit from ${profession} services and send them a cold pitch email today.`,
-          `Review your pricing structure to ensure profit margin accounts for current operational inflation.`,
-          `Design a simple case study post showcasing a recent successful project and share it on social media.`,
-          `Spend 30 minutes analyzing your accounts ledger to trace and eliminate leakage in cash flow.`,
-          `Research one new market segment or industry trend relevant to your ${profession} business growth.`,
-          `Follow up with one previous client for feedback, referral, or repeat engagement opportunity.`
-        ],
-        "baby": [
-          `Prepare a nutritious diet chart rich in folic acid, iron, and green vegetables, and track your meals today.`,
-          `Research and shortlist highly rated gynecologists or maternity hospitals in your local city area.`,
-          `Spend 20 minutes doing light breathing exercises (Pranayama) or mindfulness yoga to reduce bodily cortisol.`,
-          `Create a daily health tracking diary to log fertility, body temperature, or prenatal vitamin intakes.`,
-          `Research the latest guidance on prenatal nutrition and schedule a preconception health check-up this week.`,
-          `Identify and remove any environmental stressors (excess screen time, processed food, irregular sleep) from your current routine.`
-        ],
-        "property": [
-          `Search property platforms (MagicBricks, 99acres, Housing.com) for ${propertyType} options in ${propertyCity || cityName} and shortlist 3 matches.`,
-          `Write a detailed checklist of must-have requirements: location, size, proximity to work/school, budget range.`,
-          `Contact at least 2 real estate agents or builders to schedule site visits for this week.`,
-          `Calculate your loan eligibility using your bank's home loan calculator and prepare the required documentation list (income proof, ID, address proof).`,
-          `Research upcoming infrastructure projects (metro, highway, RERA projects) near your target property location to evaluate future appreciation.`,
-          `Identify if a Vastu expert consultation before final property selection would be valuable — shortlist one locally.`
-        ],
-        "health": [
-          `Drink at least 3 liters of water today and keep a hydration log.`,
-          `Spend 30 minutes doing light walking, stretching, or yoga to release physical and mental tension.`,
-          `Prepare a clean, high-fiber, unprocessed meal plan for the next 7 days.`,
-          `Schedule or research an appointment with the appropriate medical specialist for your specific concern.`,
-          `Track your sleep — aim for 7–8 hours and avoid screens 1 hour before bedtime tonight.`,
-          `Research one evidence-based supplement or lifestyle practice recommended for your specific health goal.`
-        ],
-        "custom_job": [
-          `Search job listings on LinkedIn or specialized portals matching your background as a ${profession} and apply to at least 3 roles.`,
-          `Revise your resume specifically highlighting your key accomplishments and skills in relation to your goal: "${issueText}".`,
-          `Reach out to 3 professionals or recruiters in your target ${profession} field on LinkedIn and request a short informational chat.`,
-          `Upskill by reading a technical blog post or learning a new tool relevant to your ${profession} field.`
-        ],
-        "custom_money": [
-          `Audit your bank accounts and record all your monthly income and expenses to understand your exact cash flow.`,
-          `Create a monthly budget sheet and identify 2 non-essential expenses you can cut to save money today.`,
-          `Investigate 2 low-risk mutual funds or savings plans to automate your recurring monthly investments.`,
-          `Write down a detailed list of all active debts and draft a plan prioritizing the repayment of the highest-interest debt.`
-        ],
-        "custom_marriage": [
-          `Write down 3 qualities you value most in your partner or relationship and focus on expressing them today.`,
-          `Take 15 minutes to have an honest, compassionate, and uninterrupted conversation with your partner or a family member.`,
-          `Surprise your loved one with a small, thoughtful gesture (like a warm text, favorite flower, or preparing a meal).`,
-          `Reflect on your personal boundaries and list 3 healthy ways you can communicate them constructively in your relationship.`
-        ],
-        "custom_education": [
-          `Define a specific study goal for today and study for at least 2 hours in focused 30-minute blocks (Pomodoro technique).`,
-          `Write a concise summary of the most complex topic you studied today in your own words.`,
-          `Practice solving 3 sample questions or test exercises related to your target subject to test your grasp.`,
-          `Organize your study table, clear all non-essential items, and keep only current reference books to boost focus.`
-        ],
-        "custom_health": [
-          `Drink at least 3 liters of water today and record your consumption to flush bodily toxins.`,
-          `Spend 25 minutes doing simple stretching or walking outdoors to release physical and mental stress.`,
-          `Research or schedule an appointment with a professional specialist regarding your health concern: "${issueText}".`,
-          `Write down a daily menu focusing on clean, unprocessed, high-fiber food for the next 7 days.`
-        ],
-        "custom_visa": [
-          `Log in to the official immigration portal and review the checklist status of your issue: "${issueText}".`,
-          `Double-check all submission files to ensure stamps, signatures, and dates are valid.`,
-          `Read or post on an immigration forum/community to check recent processing times for similar travel cases.`,
-          `Prepare all travel documents in a secure folder, and update your personal travel budget spreadsheet.`
-        ],
-        "custom_legal": [
-          `Draft a concise status update email to your legal consultant/lawyer regarding: "${issueText}".`,
-          `Organize all evidentiary documents and correspondence chronologically in a digital folder today.`,
-          `List 3 key potential compromise points or resolution outcomes for this dispute to discuss next.`,
-          `Spend 20 minutes reviewing current laws or similar case precedents online to stay informed.`
-        ],
-        "custom_mental": [
-          `Dedicate 10 minutes to deep breathing exercises (Pranayama) or mindfulness meditation to calm your mind today.`,
-          `Write down 3 items you are deeply grateful for in a journal to shift focus from: "${issueText}".`,
-          `Reach out and talk to a supportive friend, family member, or professional counselor to express your feelings.`,
-          `Disconnect from social media and electronic screens for at least 2 hours before going to sleep tonight.`
-        ],
-        "custom_property": [
-          `Open property finder apps or portals and shortlist at least 3 homes/plots matching your budget today.`,
-          `Write down a detailed checklist of your absolute requirements (e.g. location, distance to work, room count).`,
-          `Contact at least 2 real estate brokers or property listings owners to schedule site visits for this week.`,
-          `Review your bank balance or calculate mortgage/home loan affordability limits on your banking dashboard.`
-        ],
-        "custom_pregnancy": [
-          `Prepare a nutritious diet chart rich in folic acid, iron, and green vegetables, and track your meals today.`,
-          `Research and shortlist highly rated gynecologists or maternity hospitals in your local city area.`,
-          `Spend 20 minutes doing light breathing exercises (Pranayama) or mindfulness yoga to reduce bodily cortisol.`,
-          `Create a daily health tracking diary to log your fertility, body temperature, or prenatal vitamin intakes.`
-        ],
-        "custom_general": [
-          `Write down a clear list of 3 specific actions you can take today to address the issue: "${issueText}".`,
-          `Execute the most immediate or simplest action from your list today to gain momentum.`,
-          `Dedicate 30 minutes to search online or read books for solutions from experts who solved the issue: "${issueText}".`,
-          `Create a tracking file or note to record daily improvements and actions related to this goal.`
-        ]
+      const vastuSuggestionsHi = {
+        "job": "सुनिश्चित करें कि आपका अध्ययन या कार्य डेस्क आपके बेडरूम के उत्तर या उत्तर-पूर्व क्षेत्र में रखा गया है। डेस्क को साफ, अव्यवस्था मुक्त रखें और यहां एक ग्रीन एवेन्शुरिन क्रिस्टल या एक छोटा पौधा रखें। मुख्य द्वार की ओर पीठ करके बैठने से बचें।",
+        "debt": "अपने घर की उत्तर दिशा में एक छोटा बहता हुआ पानी का फव्वारा या शांत पानी के प्रवाह की तस्वीर लगाएं। सुनिश्चित करें कि उत्तर-पूर्व क्षेत्र में कोई भारी लोहे की वस्तु या कचरा न हो। तिजोरी को दक्षिण-पश्चिम में रखें और खुलते समय उसका मुख हमेशा उत्तर की ओर हो।",
+        "marriage": "अपने बेडरूम के दक्षिण-पश्चिम कोने में सजावटी गुलाबी/गोल्डन लवबर्ड्स की जोड़ी या रोज़ क्वार्ट्ज क्रिस्टल रखें। गहरे नीले या काले रंग की बेडशीट का उपयोग करने से बचें। बेडरूम या लिविंग एरिया में कोई टूटी हुई शीशा या दरार वाली कांच न हो।",
+        "baby": "स्वास्थ्य और प्रजनन क्षमता का समर्थन करने के लिए अपने बेडरूम के पूर्व और उत्तर-पूर्व क्षेत्र को हल्का, साफ रखें और यहां ताजे फूल रखें। भारी कंक्रीट बीम के नीचे सोने से बचें।",
+        "business": "अपनी दुकान, कार्यालय या कार्यशाला के मुख्य प्रवेश द्वार को साफ, अच्छी तरह हवादार और स्वस्तिक चिह्न से सजाकर रखें। बैठने की कुर्सी का मुख पूर्व या उत्तर की ओर रखें। प्रवेश द्वार के पास जूते या कचरा रखने से बचें।",
+        "property": `सुनिश्चित करें कि आपके संभावित घर/प्लॉट का उत्तर-पूर्व क्षेत्र खुला, हल्का और भारी अव्यवस्था से मुक्त हो। पूर्व या उत्तर मुखी मुख्य द्वार के साथ संपत्ति की खरीद को प्राथमिकता दें। सकारात्मक ऊर्जा के लिए संपत्ति के दौरे के समय मुख्य प्रवेश द्वार के पास वास्तु कलश रखें।`,
+        "health": "सुनिश्चित करें कि आपके सोने के बिस्तर का सिरहाना दक्षिण की ओर हो। अपने बेडरूम के उत्तर-पूर्व क्षेत्र से किसी भी धूल या अव्यवस्थित वस्तुओं को साफ करें। बाथरूम/शौचालय का दरवाजा हमेशा बंद रखें। हीलिंग ऊर्जा के लिए पूर्व की ओर खिड़की में तुलसी का पौधा रखें।",
+        "custom_job": "अपने कार्य डेस्क को पूर्व या उत्तर-पूर्व की ओर रखें, और करियर विकास के लिए उस पर एक छोटा बांस या हरा पौधा रखें।",
+        "custom_money": "सुनिश्चित करें कि आपके घर का उत्तर क्षेत्र साफ, हल्का और भारी लोहे या कचरे से मुक्त हो ताकि नकदी प्रवाह ऊर्जा प्रवेश कर सके। अपने वित्तीय दस्तावेज दक्षिण-पश्चिम में रखें।",
+        "custom_marriage": "आपसी प्रेम को बढ़ावा देने के लिए अपने बेडरूम के दक्षिण-पश्चिम कोने में रोज़ क्वार्ट्ज क्रिस्टल के दो गोले रखें। मुख्य द्वार की ओर पैर करके सोने से बचें।",
+        "custom_education": "अपनी अध्ययन मेज उत्तर-पूर्व या पूर्व दिशा में रखें। सिर के ठीक ऊपर भारी किताबें रखने से बचें। अध्ययन कक्ष को साफ और अच्छी तरह से प्रकाशित रखें।",
+        "custom_health": "सुनिश्चित करें कि आपके सोने के बिस्तर का सिरहाना दक्षिण या पूर्व की ओर हो। शुद्ध स्वास्थ्य प्रवाह बनाए रखने के लिए अपने घर के उत्तर-पूर्व क्षेत्र से किसी भी अव्यवस्थित वस्तु या धूल को साफ करें।",
+        "custom_visa": "पारगमन ऊर्जा को तेज करने के लिए अपने पासपोर्ट, यात्रा दस्तावेज या वीजा आवेदनों को अपने कमरे के उत्तर-पश्चिम कोने (वायु/पारगमन क्षेत्र) में रखें।",
+        "custom_legal": "स्थिरता सुनिश्चित करने के लिए सभी कोर्ट केस फाइलों, कानूनी पत्रों और विवाद दस्तावेजों को अपने कार्यालय या बेडरूम के दक्षिण या दक्षिण-पश्चिम कोने में रखें।",
+        "custom_mental": "मानसिक शांति को बढ़ावा देने के लिए सुनिश्चित करें कि आपके बेडरूम का उत्तर-पश्चिम क्षेत्र साफ, भारी भंडारण ब्लॉकों से मुक्त और अच्छी तरह से हवादार हो। प्रतिदिन लैवेंडर या चंदन की धूप जलाएं।",
+        "custom_property": "स्थिर संपत्ति लेनदेन को आकर्षित करने के लिए सुनिश्चित करें कि आपके कमरे का पश्चिम या दक्षिण-पश्चिम क्षेत्र साफ, धूल मुक्त और अच्छी तरह से प्रकाशित हो।",
+        "custom_pregnancy": "अपने बेडरूम के पूर्व और उत्तर-पूर्व क्षेत्र को हल्का, साफ रखें और यहां ताजे फूल रखें। भारी कंक्रीट बीम के नीचे सीधे सोने से बचें।",
+        "custom_general": `इस समस्या को हल करने की योजना बनाते समय पूर्व की ओर मुंह करके बैठें: '${issueText}', और सुनिश्चित करें कि आपकी काम करने वाली कुर्सी के पीछे एक ठोस दीवार का सहारा हो।`
       };
 
-      let actionsGoal = normalizedGoal;
-      if (normalizedGoal === 'custom') {
-        actionsGoal = "custom_" + customCategory;
-      }
-      let actions = [...(practicalActions[actionsGoal] || practicalActions["job"])];
-      // Replace placeholders that have template literals that were pre-evaluated as 'undefined'
-      actions = actions.filter(a => a !== undefined);
-      
-      if (goal === 'baby') {
+      // Helper function to build predictions for a specific language
+      function compileMissionData(lang) {
+        const lordDetails = lang === 'hi' ? (vedicMantrasHi[rulingLord] || vedicMantrasHi["Sun"]) : (vedicMantrasEn[rulingLord] || vedicMantrasEn["Sun"]);
+        let vListHTML;
+
+        // Vedic Tasks
+        if (!hasPartner) {
+          const goalVedicContextEn = {
+            job: `Perform Surya Namaskaar (12 rounds) before sunrise to activate career and authority vibrations.`,
+            debt: `Recite the Shiva Panchakshari mantra "Om Namah Shivaya" 108 times before meals to dissolve financial anxieties.`,
+            marriage: `Recite the Katyayani mantra "Om Katyayanyai Namah" 108 times on a Friday morning to attract your destined partner.`,
+            baby: `Both partners should recite the Santan Gopal mantra "Om Devaki Sut Govind..." 108 times together each morning.`,
+            business: `Perform Ganesh puja on Wednesdays and light incense (dhoop) at your business entrance.`,
+            property: `Recite the Bhoomi Sukta prayer (from Atharvaveda) before property visits. Also chant "Om Bhaumaya Namah" 11 times for Mars blessings on property.`,
+            health: `Perform Surya Namaskar (sun salutation) at sunrise and drink copper vessel water in the morning for vitality.`,
+            custom: `Perform an evening puja with incense and a ghee lamp, focusing your intention on resolving: "${issueText}".`
+          };
+          const goalVedicContextHi = {
+            job: `करियर और अधिकार के स्पंदनों को सक्रिय करने के लिए सूर्योदय से पहले सूर्य नमस्कार (12 चक्र) करें।`,
+            debt: `वित्तीय चिंताओं को दूर करने के लिए भोजन से पहले 108 बार शिव पंचाक्षरी मंत्र "ॐ नमः शिवाय" का जाप करें।`,
+            marriage: `अपने भाग्यशाली जीवनसाथी को आकर्षित करने के लिए शुक्रवार की सुबह कात्यायनी मंत्र "ॐ कात्यायन्यै नमः" का 108 बार जाप करें।`,
+            baby: `संतान सुख के लिए दोनों साथी मिलकर प्रत्येक सुबह 108 बार संतान गोपाल मंत्र "ॐ देवकी सुत गोविंद..." का जाप करें।`,
+            business: `बुधवार को गणेश पूजा करें और अपने व्यावसायिक प्रवेश द्वार पर धूप जलाएं।`,
+            property: `संपत्ति के दौरों से पहले भूमि सूक्त प्रार्थना (अथर्ववेद से) का पाठ करें। संपत्ति पर मंगल के आशीर्वाद के लिए "ॐ भौमाय नमः" का 11 बार जाप करें।`,
+            health: `सूर्योदय के समय सूर्य नमस्कार करें और जीवन शक्ति के लिए सुबह तांबे के बर्तन का पानी पिएं।`,
+            custom: `शाम को धूप और घी के दीये के साथ पूजा करें, अपने ध्यान को इस समस्या के समाधान पर केंद्रित करें: "${issueText}"।`
+          };
+
+          const contextMap = lang === 'hi' ? goalVedicContextHi : goalVedicContextEn;
+          const contextKey = ['property-single','property-couple'].includes(goal) ? 'property' : ['marriage-single','marriage-couple'].includes(goal) ? 'marriage' : (normalizedGoal in contextMap ? normalizedGoal : 'custom');
+          
+          if (lang === 'hi') {
+            vListHTML = `
+              <li style="margin-bottom: 10px;"><strong>शासक ग्रह मंत्र:</strong> प्रत्येक सुबह पूर्व की ओर मुंह करके 108 बार <strong>"${lordDetails.mantra}"</strong> का लगातार 40 दिनों तक जाप करें।</li>
+              <li style="margin-bottom: 10px;"><strong>पवित्र पाठ:</strong> ${lordDetails.text}</li>
+              <li style="margin-bottom: 10px;"><strong>लक्ष्य अनुष्ठान:</strong> ${contextMap[contextKey] || contextMap.custom}</li>
+              <li><strong>एकादशी व्रत:</strong> अपने लक्ष्य से जुड़े कर्मों को संरेखित करने के लिए प्रति माह कम से कम एक एकादशी का व्रत रखें, जिसमें केवल फल या पानी का सेवन करें।</li>
+            `;
+          } else {
+            vListHTML = `
+              <li style="margin-bottom: 10px;"><strong>Ruling Planet Mantra:</strong> Chant <strong>"${lordDetails.mantra}"</strong> exactly 108 times each morning facing East for 40 consecutive days.</li>
+              <li style="margin-bottom: 10px;"><strong>Sacred Text:</strong> ${lordDetails.text}</li>
+              <li style="margin-bottom: 10px;"><strong>Goal Ritual:</strong> ${contextMap[contextKey] || contextMap.custom}</li>
+              <li><strong>Ekadashi Fast:</strong> Observe at least one Ekadashi (11th lunar day) fast per month, drinking only fruit or water, to burn karmic debt aligned with your goal.</li>
+            `;
+          }
+        } else {
+          const partnerLordDetails = lang === 'hi' ? (vedicMantrasHi[partnerRulingLord] || vedicMantrasHi["Sun"]) : (vedicMantrasEn[partnerRulingLord] || vedicMantrasEn["Sun"]);
+          const coupleGoalRitualsEn = {
+            marriage: `Both partners should recite the Vivah Sukta verses from the Rigveda together each morning and offer flowers to Lord Vishnu on Thursdays.`,
+            baby: `Both partners should recite the Santan Gopal mantra "Om Devaki Sut Govind..." 108 times together each morning.`,
+            property: `Both partners should offer water, a flower, and a pinch of turmeric to a rising sun, and chant "Om Bhaumaya Namah" 11 times together before any property visits.`,
+            debt: `Both partners should recite the Shiva Panchakshari mantra together 108 times on Monday mornings while holding water in cupped hands.`,
+            custom: `Both partners should perform evening puja together with ghee lamp, flowers, and focused collective intention on resolving the shared challenge.`
+          };
+          const coupleGoalRitualsHi = {
+            marriage: `दोनों साथी प्रत्येक सुबह मिलकर ऋग्वेद के विवाह सूक्त श्लोकों का पाठ करें और गुरुवार को भगवान विष्णु को फूल अर्पित करें।`,
+            baby: `दोनों साथी प्रत्येक सुबह मिलकर संतान गोपाल मंत्र "ॐ देवकी सुत गोविंद..." का 108 बार जाप करें।`,
+            property: `दोनों साथी किसी भी संपत्ति के दौरे से पहले उगते सूर्य को जल, फूल और एक चुटकी हल्दी अर्पित करें, और मिलकर 11 बार "ॐ भौमाय नमः" का जाप करें।`,
+            debt: `दोनों साथी सोमवार की सुबह हाथों में जल लेकर मिलकर 108 बार शिव पंचाक्षरी मंत्र का जाप करें।`,
+            custom: `दोनों साथी शाम को मिलकर घी के दीपक, फूलों और सामूहिक ध्यान के साथ साझा चुनौती को हल करने के लिए पूजा करें।`
+          };
+
+          const coupleMap = lang === 'hi' ? coupleGoalRitualsHi : coupleGoalRitualsEn;
+          const coupleContextKey = normalizedGoal in coupleMap ? normalizedGoal : 'custom';
+
+          if (lang === 'hi') {
+            vListHTML = `
+              <li style="margin-bottom: 10px;"><strong>${name} का मंत्र:</strong> प्रत्येक सुबह 108 बार <strong>"${lordDetails.mantra}"</strong> का जाप करें (आपके लग्न के स्वामी: ${rulingLord})।</li>
+              <li style="margin-bottom: 10px;"><strong>${partnerName || 'साथी'} का मंत्र:</strong> प्रत्येक सुबह 108 बार <strong>"${partnerLordDetails.mantra}"</strong> का जाप करें (उनके लग्न के स्वामी: ${partnerRulingLord})।</li>
+              <li style="margin-bottom: 10px;"><strong>युगल लक्ष्य अनुष्ठान:</strong> ${coupleMap[coupleContextKey]}</li>
+              <li style="margin-bottom: 10px;"><strong>साझा पवित्र पाठ:</strong> अपने साझा लक्ष्य के लिए ईश्वरीय सहायता प्राप्त करने के लिए प्रत्येक शाम एक साथ गुरु स्तोत्र या शिव पुराण का पाठ करें।</li>
+              <li><strong>एकादशी व्रत:</strong> सामूहिक कर्म ऊर्जा को संरेखित करने के लिए इस महीने कम से कम एक बार दोनों मिलकर एकादशी व्रत का पालन करें।</li>
+            `;
+          } else {
+            vListHTML = `
+              <li style="margin-bottom: 10px;"><strong>${name}'s Mantra:</strong> Chant <strong>"${lordDetails.mantra}"</strong> 108 times each morning (ruler of your Lagna: ${rulingLord}).</li>
+              <li style="margin-bottom: 10px;"><strong>${partnerName || 'Partner'}'s Mantra:</strong> Chant <strong>"${partnerLordDetails.mantra}"</strong> 108 times each morning (ruler of their Lagna: ${partnerRulingLord}).</li>
+              <li style="margin-bottom: 10px;"><strong>Couple Goal Ritual:</strong> ${coupleMap[coupleContextKey]}</li>
+              <li style="margin-bottom: 10px;"><strong>Shared Sacred Text:</strong> Read the Guru Stotra or Shiva Purana together each evening to invite divine support for your shared goal.</li>
+              <li><strong>Ekadashi Fast:</strong> Both observe Ekadashi fast together at least once this month to align collective karmic energies.</li>
+            `;
+          }
+        }
+
+        // Lal Kitab Remedies
+        const remMap = lang === 'hi' ? lalkitabRemediesHi : lalkitabRemediesEn;
+        let rKey = goal;
+        if (goal === 'marriage-single' || goal === 'marriage-couple') rKey = 'marriage';
+        if (goal === 'property-single' || goal === 'property-couple') rKey = 'property';
+        if (goal === 'custom') rKey = "custom_" + customCategory;
+        let remedies = [...(remMap[rKey] || remMap["job"])];
+        
         if (hasPartner) {
-          if (babyNum === "1") {
-            actions = [
-              `Self: Maintain a healthy prenatal diet and log your daily vitamin intake today.`,
-              `Partner (${partnerName}): Assist in organizing domestic tasks to minimize physical strain for your spouse.`,
-              `Joint Action: Both you and ${partnerName} spend 15 minutes doing light meditation together to align relationship energies.`,
-              `Joint Planning: Shortlist 3 local healthcare clinics or maternity centers to visit together this month.`
-            ];
-          } else if (babyNum === "2") {
-            actions = [
-              `Self: Spend 15 minutes tracking health metrics and post-pregnancy recovery signs today.`,
-              `Partner (${partnerName}): Spend 30 minutes playing with or caring for your first child (age: ${firstBabyAge}) to give your spouse some personal rest.`,
-              `Joint Action: Spend 15 minutes talking with ${partnerName} on how to prepare your first child emotionally for a sibling.`,
-              `Joint Planning: Inspect which baby gear (stroller, crib, clothes) from your first child is reusable.`
-            ];
-          } else if (babyNum === "3") {
-            actions = [
-              `Self: Take 20 minutes to rest, practice light stretching, and log nutrition metrics today.`,
-              `Partner (${partnerName}): Take charge of organizing the daily schedules and study routines of your first two children (ages: ${firstBabyAge} & ${secondBabyAge}) today.`,
-              `Joint Action: Sit with ${partnerName} for 20 minutes to map out the financial adjustments required for a family of five.`,
-              `Joint Planning: Discuss bedroom reorganization or space distribution to accommodate three children.`
-            ];
-          }
-        } else {
-          if (babyNum === "1") {
-            actions = [
-              `Plan a nutrient-rich menu focusing on prenatal health, folic acid, and iron today.`,
-              `Research and shortlist highly-rated gynecologists or prenatal specialists in your local city area.`,
-              `Spend 20 minutes doing light breathing exercises (Pranayama) to reduce body stress levels.`,
-              `Start keeping a daily health calendar to track cycle indicators and fertility windows.`
-            ];
-          } else if (babyNum === "2") {
-            actions = [
-              `Consult with a pediatrician or doctor to review health markers since your first pregnancy (first child is ${firstBabyAge} years old).`,
-              `Create a checklist of baby essentials and gear you can reuse from your first child.`,
-              `Dedicate 20 minutes to read about managing parenting schedules and routines with multiple children.`,
-              `Schedule a routine health check-up to assess prenatal compatibility and health markers.`
-            ];
-          } else if (babyNum === "3") {
-            actions = [
-              `Review your monthly family budget ledger to account for the expenses of raising three children (existing ages: ${firstBabyAge} & ${secondBabyAge}).`,
-              `Set aside 30 minutes to discuss space/room distribution for all three children.`,
-              `Practice a 15-minute mindfulness session to cultivate mental resilience for a larger family.`,
-              `Schedule a primary healthcare consultation to review maternal health pointers.`
-            ];
+          if (lang === 'hi') {
+            if (normalizedGoal === 'baby' || customCategory === 'pregnancy') {
+              remedies[1] = `संतान आशीर्वाद को मजबूत करने के लिए आप और ${partnerName || 'आपके साथी'} दोनों को मिलकर बरगद के पेड़ की जड़ में दूध या मीठा पानी चढ़ाना चाहिए और माथे पर गीली मिट्टी का तिलक लगाना चाहिए।`;
+            } else if (normalizedGoal === 'property' || customCategory === 'property') {
+              remedies[1] = `सामूहिक मंगल/भूमि ऊर्जा का आह्वान करने के लिए आप और ${partnerName || 'आपके साथी'} दोनों को मिलकर उगते सूर्य को एक चम्मच शहद मिला हुआ जल अर्पित करना चाहिए।`;
+            } else if (normalizedGoal === 'marriage') {
+              remedies[1] = `सामंजस्यपूर्ण विवाह तरंगों के लिए आप और ${partnerName || 'आपके साथी'} दोनों को मिलकर गुरुवार की शाम विष्णु मंदिर में घी का दीपक जलाना चाहिए।`;
+            } else {
+              remedies[1] = `शुक्र/चंद्र अनुकूलता को मजबूत करने के लिए आप और ${partnerName || 'आपके साथी'} दोनों को मिलकर सोमवार की सुबह सफेद गाय को भोजन कराना चाहिए या चावल और दूध का दान करना चाहिए।`;
+            }
+          } else {
+            if (normalizedGoal === 'baby' || customCategory === 'pregnancy') {
+              remedies[1] = `Both you and ${partnerName || 'your partner'} should offer milk or sweet water to a banyan tree root together and apply the wet soil tilak on your foreheads to strengthen progeny blessings.`;
+            } else if (normalizedGoal === 'property' || customCategory === 'property') {
+              remedies[1] = `Both you and ${partnerName || 'your partner'} should offer fresh water mixed with a small spoon of honey to the rising Sun together to invoke collective Mars/land energy.`;
+            } else if (normalizedGoal === 'marriage') {
+              remedies[1] = `Both you and ${partnerName || 'your partner'} should light a ghee lamp at a Vishnu temple together on Thursday evenings for harmonious marital vibrations.`;
+            } else {
+              remedies[1] = `Both you and ${partnerName || 'your partner'} should feed a white cow or donate rice and milk on Monday mornings to strengthen Venus/Moon compatibilities.`;
+            }
           }
         }
-      } else if (hasPartner) {
-        if (customCategory === "pregnancy") {
-          actions = [
-            `Self (Female Partner): Track your physical health indicators, keep a pregnancy diary, and take prenatal vitamins.`,
-            `Partner (${partnerName}): Take over one heavy household chore (like carrying groceries or deep cleaning) to minimize physical fatigue for your partner.`,
-            `Joint Action: Spend 15 minutes in the evening doing light breathing exercises (Anulom Vilom) together to harmonize stress levels.`,
-            `Joint Planning: Draft a shared list of questions you want to ask your gynecologist or consultant during next week's check-up.`
-          ];
-        } else if (customCategory === "property") {
-          actions = [
-            `Self: Spend 15 minutes searching online listings for properties matching your target criteria and shortlist 3 choices.`,
-            `Partner (${partnerName}): Spend 15 minutes reviewing the financial budget, savings, or loan documentation options.`,
-            `Joint Action: Spend 20 minutes looking at the shortlisted options together and align on your location priorities.`,
-            `Joint Action: Schedule a joint site visit or broker call to inspect a physical property together this weekend.`
-          ];
-        } else {
-          actions = [
-            `Self: Take 15 minutes today to write down a relationship concern or goal you want to discuss with ${partnerName}.`,
-            `Partner (${partnerName}): Ask them to spend 15 minutes listening actively to your daily experiences without offering unsolicited advice.`,
-            `Joint Action: Both you and ${partnerName} should spend 20 minutes walking together outdoors or sharing a relaxing tea while discussing a shared domestic plan.`,
-            `Energetic Sync: Wear pleasing light colors today (like cream, pastel pink, or light yellow) to harmonize both partners' planetary vibrations.`
-          ];
+        const lListHTML = remedies.slice(0, 6).map((r, i) =>
+          `<li style="margin-bottom: 10px;"><strong>${lang === 'hi' ? 'उपाय' : 'Remedy'} ${i+1}:</strong> ${r}</li>`
+        ).join('');
+
+        // Vastu Suggestions
+        const vastuMap = lang === 'hi' ? vastuSuggestionsHi : vastuSuggestionsEn;
+        let vastuGoal = normalizedGoal;
+        if (normalizedGoal === 'custom') {
+          vastuGoal = "custom_" + customCategory;
         }
+        let vastuText = vastuMap[vastuGoal] || vastuMap["job"];
+        if (normalizedGoal === 'baby') {
+          if (hasPartner) {
+            if (lang === 'hi') {
+              if (babyNum === "1") {
+                vastuText = `सुनिश्चित करें कि आपका साझा बिस्तर दक्षिण-पश्चिम दिशा में रखा गया है। अपने बेडरूम में गहरे रंगों का उपयोग करने से बचें; गर्भावस्था के अनुकूल तरंगों के लिए हल्के क्रीम, गुलाबी या हल्के पीले रंगों को प्राथमिकता दें। उत्तर-पूर्व कोने को साफ रखें।`;
+              } else if (babyNum === "2") {
+                vastuText = `सुनिश्चित करें कि आपके घर का उत्तर-पूर्व क्षेत्र साफ है। शांत वातावरण बनाए रखने के लिए अपने पहले बच्चे के खिलौनों को अपने सोने के बेडरूम से दूर रखें। बेडरूम के पूर्व क्षेत्र में ताजे सफेद फूल रखें।`;
+              } else if (babyNum === "3") {
+                vastuText = `घर में बढ़ती हुई संतान ऊर्जा को आमंत्रित करने के लिए अपने रहने वाले क्षेत्र के पूर्वी हिस्से में एक स्वस्थ हरा पौधा या पारिवारिक चित्र लगाएं। बच्चों के कमरे में पूर्व या उत्तर की ओर खिड़कियां रखें।`;
+              }
+            } else {
+              if (babyNum === "1") {
+                vastuText = `Ensure your shared bed is placed in the South-West direction. Avoid using aggressive colors (like red or dark blue) in your bedroom; prefer warm cream, pastel pink, or light yellow tones to support pregnancy vibrations. Keep North-East zone clean and fresh.`;
+              } else if (babyNum === "2") {
+                vastuText = `Ensure the North-East zone of your home is clean. Keep your first child's toys away from your bedroom to maintain tranquil pregnancy vibes. Place fresh white flowers in the East zone of your bedroom.`;
+              } else if (babyNum === "3") {
+                vastuText = `Place a healthy green plant or a family portrait in the East zone of your shared living space to invite growing domestic progeny energies. Ensure the children's room has East or North-facing windows.`;
+              }
+            }
+          }
+        } else if (normalizedGoal === 'property') {
+          if (hasPartner) {
+            if (lang === 'hi') {
+              vastuText = `आप दोनों को संभावित ${propertyType} पर एक साथ जाना चाहिए और मूल्यांकन करना चाहिए: मुख्य द्वार की दिशा (पूर्व/उत्तर को प्राथमिकता दें), उत्तर-पूर्व क्षेत्र (खुला/हल्का होना चाहिए), रसोई (दक्षिण-पूर्व में होनी चाहिए)। उत्तर-पूर्व में शौचालय या बैठने/सोने के क्षेत्र के ऊपर कंक्रीट बीम वाली संपत्तियों से बचें।`;
+            } else {
+              vastuText = `Both of you should visit the prospective ${propertyType} together and assess: main door direction (prefer East/North), North-East zone (should be open/light), kitchen (should be in South-East). Avoid properties with toilets in North-East or beams over the main sitting/sleeping area.`;
+            }
+          }
+        } else if (normalizedGoal === 'marriage') {
+          if (hasPartner) {
+            if (lang === 'hi') {
+              vastuText = `सुनिश्चित करें कि आपके बेडरूम का दक्षिण-पश्चिम (संबंध क्षेत्र) साफ है, वहां रोज़ क्वार्ट्ज क्रिस्टल का गोला है, और बिस्तर को सीधे प्रतिबिंबित करने वाले कोई दर्पण नहीं हैं। टूटे सजावटी सामान हटा दें।`;
+            } else {
+              vastuText = `Ensure the South-West (relationship zone) of your shared bedroom is clean, has a rose quartz sphere, and contains no mirrors directly reflecting the bed. Remove any broken decor items.`;
+            }
+          } else {
+            if (lang === 'hi') {
+              vastuText = `अपने बेडरूम के दक्षिण-पश्चिम कोने में गुलाबी या गोल्डन लवबर्ड्स की मूर्ति रखें। दक्षिण-पश्चिम में कचरा या कबाड़ रखने से बचें। हर शुक्रवार की शाम गुलाब या चमेली की धूप जलाएं।`;
+            } else {
+              vastuText = `Place a pair of pink or gold lovebirds figurine in the South-West corner of your bedroom. Avoid clutter in the South-West. Light rose or jasmine incense every Friday evening.`;
+            }
+          }
+        } else if (hasPartner) {
+          if (lang === 'hi') {
+            if (customCategory === "pregnancy") {
+              vastuText = `सुनिश्चित करें कि आपका साझा बिस्तर दक्षिण-पश्चिम दिशा में रखा गया है। अपने बेडरूम में गहरे रंगों का उपयोग करने से बचें; हल्के क्रीम, गुलाबी या हल्के पीले रंगों को प्राथमिकता दें।`;
+            } else if (customCategory === "property") {
+              vastuText = `सुनिश्चित करें कि आपके रहने वाले स्थान का उत्तर-पूर्व क्षेत्र हल्का और साफ रखा गया है। अपने लिविंग रूम के पूर्व दिशा में एक हरे-भरे जंगल की तस्वीर लगाएं।`;
+            } else {
+              vastuText = `सुनिश्चित करें कि आपके साझा बेडरूम का दक्षिण-पश्चिम (रिश्ता और स्थिरता क्षेत्र) साफ है, वहां रोज़ क्वार्ट्ज का गोला है, और बिस्तर के सामने कोई दर्पण नहीं है।`;
+            }
+          }
+        }
+        const vVastuHTML = `<li>${vastuText}</li>`;
+
+        // Practical Actions
+        const practicalActions = {
+          "job": [
+            `Open job boards (Naukri, LinkedIn, or specialized portals) and apply to at least 3 relevant roles matching your profile as a ${profession}.`,
+            `Rewrite your resume headline to explicitly emphasize your key technical competencies as a ${profession}.`,
+            `Identify 5 recruitment managers in the ${profession} domain on LinkedIn and send tailored connection requests.`,
+            `Spend 45 minutes upskilling — learn a trending tool or concept required for advanced ${profession} roles.`,
+            `Record your daily progress: list 3 applications sent today and track response timelines.`,
+            `Ask one senior colleague, mentor, or professional contact for a candid review of your resume or interview performance.`
+          ],
+          "debt": [
+            `List all your active debts in a spreadsheet, ordering them by interest rate — focus extra payments on highest-interest debt first (Avalanche method).`,
+            `Review your ${profession} work expenses and cancel one non-essential subscription or service today.`,
+            `Contact one creditor or bank representative to negotiate a lower interest rate, consolidated plan, or fee waiver.`,
+            `Set aside a small emergency buffer (Rs. 500–1000) before any discretionary spending today.`,
+            `Set up an automatic monthly SIP (Systematic Investment Plan) of any amount to a debt repayment fund.`,
+            `Calculate your total debt-to-income ratio and write out a 3-month debt clearance milestones list.`
+          ],
+          "marriage": [
+            isSingleMarriage ?
+              `Take 15 minutes to journal your ideal partner qualities compatible with your lifestyle as a ${profession}.` :
+              `Take 15 minutes to write down one quality you appreciate most about your partner and share it with them today.`,
+            isSingleMarriage ?
+              `Participate in a community club, hobby class, or professional networking event to meet people organically.` :
+              `Plan one small shared activity or date this week that you both enjoy equally.`,
+            isSingleMarriage ?
+              `Consult with a trusted family elder or astrologer about favorable marriage muhurtas (auspicious timings) for your horoscope.` :
+              `Have an honest 15-minute conversation with your partner about your shared vision for the next 12 months.`,
+            isSingleMarriage ?
+              `Reach out to 2 prospective matches on matrimonial or social platforms with a personalized and respectful message.` :
+              `Perform one shared routine task (like cooking or organizing space) together to strengthen cooperative vibrations.`,
+            isSingleMarriage ?
+              `Refine your personal online matrimonial profiles with fresh, professional portraits and updated descriptions.` :
+              `Set aside 10 minutes to discuss mutual financial allocations or joint asset targets for this quarter.`,
+            isSingleMarriage ?
+              `Spend 20 minutes updating your personal budget ledger to prepare for upcoming life goals.` :
+              `Apologize or resolve one minor outstanding conflict with your partner with complete empathy.`
+          ],
+          "custom_job": [
+            `Update your professional profile headline, emphasizing skills as a ${profession}.`,
+            `Identify 3 target companies and apply to their openings today.`,
+            `Connect with 3 managers or peers in your field on LinkedIn.`,
+            `Spend 30 minutes upgrading your skills on current tools.`
+          ],
+          "custom_money": [
+            `List all active monthly subscriptions and cancel at least one non-essential service today.`,
+            `Create a detailed weekly expense tracker to review cash flow limits.`,
+            `Put a fixed, small amount of savings into a separate bank account today.`,
+            `Contact a financial advisor or creditor to discuss interest options.`
+          ],
+          "custom_marriage": [
+            `Write down three qualities you seek or appreciate in a long-term partner.`,
+            `Plan a small, warm connection gesture or communication step today.`,
+            `Clean the South-West relationship zone of your room to remove heavy clutter.`,
+            `Speak with a family elder or partner about relationship plans.`
+          ],
+          "custom_education": [
+            `Define a specific study goal for today and study for at least 2 hours in focused 30-minute blocks (Pomodoro technique).`,
+            `Write a concise summary of the most complex topic you studied today in your own words.`,
+            `Practice solving 3 sample questions or test exercises related to your target subject to test your grasp.`,
+            `Organize your study table, clear all non-essential items, and keep only current reference books to boost focus.`
+          ],
+          "custom_health": [
+            `Drink at least 3 liters of water today and record your consumption to flush bodily toxins.`,
+            `Spend 25 minutes doing simple stretching or walking outdoors to release physical and mental stress.`,
+            `Research or schedule an appointment with a professional specialist regarding your health concern: "${issueText}".`,
+            `Write down a daily menu focusing on clean, unprocessed, high-fiber food for the next 7 days.`
+          ],
+          "custom_visa": [
+            `Log in to the official immigration portal and review the checklist status of your issue: "${issueText}".`,
+            `Double-check all submission files to ensure stamps, signatures, and dates are valid.`,
+            `Read or post on an immigration forum/community to check recent processing times for similar travel cases.`,
+            `Prepare all travel documents in a secure folder, and update your personal travel budget spreadsheet.`
+          ],
+          "custom_legal": [
+            `Draft a concise status update email to your legal consultant/lawyer regarding: "${issueText}".`,
+            `Organize all evidentiary documents and correspondence chronologically in a digital folder today.`,
+            `List 3 key potential compromise points or resolution outcomes for this dispute to discuss next.`,
+            `Spend 20 minutes reviewing current laws or similar case precedents online to stay informed.`
+          ],
+          "custom_mental": [
+            `Dedicate 10 minutes to deep breathing exercises (Pranayama) or mindfulness meditation to calm your mind today.`,
+            `Write down 3 items you are deeply grateful for in a journal to shift focus from: "${issueText}".`,
+            `Reach out and talk to a supportive friend, family member, or professional counselor to express your feelings.`,
+            `Disconnect from social media and electronic screens for at least 2 hours before going to sleep tonight.`
+          ],
+          "custom_property": [
+            `Open property finder apps or portals and shortlist at least 3 homes/plots matching your budget today.`,
+            `Write down a detailed checklist of your absolute requirements (e.g. location, distance to work, room count).`,
+            `Contact at least 2 real estate brokers or property listings owners to schedule site visits for this week.`,
+            `Review your bank balance or calculate mortgage/home loan affordability limits on your banking dashboard.`
+          ],
+          "custom_pregnancy": [
+            `Prepare a nutritious diet chart rich in folic acid, iron, and green vegetables, and track your meals today.`,
+            `Research and shortlist highly rated gynecologists or maternity hospitals in your local city area.`,
+            `Spend 20 minutes doing light breathing exercises (Pranayama) or mindfulness yoga to reduce bodily cortisol.`,
+            `Create a daily health tracking diary to log your fertility, body temperature, or prenatal vitamin intakes.`
+          ],
+          "custom_general": [
+            `Write down a clear list of 3 specific actions you can take today to address the issue: "${issueText}".`,
+            `Execute the most immediate or simplest action from your list today to gain momentum.`,
+            `Dedicate 30 minutes to search online or read books for solutions from experts who solved the issue: "${issueText}".`,
+            `Create a tracking file or note to record daily improvements and actions related to this goal.`
+          ]
+        };
+
+        const practicalActionsHi = {
+          "job": [
+            `नौकरी बोर्ड (Naukri, LinkedIn आदि) खोलें और ${profession} के रूप में अपनी प्रोफाइल से मेल खाने वाली कम से कम 3 भूमिकाओं के लिए आवेदन करें।`,
+            `${profession} के रूप में अपनी प्रमुख तकनीकी दक्षताओं पर जोर देने के लिए अपनी रिज्यूम हेडलाइन को अपडेट करें।`,
+            `LinkedIn पर ${profession} क्षेत्र के 5 भर्ती प्रबंधकों की पहचान करें और संबंध अनुरोध भेजें।`,
+            `45 मिनट कौशल विकास में लगाएं - ${profession} भूमिकाओं के लिए आवश्यक एक नया टूल या अवधारणा सीखें।`,
+            `अपनी दैनिक प्रगति रिकॉर्ड करें: आज भेजे गए 3 आवेदनों की सूची बनाएं और प्रतिक्रिया समय ट्रैक करें।`,
+            `अपने रिज्यूम या इंटरव्यू प्रदर्शन की निष्पक्ष समीक्षा के लिए किसी वरिष्ठ सहयोगी या संपर्क से पूछें।`
+          ],
+          "debt": [
+            `अपने बहीखाते में सभी ऋणों को ब्याज दर के अनुसार सूचीबद्ध करें - सबसे अधिक ब्याज वाले ऋण के भुगतान पर ध्यान दें (हिमस्खलन विधि)।`,
+            `${profession} के रूप में अपने कार्य खर्चों की समीक्षा करें और आज एक गैर-आवश्यक सदस्यता या सेवा को रद्द करें।`,
+            `कम ब्याज दर या समेकित योजना पर बातचीत करने के लिए एक लेनदार या बैंक प्रतिनिधि से संपर्क करें।`,
+            `आज किसी भी अतिरिक्त खर्च से पहले एक छोटा आपातकालीन बफर (रु. 500-1000) अलग रखें।`,
+            `ऋण भुगतान कोष के लिए किसी भी राशि का स्वचालित मासिक सिप (SIP) स्थापित करें।`,
+            `अपनी आय-से-ऋण अनुपात की गणना करें और 3-महीने की ऋण निकासी मील के पत्थर की सूची लिखें।`
+          ],
+          "marriage": [
+            isSingleMarriage ?
+              `${profession} के रूप में अपनी जीवनशैली के अनुकूल आदर्श साथी के गुणों को लिखने के लिए 15 मिनट का समय लें।` :
+              `अपने साथी के बारे में एक गुण लिखने के लिए 15 मिनट का समय लें जिसे आप सबसे अधिक पसंद करते हैं और आज उनके साथ साझा करें।`,
+            isSingleMarriage ?
+              `लोगों से मिलने के लिए किसी सामुदायिक क्लब, हॉबी क्लास या पेशेवर नेटवर्किंग कार्यक्रम में भाग लें।` :
+              `इस सप्ताह एक छोटी साझा गतिविधि या डेट की योजना बनाएं जिसका आप दोनों समान रूप से आनंद लें।`,
+            isSingleMarriage ?
+              `अपनी कुंडली के लिए अनुकूल विवाह मुहूर्त (शुभ समय) के बारे में किसी भरोसेमंद परिवार के बुजुर्ग या ज्योतिषी से सलाह लें।` :
+              `अगले 12 महीनों के लिए अपने साझा दृष्टिकोण के बारे में अपने साथी के साथ 15 मिनट की ईमानदार बातचीत करें।`,
+            isSingleMarriage ?
+              `एक व्यक्तिगत और सम्मानजनक संदेश के साथ वैवाहिक या सामाजिक मंचों पर 2 संभावित मैचों से संपर्क करें।` :
+              `सहयोगात्मक स्पंदनों को मजबूत करने के लिए एक साथ मिलकर एक नियमित घरेलू कार्य (जैसे खाना बनाना या जगह व्यवस्थित करना) करें।`,
+            isSingleMarriage ?
+              `ताजा पेशेवर चित्रों और अद्यतन विवरणों के साथ अपने व्यक्तिगत वैवाहिक प्रोफाइल को परिष्कृत करें।` :
+              `इस तिमाही के लिए आपसी वित्तीय आवंटन या संयुक्त संपत्ति लक्ष्यों पर चर्चा करने के लिए 10 मिनट का समय निकालें।`,
+            isSingleMarriage ?
+              `आगामी जीवन लक्ष्यों की तैयारी के लिए अपने व्यक्तिगत बजट बहीखाते को अपडेट करने में 20 मिनट का समय लगाएं।` :
+              `पूर्ण सहानुभूति के साथ अपने साथी के साथ किसी भी छोटे विवाद या गलतफहमी को तुरंत हल करें।`
+          ],
+          "custom_job": [
+            `${profession} के रूप में कौशल पर जोर देते हुए अपने पेशेवर प्रोफाइल को अपडेट करें।`,
+            `3 लक्षित कंपनियों की पहचान करें और आज ही उनके यहां आवेदन करें।`,
+            `LinkedIn पर अपने क्षेत्र के 3 प्रबंधकों या साथियों से जुड़ें।`,
+            `कौशल उन्नयन के लिए वर्तमान टूल्स सीखने में 30 मिनट का समय लगाएं।`
+          ],
+          "custom_money": [
+            `सक्रिय मासिक सदस्यताओं की सूची बनाएं और आज ही कम से कम एक गैर-आवश्यक सेवा रद्द करें।`,
+            `नकदी प्रवाह सीमा की समीक्षा के लिए एक विस्तृत साप्ताहिक व्यय ट्रैकर बनाएं।`,
+            `बचत की एक निश्चित, छोटी राशि आज ही एक अलग बैंक खाते में रखें।`,
+            `ब्याज विकल्पों पर चर्चा करने के लिए एक वित्तीय सलाहकार या लेनदार से संपर्क करें।`
+          ],
+          "custom_marriage": [
+            `दीर्घकालिक साथी में जो तीन गुण आप चाहते हैं या पसंद करते हैं उन्हें लिखें।`,
+            `आज ही एक छोटे, मधुर संबंध हाव-भाव या संचार कदम की योजना बनाएं।`,
+            `कबाड़ हटाने के लिए अपने बेडरूम के दक्षिण-पश्चिम संबंध क्षेत्र को साफ करें।`,
+            `पारिवारिक बुजुर्ग या साथी से संबंध योजनाओं के बारे में बात करें।`
+          ],
+          "custom_education": [
+            `आज के लिए एक विशिष्ट अध्ययन लक्ष्य परिभाषित करें और केंद्रित 30-मिनट के ब्लॉकों (पोमोडोरो तकनीक) में कम से कम 2 घंटे अध्ययन करें।`,
+            `आज आपके द्वारा अध्ययन किए गए सबसे जटिल विषय का अपने शब्दों में एक संक्षिप्त सारांश लिखें।`,
+            `अपनी पकड़ का परीक्षण करने के लिए अपने लक्षित विषय से संबंधित 3 नमूना प्रश्नों या परीक्षण अभ्यासों को हल करने का अभ्यास करें।`,
+            `अपने अध्ययन की मेज को व्यवस्थित करें, सभी गैर-आवश्यक वस्तुओं को हटा दें और ध्यान बढ़ाने के लिए केवल संदर्भ पुस्तकें रखें।`
+          ],
+          "custom_health": [
+            `शरीर के विषाक्त पदार्थों को बाहर निकालने के लिए आज कम से कम 3 लीटर पानी पिएं और अपना सेवन रिकॉर्ड करें।`,
+            `शारीरिक और मानसिक तनाव को दूर करने के लिए बाहर साधारण स्ट्रेचिंग या टहलने में 25 मिनट का समय बिताएं।`,
+            `अपनी स्वास्थ्य संबंधी चिंता के संबंध में किसी पेशेवर विशेषज्ञ से संपर्क करें या अपॉइंटमेंट लें: "${issueText}"।`,
+            `अगले 7 दिनों के लिए स्वच्छ, असंसाधित, उच्च फाइबर वाले भोजन पर ध्यान केंद्रित करते हुए एक दैनिक मेनू लिखें।`
+          ],
+          "custom_visa": [
+            `आधिकारिक आव्रजन पोर्टल पर लॉग इन करें और अपनी समस्या की स्थिति की समीक्षा करें: "${issueText}"।`,
+            `यह सुनिश्चित करने के लिए सभी सबमिशन फाइलों की दोबारा जांच करें कि स्टैम्प, हस्ताक्षर और तारीखें मान्य हैं।`,
+            `समान यात्रा मामलों के प्रसंस्करण समय की जांच करने के लिए आव्रजन मंच/समुदाय पर पढ़ें या पोस्ट करें।`,
+            `सभी यात्रा दस्तावेजों को एक सुरक्षित फ़ोल्डर में तैयार रखें और अपने व्यक्तिगत यात्रा बजट स्प्रेडशीट को अपडेट करें।`,
+          ],
+          "custom_legal": [
+            `अपनी कानूनी विवाद समस्या के बारे में अपने कानूनी सलाहकार/वकील को एक संक्षिप्त स्थिति अपडेट ईमेल का मसौदा तैयार करें: "${issueText}"।`,
+            `सभी साक्ष्य दस्तावेजों और पत्राचार को आज ही एक डिजिटल फ़ोल्डर में क्रमानुसार व्यवस्थित करें।`,
+            `चर्चा करने के लिए इस विवाद के 3 प्रमुख संभावित समाधान बिंदुओं या परिणामों की सूची बनाएं।`,
+            `सूचित रहने के लिए ऑनलाइन समान अदालती मामलों के निर्णयों या कानूनों की समीक्षा करने में 20 मिनट का समय लगाएं।`
+          ],
+          "custom_mental": [
+            `अपने मन को शांत करने के लिए आज 10 मिनट गहरी सांस लेने के व्यायाम (प्राणायाम) या ध्यान को समर्पित करें।`,
+            `इस समस्या से ध्यान हटाने के लिए एक डायरी में 3 चीजें लिखें जिनके लिए आप आभारी हैं: "${issueText}"।`,
+            `अपनी भावनाओं को व्यक्त करने के लिए एक सहायक मित्र, परिवार के सदस्य या पेशेवर परामर्शदाता से बात करें।`,
+            `आज रात सोने से कम से कम 2 घंटे पहले सोशल मीडिया और इलेक्ट्रॉनिक स्क्रीन से दूरी बना लें।`
+          ],
+          "custom_property": [
+            `ऑनलाइन संपत्ति खोजने वाले ऐप्स खोलें और आज ही अपने बजट से मेल खाने वाले कम से कम 3 घरों/प्लॉटों को शॉर्टलिस्ट करें।`,
+            `अपनी पूर्ण आवश्यकताओं (जैसे स्थान, काम से दूरी, कमरों की संख्या) की एक विस्तृत सूची लिखें।`,
+            `इस सप्ताह साइट विजिट के लिए कम से कम 2 रियल एस्टेट ब्रोकर्स या संपत्ति मालिकों से संपर्क करें।`,
+            `अपने बैंक बैलेंस की समीक्षा करें या होम लोन की सामर्थ्य सीमा की गणना करें।`
+          ],
+          "custom_pregnancy": [
+            `फोलिक एसिड, आयरन और हरी सब्जियों से भरपूर एक पौष्टिक आहार चार्ट तैयार करें और आज ही अपने भोजन को ट्रैक करें।`,
+            `अपने स्थानीय शहर क्षेत्र में उच्च श्रेणी के स्त्री रोग विशेषज्ञों या मातृत्व अस्पतालों की सूची बनाएं।`,
+            `शारीरिक तनाव के स्तर को कम करने के लिए हल्के श्वास व्यायाम (प्राणायाम) या माइंडफुलनेस योग करने में 20 मिनट का समय बिताएं।`,
+            `अपनी प्रजनन क्षमता या विटामिन सेवन को लॉग करने के लिए एक दैनिक स्वास्थ्य ट्रैकिंग डायरी बनाएं।`
+          ],
+          "custom_general": [
+            `इस समस्या के समाधान के लिए आज आप जो 3 विशिष्ट कदम उठा सकते हैं, उनकी एक स्पष्ट सूची लिखें: "${issueText}"।`,
+            `गति प्राप्त करने के लिए आज ही अपनी सूची में से सबसे सरल कदम उठाएं।`,
+            `इस समस्या का समाधान करने वाले विशेषज्ञों के सुझावों को पढ़ने या ऑनलाइन खोजने के लिए 30 मिनट का समय दें: "${issueText}"।`,
+            `इस लक्ष्य से जुड़े दैनिक सुधारों और कार्यों को रिकॉर्ड करने के लिए एक ट्रैकिंग नोट बनाएं।`
+          ]
+        };
+
+        const practicalMap = lang === 'hi' ? practicalActionsHi : practicalActions;
+        let actionsGoal = normalizedGoal;
+        if (normalizedGoal === 'custom') {
+          actionsGoal = "custom_" + customCategory;
+        }
+        let actions = [...(practicalMap[actionsGoal] || practicalMap["job"])];
+        actions = actions.filter(a => a !== undefined);
+
+        if (goal === 'baby') {
+          if (hasPartner) {
+            if (lang === 'hi') {
+              if (babyNum === "1") {
+                actions = [
+                  `स्वयं: एक स्वस्थ प्रसवपूर्व आहार बनाए रखें और आज ही अपने दैनिक विटामिन सेवन को दर्ज करें।`,
+                  `साथी (${partnerName}): अपने जीवनसाथी के लिए शारीरिक तनाव को कम करने के लिए घरेलू कार्यों में सहायता करें।`,
+                  `संयुक्त कदम: रिश्ते की ऊर्जा को संरेखित करने के लिए आप और ${partnerName} दोनों मिलकर 15 मिनट ध्यान करें।`,
+                  `संयुक्त योजना: इस महीने दौरा करने के लिए 3 स्थानीय स्वास्थ्य क्लीनिकों या मातृत्व केंद्रों को शॉर्टलिस्ट करें।`
+                ];
+              } else if (babyNum === "2") {
+                actions = [
+                  `स्वयं: स्वास्थ्य मेट्रिक्स और प्रसव के बाद की रिकवरी के संकेतों को ट्रैक करने के लिए 15 मिनट का समय लें।`,
+                  `साथी (${partnerName}): अपने जीवनसाथी को आराम देने के लिए अपने पहले बच्चे (उम्र: ${firstBabyAge} वर्ष) की देखभाल में 30 मिनट का समय बिताएं।`,
+                  `संयुक्त कदम: ${partnerName} के साथ चर्चा करें कि पहले बच्चे को नए भाई या बहन के आगमन के लिए मानसिक रूप से कैसे तैयार किया जाए।`,
+                  `संयुक्त योजना: निरीक्षण करें कि पहले बच्चे के कौन से सामान (जैसे पालना, खिलौने, कपड़े) दोबारा काम आ सकते हैं।`
+                ];
+              } else if (babyNum === "3") {
+                actions = [
+                  `स्वयं: आराम करने, हल्के खिंचाव का अभ्यास करने और आज पोषण मेट्रिक्स लॉग करने के लिए 20 मिनट लें।`,
+                  `साथी (${partnerName}): आज अपने पहले दो बच्चों (उम्र: ${firstBabyAge} और ${secondBabyAge}) की दैनिक दिनचर्या और पढ़ाई की जिम्मेदारी संभालें।`,
+                  `संयुक्त कदम: पांच सदस्यों के परिवार के लिए आवश्यक वित्तीय समायोजन का खाका तैयार करने के लिए ${partnerName} के साथ 20 मिनट बैठें।`,
+                  `संयुक्त योजना: तीन बच्चों को समायोजित करने के लिए शयनकक्ष के पुनर्गठन या अंतरिक्ष वितरण पर चर्चा करें।`
+                ];
+              }
+            } else {
+              if (babyNum === "1") {
+                actions = [
+                  `Self: Maintain a healthy prenatal diet and log your daily vitamin intake today.`,
+                  `Partner (${partnerName}): Assist in organizing domestic tasks to minimize physical strain for your spouse.`,
+                  `Joint Action: Both you and ${partnerName} spend 15 minutes doing light meditation together to align relationship energies.`,
+                  `Joint Planning: Shortlist 3 local healthcare clinics or maternity centers to visit together this month.`
+                ];
+              } else if (babyNum === "2") {
+                actions = [
+                  `Self: Spend 15 minutes tracking health metrics and post-pregnancy recovery signs today.`,
+                  `Partner (${partnerName}): Spend 30 minutes playing with or caring for your first child (age: ${firstBabyAge}) to give your spouse some personal rest.`,
+                  `Joint Action: Spend 15 minutes talking with ${partnerName} on how to prepare your first child emotionally for a sibling.`,
+                  `Joint Planning: Inspect which baby gear (stroller, crib, clothes) from your first child is reusable.`
+                ];
+              } else if (babyNum === "3") {
+                actions = [
+                  `Self: Take 20 minutes to rest, practice light stretching, and log nutrition metrics today.`,
+                  `Partner (${partnerName}): Take charge of organizing the daily schedules and study routines of your first two children (ages: ${firstBabyAge} & ${secondBabyAge}) today.`,
+                  `Joint Action: Sit with ${partnerName} for 20 minutes to map out the financial adjustments required for a family of five.`,
+                  `Joint Planning: Discuss bedroom reorganization or space distribution to accommodate three children.`
+                ];
+              }
+            }
+          } else {
+            if (lang === 'hi') {
+              if (babyNum === "1") {
+                actions = [
+                  `आज प्रसवपूर्व स्वास्थ्य, फोलिक एसिड और आयरन से भरपूर एक पौष्टिक मेनू की योजना बनाएं।`,
+                  `अपने स्थानीय शहर क्षेत्र में उच्च श्रेणी के स्त्री रोग विशेषज्ञों या मातृत्व विशेषज्ञों की सूची बनाएं।`,
+                  `तनाव के स्तर को कम करने के लिए हल्के श्वास व्यायाम (प्राणायाम) करने में 20 मिनट का समय बिताएं।`,
+                  `प्रजनन काल और स्वास्थ्य संकेतकों को ट्रैक करने के लिए दैनिक स्वास्थ्य कैलेंडर बनाए रखें।`
+                ];
+              } else if (babyNum === "2") {
+                actions = [
+                  `पहली गर्भावस्था के बाद से स्वास्थ्य संकेतकों की समीक्षा के लिए बाल रोग विशेषज्ञ से परामर्श करें (पहला बच्चा ${firstBabyAge} वर्ष का है)।`,
+                  `पहले बच्चे के पुनः उपयोग किए जा सकने वाले शिशु सामानों की एक चेकलिस्ट बनाएं।`,
+                  `कई बच्चों के पालन-पोषण और समय प्रबंधन के तरीकों को पढ़ने के लिए 20 मिनट का समय दें।`,
+                  `प्रसवपूर्व स्वास्थ्य मार्करों का आकलन करने के लिए एक नियमित स्वास्थ्य जांच का समय निर्धारित करें।`
+                ];
+              } else if (babyNum === "3") {
+                actions = [
+                  `तीन बच्चों (मौजूदा उम्र: ${firstBabyAge} और ${secondBabyAge}) के खर्चों की व्यवस्था के लिए अपनी पारिवारिक बजट बहीखाते की समीक्षा करें।`,
+                  `सभी तीन बच्चों के लिए कमरों या जगह के वितरण पर चर्चा करने के लिए 30 मिनट का समय निकालें।`,
+                  `एक बड़े परिवार के लिए मानसिक सहनशक्ति विकसित करने के लिए 15 मिनट का ध्यान सत्र करें।`,
+                  `मातृ स्वास्थ्य संकेतकों की समीक्षा के लिए एक प्राथमिक स्वास्थ्य परामर्श शेड्यूल करें।`
+                ];
+              }
+            } else {
+              if (babyNum === "1") {
+                actions = [
+                  `Plan a nutrient-rich menu focusing on prenatal health, folic acid, and iron today.`,
+                  `Research and shortlist highly-rated gynecologists or prenatal specialists in your local city area.`,
+                  `Spend 20 minutes doing light breathing exercises (Pranayama) to reduce body stress levels.`,
+                  `Start keeping a daily health calendar to track cycle indicators and fertility windows.`
+                ];
+              } else if (babyNum === "2") {
+                actions = [
+                  `Consult with a pediatrician or doctor to review health markers since your first pregnancy (first child is ${firstBabyAge} years old).`,
+                  `Create a checklist of baby essentials and gear you can reuse from your first child.`,
+                  `Dedicate 20 minutes to read about managing parenting schedules and routines with multiple children.`,
+                  `Schedule a routine health check-up to assess prenatal compatibility and health markers.`
+                ];
+              } else if (babyNum === "3") {
+                actions = [
+                  `Review your monthly family budget ledger to account for the expenses of raising three children (existing ages: ${firstBabyAge} & ${secondBabyAge}).`,
+                  `Set aside 30 minutes to discuss space/room distribution for all three children.`,
+                  `Practice a 15-minute mindfulness session to cultivate mental resilience for a larger family.`,
+                  `Schedule a primary healthcare consultation to review maternal health pointers.`
+                ];
+              }
+            }
+          }
+        } else if (hasPartner) {
+          if (lang === 'hi') {
+            if (customCategory === "pregnancy") {
+              actions = [
+                `स्वयं (महिला साथी): अपने शारीरिक स्वास्थ्य संकेतकों को ट्रैक करें, गर्भावस्था डायरी बनाए रखें, और विटामिन लें।`,
+                `साथी (${partnerName}): साथी की शारीरिक थकान को कम करने के लिए एक भारी घरेलू काम (जैसे राशन लाना या गहरी सफाई) खुद संभालें।`,
+                `संयुक्त कदम: तनाव के स्तर को संतुलित करने के लिए शाम को मिलकर 15 मिनट श्वास व्यायाम (अनुलोम विलोम) करें।`,
+                `संयुक्त योजना: उन प्रश्नों की एक साझा सूची तैयार करें जिन्हें आप अगले सप्ताह की जांच के दौरान डॉक्टर से पूछना चाहते हैं।`
+              ];
+            } else if (customCategory === "property") {
+              actions = [
+                `स्वयं: अपने बजट से मेल खाने वाली संपत्तियों के लिए ऑनलाइन लिस्टिंग खोजें और 3 विकल्पों को शॉर्टलिस्ट करें।`,
+                `साथी (${partnerName}): वित्तीय बजट, बचत या गृह ऋण प्रलेखन विकल्पों की समीक्षा करने में 15 मिनट का समय दें।`,
+                `संयुक्त कदम: शॉर्टलिस्ट किए गए विकल्पों को एक साथ देखने में 20 मिनट का समय बिताएं और स्थान प्राथमिकताओं को संरेखित करें।`,
+                `संयुक्त योजना: इस सप्ताहांत एक साथ भौतिक संपत्ति का निरीक्षण करने के लिए एक संयुक्त साइट विजिट शेड्यूल करें।`
+              ];
+            } else {
+              actions = [
+                `स्वयं: आज 15 मिनट का समय निकालकर एक संबंध चिंता या लक्ष्य लिखें जिसे आप ${partnerName} के साथ साझा करना चाहते हैं।`,
+                `साथी (${partnerName}): उनसे कहें कि बिना किसी अनचाही सलाह दिए आपके दैनिक अनुभवों को सक्रिय रूप से सुनने में 15 मिनट बिताएं।`,
+                `संयुक्त कदम: आप और ${partnerName} दोनों मिलकर 20 मिनट बाहर टहलें या साझा योजना पर चर्चा करते हुए चाय साझा करें।`,
+                `ऊर्जावान संरेखण: साथी के ग्रहों के स्पंदनों को सामंजस्य में लाने के लिए आज मनभावन हल्के रंग (जैसे क्रीम या पीला) पहनें।`
+              ];
+            }
+          } else {
+            if (customCategory === "pregnancy") {
+              actions = [
+                `Self (Female Partner): Track your physical health indicators, keep a pregnancy diary, and take prenatal vitamins.`,
+                `Partner (${partnerName}): Take over one heavy household chore (like carrying groceries or deep cleaning) to minimize physical fatigue for your partner.`,
+                `Joint Action: Spend 15 minutes in the evening doing light breathing exercises (Anulom Vilom) together to harmonize stress levels.`,
+                `Joint Planning: Draft a shared list of questions you want to ask your gynecologist or consultant during next week's check-up.`
+              ];
+            } else if (customCategory === "property") {
+              actions = [
+                `Self: Spend 15 minutes searching online listings for properties matching your target criteria and shortlist 3 choices.`,
+                `Partner (${partnerName}): Spend 15 minutes reviewing the financial budget, savings, or loan documentation options.`,
+                `Joint Action: Spend 20 minutes looking at the shortlisted options together and align on your location priorities.`,
+                `Joint Action: Schedule a joint site visit or broker call to inspect a physical property together this weekend.`
+              ];
+            } else {
+              actions = [
+                `Self: Take 15 minutes today to write down a relationship concern or goal you want to discuss with ${partnerName}.`,
+                `Partner (${partnerName}): Ask them to spend 15 minutes listening actively to your daily experiences without offering unsolicited advice.`,
+                `Joint Action: Both you and ${partnerName} should spend 20 minutes walking together outdoors or sharing a relaxing tea while discussing a shared domestic plan.`,
+                `Energetic Sync: Wear pleasing light colors today (like cream, pastel pink, or light yellow) to harmonize both partners' planetary vibrations.`
+              ];
+            }
+          }
+        }
+
+        const pListHTML = actions.slice(0, 6).map((a, i) =>
+          `<li style="margin-bottom: 10px;"><strong>${lang === 'hi' ? 'कदम' : 'Action Step'} ${i+1}:</strong> ${a}</li>`
+        ).join('');
+
+        // Astro predictions text
+        let predictionHTML;
+        if (lang === 'hi') {
+          predictionHTML = `
+            <p style="margin: 0 0 10px 0;"><strong>ज्योतिषीय लग्न (Lagna):</strong> <span style="color: var(--gold);">${lagnaNameHi} (${lagnaName})</span> | <strong>शासक ग्रह:</strong> <span style="color: #5dade2;">${rulingLord}</span></p>
+            <p style="margin: 0 0 10px 0;">आपकी कुंडली बताती है कि आपके लग्न स्वामी <strong>${rulingLord}</strong> वर्तमान में आपके 90-दिवसीय कर्म चक्र की ओर मजबूत ऊर्जा किरणें संचारित कर रहे हैं। समर्पित अनुशासन के साथ, आपका व्यक्तिगत ऊर्जा संरेखण आगामी 90 दिनों में चरम प्रकटीकरण शक्ति तक पहुंच जाएगा।</p>
+            <div style="background: rgba(232, 200, 121, 0.06); padding: 12px; border-radius: 8px; border-left: 3px solid var(--gold); margin-top: 10px;">
+              <strong style="color: var(--gold); display: block; margin-bottom: 4px;">🎯 सक्रिय लक्ष्यों का ज्योतिषीय पूर्वानुमान:</strong>
+              <ul style="margin: 4px 0 0 18px; padding: 0;">
+                ${activeGoalsList.map(g => {
+                  const gLabel = goalLabelsHi[g] || goalLabelsEn[g] || g;
+                  return `<li style="margin-bottom: 4px;"><strong>${gLabel}:</strong> ${rulingLord} के स्थान के तहत अत्यधिक अनुकूल ग्रह समर्थन पाया गया। त्वरित सफलता के लिए नीचे दिए गए उपायों का पालन करें।</li>`;
+                }).join('')}
+              </ul>
+            </div>
+          `;
+        } else {
+          predictionHTML = `
+            <p style="margin: 0 0 10px 0;"><strong>Astrological Ascendant (Lagna):</strong> <span style="color: var(--gold);">${lagnaName} (${lagnaNameHi})</span> | <strong>Ruling Planet:</strong> <span style="color: #5dade2;">${rulingLord}</span></p>
+            <p style="margin: 0 0 10px 0;">Your horoscope indicates that your Lagna Lord <strong>${rulingLord}</strong> is currently transmitting strong activating rays towards your 90-day karmic cycle. With dedicated discipline, your personal energy alignment will reach peak manifestation power over the upcoming 90 days.</p>
+            <div style="background: rgba(232, 200, 121, 0.06); padding: 12px; border-radius: 8px; border-left: 3px solid var(--gold); margin-top: 10px;">
+              <strong style="color: var(--gold); display: block; margin-bottom: 4px;">🎯 Active Goals Astrological Forecast:</strong>
+              <ul style="margin: 4px 0 0 18px; padding: 0;">
+                ${activeGoalsList.map(g => {
+                  const gLabel = goalLabelsEn[g] || g;
+                  return `<li style="margin-bottom: 4px;"><strong>${gLabel}:</strong> Highly favorable planetary support detected under ${rulingLord}'s placement. Follow the remedies below for accelerated success.</li>`;
+                }).join('')}
+              </ul>
+            </div>
+          `;
+        }
+
+        // Mission Type
+        const goalTitleMapEn = {
+          'job': 'Career Mission',
+          'debt': 'Wealth Clearing Mission',
+          'marriage': isSingleMarriage ? 'Marriage Prediction Mission' : 'Relationship Harmony Mission',
+          'baby': 'Baby Planning Mission',
+          'business': 'Business Growth Mission',
+          'property': 'Dream Home Mission',
+          'health': 'Health & Healing Mission',
+          'custom': 'Life Resolution Mission'
+        };
+        const goalTitleMapHi = {
+          'job': 'करियर मिशन',
+          'debt': 'धन शुद्धि मिशन',
+          'marriage': isSingleMarriage ? 'विवाह भविष्यवाणी मिशन' : 'रिश्ता सामंजस्य मिशन',
+          'baby': 'संतान योजना मिशन',
+          'business': 'व्यापार विकास मिशन',
+          'property': 'सपनों का घर मिशन',
+          'health': 'स्वास्थ्य और उपचार मिशन',
+          'custom': 'जीवन समाधान मिशन'
+        };
+        const missionType = lang === 'hi' ? (goalTitleMapHi[normalizedGoal] || 'दैनिक एस्ट्रो मिशन') : (goalTitleMapEn[normalizedGoal] || 'Daily Astro Mission');
+        let titleText = hasPartner
+          ? (lang === 'hi' ? `${name} और ${partnerName || 'साथी'} का ${missionType}` : `${name} & ${partnerName || 'Partner'}'s ${missionType}`)
+          : (lang === 'hi' ? `${name} का ${missionType}` : `${name}'s ${missionType}`);
+
+        return {
+          vListHTML,
+          lListHTML,
+          vVastuHTML,
+          pListHTML,
+          predictionHTML,
+          titleText
+        };
       }
-      // ---------------------------------------------------------------
-      // BUILD HTML LISTS — render all items (up to 6)
-      // ---------------------------------------------------------------
-      const practicalListHTML = actions.slice(0, 6).map((a, i) =>
-        `<li style="margin-bottom: 10px;"><strong>Action Step ${i+1}:</strong> ${a}</li>`
-      ).join('');
 
-      // ---------------------------------------------------------------
-      // POPULATE RESULT VIEW
-      // ---------------------------------------------------------------
-      document.getElementById('vedic-tasks-list').innerHTML = vedicListHTML;
-      document.getElementById('lalkitab-tasks-list').innerHTML = lalkitabListHTML;
-      document.getElementById('vastu-tasks-list').innerHTML = vastuListHTML;
-      document.getElementById('practical-tasks-list').innerHTML = practicalListHTML;
+      // Compile both languages!
+      const missionEn = compileMissionData('en');
+      const missionHi = compileMissionData('hi');
 
-      // Goal-aware title
-      const goalTitleMap = {
-        'job': 'Career Mission',
-        'debt': 'Wealth Clearing Mission',
-        'marriage': isSingleMarriage ? 'Marriage Prediction Mission' : 'Relationship Harmony Mission',
-        'baby': 'Baby Planning Mission',
-        'business': 'Business Growth Mission',
-        'property': 'Dream Home Mission',
-        'health': 'Health & Healing Mission',
-        'custom': 'Life Resolution Mission'
-      };
-      const missionType = goalTitleMap[normalizedGoal] || 'Daily Astro Mission';
-      let titleText = hasPartner
-        ? `${name} & ${partnerName || 'Partner'}\'s ${missionType}`
-        : `${name}\'s ${missionType}`;
-      document.getElementById('coach-result-title').innerText = titleText;
+      // Populate current active language results directly to Coach Tab DOM
+      const targetMission = currentAppLang === 'hi' ? missionHi : missionEn;
+      document.getElementById('vedic-tasks-list').innerHTML = targetMission.vListHTML;
+      document.getElementById('lalkitab-tasks-list').innerHTML = targetMission.lListHTML;
+      document.getElementById('vastu-tasks-list').innerHTML = targetMission.vVastuHTML;
+      document.getElementById('practical-tasks-list').innerHTML = targetMission.pListHTML;
+      document.getElementById('coach-result-title').innerText = targetMission.titleText;
+      if (astroPredEl) astroPredEl.innerHTML = targetMission.predictionHTML;
 
-      // --- SAVE AND SYNC TO GAMIFICATION DASHBOARD ---
+      // --- SAVE BOTH VERSIONS IN LOCAL STORAGE ---
       const todayStr = getFormattedDate();
       localStorage.setItem('today_mission_date', todayStr);
-      localStorage.setItem('today_mission_title', titleText);
-      localStorage.setItem('today_mission_vedic', vedicListHTML);
-      localStorage.setItem('today_mission_lalkitab', lalkitabListHTML);
-      localStorage.setItem('today_mission_vastu', vastuListHTML);
-      localStorage.setItem('today_mission_practical', practicalListHTML);
+      
+      // Titles
+      localStorage.setItem('today_mission_title_en', missionEn.titleText);
+      localStorage.setItem('today_mission_title_hi', missionHi.titleText);
+      localStorage.setItem('today_mission_title', targetMission.titleText); // default/fallback
 
-      // Save raw text for the Home Tab Quest Cards
-      localStorage.setItem('today_quest_vedic_text', document.getElementById('vedic-tasks-list').innerText);
-      localStorage.setItem('today_quest_lalkitab_text', document.getElementById('lalkitab-tasks-list').innerText);
-      localStorage.setItem('today_quest_vastu_text', document.getElementById('vastu-tasks-list').innerText);
-      localStorage.setItem('today_quest_practical_text', document.getElementById('practical-tasks-list').innerText);
+      // Astro Predictions
+      localStorage.setItem('today_astro_prediction_en', missionEn.predictionHTML);
+      localStorage.setItem('today_astro_prediction_hi', missionHi.predictionHTML);
 
-      // Reset today's quest completion state in localStorage for the new day's generation
+      // HTML tasks list values
+      localStorage.setItem('today_mission_vedic_en', missionEn.vListHTML);
+      localStorage.setItem('today_mission_vedic_hi', missionHi.vListHTML);
+      localStorage.setItem('today_mission_lalkitab_en', missionEn.lListHTML);
+      localStorage.setItem('today_mission_lalkitab_hi', missionHi.lListHTML);
+      localStorage.setItem('today_mission_vastu_en', missionEn.vVastuHTML);
+      localStorage.setItem('today_mission_vastu_hi', missionHi.vVastuHTML);
+      localStorage.setItem('today_mission_practical_en', missionEn.pListHTML);
+      localStorage.setItem('today_mission_practical_hi', missionHi.pListHTML);
+
+      // Raw text content values for Dashboard Doable Quest Cards
+      // We create temp elements to extract text safely for both languages
+      const tempVEn = document.createElement('div'); tempVEn.innerHTML = missionEn.vListHTML;
+      const tempVHi = document.createElement('div'); tempVHi.innerHTML = missionEn.vListHTML; // wait, using hi
+      tempVHi.innerHTML = missionHi.vListHTML;
+      const tempLEn = document.createElement('div'); tempLEn.innerHTML = missionEn.lListHTML;
+      const tempLHi = document.createElement('div'); tempLHi.innerHTML = missionHi.lListHTML;
+      const tempVaEn = document.createElement('div'); tempVaEn.innerHTML = missionEn.vVastuHTML;
+      const tempVaHi = document.createElement('div'); tempVaHi.innerHTML = missionHi.vVastuHTML;
+      const tempPEn = document.createElement('div'); tempPEn.innerHTML = missionEn.pListHTML;
+      const tempPHi = document.createElement('div'); tempPHi.innerHTML = missionHi.pListHTML;
+
+      localStorage.setItem('today_quest_vedic_text_en', tempVEn.innerText);
+      localStorage.setItem('today_quest_vedic_text_hi', tempVHi.innerText);
+      localStorage.setItem('today_quest_lalkitab_text_en', tempLEn.innerText);
+      localStorage.setItem('today_quest_lalkitab_text_hi', tempLHi.innerText);
+      localStorage.setItem('today_quest_vastu_text_en', tempVaEn.innerText);
+      localStorage.setItem('today_quest_vastu_text_hi', tempVaHi.innerText);
+      localStorage.setItem('today_quest_practical_text_en', tempPEn.innerText);
+      localStorage.setItem('today_quest_practical_text_hi', tempPHi.innerText);
+
+      // Save defaults/fallbacks as well
+      localStorage.setItem('today_mission_vedic', targetMission.vListHTML);
+      localStorage.setItem('today_mission_lalkitab', targetMission.lListHTML);
+      localStorage.setItem('today_mission_vastu', targetMission.vVastuHTML);
+      localStorage.setItem('today_mission_practical', targetMission.pListHTML);
+      localStorage.setItem('today_quest_vedic_text', targetMission.vListHTML);
+      localStorage.setItem('today_quest_lalkitab_text', targetMission.lListHTML);
+      localStorage.setItem('today_quest_vastu_text', targetMission.vVastuHTML);
+      localStorage.setItem('today_quest_practical_text', targetMission.pListHTML);      // Reset today's quest completion state in localStorage for the new day's generation
       questsState = {"vedic":false,"lalkitab":false,"vastu":false,"practical":false};
       localStorage.setItem('user_quests_state', JSON.stringify(questsState));
       
@@ -3542,7 +3966,192 @@
         renderPersonalizedRashiHoroscope();
       }
 
+      // 1. Translate Form Select options
+      translateFormSelects(lang);
+
+      // 2. Translate placeholders in form fields
+      translatePlaceholders(lang);
+
+      // 3. Update Settings tab profile card
+      updateSettingsProfileCard(lang);
+
+      // 4. Refresh Daily Quests text cards
+      refreshDailyQuestsUI(lang);
+
+      // 5. Update Gamification headers
+      updateGamificationHeader();
+
+      // 6. Refresh Roadmap tasks in selected language
+      if (typeof selectedRoadmapDay !== 'undefined' && typeof renderRoadmapDayTasks === 'function') {
+        renderRoadmapDayTasks(selectedRoadmapDay);
+      }
+
       console.log('🌐 App language switched to:', lang.toUpperCase());
+    }
+
+    function translatePlaceholders(lang) {
+      const placeHolderTranslations = {
+        en: {
+          'o-name': 'Your Name',
+          'c-name': 'Your Name',
+          'c-p-name': "Partner's Name",
+          'o-city': 'Type city (e.g. New Delhi)',
+          'c-city': 'Type city (e.g. New Delhi)',
+          'c-p-city': 'Type city (e.g. Mumbai)',
+          'o-profession': 'e.g. Software Engineer, Sales, Student',
+          'c-profession': 'e.g. Software Engineer, Designer, Student',
+          'o-custom-issue': 'Describe your issue clearly... (or use mic)',
+          'c-custom-issue': 'e.g. Visa delay, legal dispute, health concerns, etc.',
+          'o-first-baby-dob': 'Date of Birth',
+          'c-first-baby-dob': 'Date of Birth',
+          'c-first-baby-age': 'e.g. 5',
+          'c-second-baby-age': 'e.g. 2'
+        },
+        hi: {
+          'o-name': 'आपका नाम',
+          'c-name': 'आपका नाम',
+          'c-p-name': 'साथी का नाम',
+          'o-city': 'शहर टाइप करें (जैसे: नई दिल्ली)',
+          'c-city': 'शहर टाइप करें (जैसे: नई दिल्ली)',
+          'c-p-city': 'शहर टाइप करें (जैसे: मुंबई)',
+          'o-profession': 'जैसे: सॉफ्टवेयर इंजीनियर, छात्र',
+          'c-profession': 'जैसे: सॉफ्टवेयर इंजीनियर, डिजाइनर, छात्र',
+          'o-custom-issue': 'अपनी समस्या स्पष्ट रूप से लिखें... (या माइक का उपयोग करें)',
+          'c-custom-issue': 'जैसे: वीजा में देरी, कानूनी विवाद, आदि',
+          'o-first-baby-dob': 'जन्म तिथि',
+          'c-first-baby-dob': 'जन्म तिथि',
+          'c-first-baby-age': 'जैसे: 5',
+          'c-second-baby-age': 'जैसे: 2'
+        }
+      };
+
+      const placeholders = placeHolderTranslations[lang];
+      if (placeholders) {
+        Object.keys(placeholders).forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.setAttribute('placeholder', placeholders[id]);
+        });
+      }
+    }
+
+    function translateFormSelects(lang) {
+      // 1. Compatibility selects
+      const rasiNamesEn = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+      const rasiNamesHi = ["मेष", "वृषभ", "मिथुन", "कर्क", "सिंह", "कन्या", "तुला", "वृश्चिक", "धनु", "मकर", "कुंभ", "मीन"];
+      const rasiList = lang === 'hi' ? rasiNamesHi : rasiNamesEn;
+      ['m-bride-sign', 'm-groom-sign'].forEach(id => {
+        const sel = document.getElementById(id);
+        if (sel) {
+          const val = sel.value;
+          sel.innerHTML = rasiList.map((name, idx) => `<option value="${idx}">${name}</option>`).join('');
+          sel.value = val;
+        }
+      });
+
+      // 2. Coach Goal select
+      const goalOptionsEn = {
+        "job": "Career / Dream Job",
+        "debt": "Clear Financial Debt / Wealth",
+        "marriage": "Marriage / Relationship Harmony",
+        "marriage-single": "Marriage Prediction (Single)",
+        "marriage-couple": "Marriage Harmony (Couple)",
+        "baby": "Planning for Baby / Progeny",
+        "business": "Start or Grow Business",
+        "property": "Buy Home / Property",
+        "property-single": "Buy Home (Single)",
+        "property-couple": "Buy Home (Couple)",
+        "health": "Health & Wellbeing",
+        "custom": "Resolve Major Life Issue"
+      };
+      const goalOptionsHi = {
+        "job": "करियर / सपनों की नौकरी",
+        "debt": "वित्तीय ऋण चुकाना / धन",
+        "marriage": "विवाह / संबंध सद्भाव",
+        "marriage-single": "विवाह भविष्यवाणी (एकल)",
+        "marriage-couple": "विवाह सद्भाव (युगल)",
+        "baby": "बच्चे के लिए योजना / संतान",
+        "business": "व्यवसाय शुरू करना या बढ़ाना",
+        "property": "घर / संपत्ति खरीदना",
+        "property-single": "घर खरीदें (एकल)",
+        "property-couple": "घर खरीदें (युगल)",
+        "health": "स्वास्थ्य और कल्याण",
+        "custom": "बड़ी जीवन समस्या का समाधान"
+      };
+      const goalMap = lang === 'hi' ? goalOptionsHi : goalOptionsEn;
+      const cGoal = document.getElementById('c-goal');
+      if (cGoal) {
+        const val = cGoal.value;
+        cGoal.innerHTML = Object.keys(goalMap).map(k => `<option value="${k}">${goalMap[k]}</option>`).join('');
+        cGoal.value = val;
+      }
+
+      // 3. Baby Number select
+      const babyNumEn = { "1": "1st Baby", "2": "2nd Baby", "3": "3rd Baby" };
+      const babyNumHi = { "1": "पहला बच्चा", "2": "दूसरा बच्चा", "3": "तीसरा बच्चा" };
+      const babyMap = lang === 'hi' ? babyNumHi : babyNumEn;
+      const cBaby = document.getElementById('c-baby-number');
+      if (cBaby) {
+        const val = cBaby.value;
+        cBaby.innerHTML = Object.keys(babyMap).map(k => `<option value="${k}">${babyMap[k]}</option>`).join('');
+        cBaby.value = val;
+      }
+
+      // 4. Alignment Path select
+      const pathModeEn = { "single": "Single Path (Individual)", "couple": "Couple Path (Shared details)" };
+      const pathModeHi = { "single": "एकल मार्ग (व्यक्तिगत)", "couple": "युगल मार्ग (साझा विवरण)" };
+      const pathMap = lang === 'hi' ? pathModeHi : pathModeEn;
+      const cPath = document.getElementById('c-path-mode');
+      if (cPath) {
+        const val = cPath.value;
+        cPath.innerHTML = Object.keys(pathMap).map(k => `<option value="${k}">${pathMap[k]}</option>`).join('');
+        cPath.value = val;
+      }
+    }
+
+    function updateSettingsProfileCard(lang) {
+      const profileName = document.getElementById('settings-profile-name');
+      const profileSession = document.getElementById('settings-profile-session');
+      if (profileName) {
+        const storedName = localStorage.getItem('user_name') || localStorage.getItem('kundli_name');
+        profileName.innerText = storedName || (lang === 'hi' ? 'ब्रह्मांडीय साधक' : 'Cosmic Seeker');
+      }
+      if (profileSession) {
+        const email = localStorage.getItem('user_email');
+        if (email) {
+          profileSession.innerText = lang === 'hi' ? `सक्रिय सत्र: ${email}` : `Active Session: ${email}`;
+        } else {
+          profileSession.innerText = lang === 'hi' ? `सक्रिय सत्र: अतिथि मोड` : `Active Session: Guest Mode`;
+        }
+      }
+    }
+
+    function refreshDailyQuestsUI(lang) {
+      const vText = localStorage.getItem(`today_quest_vedic_text_${lang}`) || localStorage.getItem('today_quest_vedic_text');
+      const lText = localStorage.getItem(`today_quest_lalkitab_text_${lang}`) || localStorage.getItem('today_quest_lalkitab_text');
+      const vaText = localStorage.getItem(`today_quest_vastu_text_${lang}`) || localStorage.getItem('today_quest_vastu_text');
+      const pText = localStorage.getItem(`today_quest_practical_text_${lang}`) || localStorage.getItem('today_quest_practical_text');
+
+      if (vText && document.getElementById('q-vedic-text')) document.getElementById('q-vedic-text').innerHTML = formatQuestHTML(vText);
+      if (lText && document.getElementById('q-lalkitab-text')) document.getElementById('q-lalkitab-text').innerHTML = formatQuestHTML(lText);
+      if (vaText && document.getElementById('q-vastu-text')) document.getElementById('q-vastu-text').innerHTML = formatQuestHTML(vaText);
+      if (pText && document.getElementById('q-practical-text')) document.getElementById('q-practical-text').innerHTML = formatQuestHTML(pText);
+
+      // Coach predictions values translation
+      const vList = localStorage.getItem(`today_mission_vedic_${lang}`);
+      const lList = localStorage.getItem(`today_mission_lalkitab_${lang}`);
+      const vaList = localStorage.getItem(`today_mission_vastu_${lang}`);
+      const pList = localStorage.getItem(`today_mission_practical_${lang}`);
+      const title = localStorage.getItem(`today_mission_title_${lang}`);
+      const astro = localStorage.getItem(`today_astro_prediction_${lang}`);
+
+      if (vList && document.getElementById('vedic-tasks-list')) document.getElementById('vedic-tasks-list').innerHTML = vList;
+      if (lList && document.getElementById('lalkitab-tasks-list')) document.getElementById('lalkitab-tasks-list').innerHTML = lList;
+      if (vaList && document.getElementById('vastu-tasks-list')) document.getElementById('vastu-tasks-list').innerHTML = vaList;
+      if (pList && document.getElementById('practical-tasks-list')) document.getElementById('practical-tasks-list').innerHTML = pList;
+      if (title && document.getElementById('coach-result-title')) document.getElementById('coach-result-title').innerText = title;
+      
+      const astroPredEl = document.getElementById('coach-astrological-prediction');
+      if (astro && astroPredEl) astroPredEl.innerHTML = astro;
     }
 
     function toggleAppLanguage() {
@@ -5195,6 +5804,7 @@
 
     // App Initialization
     function initApp() {
+      setAppLanguage(currentAppLang);
       // Load Cloud DB Config
       loadCloudConfig();
 
@@ -5245,10 +5855,25 @@
           console.error("Auto quest generation error:", e);
         }
       } else {
-        const vText = localStorage.getItem('today_quest_vedic_text');
-        const lText = localStorage.getItem('today_quest_lalkitab_text');
-        const vaText = localStorage.getItem('today_quest_vastu_text');
-        const pText = localStorage.getItem('today_quest_practical_text');
+                const vText = localStorage.getItem('today_quest_vedic_text_' + currentAppLang) || localStorage.getItem('today_quest_vedic_text');
+        const lText = localStorage.getItem('today_quest_lalkitab_text_' + currentAppLang) || localStorage.getItem('today_quest_lalkitab_text');
+        const vaText = localStorage.getItem('today_quest_vastu_text_' + currentAppLang) || localStorage.getItem('today_quest_vastu_text');
+        const pText = localStorage.getItem('today_quest_practical_text_' + currentAppLang) || localStorage.getItem('today_quest_practical_text');
+
+        // Also restore coach tab predictions with correct language
+        const vList = localStorage.getItem('today_mission_vedic_' + currentAppLang);
+        const lList = localStorage.getItem('today_mission_lalkitab_' + currentAppLang);
+        const vaList = localStorage.getItem('today_mission_vastu_' + currentAppLang);
+        const pList = localStorage.getItem('today_mission_practical_' + currentAppLang);
+        const coachTitle = localStorage.getItem('today_mission_title_' + currentAppLang);
+        const astroPred = localStorage.getItem('today_astro_prediction_' + currentAppLang);
+
+        if (vList && document.getElementById('vedic-tasks-list')) document.getElementById('vedic-tasks-list').innerHTML = vList;
+        if (lList && document.getElementById('lalkitab-tasks-list')) document.getElementById('lalkitab-tasks-list').innerHTML = lList;
+        if (vaList && document.getElementById('vastu-tasks-list')) document.getElementById('vastu-tasks-list').innerHTML = vaList;
+        if (pList && document.getElementById('practical-tasks-list')) document.getElementById('practical-tasks-list').innerHTML = pList;
+        if (coachTitle && document.getElementById('coach-result-title')) document.getElementById('coach-result-title').innerText = coachTitle;
+        if (astroPred && document.getElementById('coach-astrological-prediction')) document.getElementById('coach-astrological-prediction').innerHTML = astroPred;
 
         if (vText && document.getElementById('q-vedic-text')) document.getElementById('q-vedic-text').innerHTML = formatQuestHTML(vText);
         if (lText && document.getElementById('q-lalkitab-text')) document.getElementById('q-lalkitab-text').innerHTML = formatQuestHTML(lText);
@@ -6516,12 +7141,10 @@
     }
 
     // 5. SYSTEM SETTINGS
-    function changeLanguage() {
+        function changeLanguage() {
       const lang = document.getElementById('lang-select').value;
-      const title = document.getElementById('header-title');
-      if (lang === 'hi') {
-        title.innerText = "कोस्मोवैदिक";
-      } else {
+      setAppLanguage(lang);
+    } else {
         title.innerText = "COSMOVEDIC";
       }
     }
