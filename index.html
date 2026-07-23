@@ -439,8 +439,8 @@
       bottom: 0;
       left: 0;
       right: 0;
-      height: 72px;
-      background: rgba(14, 10, 32, 0.92);
+      height: 66px;
+      background: rgba(14, 10, 32, 0.95);
       border-top: 1px solid rgba(232, 200, 121, 0.15);
       display: flex;
       justify-content: space-around;
@@ -448,7 +448,7 @@
       z-index: 100;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      padding: 0 6px;
+      padding: 0 2px;
     }
 
     .nav-item {
@@ -458,23 +458,25 @@
       justify-content: center;
       color: var(--text-subtle);
       cursor: pointer;
-      font-size: 0.72rem;
+      font-size: 0.58rem;
       font-weight: 600;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.2px;
       text-decoration: none;
       background: none;
       border: none;
       outline: none;
-      padding: 8px 12px;
-      border-radius: 12px;
+      padding: 6px 4px;
+      border-radius: 10px;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
+      min-width: 0;
+      flex: 1;
     }
 
     .nav-item svg {
-      width: 22px;
-      height: 22px;
-      margin-bottom: 4px;
+      width: 19px;
+      height: 19px;
+      margin-bottom: 3px;
       fill: currentColor;
       transition: transform 0.25s ease, fill 0.25s ease;
     }
@@ -1303,7 +1305,7 @@
               <input type="checkbox" id="q-vedic" onchange="toggleQuest('vedic', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
               <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
-                  <strong style="color: var(--gold); font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3 0-5 2-5 4s2 4 5 4c-1 2-3 4-6 5"/><path d="M14 10c1 2 2 4 2 6a4 4 0 0 1-4 4"/><path d="M12 2c3 0 5 2 5 4"/><circle cx="17" cy="7" r="1" fill="#E8C879"/></svg> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><path d="M12 2v2M4.93 4.93l1.41 1.41M20 12h2M17.66 17.66l1.41 1.41M2 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg> Morning Ritual (06:00 AM - 07:30 AM)</strong>
+                  <strong style="color: var(--gold); font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2M4.93 4.93l1.41 1.41M20 12h2M17.66 17.66l1.41 1.41M2 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/><circle cx="12" cy="12" r="5" fill="none"/></svg> Morning Ritual (06:00 AM - 07:30 AM)</strong>
                   <span style="font-size: 0.75rem; background: rgba(232, 200, 121, 0.15); color: var(--gold); padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+20 XP</span>
                 </div>
                 <div id="q-vedic-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;"></div>
@@ -1315,7 +1317,7 @@
               <input type="checkbox" id="q-lalkitab" onchange="toggleQuest('lalkitab', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
               <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
-                  <strong style="color: #ff6b6b; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="6" x2="16" y2="6"/><line x1="12" y1="10" x2="16" y2="10"/></svg> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><path d="M12 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 20h20M12 20v-6"/></svg> Evening Remedy (06:30 PM - 07:15 PM)</strong>
+                  <strong style="color: #ff6b6b; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="6" x2="16" y2="6"/><line x1="12" y1="10" x2="16" y2="10"/></svg> Evening Remedy (06:30 PM - 07:15 PM)</strong>
                   <span style="font-size: 0.75rem; background: rgba(255, 107, 107, 0.15); color: #ff6b6b; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+15 XP</span>
                 </div>
                 <div id="q-lalkitab-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;"></div>
@@ -1327,7 +1329,7 @@
               <input type="checkbox" id="q-vastu" onchange="toggleQuest('vastu', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
               <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
-                  <strong style="color: #5dade2; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Workspace &amp; Direction Setup</strong>
+                  <strong style="color: #5dade2; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Workspace &amp; Direction Setup</strong>
                   <span style="font-size: 0.75rem; background: rgba(93, 173, 226, 0.15); color: #5dade2; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+15 XP</span>
                 </div>
                 <div id="q-vastu-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;"></div>
@@ -1339,7 +1341,7 @@
               <input type="checkbox" id="q-practical" onchange="toggleQuest('practical', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
               <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
-                  <strong style="color: #2ecc71; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>️ Mid-Day Doable Task (11:45 AM - 01:30 PM)</strong>
+                  <strong style="color: #2ecc71; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> Mid-Day Doable Task (11:45 AM - 01:30 PM)</strong>
                   <span style="font-size: 0.75rem; background: rgba(46, 204, 113, 0.15); color: #2ecc71; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+30 XP</span>
                 </div>
                 <div id="q-practical-text" style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;"></div>
@@ -1359,6 +1361,13 @@
             </h4>
             <span id="journey-day-badge" style="font-size:0.75rem; background:rgba(232,200,121,0.15); color:var(--gold); padding:2px 8px; border-radius:10px; font-weight:bold;">Day 1 of 90</span>
           </div>
+
+          <!-- Today's date display -->
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; display:flex; align-items:center; gap:5px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span id="journey-today-date" style="color: var(--gold);">Today: —</span>
+          </div>
+
           <p style="margin: 0 0 12px 0; font-size: 0.75rem; color: var(--text-muted); text-align: left;">Your 90-day daily task plan: chant mantras, do Lal Kitab remedies, &amp; complete practical goals</p>
           
           <!-- 90-Day Phase Progress Bar -->
@@ -1372,9 +1381,15 @@
             </div>
           </div>
 
-          <!-- 90-Day Interactive Grid -->
-          <div id="dedication-grid" style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; max-height: 180px; overflow-y: auto; padding: 4px; border-radius: 8px; background: rgba(0,0,0,0.2);">
-            <!-- 90 squares generated dynamically by JS -->
+          <!-- 30-Day Paginated Grid -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <button onclick="navigateGridPage(-1)" style="background:rgba(232,200,121,0.1); border:1px solid rgba(232,200,121,0.25); color:var(--gold); border-radius:8px; padding:4px 10px; font-size:0.75rem; cursor:pointer;">&#9664; Prev</button>
+            <span id="grid-page-label" style="font-size:0.75rem; color:var(--gold); font-weight:600;">Days 1–30</span>
+            <button onclick="navigateGridPage(1)" style="background:rgba(232,200,121,0.1); border:1px solid rgba(232,200,121,0.25); color:var(--gold); border-radius:8px; padding:4px 10px; font-size:0.75rem; cursor:pointer;">Next &#9654;</button>
+          </div>
+
+          <div id="dedication-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; padding: 4px; border-radius: 8px; background: rgba(0,0,0,0.2);">
+            <!-- 30 squares generated dynamically by JS -->
           </div>
           
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 0.68rem; color: var(--text-muted);">
@@ -1417,9 +1432,9 @@
               </h3>
               <p style="color: var(--text-muted); font-size: 0.78rem; margin: 3px 0 0 0;" id="rashi-date-label">Today</p>
             </div>
-            <div style="background: rgba(142, 111, 214, 0.2); border: 1px solid rgba(142, 111, 214, 0.5); padding: 5px 12px; border-radius: 20px; text-align: right;">
-              <span style="font-size: 0.7rem; color: var(--gold); text-transform: uppercase; font-weight: 700; display: block;"><span class="k-lbl-en">Janma Rashi</span><span class="k-lbl-hi" style="display:none;">जन्म राशि</span></span>
-              <span style="font-size: 0.9rem; color: #FFFFFF; font-weight: bold;" id="rashi-badge-name">—</span>
+            <div style="background: rgba(142, 111, 214, 0.2); border: 1px solid rgba(142, 111, 214, 0.5); padding: 5px 10px; border-radius: 12px; text-align: center; min-width: 72px;">
+              <span style="font-size: 0.6rem; color: var(--gold); text-transform: uppercase; font-weight: 700; display: block; letter-spacing: 0.5px;"><span class="k-lbl-en">Janma Rashi</span><span class="k-lbl-hi" style="display:none;">जन्म राशि</span></span>
+              <span style="font-size: 0.82rem; color: #FFFFFF; font-weight: bold; display: block; line-height: 1.3;" id="rashi-badge-name">—</span>
             </div>
           </div>
           <div id="rashi-prediction-content" style="font-size: 0.88rem; line-height: 1.6; color: #E0DFEC; margin-bottom: 16px;">
@@ -4236,7 +4251,17 @@
     }
 
     function navigateRoadmapDay(delta) {
+      const prev = selectedRoadmapDay;
       selectedRoadmapDay = Math.min(Math.max(selectedRoadmapDay + delta, 1), 90);
+
+      // Auto-flip grid page when crossing day 30/60 boundaries
+      const prevPage = Math.floor((prev - 1) / 30);
+      const newPage = Math.floor((selectedRoadmapDay - 1) / 30);
+      if (prevPage !== newPage) {
+        gridPage = newPage;
+        renderDedicationGrid();
+      }
+
       renderRoadmapDayTasks(selectedRoadmapDay);
     }
 
@@ -4925,6 +4950,14 @@
       }
     }
 
+    // Current visible page of the 30-day grid (0=Days1-30, 1=Days31-60, 2=Days61-90)
+    let gridPage = 0;
+
+    function navigateGridPage(delta) {
+      gridPage = (gridPage + delta + 3) % 3; // Loop: 0 -> 1 -> 2 -> 0
+      renderDedicationGrid();
+    }
+
     function renderDedicationGrid() {
       const grid = document.getElementById('dedication-grid');
       if (!grid) return;
@@ -4945,7 +4978,22 @@
       let currentDayNum = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
       if (currentDayNum > 90) currentDayNum = 90;
 
+      // Update today's date display
+      const todayDateEl = document.getElementById('journey-today-date');
+      if (todayDateEl) {
+        const todayFormatted = todayObj.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+        todayDateEl.textContent = 'Today: ' + todayFormatted;
+      }
+
       let completedDaysCount = 0;
+
+      // Count all 90 days for progress bar
+      for (let day = 1; day <= 90; day++) {
+        const d = new Date(startDateObj.getTime() + (day - 1) * 24 * 60 * 60 * 1000);
+        const dateStr = getFormattedDate(d);
+        const completedCount = dedicationHistory[dateStr] || 0;
+        if (completedCount === 4) completedDaysCount++;
+      }
 
       // Update Header Badges & Progress Bar
       const dayBadge = document.getElementById('journey-day-badge');
@@ -4958,28 +5006,60 @@
         else phaseTitle.textContent = "Phase 3: Manifestation (Days 61-90)";
       }
 
-      // Render 90 Grid Squares
-      for (let day = 1; day <= 90; day++) {
+      const percent = Math.round((completedDaysCount / 90) * 100);
+      const percentEl = document.getElementById('journey-percent');
+      const progressFill = document.getElementById('journey-progress-fill');
+      if (percentEl) percentEl.textContent = `${percent}% Complete (${completedDaysCount}/90 Days)`;
+      if (progressFill) progressFill.style.width = `${Math.max(1, percent)}%`;
+
+      // Auto-set gridPage to the page containing today's day on first render (gridPage === 0 + currentDay > 30)
+      if (gridPage === 0 && currentDayNum > 30) {
+        gridPage = Math.floor((currentDayNum - 1) / 30);
+      }
+
+      // Determine which 30-day page to show
+      const pageLabels = ['Days 1\u201330', 'Days 31\u201360', 'Days 61\u201390'];
+      const pageLabelEl = document.getElementById('grid-page-label');
+      if (pageLabelEl) pageLabelEl.textContent = pageLabels[gridPage];
+
+      const startDay = gridPage * 30 + 1;
+      const endDay = Math.min(startDay + 29, 90);
+
+      // Render 30 Grid Squares for the current page
+      for (let day = startDay; day <= endDay; day++) {
         const d = new Date(startDateObj.getTime() + (day - 1) * 24 * 60 * 60 * 1000);
         const dateStr = getFormattedDate(d);
         const completedCount = dedicationHistory[dateStr] || 0;
-        
-        if (completedCount === 4) completedDaysCount++;
 
         const box = document.createElement('div');
-        box.style.height = '20px';
-        box.style.borderRadius = '3px';
-        box.style.fontSize = '0.55rem';
+        box.style.height = '32px';
+        box.style.borderRadius = '5px';
+        box.style.fontSize = '0.62rem';
         box.style.display = 'flex';
+        box.style.flexDirection = 'column';
         box.style.alignItems = 'center';
         box.style.justifyContent = 'center';
         box.style.cursor = 'pointer';
         box.style.transition = 'all 0.2s';
-        box.innerText = day;
+        box.style.lineHeight = '1.1';
+
+        // Show day number and date
+        const dayLabel = document.createElement('span');
+        dayLabel.style.fontWeight = 'bold';
+        dayLabel.textContent = day;
+
+        const dateLabel = document.createElement('span');
+        dateLabel.style.fontSize = '0.5rem';
+        dateLabel.style.opacity = '0.7';
+        dateLabel.textContent = d.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+
+        box.appendChild(dayLabel);
+        box.appendChild(dateLabel);
 
         if (day === currentDayNum) {
-          box.style.border = '1.5px solid var(--gold)';
+          box.style.border = '2px solid var(--gold)';
           box.style.fontWeight = 'bold';
+          box.style.boxShadow = '0 0 8px rgba(232, 200, 121, 0.4)';
         }
 
         if (completedCount === 0) {
@@ -4996,14 +5076,9 @@
         }
 
         box.title = `Day ${day} (${dateStr}): ${completedCount}/4 Quests Complete`;
+        box.onclick = () => renderRoadmapDayTasks(day);
         grid.appendChild(box);
       }
-
-      const percent = Math.round((completedDaysCount / 90) * 100);
-      const percentEl = document.getElementById('journey-percent');
-      const progressFill = document.getElementById('journey-progress-fill');
-      if (percentEl) percentEl.textContent = `${percent}% Complete (${completedDaysCount}/90 Days)`;
-      if (progressFill) progressFill.style.width = `${Math.max(1, percent)}%`;
     }
 
     // Session & Profile state managed dynamically via Supabase & LocalStorage
