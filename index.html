@@ -162,6 +162,44 @@
       --text-subtle: #79769B;
     }
 
+    body.light-theme {
+      --bg-color: #F8F9FA;
+      --bg-gradient: radial-gradient(circle at 50% 0%, #E8E5FA 0%, #F8F9FA 75%);
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --card-bg-solid: #FFFFFF;
+      --card-border: rgba(142, 111, 214, 0.2);
+      --card-border-glow: rgba(142, 111, 214, 0.5);
+      --gold: #9C7D0E;
+      --gold-dark: #7B6005;
+      --gold-light: #FFF2C6;
+      --gold-gradient: linear-gradient(135deg, #9C7D0E 0%, #7B6005 100%);
+      --purple: #6A38C8;
+      --purple-dark: #ECE7FA;
+      --nebula: #1E5B9E;
+      --emerald: #27AE60;
+      --text: #1C1A30;
+      --text-muted: #595679;
+      --text-subtle: #8986AA;
+    }
+
+    body.light-theme .form-group input, 
+    body.light-theme .form-group select {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(106, 56, 200, 0.3);
+      color: var(--text);
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+    body.light-theme .form-group input:focus, 
+    body.light-theme .form-group select:focus {
+      background: #FFFFFF;
+      border-color: var(--gold);
+      box-shadow: 0 0 10px rgba(156, 125, 14, 0.2), inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+    body.light-theme .form-group select option {
+      background: #FFFFFF;
+      color: var(--text);
+    }
+
     @media print {
       body, html {
         background: #ffffff !important;
@@ -875,9 +913,12 @@
 
   <!-- 2.5. ONBOARDING SCREEN -->
   <div id="onboarding-screen" style="display: none; position: relative;">
-    <!-- Language Switcher Pill for Onboarding Screens -->
-    <div style="position: absolute; top: 16px; right: 16px; z-index: 1000;">
-      <button onclick="toggleAppLanguage()" class="lang-toggle-btn" style="background: rgba(232, 200, 121, 0.15); border: 1px solid rgba(232, 200, 121, 0.4); color: var(--gold); padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; backdrop-filter: blur(10px); box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+    <!-- Language & Theme Switcher Pill for Onboarding Screens -->
+    <div style="position: absolute; top: 16px; right: 16px; z-index: 1000; display: flex; gap: 8px; align-items: center;">
+      <button onclick="toggleTheme()" class="theme-toggle-btn" title="Toggle Light/Dark Theme" style="background: rgba(232, 200, 121, 0.15); border: 1px solid rgba(232, 200, 121, 0.4); color: var(--gold); padding: 6px; border-radius: 50%; width: 28px; height: 28px; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.25s ease;">
+        <svg class="theme-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button onclick="toggleAppLanguage()" class="lang-toggle-btn" style="background: rgba(232, 200, 121, 0.15); border: 1px solid rgba(232, 200, 121, 0.4); color: var(--gold); padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; backdrop-filter: blur(10px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.25s ease;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> <span class="app-lang-label">EN / हिंदी</span>
       </button>
     </div>
@@ -1289,9 +1330,14 @@
   <div id="app-layout">
     <header style="display: flex; align-items: center; justify-content: space-between; padding: 0 16px;">
       <h1 id="header-title" style="margin: 0; font-size: 1.35rem;">COSMOVEDIC</h1>
-      <button onclick="toggleAppLanguage()" class="lang-toggle-btn" style="background: rgba(240, 215, 123, 0.15); border: 1px solid rgba(240, 215, 123, 0.4); color: var(--gold); padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; backdrop-filter: blur(10px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.25s ease;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> <span class="app-lang-label">EN / हिंदी</span>
-      </button>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button onclick="toggleTheme()" class="theme-toggle-btn" title="Toggle Light/Dark Theme" style="background: rgba(240, 215, 123, 0.15); border: 1px solid rgba(240, 215, 123, 0.4); color: var(--gold); padding: 6px; border-radius: 50%; width: 28px; height: 28px; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.25s ease;">
+          <svg class="theme-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <button onclick="toggleAppLanguage()" class="lang-toggle-btn" style="background: rgba(240, 215, 123, 0.15); border: 1px solid rgba(240, 215, 123, 0.4); color: var(--gold); padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; backdrop-filter: blur(10px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.25s ease;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> <span class="app-lang-label">EN / हिंदी</span>
+        </button>
+      </div>
     </header>
 
     <main>
@@ -4908,6 +4954,55 @@
       const nextLang = currentAppLang === 'en' ? 'hi' : 'en';
       setAppLanguage(nextLang);
     }
+
+    function toggleTheme() {
+      const isLight = document.body.classList.contains('light-theme');
+      if (isLight) {
+        document.body.classList.remove('light-theme');
+        localStorage.setItem('app_theme', 'dark');
+      } else {
+        document.body.classList.add('light-theme');
+        localStorage.setItem('app_theme', 'light');
+      }
+      updateThemeUI();
+      
+      // Instantly redraw canvas charts to match theme
+      if (typeof drawChart === 'function') {
+        try { drawChart(); } catch(e) {}
+      }
+      if (typeof drawLalKitabChart === 'function') {
+        try { drawLalKitabChart(); } catch(e) {}
+      }
+    }
+
+    function updateThemeUI() {
+      const isLight = document.body.classList.contains('light-theme');
+      
+      // Update icons for all theme toggle buttons on the page
+      const icons = document.querySelectorAll('.theme-toggle-btn .theme-icon');
+      icons.forEach(icon => {
+        if (isLight) {
+          // Sun SVG Icon
+          icon.innerHTML = `<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>`;
+        } else {
+          // Moon SVG Icon
+          icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+        }
+      });
+    }
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem('app_theme');
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+      } else {
+        document.body.classList.remove('light-theme');
+      }
+      updateThemeUI();
+    }
+
+    // Initialize theme immediately on script load
+    try { initTheme(); } catch(e) {}
 
     function handleLogout() {
       showCustomConfirm("Logout Confirmation", "Are you sure you want to log out of CosmoVedic?", async () => {
@@ -8744,13 +8839,15 @@
       const w = canvas.width;
       const h = canvas.height;
 
+      const isLight = document.body.classList.contains('light-theme');
+
       // Clear Canvas
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = '#0C0922';
+      ctx.fillStyle = isLight ? '#FFFFFF' : '#0C0922';
       ctx.fillRect(0, 0, w, h);
 
       // Draw North Indian style (Diamond)
-      ctx.strokeStyle = '#E8C879';
+      ctx.strokeStyle = isLight ? '#A07F10' : '#E8C879';
       ctx.lineWidth = 2;
       ctx.strokeRect(0, 0, w, h);
 
@@ -8796,7 +8893,7 @@
       ];
 
       // Draw Sign Numbers (1 to 12)
-      ctx.fillStyle = '#E8C879';
+      ctx.fillStyle = isLight ? '#A07F10' : '#E8C879';
       ctx.font = 'bold 12px sans-serif';
       ctx.textAlign = 'center';
 
@@ -8814,7 +8911,7 @@
         housePlanets[houseIdx].push(short);
       });
 
-      ctx.fillStyle = '#FFFFFF';
+      ctx.fillStyle = isLight ? '#1C1A30' : '#FFFFFF';
       ctx.font = '10px sans-serif';
       for (let h = 1; h <= 12; h++) {
         const text = housePlanets[h].join(" ");
@@ -9256,14 +9353,16 @@
       const w = canvas.width;
       const h = canvas.height;
 
+      const isLight = document.body.classList.contains('light-theme');
+
       // Clear Canvas
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = '#0C0922';
+      ctx.fillStyle = isLight ? '#FFFFFF' : '#0C0922';
       ctx.fillRect(0, 0, w, h);
 
       if (isNorthIndianStyle) {
         // Draw North Indian style (Diamond)
-        ctx.strokeStyle = '#E8C879';
+        ctx.strokeStyle = isLight ? '#A07F10' : '#E8C879';
         ctx.lineWidth = 2;
         ctx.strokeRect(0, 0, w, h);
 
@@ -9310,7 +9409,7 @@
 
         // Draw Sign Numbers
         const lagnaSign = activePlacements[0].sign + 1; // 1-based index
-        ctx.fillStyle = '#E8C879';
+        ctx.fillStyle = isLight ? '#A07F10' : '#E8C879';
         ctx.font = 'bold 12px sans-serif';
         ctx.textAlign = 'center';
 
@@ -9327,7 +9426,7 @@
           housePlanets[houseIdx].push(short);
         });
 
-        ctx.fillStyle = '#FFFFFF';
+        ctx.fillStyle = isLight ? '#1C1A30' : '#FFFFFF';
         ctx.font = '10px sans-serif';
         for (let h = 1; h <= 12; h++) {
           const text = housePlanets[h].join(" ");
@@ -9336,7 +9435,7 @@
 
       } else {
         // Draw South Indian style (Grid)
-        ctx.strokeStyle = '#E8C879';
+        ctx.strokeStyle = isLight ? '#A07F10' : '#E8C879';
         ctx.lineWidth = 2;
         ctx.strokeRect(0, 0, w, h);
 
@@ -9375,13 +9474,13 @@
           const y = c.r * step;
 
           // Header
-          ctx.fillStyle = '#8E6FD6';
+          ctx.fillStyle = isLight ? '#6A38C8' : '#8E6FD6';
           ctx.font = 'bold 9px sans-serif';
           ctx.textAlign = 'left';
           ctx.fillText(signNames[s].substring(0, 3).toUpperCase(), x + 4, y + 12);
 
           // Planets
-          ctx.fillStyle = '#FFFFFF';
+          ctx.fillStyle = isLight ? '#1C1A30' : '#FFFFFF';
           ctx.font = '10px sans-serif';
           ctx.textAlign = 'center';
           
