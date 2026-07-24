@@ -4063,7 +4063,13 @@
       const activeGoalNames = activeGoalsList.map(g => goalLabels[g] || g).join(', ');
 
       const lordDetails = currentAppLang === 'hi' ? (vedicMantrasHi[rulingLord] || vedicMantrasHi["Sun"]) : (vedicMantrasEn[rulingLord] || vedicMantrasEn["Sun"]);
-      const unifiedVedicText = `Ruling Planet Mantra: Chant "${lordDetails.mantra}" 108 times each morning facing East. (Energizes all active goals: ${activeGoalNames}). Sacred Text: ${lordDetails.text}`;
+      // Build goal-specific ritual text for the dashboard quest card
+      const _contextMap = currentAppLang === 'hi' ? (() => { const m = { job: 'करियर और अधिकार के स्पंदनों को सक्रिय करने के लिए सूर्योदय से पहले सूर्य नमस्कार (12 चक्र) करें।', debt: 'वित्तीय चिंताओं को दूर करने के लिए भोजन से पहले 108 बार "ॐ नमः शिवाय" का जाप करें।', marriage: 'अपने भाग्यशाली जीवनसाथी को आकर्षित करने के लिए शुक्रवार की सुबह कात्यायनी मंत्र का 108 बार जाप करें।', baby: 'संतान सुख के लिए प्रत्येक सुबह 108 बार संतान गोपाल मंत्र का जाप करें।', business: 'बुधवार को गणेश पूजा करें और अपने व्यावसायिक प्रवेश द्वार पर धूप जलाएं।', property: 'संपत्ति के दौरों से पहले "ॐ भौमाय नमः" का 11 बार जाप करें।', health: 'सूर्योदय के समय सूर्य नमस्कार करें और जीवन शक्ति के लिए तांबे के बर्तन का पानी पिएं।', custom: 'शाम को घी के दीये के साथ पूजा करें और अपने लक्ष्य पर ध्यान केंद्रित करें।' }; return m; })() : { job: 'Perform Surya Namaskaar (12 rounds) before sunrise to activate career and authority vibrations.', debt: 'Recite "Om Namah Shivaya" 108 times before meals to dissolve financial anxieties.', marriage: 'Recite the Katyayani mantra 108 times on Friday morning to attract your destined partner.', baby: 'Recite the Santan Gopal mantra 108 times each morning for progeny blessings.', business: 'Perform Ganesh puja on Wednesdays and light incense at your business entrance.', property: 'Chant "Om Bhaumaya Namah" 11 times before property visits for Mars blessings.', health: 'Perform Surya Namaskar at sunrise and drink copper vessel water in the morning for vitality.', custom: 'Perform an evening puja with incense and a ghee lamp, focusing intention on your goal.' };
+      const _nGoal = normalizedGoal in _contextMap ? normalizedGoal : 'custom';
+      const _goalRitual = _contextMap[_nGoal] || _contextMap['custom'];
+      const unifiedVedicText = currentAppLang === 'hi'
+        ? `शासक ग्रह मंत्र: "${lordDetails.mantra}" का 108 बार जाप करें (लक्ष्य: ${activeGoalNames})। पवित्र पाठ: ${lordDetails.text} लक्ष्य अनुष्ठान: ${_goalRitual}`
+        : `Ruling Planet Mantra: Chant "${lordDetails.mantra}" 108 times each morning facing East. (Goal: ${activeGoalNames}). Sacred Text: ${lordDetails.text} Goal Ritual: ${_goalRitual}`;
       localStorage.setItem('today_quest_vedic_text', unifiedVedicText);
 
       // Populate Home Quest Cards with clean multi-line HTML formatting
@@ -4465,20 +4471,61 @@
       const activeGoals = (typeof getActiveGoals === 'function') ? getActiveGoals() : ['job'];
       const primaryGoal = activeGoals[0] || 'job';
 
-      // Progressive Vedic Task (Gentle slow progression)
-      const vText = lang === 'hi'
-        ? `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> दिन ${dayNum} के संरेखण के लिए सुबह 06:00 से 07:15 के बीच पूर्व की ओर मुंह करके अपने स्वामी ग्रह मंत्र का जाप करें।`
-        : `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Recite your ruling planet mantra facing East between 06:00 AM - 07:15 AM for Day ${dayNum} alignment.`;
+      // Goal-specific Vedic Task texts per goal
+      const goalVedicDayTextEn = {
+        job:      `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Chant your ruling planet mantra facing East (06:00–07:15 AM). Then perform 12 rounds of Surya Namaskar to activate career & authority vibrations.`,
+        debt:     `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Chant your ruling planet mantra ${chantCount} times facing East (06:00–07:15 AM). Then recite "Om Namah Shivaya" 108 times before meals to dissolve financial anxieties.`,
+        marriage: `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Chant your ruling planet mantra facing East (06:00–07:15 AM). On Fridays, additionally recite the Katyayani mantra 108 times to attract your destined partner.`,
+        baby:     `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Chant your ruling planet mantra facing East (06:00–07:15 AM). Additionally recite Santan Gopal mantra "Om Devaki Sut Govind" 108 times for progeny blessings.`,
+        business: `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Chant your ruling planet mantra facing East (06:00–07:15 AM). On Wednesdays, perform Ganesh puja and light incense at your business entrance for growth.`,
+        property: `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Chant your ruling planet mantra facing East (06:00–07:15 AM). Before property visits, chant "Om Bhaumaya Namah" 11 times for Mars blessings on land and assets.`,
+        health:   `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Perform Surya Namaskar at sunrise, then chant your ruling planet mantra ${chantCount} times (06:00–07:15 AM). Drink copper vessel water afterward for vitality.`,
+        custom:   `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Chant your ruling planet mantra ${chantCount} times facing East between 06:00 AM–07:15 AM for Day ${dayNum} alignment.`
+      };
+      const goalVedicDayTextHi = {
+        job:      `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> सुबह 06:00–07:15 के बीच पूर्व की ओर मुंह करके अपने स्वामी ग्रह मंत्र का जाप करें। फिर करियर ऊर्जा सक्रिय करने के लिए 12 चक्र सूर्य नमस्कार करें।`,
+        debt:     `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> सुबह 06:00–07:15 के बीच पूर्व की ओर ${chantCount} बार स्वामी ग्रह मंत्र जाप करें। फिर भोजन से पहले "ॐ नमः शिवाय" 108 बार जाप करें।`,
+        marriage: `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> सुबह 06:00–07:15 के बीच पूर्व की ओर मुंह करके स्वामी ग्रह मंत्र का जाप करें। शुक्रवार को कात्यायनी मंत्र का 108 बार जाप करें।`,
+        baby:     `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> सुबह 06:00–07:15 के बीच स्वामी ग्रह मंत्र का जाप करें। साथ ही संतान गोपाल मंत्र "ॐ देवकी सुत गोविंद" का 108 बार जाप करें।`,
+        business: `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> सुबह 06:00–07:15 के बीच पूर्व की ओर मुंह करके स्वामी ग्रह मंत्र का जाप करें। बुधवार को गणेश पूजा करें।`,
+        property: `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> सुबह 06:00–07:15 के बीच स्वामी ग्रह मंत्र का जाप करें। संपत्ति भ्रमण से पहले "ॐ भौमाय नमः" का 11 बार जाप करें।`,
+        health:   `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> सूर्योदय के समय सूर्य नमस्कार करें, फिर 06:00–07:15 के बीच स्वामी ग्रह मंत्र का ${chantCount} बार जाप करें। तांबे के बर्तन का पानी पिएं।`,
+        custom:   `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> दिन ${dayNum} के संरेखण के लिए सुबह 06:00–07:15 के बीच पूर्व की ओर मुंह करके अपने स्वामी ग्रह मंत्र का जाप करें।`
+      };
+      const _vGoalKey = (primaryGoal.includes('marriage') ? 'marriage' : primaryGoal.includes('property') ? 'property' : primaryGoal in goalVedicDayTextEn ? primaryGoal : 'custom');
+      const vText = lang === 'hi' ? (goalVedicDayTextHi[_vGoalKey] || goalVedicDayTextHi.custom) : (goalVedicDayTextEn[_vGoalKey] || goalVedicDayTextEn.custom);
       
-      // Progressive Lal Kitab / Day Remedy
+      // Goal-specific Evening Remedy texts per goal
       const daysOfWeekEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
       const daysOfWeekHi = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
       const dayNameEn = daysOfWeekEn[targetDate.getDay()];
       const dayNameHi = daysOfWeekHi[targetDate.getDay()];
       
+      // Goal-specific base remedy then day-override
+      const goalBaseRemedyEn = {
+        job:      `Offer water to the rising Sun from a copper vessel. Keep your desk facing East or North and free of clutter.`,
+        debt:     `Offer sweet milk to a banyan tree root. Avoid taking loans on Tuesdays.`,
+        marriage: `Offer white flowers and milk at a Shiva temple. Keep a rose quartz crystal in your bedroom's South-West.`,
+        baby:     `Offer yellow fruits to a temple or feed a cow with green grass and jaggery to strengthen Jupiter.`,
+        business: `Light a ghee lamp at your shop or business entrance. Keep a whole coconut at the entrance for prosperity.`,
+        property: `Offer fresh water mixed with honey to the rising Sun to invoke Mars (ruler of land/property).`,
+        health:   `Donate food to a stray dog in the morning to pacify Saturn. Keep a piece of raw turmeric in your pocket.`,
+        custom:   `Offer water or light a ghee lamp facing East at sunset (06:30 PM).`
+      };
+      const goalBaseRemedyHi = {
+        job:      `तांबे के बर्तन से उगते सूर्य को जल अर्पित करें। अपने डेस्क का मुख पूर्व या उत्तर की ओर रखें।`,
+        debt:     `बरगद के पेड़ की जड़ में मीठा दूध अर्पित करें। मंगलवार को कर्ज लेने से बचें।`,
+        marriage: `शिव मंदिर में सफेद फूल और दूध अर्पित करें। बेडरूम के दक्षिण-पश्चिम में रोज़ क्वार्ट्ज क्रिस्टल रखें।`,
+        baby:     `मंदिर में पीले फल अर्पित करें या गाय को हरा घास और गुड़ खिलाएं।`,
+        business: `दुकान या व्यावसायिक प्रवेश द्वार पर घी का दीपक जलाएं।`,
+        property: `मंगल के लिए उगते सूर्य को शहद मिला जल अर्पित करें।`,
+        health:   `आवारा कुत्ते को भोजन दान करें। अपनी जेब में कच्ची हल्दी की गांठ रखें।`,
+        custom:   `सूर्यास्त (शाम 06:30 बजे) पर पूर्व की ओर मुंह करके जल अर्पित करें या घी का दीपक जलाएं।`
+      };
+      const _lGoalKey = (primaryGoal.includes('marriage') ? 'marriage' : primaryGoal.includes('property') ? 'property' : primaryGoal in goalBaseRemedyEn ? primaryGoal : 'custom');
       let lText = '';
       if (lang === 'hi') {
-        lText = `<span style="color:#ff6b6b;font-weight:600;">${dayNameHi} का उपाय:</span> सूर्यास्त (शाम 06:30 बजे) पर पूर्व की ओर मुंह करके जल अर्पित करें या घी का दीपक जलाएं।`;
+        lText = `<span style="color:#ff6b6b;font-weight:600;">${dayNameHi} का लक्ष्य उपाय:</span> ${goalBaseRemedyHi[_lGoalKey] || goalBaseRemedyHi.custom}`;
         if (dayNameEn === "Wednesday") {
           lText = `<span style="color:#ff6b6b;font-weight:600;">बुधवार बुध उपाय:</span> गायों को हरा चारा (पालक/घास) खिलाएं या पक्षियों को 7 अनाज खिलाएं।`;
         } else if (dayNameEn === "Thursday") {
@@ -4489,9 +4536,9 @@
           lText = `<span style="color:#ff6b6b;font-weight:600;">शनिवार शनि उपाय:</span> पीपल के पेड़ के नीचे सरसों के तेल का दीपक जलाएं या काले तिल का दान करें।`;
         }
       } else {
-        lText = `<span style="color:#ff6b6b;font-weight:600;">${dayNameEn} Remedy:</span> Offer water or light a ghee lamp facing East at sunset (06:30 PM).`;
+        lText = `<span style="color:#ff6b6b;font-weight:600;">${dayNameEn} Goal Remedy:</span> ${goalBaseRemedyEn[_lGoalKey] || goalBaseRemedyEn.custom}`;
         if (dayNameEn === "Wednesday") {
-          lText = `<span style="color:#ff6b6b;font-weight:600;">Wednesday Mercury Remedy:</span> Feed green fodder (Palak/gass) to cows or offer 7 grains to birds.`;
+          lText = `<span style="color:#ff6b6b;font-weight:600;">Wednesday Mercury Remedy:</span> Feed green fodder (Palak/grass) to cows or offer 7 grains to birds.`;
         } else if (dayNameEn === "Thursday") {
           lText = `<span style="color:#ff6b6b;font-weight:600;">Thursday Jupiter Remedy:</span> Offer yellow flowers or a pinch of turmeric in water to rising Sun.`;
         } else if (dayNameEn === "Friday") {
@@ -4844,12 +4891,19 @@
             localStorage.setItem('user_authenticated', 'true');
             localStorage.setItem('user_email', email);
             localStorage.setItem('user_auth_provider', 'email');
-            const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
-            if (hasProfile) {
-              showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Welcome back!`);
+            // CRITICAL FIX: Always restore profile from cloud first before routing.
+            // Do NOT check localStorage here — it was cleared on logout.
+            showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Signed In! Restoring your profile...`);
+            const userId = data.user && data.user.id;
+            let _hasCloudProfile = false;
+            if (userId) {
+              try { _hasCloudProfile = await restoreProfileFromCloud(userId); } catch(e) { console.error('Profile restore error:', e); }
+            }
+            if (_hasCloudProfile || (localStorage.getItem('user_name') && localStorage.getItem('user_dob'))) {
+              showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Welcome back! Loading your dashboard...`);
               openAppDashboard();
             } else {
-              showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Signed In! Select your Goal Path.`);
+              showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Welcome! Please complete your profile.`);
               const onboarding = document.getElementById('onboarding-screen');
               const appLayout = document.getElementById('app-layout');
               if (appLayout) appLayout.style.display = 'none';
