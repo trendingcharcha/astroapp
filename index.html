@@ -4026,6 +4026,7 @@
           let goalActions = [...(practicalMap[actionsGoal] || practicalMap["job"])];
           goalActions = goalActions.filter(a => a !== undefined);
 
+
           if (g === 'baby') {
             if (hasPartner) {
               if (lang === 'hi') {
@@ -4052,111 +4053,136 @@
                   ];
                 }
               } else {
-                if (lang === 'hi') {
-                  if (babyNum === "1") {
-                    goalActions = [
-                      `आज प्रसवपूर्व स्वास्थ्य, फोलिक एसिड और आयरन से भरपूर एक पौष्टिक मेनू की योजना बनाएं।`,
-                      `अपने स्थानीय शहर क्षेत्र में उच्च श्रेणी के स्त्री रोग विशेषज्ञों या मातृत्व विशेषज्ञों की सूची बनाएं।`,
-                      `तनाव के स्तर को कम करने के लिए हल्के श्वास व्यायाम (प्राणायाम) करने में 20 मिनट का समय बिताएं।`,
-                      `प्रजनन काल और स्वास्थ्य संकेतकों को ट्रैक करने के लिए दैनिक स्वास्थ्य कैलेंडर बनाए रखें।`
-                    ];
-                  } else if (babyNum === "2") {
-                    goalActions = [
-                      `पहली गर्भावस्था के बाद से स्वास्थ्य संकेतकों की समीक्षा के लिए बाल रोग विशेषज्ञ से परामर्श करें (पहला बच्चा ${firstBabyAge} वर्ष का है)।`,
-                      `पहले बच्चे के पुनः उपयोग किए जा सकने वाले शिशु सामानों की एक चेकलिस्ट बनाएं।`,
-                      `कई बच्चों के पालन-पोषण और समय प्रबंधन के तरीकों को पढ़ने के लिए 20 मिनट का समय दें।`,
-                      `प्रसवपूर्व स्वास्थ्य मार्करों का आकलन करने के लिए एक नियमित स्वास्थ्य जांच का समय निर्धारित करें।`
-                    ];
-                  } else if (babyNum === "3") {
-                    goalActions = [
-                      `तीन बच्चों (मौजूदा उम्र: ${firstBabyAge} और ${secondBabyAge}) के खर्चों की व्यवस्था के लिए अपनी पारिवारिक बजट बहीखाते की समीक्षा करें।`,
-                      `सभी तीन बच्चों के लिए कमरों या जगह के वितरण पर चर्चा करने के लिए 30 मिनट का समय निकालें।`,
-                      `एक बड़े परिवार के लिए मानसिक सहनशक्ति विकसित करने के लिए 15 मिनट का ध्यान सत्र करें।`,
-                      `मातृ स्वास्थ्य संकेतकों की समीक्षा के लिए एक प्राथमिक स्वास्थ्य परामर्श शेड्यूल करें।`
-                    ];
-                  }
-                } else {
-                  if (babyNum === "1") {
-                    goalActions = [
-                      `Plan a nutritious prenatal menu rich in folate, iron, and greens today.`,
-                      `Research and list high-rated gynecologists or birthing specialists in your city area.`,
-                      `Spend 20 minutes practicing deep breathing exercises (Pranayama) to stabilize cortisol levels.`,
-                      `Maintain a daily fertility and health tracking log to monitor cycles and wellness markers.`
-                    ];
-                  } else if (babyNum === "2") {
-                    goalActions = [
-                      `Consult with a pediatrician or doctor to review health markers since your first pregnancy (first child is ${firstBabyAge} years old).`,
-                      `Create a checklist of baby essentials and gear you can reuse from your first child.`,
-                      `Dedicate 20 minutes to read about managing parenting schedules and routines with multiple children.`,
-                      `Schedule a routine health check-up to assess prenatal compatibility and health markers.`
-                    ];
-                  } else if (babyNum === "3") {
-                    goalActions = [
-                      `Review your monthly family budget ledger to account for the expenses of raising three children (existing ages: ${firstBabyAge} & ${secondBabyAge}).`,
-                      `Set aside 30 minutes to discuss space/room distribution for all three children.`,
-                      `Practice a 15-minute mindfulness session to cultivate mental resilience for a larger family.`,
-                      `Schedule a primary healthcare consultation to review maternal health pointers.`
-                    ];
-                  }
+                if (babyNum === "1") {
+                  goalActions = [
+                    `Self: Maintain a healthy prenatal diet and log your daily vitamin intake today.`,
+                    `Partner (${partnerName}): Assist with household tasks to minimize physical stress for your partner.`,
+                    `Joint Action: Spend 15 minutes meditating together with ${partnerName} to align relationship energy.`,
+                    `Joint Planning: Shortlist 3 local health clinics or maternity centers to visit this month.`
+                  ];
+                } else if (babyNum === "2") {
+                  goalActions = [
+                    `Self: Take 15 minutes to track health metrics and post-pregnancy recovery signs.`,
+                    `Partner (${partnerName}): Spend 30 minutes helping care for your first child (age: ${firstBabyAge} years).`,
+                    `Joint Action: Discuss with ${partnerName} how to mentally prepare the first child for the arrival of the new sibling.`,
+                    `Joint Planning: Check which baby essentials and gear from the first child can be reused.`
+                  ];
+                } else if (babyNum === "3") {
+                  goalActions = [
+                    `Self: Spend 20 minutes relaxing, practicing light stretches, and logging nutrition metrics.`,
+                    `Partner (${partnerName}): Take responsibility for the daily routine and studies of your first two children (ages: ${firstBabyAge} & ${secondBabyAge}) today.`,
+                    `Joint Action: Sit down with ${partnerName} for 20 minutes to draft the necessary financial adjustments for a family of five.`,
+                    `Joint Planning: Discuss bedroom reorganization or space distribution to accommodate three children.`
+                  ];
                 }
               }
-            } else if (hasPartner) {
+            } else {
               if (lang === 'hi') {
-                if (customCategory === "pregnancy") {
+                if (babyNum === "1") {
                   goalActions = [
-                    `स्वयं (महिला साथी): अपने शारीरिक स्वास्थ्य संकेतकों को ट्रैक करें, गर्भावस्था डायरी बनाए रखें, और विटामिन लें।`,
-                    `साथी (${partnerName}): साथी की शारीरिक थकान को कम करने के लिए एक भारी घरेलू काम खुद संभालें।`,
-                    `संयुक्त कदम: तनाव के स्तर को संतुलित करने के लिए शाम को मिलकर 15 मिनट श्वास व्यायाम (अनुलोम विलोम) करें।`,
-                    `संयुक्त योजना: उन प्रश्नों की एक साझा सूची तैयार करें जिन्हें आप अगले सप्ताह की जांच के दौरान डॉक्टर से पूछना चाहते हैं।`
+                    `आज प्रसवपूर्व स्वास्थ्य, फोलिक एसिड और आयरन से भरपूर एक पौष्टिक मेनू की योजना बनाएं।`,
+                    `अपने स्थानीय शहर क्षेत्र में उच्च श्रेणी के स्त्री रोग विशेषज्ञों या मातृत्व विशेषज्ञों की सूची बनाएं।`,
+                    `तनाव के स्तर को कम करने के लिए हल्के श्वास व्यायाम (प्राणायाम) करने में 20 मिनट का समय बिताएं।`,
+                    `प्रजनन काल और स्वास्थ्य संकेतकों को ट्रैक करने के लिए दैनिक स्वास्थ्य कैलेंडर बनाए रखें।`
                   ];
-                } else if (customCategory === "property") {
+                } else if (babyNum === "2") {
                   goalActions = [
-                    `स्वयं: अपने बजट से मेल खाने वाली संपत्तियों के लिए ऑनलाइन लिस्टिंग खोजें और 3 विकल्पों को शॉर्टलिस्ट करें।`,
-                    `साथी (${partnerName}): वित्तीय बजट, बचत या गृह ऋण प्रलेखन विकल्पों की समीक्षा करने में 15 मिनट का समय दें।`,
-                    `संयुक्त कदम: शॉर्टलिस्ट किए गए विकल्पों को एक साथ देखने में 20 मिनट का समय बिताएं और स्थान प्राथमिकताओं को संरेखित करें।`,
-                    `संयुक्त योजना: इस सप्ताहांत एक साथ भौतिक संपत्ति का निरीक्षण करने के लिए एक संयुक्त साइट विजिट शेड्यूल करें।`
+                    `पहली गर्भावस्था के बाद से स्वास्थ्य संकेतकों की समीक्षा के लिए बाल रोग विशेषज्ञ से परामर्श करें (पहला बच्चा ${firstBabyAge} वर्ष का है)।`,
+                    `पहले बच्चे के पुनः उपयोग किए जा सकने वाले शिशु सामानों की एक चेकलिस्ट बनाएं।`,
+                    `कई बच्चों के पालन-पोषण और समय प्रबंधन के तरीकों को पढ़ने के लिए 20 मिनट का समय दें।`,
+                    `प्रसवपूर्व स्वास्थ्य मार्करों का आकलन करने के लिए एक नियमित स्वास्थ्य जांच का समय निर्धारित करें।`
                   ];
-                } else {
+                } else if (babyNum === "3") {
                   goalActions = [
-                    `स्वयं: आज 15 मिनट का समय निकालकर एक संबंध चिंता या लक्ष्य लिखें जिसे आप ${partnerName} के साथ साझा करना चाहते हैं।`,
-                    `साथी (${partnerName}): उनसे कहें कि सक्रिय रूप से सुनने में 15 मिनट बिताएं बिना कोई अवांछित सलाह दिए।`,
-                    `संयुक्त कदम: आप और ${partnerName} दोनों मिलकर 20 मिनट बाहर टहलें या साझा योजना पर चर्चा करते हुए चाय साझा करें।`,
-                    `ऊर्जावान संरेखण: साथी के ग्रहों के स्पंदनों को सामंजस्य में लाने के लिए आज मनभावन हल्के रंग (जैसे क्रीम या पीला) पहनें।`
+                    `तीन बच्चों (मौजूदा उम्र: ${firstBabyAge} और ${secondBabyAge}) के खर्चों की व्यवस्था के लिए अपनी पारिवारिक बजट बहीखाते की समीक्षा करें।`,
+                    `सभी तीन बच्चों के लिए कमरों या जगह के वितरण पर चर्चा करने के लिए 30 मिनट का समय निकालें।`,
+                    `एक बड़े परिवार के लिए मानसिक सहनशक्ति विकसित करने के लिए 15 मिनट का ध्यान सत्र करें।`,
+                    `मातृ स्वास्थ्य संकेतकों की समीक्षा के लिए एक प्राथमिक स्वास्थ्य परामर्श शेड्यूल करें।`
                   ];
                 }
               } else {
-                if (customCategory === "pregnancy") {
+                if (babyNum === "1") {
                   goalActions = [
-                    `Self (Female Partner): Track your physical health indicators, keep a pregnancy diary, and take prenatal vitamins.`,
-                    `Partner (${partnerName}): Take over one heavy household chore (like carrying groceries or deep cleaning) to minimize physical fatigue for your partner.`,
-                    `Joint Action: Spend 15 minutes in the evening doing light breathing exercises (Anulom Vilom) together to harmonize stress levels.`,
-                    `Joint Planning: Draft a shared list of questions you want to ask your gynecologist or consultant during next week's check-up.`
+                    `Plan a nutritious prenatal menu rich in folate, iron, and greens today.`,
+                    `Research and list high-rated gynecologists or birthing specialists in your city area.`,
+                    `Spend 20 minutes practicing deep breathing exercises (Pranayama) to stabilize cortisol levels.`,
+                    `Maintain a daily fertility and health tracking log to monitor cycles and wellness markers.`
                   ];
-                } else if (customCategory === "property") {
+                } else if (babyNum === "2") {
                   goalActions = [
-                    `Self: Spend 15 minutes searching online listings for properties matching your target criteria and shortlist 3 choices.`,
-                    `Partner (${partnerName}): Spend 15 minutes reviewing the financial budget, savings, or loan documentation options.`,
-                    `Joint Action: Spend 20 minutes looking at the shortlisted options together and align on your location priorities.`,
-                    `Joint Action: Schedule a joint site visit or broker call to inspect a physical property together this weekend.`
+                    `Consult with a pediatrician or doctor to review health markers since your first pregnancy (first child is ${firstBabyAge} years old).`,
+                    `Create a checklist of baby essentials and gear you can reuse from your first child.`,
+                    `Dedicate 20 minutes to read about managing parenting schedules and routines with multiple children.`,
+                    `Schedule a routine health check-up to assess prenatal compatibility and health markers.`
                   ];
-                } else {
+                } else if (babyNum === "3") {
                   goalActions = [
-                    `Self: Take 15 minutes today to write down a relationship concern or goal you want to discuss with ${partnerName}.`,
-                    `Partner (${partnerName}): Ask them to spend 15 minutes listening actively to your daily experiences without offering unsolicited advice.`,
-                    `Joint Action: Both you and ${partnerName} should spend 20 minutes walking together outdoors or sharing a relaxing tea while discussing a shared domestic plan.`,
-                    `Energetic Sync: Wear pleasing light colors today (like cream, pastel pink, or light yellow) to harmonize both partners' planetary vibrations.`
+                    `Review your monthly family budget ledger to account for the expenses of raising three children (existing ages: ${firstBabyAge} & ${secondBabyAge}).`,
+                    `Set aside 30 minutes to discuss space/room distribution for all three children.`,
+                    `Practice a 15-minute mindfulness session to cultivate mental resilience for a larger family.`,
+                    `Schedule a primary healthcare consultation to review maternal health pointers.`
                   ];
                 }
               }
             }
-
-            const sliced = goalActions.slice(0, actionsPerGoal);
-            sliced.forEach(act => {
-              if (!allActions.includes(act)) {
-                allActions.push(act);
+          } else if (hasPartner) {
+            if (lang === 'hi') {
+              if (customCategory === "pregnancy") {
+                goalActions = [
+                  `स्वयं (महिला साथी): अपने शारीरिक स्वास्थ्य संकेतकों को ट्रैक करें, गर्भावस्था डायरी बनाए रखें, और विटामिन लें।`,
+                  `साथी (${partnerName}): साथी की शारीरिक थकान को कम करने के लिए एक भारी घरेलू काम खुद संभालें।`,
+                  `संयुक्त कदम: तनाव के स्तर को संतुलित करने के लिए शाम को मिलकर 15 मिनट श्वास व्यायाम (अनुलोम विलोम) करें।`,
+                  `संयुक्त योजना: उन प्रश्नों की एक साझा सूची तैयार करें जिन्हें आप अगले सप्ताह की जांच के दौरान डॉक्टर से पूछना चाहते हैं।`
+                ];
+              } else if (customCategory === "property") {
+                goalActions = [
+                  `स्वयं: अपने बजट से मेल खाने वाली संपत्तियों के लिए ऑनलाइन लिस्टिंग खोजें और 3 विकल्पों को शॉर्टलिस्ट करें।`,
+                  `साथी (${partnerName}): वित्तीय बजट, बचत या गृह ऋण प्रलेखन विकल्पों की समीक्षा करने में 15 मिनट का समय दें।`,
+                  `संयुक्त कदम: शॉर्टलिस्ट किए गए विकल्पों को एक साथ देखने में 20 मिनट का समय बिताएं और स्थान प्राथमिकताओं को संरेखित करें।`,
+                  `संयुक्त योजना: इस सप्ताहांत एक साथ भौतिक संपत्ति का निरीक्षण करने के लिए एक संयुक्त साइट विजिट शेड्यूल करें।`
+                ];
+              } else {
+                goalActions = [
+                  `स्वयं: आज 15 मिनट का समय निकालकर एक संबंध चिंता या लक्ष्य लिखें जिसे आप ${partnerName} के साथ साझा करना चाहते हैं।`,
+                  `साथी (${partnerName}): उनसे कहें कि सक्रिय रूप से सुनने में 15 मिनट बिताएं बिना कोई अवांछित सलाह दिए।`,
+                  `संयुक्त कदम: आप और ${partnerName} दोनों मिलकर 20 मिनट बाहर टहलें या साझा योजना पर चर्चा करते हुए चाय साझा करें।`,
+                  `ऊर्जावान संरेखण: साथी के ग्रहों के स्पंदनों को सामंजस्य में लाने के लिए आज मनभावन हल्के रंग (जैसे क्रीम या पीला) पहनें।`
+                ];
               }
-            });
+            } else {
+              if (customCategory === "pregnancy") {
+                goalActions = [
+                  `Self (Female Partner): Track your physical health indicators, keep a pregnancy diary, and take prenatal vitamins.`,
+                  `Partner (${partnerName}): Take over one heavy household chore (like carrying groceries or deep cleaning) to minimize physical fatigue for your partner.`,
+                  `Joint Action: Spend 15 minutes in the evening doing light breathing exercises (Anulom Vilom) together to harmonize stress levels.`,
+                  `Joint Planning: Draft a shared list of questions you want to ask your gynecologist or consultant during next week's check-up.`
+                ];
+              } else if (customCategory === "property") {
+                goalActions = [
+                  `Self: Spend 15 minutes searching online listings for properties matching your target criteria and shortlist 3 choices.`,
+                  `Partner (${partnerName}): Spend 15 minutes reviewing the financial budget, savings, or loan documentation options.`,
+                  `Joint Action: Spend 20 minutes looking at the shortlisted options together and align on your location priorities.`,
+                  `Joint Action: Schedule a joint site visit or broker call to inspect a physical property together this weekend.`
+                ];
+              } else {
+                goalActions = [
+                  `Self: Take 15 minutes today to write down a relationship concern or goal you want to discuss with ${partnerName}.`,
+                  `Partner (${partnerName}): Ask them to spend 15 minutes listening actively to your daily experiences without offering unsolicited advice.`,
+                  `Joint Action: Both you and ${partnerName} should spend 20 minutes walking together outdoors or sharing a relaxing tea while discussing a shared domestic plan.`,
+                  `Energetic Sync: Wear pleasing light colors today (like cream, pastel pink, or light yellow) to harmonize both partners' planetary vibrations.`
+                ];
+              }
+            }
+          }
+
+          const sliced = goalActions.slice(0, actionsPerGoal);
+          sliced.forEach(act => {
+            if (!allActions.includes(act)) {
+              allActions.push(act);
+            }
           });
+        });
+
 
         if (allActions.length === 0) {
           allActions = [...(practicalMap["job"] || [])];
