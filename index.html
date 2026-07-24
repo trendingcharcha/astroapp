@@ -2471,7 +2471,7 @@
           <p id="cloud-status" style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted); text-align: center;"></p>
         </div>
 
-        <button onclick="logout()" class="btn" style="background: #381414; color: #ff6b6b; box-shadow: none;"><span class="k-lbl-en">LOG OUT</span><span class="k-lbl-hi" style="display:none;">लॉग आउट</span></button>
+        <button onclick="handleLogout()" class="btn" style="background: #381414; color: #ff6b6b; box-shadow: none;"><span class="k-lbl-en">LOG OUT</span><span class="k-lbl-hi" style="display:none;">लॉग आउट</span></button>
       </div>
     </main>
 
@@ -5017,6 +5017,11 @@
       }
       localStorage.setItem('user_xp', xp);
       updateGamificationHeader();
+
+      // Sync progress to cloud database
+      if (typeof syncProfileToCloud === 'function') {
+        syncProfileToCloud().catch(err => console.error("GainXP sync error:", err));
+      }
     }
 
     function closeLevelUpModal() {
@@ -5324,18 +5329,28 @@
 
           // RULE 2: Validate backend user session with Supabase Cloud
           let validBackendUser = false;
+          let currentUserId = null;
           if (supabaseClient) {
             try {
               const { data: { user }, error } = await supabaseClient.auth.getUser();
               if (user && !error) {
                 validBackendUser = true;
+                currentUserId = user.id;
               }
             } catch (err) {
               console.log("Supabase backend auth check error:", err);
             }
           }
 
-          const hasLocalProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
+          let hasLocalProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
+
+          // If signed in but no local profile, try fetching/restoring from cloud database!
+          if (validBackendUser && !hasLocalProfile) {
+            const restored = await restoreProfileFromCloud(currentUserId);
+            if (restored) {
+              hasLocalProfile = true;
+            }
+          }
 
           // RULE 3: If user was DELETED from backend database, wipe local cache & require sign in!
           if (supabaseClient && !validBackendUser && isAuthFlag && !hasLocalProfile) {
@@ -5418,6 +5433,164 @@
         document.getElementById('cloud-status').innerText = "✗ Error: " + e.message;
         document.getElementById('cloud-status').style.color = "#ff6b6b";
       }
+    }
+
+    // Cloud Database Upsert & Restore helper functions
+    async function syncProfileToCloud() {
+      if (typeof supabaseClient === 'undefined' || !supabaseClient || !supabaseClient.auth) return;
+      try {
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        if (!user) return;
+
+        const name = localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || 'Seeker';
+        const gender = localStorage.getItem('user_gender') || localStorage.getItem('kundli_gender') || 'M';
+        const dob = localStorage.getItem('user_dob') || localStorage.getItem('kundli_date') || '1990-01-01';
+        const tob = localStorage.getItem('user_tob') || localStorage.getItem('kundli_time') || '12:00';
+        const pob = localStorage.getItem('user_pob') || localStorage.getItem('kundli_city') || 'New Delhi';
+        const goal = localStorage.getItem('user_goal') || 'job';
+        const onboardingPath = localStorage.getItem('onboarding_path') || 'single';
+
+        let lat = 28.6139;
+        let lng = 77.2090;
+        let tz = 5.5;
+
+        if (typeof coachSelectedCity !== 'undefined' && coachSelectedCity && coachSelectedCity.lat) {
+          lat = parseFloat(coachSelectedCity.lat);
+          lng = parseFloat(coachSelectedCity.lng);
+          tz = parseFloat(coachSelectedCity.tz || 5.5);
+        } else if (typeof onboardingSelectedCity !== 'undefined' && onboardingSelectedCity && onboardingSelectedCity.lat) {
+          lat = parseFloat(onboardingSelectedCity.lat);
+          lng = parseFloat(onboardingSelectedCity.lng);
+          tz = parseFloat(onboardingSelectedCity.tz || 5.5);
+        } else {
+          lat = parseFloat(localStorage.getItem('user_lat') || '28.6139');
+          lng = parseFloat(localStorage.getItem('user_lng') || '77.2090');
+          tz = parseFloat(localStorage.getItem('user_timezone') || '5.5');
+        }
+
+        const activeGoalsPayload = {
+          goals: [goal],
+          onboarding_path: onboardingPath,
+          partner_gender: localStorage.getItem('partner_gender') || '',
+          property_number: localStorage.getItem('property_number') || '',
+          property_type: localStorage.getItem('property_type') || '',
+          property_city: localStorage.getItem('property_city') || '',
+          user_streak: parseInt(localStorage.getItem('user_streak') || '0'),
+          user_xp: parseInt(localStorage.getItem('user_xp') || '0'),
+          user_level: parseInt(localStorage.getItem('user_level') || '1'),
+          user_moon_rashi_idx: localStorage.getItem('user_moon_rashi_idx') || '',
+          karma_daily_roadmap_history: localStorage.getItem('karma_daily_roadmap_history') || '{}'
+        };
+
+        const { error } = await supabaseClient.from('profiles').upsert({
+          id: user.id,
+          full_name: name,
+          gender: gender,
+          dob: dob,
+          tob: tob,
+          pob: pob,
+          lat: lat,
+          lng: lng,
+          timezone: tz,
+          active_goals: activeGoalsPayload,
+          updated_at: new Date().toISOString()
+        });
+
+        if (error) {
+          console.error("Error syncing profile to Supabase:", error);
+        } else {
+          console.log("Successfully synced profile to Supabase cloud database.");
+        }
+      } catch (err) {
+        console.error("Failed to sync profile to cloud:", err);
+      }
+    }
+
+    async function restoreProfileFromCloud(userId) {
+      if (typeof supabaseClient === 'undefined' || !supabaseClient || !supabaseClient.auth) return false;
+      try {
+        const { data: profile, error } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .maybeSingle();
+
+        if (error) {
+          console.error("Error fetching profile from cloud:", error);
+          return false;
+        }
+
+        if (profile) {
+          console.log("Profile found on cloud. Restoring...");
+          localStorage.setItem('user_name', profile.full_name || '');
+          localStorage.setItem('kundli_name', profile.full_name || '');
+          localStorage.setItem('user_gender', profile.gender || 'M');
+          localStorage.setItem('kundli_gender', profile.gender || 'M');
+          localStorage.setItem('user_dob', profile.dob || '');
+          localStorage.setItem('kundli_date', profile.dob || '');
+          localStorage.setItem('user_tob', profile.tob || '');
+          localStorage.setItem('kundli_time', profile.tob || '');
+          localStorage.setItem('user_pob', profile.pob || '');
+          localStorage.setItem('kundli_city', profile.pob || '');
+
+          if (profile.lat) localStorage.setItem('user_lat', profile.lat);
+          if (profile.lng) localStorage.setItem('user_lng', profile.lng);
+          if (profile.timezone) localStorage.setItem('user_timezone', profile.timezone);
+
+          const cityData = {
+            name: profile.pob,
+            lat: parseFloat(profile.lat || '28.6139'),
+            lng: parseFloat(profile.lng || '77.2090'),
+            tz: parseFloat(profile.timezone || '5.5')
+          };
+          onboardingSelectedCity = cityData;
+          coachSelectedCity = cityData;
+
+          let goal = 'job';
+          let onboardingPath = 'single';
+          if (profile.active_goals) {
+            let payload = profile.active_goals;
+            if (typeof payload === 'string') {
+              try { payload = JSON.parse(payload); } catch(e) {}
+            }
+            
+            if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+              if (payload.goals && Array.isArray(payload.goals) && payload.goals.length > 0) {
+                goal = payload.goals[0];
+              }
+              onboardingPath = payload.onboarding_path || 'single';
+              
+              if (payload.partner_gender) localStorage.setItem('partner_gender', payload.partner_gender);
+              if (payload.property_number) localStorage.setItem('property_number', payload.property_number);
+              if (payload.property_type) localStorage.setItem('property_type', payload.property_type);
+              if (payload.property_city) localStorage.setItem('property_city', payload.property_city);
+              if (payload.user_streak) localStorage.setItem('user_streak', payload.user_streak);
+              if (payload.user_xp) localStorage.setItem('user_xp', payload.user_xp);
+              if (payload.user_level) localStorage.setItem('user_level', payload.user_level);
+              if (payload.user_moon_rashi_idx) localStorage.setItem('user_moon_rashi_idx', payload.user_moon_rashi_idx);
+              
+              // Load into active runtime state variables
+              if (payload.user_xp) xp = parseInt(payload.user_xp);
+              if (payload.user_level) level = parseInt(payload.user_level);
+              if (payload.user_streak) streak = parseInt(payload.user_streak);
+
+              if (payload.karma_daily_roadmap_history) {
+                localStorage.setItem('karma_daily_roadmap_history', typeof payload.karma_daily_roadmap_history === 'string' ? payload.karma_daily_roadmap_history : JSON.stringify(payload.karma_daily_roadmap_history));
+              }
+            } else if (Array.isArray(payload) && payload.length > 0) {
+              goal = payload[0];
+            } else if (typeof payload === 'string') {
+              goal = payload;
+            }
+          }
+          localStorage.setItem('user_goal', goal);
+          localStorage.setItem('onboarding_path', onboardingPath);
+          return true;
+        }
+      } catch (err) {
+        console.error("Exception during profile restoration:", err);
+      }
+      return false;
     }
 
     // Auth flows
@@ -6763,6 +6936,13 @@
           preventDefault: () => {},
           target: btn
         });
+
+        // Sync to cloud database
+        try {
+          await syncProfileToCloud();
+        } catch (syncErr) {
+          console.error("Profile cloud sync error:", syncErr);
+        }
 
       } catch (err) {
         console.error("Coach Mission Generation Error:", err);
@@ -8914,19 +9094,34 @@
 
             const onboardingScreen = document.getElementById('onboarding-screen');
             const appLayout = document.getElementById('app-layout');
-            const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
-
-            // Only reroute if currently showing onboarding (not already in app)
-            const appVisible = appLayout && (appLayout.style.display === 'block' || appLayout.style.display === 'flex');
-            if (!appVisible) {
-              if (hasProfile) {
-                openAppDashboard();
-              } else {
-                if (onboardingScreen) onboardingScreen.style.display = 'flex';
-                if (appLayout) appLayout.style.display = 'none';
-                showOnboardingStep('select-path');
+            // Fetch and restore profile from cloud
+            restoreProfileFromCloud(session.user.id).then((restored) => {
+              const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
+              const appVisible = appLayout && (appLayout.style.display === 'block' || appLayout.style.display === 'flex');
+              if (!appVisible) {
+                if (hasProfile) {
+                  openAppDashboard();
+                  showToast("Your cloud profile has been successfully restored!", "gold");
+                } else {
+                  if (onboardingScreen) onboardingScreen.style.display = 'flex';
+                  if (appLayout) appLayout.style.display = 'none';
+                  showOnboardingStep('select-path');
+                }
               }
-            }
+            }).catch((err) => {
+              console.error("Auth listener restore error:", err);
+              const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
+              const appVisible = appLayout && (appLayout.style.display === 'block' || appLayout.style.display === 'flex');
+              if (!appVisible) {
+                if (hasProfile) {
+                  openAppDashboard();
+                } else {
+                  if (onboardingScreen) onboardingScreen.style.display = 'flex';
+                  if (appLayout) appLayout.style.display = 'none';
+                  showOnboardingStep('select-path');
+                }
+              }
+            });
           }
           if (event === 'SIGNED_OUT') {
             _authListenerFired = false;
