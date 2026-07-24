@@ -226,7 +226,7 @@
         height: auto !important;
         overflow: visible !important;
       }
-      #splash-screen, #onboarding-screen, #auth-screen, header, .nav-bar, .lang-toggle-btn, .chart-toggle, .btn, button {
+      #splash-screen, #onboarding-screen, #auth-screen, header, .nav-bar, .lang-toggle-btn, .chart-toggle, .btn, button, .no-print {
         display: none !important;
       }
       #app-layout {
@@ -263,21 +263,98 @@
       }
       #kundli-result-view {
         display: block !important;
+        padding: 0 !important;
       }
       .card {
         background: #ffffff !important;
-        border: 1px solid #999999 !important;
+        border: 1px solid #000000 !important;
         color: #000000 !important;
         box-shadow: none !important;
         page-break-inside: avoid;
         margin-bottom: 15px !important;
       }
-      h1, h2, h3, h4, strong, p, span, td, th {
+      h1, h2, h3, h4, strong, p, span, td, th, div {
         color: #000000 !important;
+        background-color: transparent !important;
+        background: transparent !important;
       }
       canvas#chartCanvas {
         border: 1px solid #000000 !important;
         background: #ffffff !important;
+      }
+
+      /* Force all accordion sections to be fully expanded in print */
+      #sec2-body, 
+      #sec3-body, 
+      #sec4-body, 
+      #sec5-body {
+        display: block !important;
+        visibility: visible !important;
+        height: auto !important;
+      }
+
+      /* Hide accordion interactive indicators */
+      #sec2-toggle-icon,
+      #sec3-toggle-icon,
+      #sec4-toggle-icon,
+      #sec5-toggle-icon,
+      span[id$="-toggle-icon"],
+      span[id$="-toggle"] {
+        display: none !important;
+      }
+
+      /* Print specific badges and progress elements in Grayscale */
+      span[id$="-badge"], 
+      span[class$="-badge"], 
+      #k-yogas-badges span,
+      #k-luck-score-badge,
+      #dont-panic-modal .btn {
+        background: #ffffff !important;
+        border: 1px solid #000000 !important;
+        color: #000000 !important;
+      }
+      #k-yogas-badges span svg {
+        stroke: #000000 !important;
+      }
+
+      /* Table styling for print */
+      .table {
+        width: 100% !important;
+        border: 1px solid #000000 !important;
+        border-collapse: collapse !important;
+        margin-top: 10px !important;
+      }
+      .table th, .table td {
+        border: 1px solid #000000 !important;
+        color: #000000 !important;
+        background: #ffffff !important;
+        padding: 6px 8px !important;
+      }
+      .table th {
+        background: #f0f0f0 !important;
+        font-weight: bold !important;
+      }
+
+      /* Grayscale progress tracks & fills */
+      div[style*="height:6px; background:rgba(255,255,255,0.07)"],
+      div[style*="height:10px; background:rgba(255,255,255,0.08)"],
+      div[style*="height:6px; background:rgba(255,255,255,0.06)"],
+      #k-luck-progress-bar,
+      #k-house-strengths-bars div[style*="height:6px"] {
+        background: #e0e0e0 !important;
+        border: 1px solid #000000 !important;
+      }
+      div[style*="height:100%; width:"][style*="background:"],
+      #k-luck-progress-bar > div,
+      #k-house-strengths-bars div[style*="height:100%"] {
+        background: #000000 !important;
+      }
+
+      /* Chart Badge overlay styling */
+      #chart-badge-title {
+        background: #ffffff !important;
+        border: 1px solid #000000 !important;
+        color: #000000 !important;
       }
     }
 
@@ -1893,7 +1970,7 @@
               <h3 id="result-name" style="margin:0; font-size:1.1rem;"></h3>
               <p id="result-subtitle" style="color:var(--text-muted); font-size:0.78rem; margin:3px 0 0;"></p>
             </div>
-            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <div class="no-print" style="display:flex; gap:6px; flex-wrap:wrap;">
               <button id="kr-lang-en" onclick="setKundliLang('en')" style="padding:4px 12px; border-radius:20px; border:1px solid var(--gold); background:var(--gold); color:#0C0922; font-size:0.72rem; font-weight:700; cursor:pointer;">EN</button>
               <button id="kr-lang-hi" onclick="setKundliLang('hi')" style="padding:4px 12px; border-radius:20px; border:1px solid rgba(232,200,121,0.3); background:transparent; color:var(--gold); font-size:0.72rem; font-weight:700; cursor:pointer;">हिंदी</button>
               <button class="btn" style="width:auto; padding:6px 14px; font-size:0.78rem;" onclick="switchTab(0, document.querySelectorAll('.nav-item')[0])">
@@ -1902,7 +1979,7 @@
             </div>
           </div>
 
-          <div class="chart-toggle" style="margin-bottom:14px; display:flex; flex-direction:column; gap:10px;">
+          <div class="chart-toggle no-print" style="margin-bottom:14px; display:flex; flex-direction:column; gap:10px;">
             <!-- DIVISIONAL CHART CAROUSEL TABS -->
             <div style="display:flex; background:rgba(255,255,255,0.04); padding:4px; border-radius:12px; border:1px solid rgba(255,255,255,0.08); gap:4px;">
               <button id="btn-chart-d1" onclick="switchKundliDivisionalChart('D1')" style="flex:1; padding:8px 4px; border-radius:8px; border:none; background:var(--gold); color:#0C0922; font-weight:bold; font-size:0.8rem; cursor:pointer; transition:all 0.2s;">
@@ -1917,7 +1994,7 @@
             </div>
 
             <!-- STYLE & DOWNLOAD ACTION ROW -->
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <div class="no-print" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
               <div style="display:flex; gap:6px;">
                 <button id="btn-style-north" class="btn btn-outline" style="width:auto; padding:5px 12px; font-size:0.78rem; margin:0; border-color:var(--gold); color:var(--gold);" onclick="setKundliStyleMode(true)">
                   <span class="k-lbl-en">North Indian</span><span class="k-lbl-hi" style="display:none;">उत्तर भारतीय</span>
@@ -1942,7 +2019,7 @@
           </div>
 
           <!-- INTERACTIVE HOUSE SELECTOR BAR -->
-          <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:10px; margin-bottom:16px;">
+          <div class="no-print" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:10px; margin-bottom:16px;">
             <p style="color:var(--text-muted); font-size:0.74rem; margin:0 0 8px; text-align:center;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg> <span class="k-lbl-en">Tap any house below or directly on the chart to inspect details</span>
               <span class="k-lbl-hi" style="display:none;">नीचे किसी भी भाव पर टैप करें या चार्ट पर सीधे विवरण देखें</span>
@@ -4456,37 +4533,17 @@
     }
 
     async function downloadKundliPDF() {
-      const name = localStorage.getItem('kundli_name') || localStorage.getItem('user_name') || 'User';
-      const cleanName = name.replace(/[^a-zA-Z0-9]/g, '_');
-      const fileName = `CosmoVedic_Kundli_Report_${cleanName}.pdf`;
+      showToast(`<svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/></svg> Preparing B&W PDF Report...`, "gold");
 
-      showToast(`<svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/></svg> Preparing Kundli PDF Download...`, "gold");
+      document.body.classList.add('print-pdf-active');
+      drawChart();
 
-      const element = document.getElementById('kundli-result-view');
-      if (!element) {
+      setTimeout(() => {
         window.print();
-        return;
-      }
 
-      if (typeof html2pdf !== 'undefined') {
-        try {
-          const opt = {
-            margin:       [8, 8, 8, 8],
-            filename:     fileName,
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true, logging: false, backgroundColor: '#070514' },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-          };
-          
-          await html2pdf().set(opt).from(element).save();
-          showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='#2ecc71' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><polyline points='20 6 9 17 4 12'/></svg> Kundli PDF Downloaded Successfully!`, "gold");
-          return;
-        } catch (err) {
-          console.warn("html2pdf generation error, falling back to print dialog:", err);
-        }
-      }
-
-      window.print();
+        document.body.classList.remove('print-pdf-active');
+        drawChart();
+      }, 150);
     }
 
     // ═══════════════════════════════════════════════════════════════
@@ -9545,15 +9602,16 @@
       const h = canvas.height;
 
       const isLight = document.body.classList.contains('light-theme');
+      const isPrint = document.body.classList.contains('print-pdf-active');
 
       // Clear Canvas
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = isLight ? '#FFFFFF' : '#0C0922';
+      ctx.fillStyle = isPrint ? '#FFFFFF' : (isLight ? '#FFFFFF' : '#0C0922');
       ctx.fillRect(0, 0, w, h);
 
       if (isNorthIndianStyle) {
         // Draw North Indian style (Diamond)
-        ctx.strokeStyle = isLight ? '#A07F10' : '#E8C879';
+        ctx.strokeStyle = isPrint ? '#000000' : (isLight ? '#A07F10' : '#E8C879');
         ctx.lineWidth = 2;
         ctx.strokeRect(0, 0, w, h);
 
@@ -9600,7 +9658,7 @@
 
         // Draw Sign Numbers
         const lagnaSign = activePlacements[0].sign + 1; // 1-based index
-        ctx.fillStyle = isLight ? '#A07F10' : '#E8C879';
+        ctx.fillStyle = isPrint ? '#000000' : (isLight ? '#A07F10' : '#E8C879');
         ctx.font = 'bold 12px sans-serif';
         ctx.textAlign = 'center';
 
@@ -9617,7 +9675,7 @@
           housePlanets[houseIdx].push(short);
         });
 
-        ctx.fillStyle = isLight ? '#1C1A30' : '#FFFFFF';
+        ctx.fillStyle = isPrint ? '#000000' : (isLight ? '#1C1A30' : '#FFFFFF');
         ctx.font = '10px sans-serif';
         for (let h = 1; h <= 12; h++) {
           const text = housePlanets[h].join(" ");
@@ -9626,7 +9684,7 @@
 
       } else {
         // Draw South Indian style (Grid)
-        ctx.strokeStyle = isLight ? '#A07F10' : '#E8C879';
+        ctx.strokeStyle = isPrint ? '#000000' : (isLight ? '#A07F10' : '#E8C879');
         ctx.lineWidth = 2;
         ctx.strokeRect(0, 0, w, h);
 
@@ -9665,13 +9723,13 @@
           const y = c.r * step;
 
           // Header
-          ctx.fillStyle = isLight ? '#6A38C8' : '#8E6FD6';
+          ctx.fillStyle = isPrint ? '#000000' : (isLight ? '#6A38C8' : '#8E6FD6');
           ctx.font = 'bold 9px sans-serif';
           ctx.textAlign = 'left';
           ctx.fillText(signNames[s].substring(0, 3).toUpperCase(), x + 4, y + 12);
 
           // Planets
-          ctx.fillStyle = isLight ? '#1C1A30' : '#FFFFFF';
+          ctx.fillStyle = isPrint ? '#000000' : (isLight ? '#1C1A30' : '#FFFFFF');
           ctx.font = '10px sans-serif';
           ctx.textAlign = 'center';
           
