@@ -6,6 +6,9 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <title>CosmoVedic - Premium Vedic Astrology App</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -144,60 +147,70 @@
     /* Premium Cosmic Theme & Advanced UI System */
     :root {
       --bg-color: #070514;
-      --bg-gradient: radial-gradient(circle at 50% 0%, #171136 0%, #070514 75%);
-      --card-bg: rgba(20, 16, 44, 0.88);
-      --card-bg-solid: #14102C;
-      --card-border: rgba(232, 200, 121, 0.18);
-      --card-border-glow: rgba(232, 200, 121, 0.4);
+      --bg-gradient: radial-gradient(circle at 50% 0%, #150F33 0%, #060410 80%);
+      --card-bg: rgba(22, 18, 48, 0.75);
+      --card-bg-solid: #151132;
+      --card-border: rgba(240, 215, 123, 0.12);
+      --card-border-glow: rgba(240, 215, 123, 0.35);
       --gold: #F0D77B;
-      --gold-dark: #C9A84C;
+      --gold-dark: #D4B157;
       --gold-light: #FFF2C6;
-      --gold-gradient: linear-gradient(135deg, #F0D77B 0%, #D4B157 100%);
-      --purple: #9B7AE8;
-      --purple-dark: #2A2050;
-      --nebula: #4A90E2;
+      --gold-gradient: linear-gradient(135deg, #F5E396 0%, #CFA53E 100%);
+      --purple: #A587F0;
+      --purple-dark: #1E173E;
+      --nebula: #519BEF;
       --emerald: #2ECC71;
-      --text: #F5F4FA;
-      --text-muted: #A3A0C2;
-      --text-subtle: #79769B;
+      --text: #F2EFFC;
+      --text-muted: #A8A3CC;
+      --text-subtle: #7C76A3;
+      
+      --box-shadow-card: 0 12px 36px rgba(0,0,0,0.55), inset 0 1px 1px rgba(255,255,255,0.06);
+      --btn-shadow: 0 6px 20px rgba(240, 215, 123, 0.25);
+      --input-bg: rgba(14, 10, 32, 0.65);
+      --input-border: rgba(155, 122, 232, 0.25);
+      --input-focus-bg: rgba(20, 15, 45, 0.85);
+      --input-focus-shadow: 0 0 14px rgba(240, 215, 123, 0.2);
+      --header-bg: rgba(7, 5, 20, 0.85);
+      --header-border: rgba(232, 200, 121, 0.15);
+      --navbar-bg: rgba(14, 10, 32, 0.95);
+      --navbar-border: rgba(232, 200, 121, 0.15);
+      --table-header-bg: rgba(27, 20, 62, 0.95);
+      --table-border: rgba(155, 122, 232, 0.2);
+      --card-bg-gradient-gamified: linear-gradient(135deg, rgba(23, 18, 48, 0.95), rgba(42, 36, 78, 0.7));
     }
 
     body.light-theme {
-      --bg-color: #F8F9FA;
-      --bg-gradient: radial-gradient(circle at 50% 0%, #E8E5FA 0%, #F8F9FA 75%);
-      --card-bg: rgba(255, 255, 255, 0.95);
+      --bg-color: #F6F5FC;
+      --bg-gradient: radial-gradient(circle at 50% 0%, #E8E3FA 0%, #F6F5FC 85%);
+      --card-bg: rgba(255, 255, 255, 0.85);
       --card-bg-solid: #FFFFFF;
-      --card-border: rgba(142, 111, 214, 0.2);
-      --card-border-glow: rgba(142, 111, 214, 0.5);
-      --gold: #9C7D0E;
-      --gold-dark: #7B6005;
-      --gold-light: #FFF2C6;
-      --gold-gradient: linear-gradient(135deg, #9C7D0E 0%, #7B6005 100%);
+      --card-border: rgba(106, 56, 200, 0.12);
+      --card-border-glow: rgba(106, 56, 200, 0.35);
+      --gold: #A57E0E;
+      --gold-dark: #826006;
+      --gold-light: #FFF7DC;
+      --gold-gradient: linear-gradient(135deg, #A57E0E 0%, #826006 100%);
       --purple: #6A38C8;
-      --purple-dark: #ECE7FA;
-      --nebula: #1E5B9E;
-      --emerald: #27AE60;
-      --text: #1C1A30;
-      --text-muted: #595679;
-      --text-subtle: #8986AA;
-    }
-
-    body.light-theme .form-group input, 
-    body.light-theme .form-group select {
-      background: rgba(255, 255, 255, 0.95);
-      border: 1px solid rgba(106, 56, 200, 0.3);
-      color: var(--text);
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-    }
-    body.light-theme .form-group input:focus, 
-    body.light-theme .form-group select:focus {
-      background: #FFFFFF;
-      border-color: var(--gold);
-      box-shadow: 0 0 10px rgba(156, 125, 14, 0.2), inset 0 1px 3px rgba(0,0,0,0.1);
-    }
-    body.light-theme .form-group select option {
-      background: #FFFFFF;
-      color: var(--text);
+      --purple-dark: #F2EEFC;
+      --nebula: #1C5A9B;
+      --emerald: #219653;
+      --text: #171526;
+      --text-muted: #5D597A;
+      --text-subtle: #8985A6;
+      
+      --box-shadow-card: 0 10px 30px rgba(106, 56, 200, 0.08), 0 1px 3px rgba(0,0,0,0.05);
+      --btn-shadow: 0 6px 20px rgba(165, 126, 14, 0.18);
+      --input-bg: rgba(255, 255, 255, 0.85);
+      --input-border: rgba(106, 56, 200, 0.22);
+      --input-focus-bg: #FFFFFF;
+      --input-focus-shadow: 0 0 14px rgba(106, 56, 200, 0.15);
+      --header-bg: rgba(255, 255, 255, 0.88);
+      --header-border: rgba(106, 56, 200, 0.12);
+      --navbar-bg: rgba(255, 255, 255, 0.95);
+      --navbar-border: rgba(106, 56, 200, 0.12);
+      --table-header-bg: rgba(236, 231, 250, 0.95);
+      --table-border: rgba(106, 56, 200, 0.2);
+      --card-bg-gradient-gamified: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(236, 231, 250, 0.8));
     }
 
     @media print {
@@ -266,8 +279,12 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
+    }
+
+    h1, h2, h3, h4, h5, h6, .splash-title, .splash-subtitle, #header-title {
+      font-family: 'Outfit', sans-serif;
     }
 
     html, body {
@@ -276,9 +293,10 @@
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background-color: #04030a;
+      background-color: var(--bg-color);
       color: var(--text);
       -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     body {
@@ -296,14 +314,15 @@
       min-height: 0;
       background-color: var(--bg-color);
       background-image: 
-        radial-gradient(circle at 50% -10%, rgba(155, 122, 232, 0.18) 0%, transparent 50%),
-        radial-gradient(circle at 85% 65%, rgba(74, 144, 226, 0.1) 0%, transparent 45%),
-        radial-gradient(circle at 15% 90%, rgba(240, 215, 123, 0.08) 0%, transparent 40%);
+        radial-gradient(circle at 50% -10%, rgba(155, 122, 232, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 85% 65%, rgba(74, 144, 226, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 15% 90%, rgba(240, 215, 123, 0.05) 0%, transparent 40%);
       overflow: hidden;
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
       box-shadow: 0 0 60px rgba(0,0,0,0.85), 0 0 30px rgba(155, 122, 232, 0.12);
+      transition: background-color 0.3s ease;
     }
 
     /* Splash Screen - absolute inside phone shell */
@@ -433,26 +452,26 @@
 
     .form-group input, .form-group select {
       width: 100%;
-      height: 46px;
-      background: rgba(22, 16, 48, 0.9);
-      border: 1px solid rgba(155, 122, 232, 0.3);
-      border-radius: 12px;
-      padding: 10px 16px;
+      height: 48px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 14px;
+      padding: 12px 18px;
       color: var(--text);
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       outline: none;
-      transition: all 0.25s ease;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
     }
 
     .form-group input:focus, .form-group select:focus {
       border-color: var(--gold);
-      box-shadow: 0 0 14px rgba(240, 215, 123, 0.25), inset 0 1px 3px rgba(0,0,0,0.3);
-      background: rgba(26, 19, 58, 0.95);
+      box-shadow: var(--input-focus-shadow), inset 0 1px 2px rgba(0,0,0,0.05);
+      background: var(--input-focus-bg);
     }
 
     .form-group select option {
-      background: #14102C;
+      background: var(--card-bg-solid);
       color: var(--text);
     }
 
@@ -460,15 +479,15 @@
       background: var(--gold-gradient);
       color: #1A1505;
       border: none;
-      border-radius: 14px;
+      border-radius: 16px;
       padding: 14px 24px;
       font-size: 0.95rem;
-      font-weight: 800;
+      font-weight: 700;
       letter-spacing: 0.5px;
       cursor: pointer;
       width: 100%;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 6px 20px rgba(240, 215, 123, 0.35);
+      box-shadow: var(--btn-shadow);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -477,13 +496,13 @@
 
     .btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(240, 215, 123, 0.5);
+      box-shadow: var(--btn-shadow);
       filter: brightness(1.05);
     }
 
     .btn:active {
       transform: translateY(0) scale(0.98);
-      box-shadow: 0 3px 10px rgba(240, 215, 123, 0.3);
+      box-shadow: var(--btn-shadow);
     }
 
     .btn-outline {
@@ -497,7 +516,7 @@
     .btn-outline:hover {
       background: rgba(240, 215, 123, 0.12);
       border-color: var(--gold);
-      color: #FFFFFF;
+      color: var(--text);
     }
 
     .btn-link {
@@ -536,11 +555,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border-bottom: 1px solid rgba(232, 200, 121, 0.15);
-      background: rgba(7, 5, 20, 0.85);
+      border-bottom: 1px solid var(--header-border);
+      background: var(--header-bg);
       z-index: 100;
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     header h1 {
@@ -548,7 +568,7 @@
       font-size: 1.4rem;
       font-weight: 800;
       letter-spacing: 4px;
-      text-shadow: 0 2px 10px rgba(240, 215, 123, 0.3);
+      text-shadow: 0 2px 10px rgba(240, 215, 123, 0.15);
     }
 
     main {
@@ -573,8 +593,8 @@
       left: 0;
       right: 0;
       height: 66px;
-      background: rgba(14, 10, 32, 0.95);
-      border-top: 1px solid rgba(232, 200, 121, 0.15);
+      background: var(--navbar-bg);
+      border-top: 1px solid var(--navbar-border);
       display: flex;
       justify-content: space-around;
       align-items: center;
@@ -582,6 +602,7 @@
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       padding: 0 2px;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .nav-item {
@@ -639,17 +660,17 @@
     .card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 20px;
+      border-radius: 20px;
+      padding: 22px;
       margin-bottom: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+      box-shadow: var(--box-shadow-card);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
     }
 
     .card:hover {
-      border-color: rgba(232, 200, 121, 0.3);
+      border-color: var(--card-border-glow);
     }
 
     .tab-content {
@@ -789,16 +810,19 @@
     }
 
     .table th, .table td {
-      border: 1px solid rgba(155, 122, 232, 0.2);
+      border: 1px solid var(--table-border);
       padding: 11px 12px;
       text-align: center;
       font-size: 0.85rem;
+      color: var(--text);
+      transition: border-color 0.3s ease, color 0.3s ease;
     }
 
     .table th {
-      background: rgba(27, 20, 62, 0.95);
+      background: var(--table-header-bg);
       color: var(--gold);
       font-weight: 700;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     /* Simple Overlay for sheets */
@@ -809,7 +833,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(4, 3, 10, 0.85);
+      background: rgba(4, 3, 10, 0.7);
       z-index: 500;
       align-items: flex-end;
       backdrop-filter: blur(8px);
@@ -823,7 +847,8 @@
       width: 100%;
       max-height: 80%;
       overflow-y: auto;
-      box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     /* Gamification Animations and Styles */
@@ -893,6 +918,59 @@
       box-shadow: 0 0 14px rgba(240, 215, 123, 0.4);
     }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    /* ─── PREMIUM OVERRIDES FOR LIGHT & DARK THEMES ────────────────────── */
+    
+    .card h4, 
+    .card h3, 
+    .auth-card h4, 
+    .auth-card h2, 
+    .auth-card p,
+    .quest-card h4, 
+    .tab-content h4, 
+    .tab-content h3, 
+    .sheet h4, 
+    #user-level-title, 
+    #level-up-rank-text, 
+    #k-moon-nakshatra, 
+    #k-gemstone-wear {
+      color: var(--text) !important;
+    }
+
+    .gamified-card, 
+    #vastu-result-view > .card {
+      background: var(--card-bg-gradient-gamified) !important;
+      border: 1px solid var(--card-border) !important;
+      box-shadow: var(--box-shadow-card) !important;
+    }
+
+    #level-up-modal .auth-card {
+      background: var(--card-bg-gradient-gamified) !important;
+      border: 2px solid var(--gold) !important;
+      box-shadow: var(--box-shadow-card) !important;
+    }
+
+    #lang-select {
+      background: var(--input-bg) !important;
+      border: 1px solid var(--input-border) !important;
+      color: var(--text) !important;
+    }
+    #lang-select option {
+      background: var(--card-bg-solid) !important;
+      color: var(--text) !important;
+    }
+
+    p, span, div, td, th {
+      letter-spacing: 0.2px;
+      line-height: 1.5;
+    }
+
+    .nav-item.active svg {
+      filter: drop-shadow(0 2px 10px var(--card-border-glow));
+    }
+    .nav-item.active::after {
+      box-shadow: 0 0 10px var(--gold);
+    }
     </style>
 
 </head>
