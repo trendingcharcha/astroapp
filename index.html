@@ -9098,7 +9098,7 @@
       const sunPl = cachedPlacementsList.find(p => p.name === 'Sun');
       const sunHouse = sunPl ? ((sunPl.sign - lagnaSign + 12) % 12) + 1 : 1;
 
-      const lagnaLord = rasiLords[lagnaSign] || "Sun";
+      const lagnaLord = signLords[lagnaSign] || "Sun";
 
       // 2. Set Header Profile Values
       const elementNamesEn = ["Fire (Agnitattva)", "Earth (Prithvitattva)", "Air (Vayutattva)", "Water (Jalatattva)"];
