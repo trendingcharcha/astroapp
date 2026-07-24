@@ -226,7 +226,7 @@
         height: auto !important;
         overflow: visible !important;
       }
-      #splash-screen, #onboarding-screen, #auth-screen, header, .nav-bar, .lang-toggle-btn, .chart-toggle, .btn, button, .no-print {
+      #splash-screen, #onboarding-screen, #auth-screen, header, .nav-bar, .lang-toggle-btn, .chart-toggle, .btn, button, .no-print, #toast-container, [id$="-modal"], [class$="-modal"] {
         display: none !important;
       }
       #app-layout {
@@ -278,9 +278,15 @@
         background-color: transparent !important;
         background: transparent !important;
       }
-      canvas#chartCanvas {
+      canvas#chartCanvas, canvas#chartCanvasPrintD1, canvas#chartCanvasPrintD9, canvas#chartCanvasPrintD10 {
         border: 1px solid #000000 !important;
         background: #ffffff !important;
+      }
+      .chart-container {
+        display: none !important;
+      }
+      .print-charts-container {
+        display: block !important;
       }
 
       /* Force all accordion sections to be fully expanded in print */
@@ -2016,6 +2022,24 @@
               D1 - Birth Chart (Lagna)
             </div>
             <canvas id="chartCanvas" width="400" height="400" onclick="handleCanvasChartClick(event)" style="cursor:pointer; border-radius:14px;"></canvas>
+          </div>
+
+          <!-- Print-Only Three-Charts Container -->
+          <div class="print-charts-container" style="display:none; margin-bottom:15px; width:100%;">
+            <div style="display:flex; flex-direction:column; gap:15px; align-items:center; width:100%;">
+              <div class="card" style="width:100%; max-width:400px; text-align:center; padding:10px; position:relative;">
+                <h4 style="margin:0 0 8px; font-size:0.9rem; font-weight:bold; text-align:center; color:#000;">D1 - Birth Chart (Lagna / लग्न कुंडली)</h4>
+                <canvas id="chartCanvasPrintD1" width="400" height="400" style="width:100%; max-width:320px; aspect-ratio:1; margin:0 auto; display:block; border:1px solid #000000; border-radius:14px;"></canvas>
+              </div>
+              <div class="card" style="width:100%; max-width:400px; text-align:center; padding:10px; position:relative;">
+                <h4 style="margin:0 0 8px; font-size:0.9rem; font-weight:bold; text-align:center; color:#000;">D9 - Navamsha Chart (Marriage & Potency / नवांश कुंडली)</h4>
+                <canvas id="chartCanvasPrintD9" width="400" height="400" style="width:100%; max-width:320px; aspect-ratio:1; margin:0 auto; display:block; border:1px solid #000000; border-radius:14px;"></canvas>
+              </div>
+              <div class="card" style="width:100%; max-width:400px; text-align:center; padding:10px; position:relative;">
+                <h4 style="margin:0 0 8px; font-size:0.9rem; font-weight:bold; text-align:center; color:#000;">D10 - Dasamsha Chart (Career & Profession / दशांश कुंडली)</h4>
+                <canvas id="chartCanvasPrintD10" width="400" height="400" style="width:100%; max-width:320px; aspect-ratio:1; margin:0 auto; display:block; border:1px solid #000000; border-radius:14px;"></canvas>
+              </div>
+            </div>
           </div>
 
           <!-- INTERACTIVE HOUSE SELECTOR BAR -->
@@ -4536,7 +4560,11 @@
       showToast(`<svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/></svg> Preparing B&W PDF Report...`, "gold");
 
       document.body.classList.add('print-pdf-active');
-      drawChart();
+      
+      // Paint all three charts for the PDF report
+      drawChartGeneric('chartCanvasPrintD1', 'D1', true);
+      drawChartGeneric('chartCanvasPrintD9', 'D9', true);
+      drawChartGeneric('chartCanvasPrintD10', 'D10', true);
 
       setTimeout(() => {
         window.print();
@@ -9593,21 +9621,27 @@
       setKundliLang(currentAppLang);
     }
 
-    function drawChart() {
-      const activePlacements = getActiveChartPlacements();
-      if (!activePlacements || activePlacements.length === 0) return;
-      const canvas = document.getElementById('chartCanvas');
+    function drawChartGeneric(canvasId, chartType, isPrint) {
+      if (!cachedPlacementsList || cachedPlacementsList.length === 0) return;
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const w = canvas.width;
       const h = canvas.height;
 
       const isLight = document.body.classList.contains('light-theme');
-      const isPrint = document.body.classList.contains('print-pdf-active');
 
       // Clear Canvas
       ctx.clearRect(0, 0, w, h);
       ctx.fillStyle = isPrint ? '#FFFFFF' : (isLight ? '#FFFFFF' : '#0C0922');
       ctx.fillRect(0, 0, w, h);
+
+      let activePlacements = [];
+      if (chartType === 'D1') activePlacements = cachedPlacementsList;
+      else if (chartType === 'D9') activePlacements = calculateD9Placements(cachedPlacementsList, cachedLagnaSignNum);
+      else if (chartType === 'D10') activePlacements = calculateD10Placements(cachedPlacementsList, cachedLagnaSignNum);
+
+      if (!activePlacements || activePlacements.length === 0) return;
 
       if (isNorthIndianStyle) {
         // Draw North Indian style (Diamond)
@@ -9737,6 +9771,10 @@
           ctx.fillText(text, x + step/2, y + step/2 + 4);
         }
       }
+    }
+
+    function drawChart() {
+      drawChartGeneric('chartCanvas', currentKundliChartType, document.body.classList.contains('print-pdf-active'));
     }
 
     // 3. MATCHING COMPATIBILITY
