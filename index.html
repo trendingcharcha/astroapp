@@ -1015,6 +1015,20 @@
       color: var(--color-vastu) !important;
     }
 
+    .xp-progress-track {
+      background: var(--progress-bg) !important;
+      border: 1px solid var(--card-border) !important;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    .journey-progress-track {
+      background: var(--progress-bg) !important;
+      transition: background-color 0.3s ease;
+    }
+    .mood-divider {
+      border-top: 1px solid var(--card-border) !important;
+      transition: border-color 0.3s ease;
+    }
+
     /* Adapt check-in mood buttons to light and dark theme background/borders */
     .mood-btn {
       background: var(--input-bg) !important;
@@ -1550,28 +1564,28 @@
               <span><span class="k-lbl-en">Karmic XP</span><span class="k-lbl-hi" style="display:none;">कर्मिक एक्सपी</span></span>
               <span id="user-xp-detail">0 / 100 XP</span>
             </div>
-            <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+            <div class="xp-progress-track" style="width: 100%; height: 8px; border-radius: 4px; overflow: hidden;">
               <div id="user-xp-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--gold), #ff6b6b); transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);"></div>
             </div>
           </div>
 
           <!-- Daily Mood Check-In -->
-          <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px;">
+          <div class="mood-divider" style="padding-top: 12px;">
             <p style="margin: 0 0 8px 0; font-size: 0.8rem; color: var(--text-muted); text-align: left;"><span class="k-lbl-en">How is your cosmic energy today?</span><span class="k-lbl-hi" style="display:none;">आज आपकी ब्रह्मांडीय ऊर्जा कैसी है?</span></p>
             <div style="display: flex; justify-content: space-between; gap: 8px;">
-              <button class="mood-btn" onclick="checkInMood(1, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 8px 0; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center;" title="Very Low">
+              <button class="mood-btn" onclick="checkInMood(1, this)" style="flex: 1; border-radius: 8px; padding: 8px 0; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center;" title="Very Low">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
               </button>
-              <button class="mood-btn" onclick="checkInMood(2, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 8px 0; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center;" title="Low">
+              <button class="mood-btn" onclick="checkInMood(2, this)" style="flex: 1; border-radius: 8px; padding: 8px 0; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center;" title="Low">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/><path d="M9.5 9a1.5 1.5 0 0 0 1 .5"/></svg>
               </button>
-              <button class="mood-btn" onclick="checkInMood(3, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 8px 0; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center;" title="Neutral">
+              <button class="mood-btn" onclick="checkInMood(3, this)" style="flex: 1; border-radius: 8px; padding: 8px 0; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center;" title="Neutral">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
               </button>
-              <button class="mood-btn" onclick="checkInMood(4, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 8px 0; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center;" title="Good">
+              <button class="mood-btn" onclick="checkInMood(4, this)" style="flex: 1; border-radius: 8px; padding: 8px 0; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center;" title="Good">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
               </button>
-              <button class="mood-btn" onclick="checkInMood(5, this)" style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 8px 0; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center;" title="Excellent">
+              <button class="mood-btn" onclick="checkInMood(5, this)" style="flex: 1; border-radius: 8px; padding: 8px 0; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; justify-content:center;" title="Excellent">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" stroke="#E8C879"/><path d="M8 13s1.5 3 4 3 4-3 4-3"/><circle cx="9" cy="9" r="1" fill="#E8C879"/><circle cx="15" cy="9" r="1" fill="#E8C879"/></svg>
               </button>
             </div>
@@ -1694,7 +1708,7 @@
               <span id="journey-phase-title" style="color:var(--gold); font-weight:600;">Phase 1: Foundation (Days 1-30)</span>
               <span id="journey-percent">1% Complete</span>
             </div>
-            <div style="height:6px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden;">
+            <div class="journey-progress-track" style="height:6px; border-radius:4px; overflow:hidden;">
               <div id="journey-progress-fill" style="height:100%; width:1%; background:linear-gradient(90deg, #8E6FD6, #E8C879); transition:width 0.4s ease;"></div>
             </div>
           </div>
