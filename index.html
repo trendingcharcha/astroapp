@@ -5396,18 +5396,21 @@
             }
           }
 
-          let hasLocalProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
-
-          // If signed in but no local profile, try fetching/restoring from cloud database!
-          if (validBackendUser && !hasLocalProfile) {
-            const restored = await restoreProfileFromCloud(currentUserId);
-            if (restored) {
-              hasLocalProfile = true;
+          // STRICT RULE: ALWAYS restore from Supabase cloud when user is authenticated.
+          // localStorage is NOT a routing source of truth — it may be stale or cleared on logout.
+          let cloudProfileExists = false;
+          if (validBackendUser && currentUserId) {
+            try {
+              const restored = await restoreProfileFromCloud(currentUserId);
+              cloudProfileExists = restored;
+            } catch(e) {
+              // Fallback: if cloud fetch fails, check local cache only as last resort
+              cloudProfileExists = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
             }
           }
 
           // RULE 3: If user was DELETED from backend database, wipe local cache & require sign in!
-          if (supabaseClient && !validBackendUser && isAuthFlag && !hasLocalProfile) {
+          if (supabaseClient && !validBackendUser && isAuthFlag) {
             localStorage.clear();
             sessionStorage.clear();
             if (appLayout) appLayout.style.display = 'none';
@@ -5416,18 +5419,21 @@
             return;
           }
 
-          // RULE 4: Auto-login to dashboard ONLY if user is authenticated AND HAS COMPLETED THEIR PROFILE DETAILS
-          if (isAuthFlag && hasLocalProfile && (validBackendUser || !supabaseClient)) {
-            if (onboarding) onboarding.style.display = 'none';
-            if (appLayout) appLayout.style.display = 'block';
-            if (typeof initApp === 'function') initApp();
-          } else if (isAuthFlag || validBackendUser) {
-            // Authenticated BUT profile is not completed yet (new sign up) -> Route to Choose Goal Path screen!
-            if (appLayout) appLayout.style.display = 'none';
-            if (onboarding) onboarding.style.display = 'flex';
-            showOnboardingStep('select-path');
+          // RULE 4 (STRICT): If authenticated AND Supabase profile EXISTS → dashboard always.
+          // If authenticated BUT no Supabase profile → new user → onboarding path.
+          if (validBackendUser) {
+            if (cloudProfileExists) {
+              if (onboarding) onboarding.style.display = 'none';
+              if (appLayout) appLayout.style.display = 'block';
+              if (typeof initApp === 'function') initApp();
+            } else {
+              // Genuinely new user — no profile row in DB yet
+              if (appLayout) appLayout.style.display = 'none';
+              if (onboarding) onboarding.style.display = 'flex';
+              showOnboardingStep('select-path');
+            }
           } else {
-            // Not authenticated -> show Entrance Screen (Smart Auth Gateway)
+            // No valid backend session → show auth entrance screen
             if (appLayout) appLayout.style.display = 'none';
             if (onboarding) onboarding.style.display = 'flex';
             showOnboardingStep('path');
@@ -9193,14 +9199,16 @@
 
             const onboardingScreen = document.getElementById('onboarding-screen');
             const appLayout = document.getElementById('app-layout');
-            // Fetch and restore profile from cloud
+            // STRICT RULE: Use `restored` boolean (Supabase profile EXISTS) as the ONLY routing truth.
+            // Never check localStorage here — it is cleared on logout and may be stale.
             restoreProfileFromCloud(session.user.id).then((restored) => {
-              const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
               const appVisible = appLayout && (appLayout.style.display === 'block' || appLayout.style.display === 'flex');
               if (!appVisible) {
-                if (hasProfile) {
+                if (restored) {
+                  // Profile EXISTS in Supabase DB → go to dashboard always
                   openAppDashboard();
                 } else {
+                  // No profile row in DB → genuinely new user → onboarding
                   if (onboardingScreen) onboardingScreen.style.display = 'flex';
                   if (appLayout) appLayout.style.display = 'none';
                   showOnboardingStep('select-path');
@@ -9208,10 +9216,11 @@
               }
             }).catch((err) => {
               console.error("Auth listener restore error:", err);
-              const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
+              // On network error only: fallback to localStorage as last resort
+              const hasLocalCache = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
               const appVisible = appLayout && (appLayout.style.display === 'block' || appLayout.style.display === 'flex');
               if (!appVisible) {
-                if (hasProfile) {
+                if (hasLocalCache) {
                   openAppDashboard();
                 } else {
                   if (onboardingScreen) onboardingScreen.style.display = 'flex';
