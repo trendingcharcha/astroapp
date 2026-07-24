@@ -7931,12 +7931,40 @@
         "Spiritual Liberation (Moksha), Foreign Travel, Isolation, Expenses & Meditation."
       ];
 
+      const houseSignificationsHi = [
+        "स्वयं की पहचान, जीवन शक्ति, स्वास्थ्य, शारीरिक रचना, चरित्र एवं व्यक्तित्व।",
+        "धन, संचित बचत, वाणी, पारिवारिक वंश, भोजन एवं प्रारंभिक बाल्यावस्था।",
+        "साहस, छोटे भाई-बहन, संचार, छोटी यात्राएं, हाथ एवं इच्छाशक्ति।",
+        "माता, गृह, अचल संपत्ति, मन, घरेलू सुख एवं वाहन।",
+        "बुद्धि, उच्च शिक्षा, प्रेम, संतान, पूर्व जन्म के संचित पुण्य कर्म।",
+        "स्वास्थ्य संबंधी चिंताएं, दैनिक बाधाएं, ऋण, शत्रु, नौकरी एवं प्रतियोगी परीक्षाएं।",
+        "विवाह, जीवनसाथी के गुण, व्यावसायिक साझेदारी, जनसंपर्क एवं अनुबंध।",
+        "दीर्घायु, अचानक लाभ/हानि, रहस्यवाद, शोध, रूपांतरण एवं पैतृक संपत्ति।",
+        "भाग्य, उच्च ज्ञान, पिता, गुरु, तीर्थयात्रा, धर्म एवं सौभाग्य।",
+        "करियर, पेशा, प्रतिष्ठा, सामाजिक स्थिति, सरकार एवं सार्वजनिक कर्म।",
+        "वित्तीय लाभ, इच्छाओं की पूर्ति, मित्रता, बड़े भाई-बहन एवं प्रचुर आय।",
+        "आध्यात्मिक मुक्ति (मोक्ष), विदेश यात्रा, एकांत, व्यय एवं ध्यान।"
+      ];
+
+      const planetNamesHi = {
+        'Sun': 'सूर्य', 'Moon': 'चन्द्र', 'Mars': 'मंगल', 'Mercury': 'बुध',
+        'Jupiter': 'गुरु', 'Venus': 'शुक्र', 'Saturn': 'शनि', 'Rahu': 'राहु',
+        'Ketu': 'केतु', 'Lagna': 'लग्न'
+      };
+
       const contentEl = document.getElementById('house-tooltip-content');
       if (!contentEl) return;
 
       const lang = currentAppLang;
       const houseNameEn = `House ${houseNum} (${signNames[houseSignNum]})`;
       const houseNameHi = `भाव ${houseNum} (${signNamesHi[houseSignNum]})`;
+
+      const sigLabel = lang === 'hi' ? 'महत्व (कारक):' : 'Signification:';
+      const sigText = lang === 'hi' ? houseSignificationsHi[houseNum - 1] : houseSignifications[houseNum - 1];
+      const occupLabel = lang === 'hi' ? '🪐 स्थित ग्रह:' : '🪐 Occupying Planets:';
+      const noOccup = lang === 'hi' ? 'कोई ग्रह उपस्थित नहीं है' : 'No planets present';
+      const aspectLabel = lang === 'hi' ? '👁️ दृष्टि डालने वाले ग्रह:' : '👁️ Aspecting Planets:';
+      const noAspect = lang === 'hi' ? 'कोई सीधी दृष्टि नहीं है' : 'No direct aspect';
 
       contentEl.innerHTML = `
         <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
@@ -7945,22 +7973,28 @@
           </div>
           <div>
             <h4 style="margin:0; color:var(--gold); font-size:1rem;">${lang === 'hi' ? houseNameHi : houseNameEn}</h4>
-            <span style="color:var(--text-muted); font-size:0.75rem;">Lord: ${signLords[houseSignNum]} (${signLordsHi[houseSignNum]})</span>
+            <span style="color:var(--text-muted); font-size:0.75rem;">${lang === 'hi' ? 'स्वामी:' : 'Lord:'} ${signLords[houseSignNum]} (${signLordsHi[houseSignNum]})</span>
           </div>
         </div>
 
         <div style="background:rgba(255,255,255,0.03); border-radius:10px; padding:10px; margin-bottom:10px; font-size:0.8rem; color:var(--text-muted); line-height:1.5;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A5 5 0 0 0 8 8c0 1 .3 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/></svg> <strong>Signification:</strong> ${houseSignifications[houseNum - 1]}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A5 5 0 0 0 8 8c0 1 .3 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/></svg> <strong>${sigLabel}</strong> ${sigText}
         </div>
 
         <div style="margin-bottom:8px;">
-          <strong style="color:#2ecc71; font-size:0.8rem; display:block; margin-bottom:4px;">🪐 Occupying Planets:</strong>
-          ${occupying.length > 0 ? occupying.map(p => `<span style="display:inline-block; background:rgba(46,204,113,0.15); color:#2ecc71; border:1px solid rgba(46,204,113,0.3); border-radius:12px; padding:2px 8px; font-size:0.75rem; font-weight:bold; margin:2px;">${p.name} (${Math.floor(p.degree)}°)</span>`).join('') : '<span style="color:var(--text-muted); font-size:0.75rem;">No planets present</span>'}
+          <strong style="color:#2ecc71; font-size:0.8rem; display:block; margin-bottom:4px;">${occupLabel}</strong>
+          ${occupying.length > 0 ? occupying.map(p => {
+            const pName = lang === 'hi' ? (planetNamesHi[p.name] || p.name) : p.name;
+            return `<span style="display:inline-block; background:rgba(46,204,113,0.15); color:#2ecc71; border:1px solid rgba(46,204,113,0.3); border-radius:12px; padding:2px 8px; font-size:0.75rem; font-weight:bold; margin:2px;">${pName} (${Math.floor(p.degree)}°)</span>`;
+          }).join('') : `<span style="color:var(--text-muted); font-size:0.75rem;">${noOccup}</span>`}
         </div>
 
         <div>
-          <strong style="color:#5dade2; font-size:0.8rem; display:block; margin-bottom:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>️ Aspecting Planets:</strong>
-          ${aspecting.length > 0 ? aspecting.map(p => `<span style="display:inline-block; background:rgba(93,173,226,0.15); color:#5dade2; border:1px solid rgba(93,173,226,0.3); border-radius:12px; padding:2px 8px; font-size:0.75rem; font-weight:bold; margin:2px;">${p.name}</span>`).join('') : '<span style="color:var(--text-muted); font-size:0.75rem;">No direct aspect</span>'}
+          <strong style="color:#5dade2; font-size:0.8rem; display:block; margin-bottom:4px;">${aspectLabel}</strong>
+          ${aspecting.length > 0 ? aspecting.map(p => {
+            const pName = lang === 'hi' ? (planetNamesHi[p.name] || p.name) : p.name;
+            return `<span style="display:inline-block; background:rgba(93,173,226,0.15); color:#5dade2; border:1px solid rgba(93,173,226,0.3); border-radius:12px; padding:2px 8px; font-size:0.75rem; font-weight:bold; margin:2px;">${pName}</span>`;
+          }).join('') : `<span style="color:var(--text-muted); font-size:0.75rem;">${noAspect}</span>`}
         </div>
       `;
 
@@ -8008,10 +8042,11 @@
       // Yogas
       const yogasBadges = document.getElementById('k-yogas-badges');
       if (yogasBadges) {
+        const isHi = (currentAppLang === 'hi');
         const yogas = [
-          {name: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/><path d="M18 2H6v12a6 6 0 0 0 12 0V2z"/></svg> Raj Yoga Active', color: '#f39c12'},
-          {name: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><polygon points="12 2 22 8.5 12 22 2 8.5 12 2"/></svg> Budhaditya Yoga', color: '#2ecc71'},
-          {name: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Gajakesari Yoga', color: '#5dade2'}
+          {name: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/><path d="M18 2H6v12a6 6 0 0 0 12 0V2z"/></svg> ${isHi ? 'राजयोग सक्रिय' : 'Raj Yoga Active'}`, color: '#f39c12'},
+          {name: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><polygon points="12 2 22 8.5 12 22 2 8.5 12 2"/></svg> ${isHi ? 'बुधादित्य योग' : 'Budhaditya Yoga'}`, color: '#2ecc71'},
+          {name: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> ${isHi ? 'गजकेसरी योग' : 'Gajakesari Yoga'}`, color: '#5dade2'}
         ];
         yogasBadges.innerHTML = yogas.map(y => `<span style="background:rgba(255,255,255,0.04); border:1px solid ${y.color}; color:${y.color}; border-radius:12px; padding:3px 10px; font-size:0.75rem; font-weight:bold;">${y.name}</span>`).join('');
       }
@@ -8019,18 +8054,20 @@
       // House Strengths (1st, 2nd, 7th, 10th, 11th)
       const houseBars = document.getElementById('k-house-strengths-bars');
       if (houseBars) {
+        const isHi = (currentAppLang === 'hi');
         const keyHouses = [
-          {num: 1, name: '1st (Self & Health)', score: 88, color: '#e74c3c'},
-          {num: 2, name: '2nd (Wealth & Speech)', score: 75, color: '#2ecc71'},
-          {num: 7, name: '7th (Marriage & Partner)', score: 82, color: '#e67e22'},
-          {num: 10, name: '10th (Career & Status)', score: 92, color: '#5dade2'},
-          {num: 11, name: '11th (Gains & Fulfillment)', score: 85, color: 'var(--gold)'}
+          {num: 1, name: isHi ? 'प्रथम भाव (स्वयं एवं स्वास्थ्य)' : '1st (Self & Health)', score: 88, color: '#e74c3c'},
+          {num: 2, name: isHi ? 'द्वितीय भाव (धन एवं वाणी)' : '2nd (Wealth & Speech)', score: 75, color: '#2ecc71'},
+          {num: 7, name: isHi ? 'सप्तम भाव (विवाह एवं साथी)' : '7th (Marriage & Partner)', score: 82, color: '#e67e22'},
+          {num: 10, name: isHi ? 'दशम भाव (करियर एवं प्रतिष्ठा)' : '10th (Career & Status)', score: 92, color: '#5dade2'},
+          {num: 11, name: isHi ? 'एकादश भाव (आय एवं मनोकामना)' : '11th (Gains & Fulfillment)', score: 85, color: 'var(--gold)'}
         ];
+        const powerText = isHi ? 'बल' : 'Power';
         houseBars.innerHTML = keyHouses.map(h => `
           <div>
             <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:2px;">
               <span style="color:var(--text-muted);">${h.name}</span>
-              <span style="color:${h.color}; font-weight:bold;">${h.score}% Power</span>
+              <span style="color:${h.color}; font-weight:bold;">${h.score}% ${powerText}</span>
             </div>
             <div style="height:6px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden;">
               <div style="height:100%; width:${h.score}%; background:${h.color}; transition:width 0.8s ease;"></div>
@@ -8044,7 +8081,10 @@
       const tenthLord = signLords[tenthSign];
       const careerPills = document.getElementById('k-career-pills');
       if (careerPills) {
-        const recs = ["Tech & AI Engineering", "Financial Banking & Wealth Advisory", "Creative Design & Digital Media"];
+        const isHi = (currentAppLang === 'hi');
+        const recs = isHi 
+          ? ["तकनीक एवं एआई इंजीनियरिंग", "वित्तीय बैंकिंग एवं धन सलाहकार", "सृजनात्मक डिजाइन एवं डिजिटल मीडिया"]
+          : ["Tech & AI Engineering", "Financial Banking & Wealth Advisory", "Creative Design & Digital Media"];
         careerPills.innerHTML = recs.map(r => `<span style="background:rgba(93,173,226,0.15); border:1px solid #5dade2; color:#5dade2; border-radius:14px; padding:4px 10px; font-size:0.75rem; font-weight:bold;">${r}</span>`).join('');
       }
 
@@ -8065,30 +8105,35 @@
       // ── SECTION 4: MARRIAGE TIMINGS & SPOUSE PERSONA (7TH HOUSE & D9) ──
       const mTimeline = document.getElementById('k-marriage-timeline');
       if (mTimeline) {
+        const isHi = (currentAppLang === 'hi');
         mTimeline.innerHTML = `
           <div style="background:rgba(255,255,255,0.03); border-left:3px solid #2ecc71; padding:8px 10px; border-radius:6px; font-size:0.78rem;">
-            <strong style="color:#2ecc71; display:block;">Phase 1: Late 2026 - Mid 2027 (Peak Window)</strong>
-            <span style="color:var(--text-muted);">Jupiter 7th aspect transit + Venus Dasha alignment. High probability for soulmate connection & marriage.</span>
+            <strong style="color:#2ecc71; display:block;">${isHi ? 'चरण 1: उत्तर 2026 - मध्य 2027 (सर्वोत्तम समय)' : 'Phase 1: Late 2026 - Mid 2027 (Peak Window)'}</strong>
+            <span style="color:var(--text-muted);">${isHi ? 'बृहस्पति की सप्तम दृष्टि गोचर + शुक्र की महादशा। जीवनसाथी से मिलने व विवाह की प्रबल संभावना।' : 'Jupiter 7th aspect transit + Venus Dasha alignment. High probability for soulmate connection & marriage.'}</span>
           </div>
           <div style="background:rgba(255,255,255,0.03); border-left:3px solid var(--gold); padding:8px 10px; border-radius:6px; font-size:0.78rem;">
-            <strong style="color:var(--gold); display:block;">Phase 2: Early 2028 - Late 2028 (Secondary Window)</strong>
-            <span style="color:var(--text-muted);">Secondary favorable window for long-term commitment and family harmony.</span>
+            <strong style="color:var(--gold); display:block;">${isHi ? 'चरण 2: प्रारंभ 2028 - उत्तर 2028 (द्वितीय अनुकूल समय)' : 'Phase 2: Early 2028 - Late 2028 (Secondary Window)'}</strong>
+            <span style="color:var(--text-muted);">${isHi ? 'दीर्घकालिक प्रतिबद्धता और पारिवारिक सद्भाव के लिए दूसरा अनुकूल समय।' : 'Secondary favorable window for long-term commitment and family harmony.'}</span>
           </div>
         `;
       }
 
       const spouseTags = document.getElementById('k-spouse-tags');
       if (spouseTags) {
-        const traits = ["Intellectual & Sharp", "Spiritual Values", "Charming Personality", "From North-West Direction", "Career-Oriented"];
+        const isHi = (currentAppLang === 'hi');
+        const traits = isHi
+          ? ["बुद्धिमान एवं प्रखर", "आध्यात्मिक मूल्य", "आकर्षक व्यक्तित्व", "उत्तर-पश्चिम दिशा से", "करियर-उन्मुख"]
+          : ["Intellectual & Sharp", "Spiritual Values", "Charming Personality", "From North-West Direction", "Career-Oriented"];
         spouseTags.innerHTML = traits.map(t => `<span style="background:rgba(231,76,60,0.15); border:1px solid #e74c3c; color:#ff6b6b; border-radius:14px; padding:4px 10px; font-size:0.75rem; font-weight:bold;">${t}</span>`).join('');
       }
 
       const doshaSummary = document.getElementById('k-dosha-alerts-summary');
       if (doshaSummary) {
+        const isHi = (currentAppLang === 'hi');
         doshaSummary.innerHTML = `
           <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:var(--text-muted);">
-            <span>Manglik Status: <strong style="color:#2ecc71;">Mild / Neutralized</strong></span>
-            <span>Kalsarpa: <strong style="color:#2ecc71;">Clear</strong></span>
+            <span>${isHi ? 'मांगलिक स्थिति' : 'Manglik Status'}: <strong style="color:#2ecc71;">${isHi ? 'सौम्य / शांत' : 'Mild / Neutralized'}</strong></span>
+            <span>${isHi ? 'कालसर्प दोष' : 'Kalsarpa'}: <strong style="color:#2ecc71;">${isHi ? 'मुक्त' : 'Clear'}</strong></span>
           </div>
         `;
       }
@@ -8096,36 +8141,49 @@
       // ── SECTION 5: GEMSTONE, POWER COLORS & FINANCIAL DIET ──
       const lagnaLord = signLords[lagnaSign];
       const gemMap = {
-        'Sun': {stone: 'Ruby (माणिक्य)', metal: 'Gold / तांबा', finger: 'Ring Finger'},
-        'Moon': {stone: 'Pearl (मोती)', metal: 'Silver', finger: 'Little Finger'},
-        'Mars': {stone: 'Red Coral (मूंगा)', metal: 'Gold / Copper', finger: 'Ring Finger'},
-        'Mercury': {stone: 'Emerald (पन्ना)', metal: 'Gold / Silver', finger: 'Little Finger'},
-        'Jupiter': {stone: 'Yellow Sapphire (पुखराज)', metal: 'Gold', finger: 'Index Finger'},
-        'Venus': {stone: 'Diamond / Opal (हीरा/ओपल)', metal: 'Platinum / Silver', finger: 'Middle/Little Finger'},
-        'Saturn': {stone: 'Blue Sapphire (नीलम)', metal: 'Iron / Steel', finger: 'Middle Finger'}
+        'Sun': {stoneEn: 'Ruby (माणिक्य)', stoneHi: 'माणिक्य (Ruby)', metalEn: 'Gold / Copper', metalHi: 'सोना / तांबा', fingerEn: 'Ring Finger', fingerHi: 'अनामिका उंगली'},
+        'Moon': {stoneEn: 'Pearl (मोती)', stoneHi: 'मोती (Pearl)', metalEn: 'Silver', metalHi: 'चांदी', fingerEn: 'Little Finger', fingerHi: 'कनिष्ठिका उंगली'},
+        'Mars': {stoneEn: 'Red Coral (मूंगा)', stoneHi: 'मूंगा (Red Coral)', metalEn: 'Gold / Copper', metalHi: 'सोना / तांबा', fingerEn: 'Ring Finger', fingerHi: 'अनामिका उंगली'},
+        'Mercury': {stoneEn: 'Emerald (पन्ना)', stoneHi: 'पन्ना (Emerald)', metalEn: 'Gold / Silver', metalHi: 'सोना / चांदी', fingerEn: 'Little Finger', fingerHi: 'कनिष्ठिका उंगली'},
+        'Jupiter': {stoneEn: 'Yellow Sapphire (पुखराज)', stoneHi: 'पुखराज (Yellow Sapphire)', metalEn: 'Gold', metalHi: 'सोना', fingerEn: 'Index Finger', fingerHi: 'तर्जनी उंगली'},
+        'Venus': {stoneEn: 'Diamond / Opal (हीरा/ओपल)', stoneHi: 'हीरा / ओपल (Diamond/Opal)', metalEn: 'Platinum / Silver', metalHi: 'प्लैटिनम / चांदी', fingerEn: 'Middle/Little Finger', fingerHi: 'मध्यमा/कनिष्ठिका उंगली'},
+        'Saturn': {stoneEn: 'Blue Sapphire (नीलम)', stoneHi: 'नीलम (Blue Sapphire)', metalEn: 'Iron / Steel', metalHi: 'लोहा / स्टील', fingerEn: 'Middle Finger', fingerHi: 'मध्यमा उंगली'}
       };
 
       const gem = gemMap[lagnaLord] || gemMap['Mercury'];
       const gemWear = document.getElementById('k-gemstone-wear');
+      const isHi = (currentAppLang === 'hi');
+      const stone = isHi ? gem.stoneHi : gem.stoneEn;
+      const metal = isHi ? gem.metalHi : gem.metalEn;
+      const finger = isHi ? gem.fingerHi : gem.fingerEn;
+
       if (gemWear) {
-        gemWear.innerHTML = `Wear <strong>${gem.stone}</strong> (5-7 Carats) set in <strong>${gem.metal}</strong> on your <strong>${gem.finger}</strong> on auspicious day.`;
+        gemWear.innerHTML = isHi 
+          ? `शुभ दिन पर अपनी <strong>${finger}</strong> में <strong>${metal}</strong> में जड़ा हुआ <strong>${stone}</strong> (5-7 कैरेट) धारण करें।`
+          : `Wear <strong>${stone}</strong> (5-7 Carats) set in <strong>${metal}</strong> on your <strong>${finger}</strong> on auspicious day.`;
       }
 
       const gemAvoid = document.getElementById('k-gemstone-avoid');
       if (gemAvoid) {
-        gemAvoid.innerText = 'Do not wear Blue Sapphire (Neelam) or Diamond without explicit trial to avoid 6th/8th house friction.';
+        gemAvoid.innerText = isHi 
+          ? 'छठे/आठवें भाव के घर्षण से बचने के लिए बिना स्पष्ट परीक्षण के नीलम या हीरा धारण न करें।'
+          : 'Do not wear Blue Sapphire (Neelam) or Diamond without explicit trial to avoid 6th/8th house friction.';
       }
 
       const pColors = document.getElementById('k-power-colors');
       const dColors = document.getElementById('k-drain-colors');
       if (pColors && dColors) {
-        pColors.innerHTML = `<span style="background:#f1c40f; color:#000; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">Gold</span><span style="background:#3498db; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">Royal Blue</span><span style="background:#ecf0f1; color:#000; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">Cream White</span>`;
-        dColors.innerHTML = `<span style="background:#34495e; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">Dark Grey</span><span style="background:#000; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">Black</span>`;
+        pColors.innerHTML = isHi 
+          ? `<span style="background:#f1c40f; color:#000; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">सुनहरा</span><span style="background:#3498db; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">शाही नीला</span><span style="background:#ecf0f1; color:#000; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">क्रीम सफेद</span>`
+          : `<span style="background:#f1c40f; color:#000; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">Gold</span><span style="background:#3498db; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">Royal Blue</span><span style="background:#ecf0f1; color:#000; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">Cream White</span>`;
+        dColors.innerHTML = isHi
+          ? `<span style="background:#34495e; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">गहरा सलेटी</span><span style="background:#000; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">काला</span>`
+          : `<span style="background:#34495e; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">Dark Grey</span><span style="background:#000; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">Black</span>`;
       }
 
       const finDiet = document.getElementById('k-financial-diet-text');
       if (finDiet) {
-        finDiet.innerHTML = currentAppLang === 'hi' ? 'आपके 2रे (आय) एवं 11वें (लाभ) भाव के अनुसार: गुरुवार एवं शनिवार को सात्विक आहार का पालन करें। मदिरा या तामसिक भोजन से बचें ताकि आर्थिक संचय स्थिर रहे।' : 'Based on your 2nd House (Intake) & 11th House (Gains): Consuming heavy foods or alcohol on Thursdays & Saturdays causes a financial drain. A pure Sattvic diet on key days protects your wealth savings!';
+        finDiet.innerHTML = isHi ? 'आपके 2रे (आय) एवं 11वें (लाभ) भाव के अनुसार: गुरुवार एवं शनिवार को सात्विक आहार का पालन करें। मदिरा या तामसिक भोजन से बचें ताकि आर्थिक संचय स्थिर रहे।' : 'Based on your 2nd House (Intake) & 11th House (Gains): Consuming heavy foods or alcohol on Thursdays & Saturdays causes a financial drain. A pure Sattvic diet on key days protects your wealth savings!';
       }
     }
 
