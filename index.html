@@ -2239,22 +2239,106 @@
         </div>
       </div>
 
-      <!-- TAB 4: TAROT -->
-      <div id="tab-tarot" class="tab-content">
-        <h3 style="margin-bottom: 10px;"><span class="k-lbl-en">Tarot Card Reading</span><span class="k-lbl-hi" style="display:none;">टैरो कार्ड रीडिंग</span></h3>
-        <p style="color: var(--text-muted); font-size: 0.9rem;"><span class="k-lbl-en">Focus on your question and select one of the cards below.</span><span class="k-lbl-hi" style="display:none;">अपने प्रश्न पर ध्यान केंद्रित करें और नीचे दिए गए कार्डों में से एक चुनें।</span></p>
-        
-        <div class="tarot-deck" id="tarot-deck">
-          <div class="tarot-card" onclick="drawTarot(0)">?</div>
-          <div class="tarot-card" onclick="drawTarot(1)">?</div>
-          <div class="tarot-card" onclick="drawTarot(2)">?</div>
+      <!-- TAB 4: VASTU -->
+      <div id="tab-vastu" class="tab-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
+          <h3 style="margin: 0;"><span class="k-lbl-en">Personalized Vedic Vastu</span><span class="k-lbl-hi" style="display:none;">व्यक्तिगत वैदिक वास्तु</span></h3>
+          <div style="background: rgba(232, 200, 121, 0.1); border: 1px solid rgba(232, 200, 121, 0.3); border-radius: 20px; padding: 4px 12px; font-size: 0.75rem; color: var(--gold); font-weight: bold;">
+            <span class="k-lbl-en">Kundli Aligned</span><span class="k-lbl-hi" style="display:none;">कुंडली संरेखित</span>
+          </div>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
+          <span class="k-lbl-en">Vastu recommendations mathematically computed from your geocentric natal placements, Lagna element, and planetary strengths.</span>
+          <span class="k-lbl-hi" style="display:none;">आपकी भू-केंद्रीय जन्म स्थिति, लग्न तत्व और ग्रहों की शक्ति से गणितीय रूप से गणना की गई वास्तु सिफारिशें।</span>
+        </p>
+
+        <div id="vastu-not-calculated-view" style="display:block; text-align:center; padding:40px 20px;" class="card">
+          <div style="font-size: 3rem; margin-bottom: 15px; color: var(--gold);">🏛️</div>
+          <h4 style="margin-bottom: 10px; color: #fff;"><span class="k-lbl-en">Generate Your Kundli First</span><span class="k-lbl-hi" style="display:none;">पहले अपनी कुंडली जनरेट करें</span></h4>
+          <p style="color: var(--text-muted); max-width: 320px; margin: 0 auto 20px; font-size: 0.85rem; line-height: 1.5;">
+            <span class="k-lbl-en">Vastu calculations require your exact Lagna and planetary degrees. Generate your chart under the Kundli tab to unlock this.</span>
+            <span class="k-lbl-hi" style="display:none;">वास्तु गणना के लिए आपके सटीक लग्न और ग्रहों के अंशों की आवश्यकता होती है। इसे अनलॉक करने के लिए कुंडली टैब में अपना चार्ट जनरेट करें।</span>
+          </p>
+          <button class="btn" style="width: auto; padding: 10px 24px;" onclick="switchTab(1, document.querySelectorAll('.nav-item')[1])">
+            <span class="k-lbl-en">GENERATE KUNDLI</span><span class="k-lbl-hi" style="display:none;">कुंडली जनरेट करें</span>
+          </button>
         </div>
 
-        <div id="tarot-result" style="display: none; margin-top: 30px;" class="card">
-          <h4 style="color: var(--gold); margin-bottom: 8px;" id="tarot-card-name">The Fool</h4>
-          <p style="color: var(--purple); font-size: 0.8rem; font-weight: bold; margin-bottom: 15px;" id="tarot-card-arcana">Major Arcana</p>
-          <p id="tarot-card-meaning" style="font-size: 0.95rem; line-height: 1.4; color: var(--text-muted); font-style: italic;"></p>
-          <button class="btn btn-outline" onclick="resetTarot()" style="margin-top: 20px;"><span class="k-lbl-en">DRAW ANOTHER</span><span class="k-lbl-hi" style="display:none;">दूसरा ड्रा करें</span></button>
+        <div id="vastu-result-view" style="display:none;">
+          <!-- Live Vastu Profile Summary -->
+          <div class="card" style="background: linear-gradient(135deg, rgba(20, 16, 44, 0.9) 0%, rgba(42, 36, 78, 0.9) 100%); border: 1px solid rgba(142, 111, 214, 0.2); margin-bottom: 20px;">
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; text-align: center;">
+              <div>
+                <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:4px; text-transform:uppercase; letter-spacing:0.5px;"><span class="k-lbl-en">Your Lagna</span><span class="k-lbl-hi" style="display:none;">आपका लग्न</span></div>
+                <strong style="color:var(--gold); font-size:1rem;" id="vastu-lagna-name">Leo / सिंह</strong>
+              </div>
+              <div>
+                <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:4px; text-transform:uppercase; letter-spacing:0.5px;"><span class="k-lbl-en">Core Element</span><span class="k-lbl-hi" style="display:none;">मुख्य तत्व</span></div>
+                <strong style="color:#ff6b6b; font-size:1rem;" id="vastu-element-name">Fire / अग्नि</strong>
+              </div>
+              <div>
+                <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:4px; text-transform:uppercase; letter-spacing:0.5px;"><span class="k-lbl-en">Power Direction</span><span class="k-lbl-hi" style="display:none;">शक्ति की दिशा</span></div>
+                <strong style="color:#5dade2; font-size:1rem;" id="vastu-power-dir">East / पूर्व</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Cards Grid -->
+          <div style="display:grid; grid-template-columns: 1fr; gap: 20px;" id="vastu-cards-container">
+            <!-- 🏠 House Vastu -->
+            <div class="card" style="border-left: 4px solid var(--purple);">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                <span style="font-size:1.4rem;">🏠</span>
+                <h4 style="margin:0; color:#fff;"><span class="k-lbl-en">House & Living Vastu</span><span class="k-lbl-hi" style="display:none;">गृह एवं निवास वास्तु</span></h4>
+              </div>
+              <div id="v-house-text" style="font-size:0.88rem; line-height:1.6; color:var(--text-muted);"></div>
+            </div>
+
+            <!-- 💼 Business Vastu -->
+            <div class="card" style="border-left: 4px solid #5dade2;">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                <span style="font-size:1.4rem;">💼</span>
+                <h4 style="margin:0; color:#fff;"><span class="k-lbl-en">Business & Work Vastu</span><span class="k-lbl-hi" style="display:none;">व्यापार एवं कार्य वास्तु</span></h4>
+              </div>
+              <div id="v-business-text" style="font-size:0.88rem; line-height:1.6; color:var(--text-muted);"></div>
+            </div>
+
+            <!-- 🛌 Sleeping Vastu -->
+            <div class="card" style="border-left: 4px solid #ff6b6b;">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                <span style="font-size:1.4rem;">🛌</span>
+                <h4 style="margin:0; color:#fff;"><span class="k-lbl-en">Sleep & Bedroom Vastu</span><span class="k-lbl-hi" style="display:none;">शयन कक्ष एवं नींद वास्तु</span></h4>
+              </div>
+              <div id="v-sleep-text" style="font-size:0.88rem; line-height:1.6; color:var(--text-muted);"></div>
+            </div>
+
+            <!-- 🍽️ Food Eating Vastu -->
+            <div class="card" style="border-left: 4px solid #2ecc71;">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                <span style="font-size:1.4rem;">🍽️</span>
+                <h4 style="margin:0; color:#fff;"><span class="k-lbl-en">Food Eating Vastu</span><span class="k-lbl-hi" style="display:none;">भोजन ग्रहण करने का वास्तु</span></h4>
+              </div>
+              <div id="v-food-text" style="font-size:0.88rem; line-height:1.6; color:var(--text-muted);"></div>
+            </div>
+
+            <!-- 🚿 Bath Vastu -->
+            <div class="card" style="border-left: 4px solid var(--gold);">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                <span style="font-size:1.4rem;">🚿</span>
+                <h4 style="margin:0; color:#fff;"><span class="k-lbl-en">Bath & Purification Vastu</span><span class="k-lbl-hi" style="display:none;">स्नान एवं शुद्धिकरण वास्तु</span></h4>
+              </div>
+              <div id="v-bath-text" style="font-size:0.88rem; line-height:1.6; color:var(--text-muted);"></div>
+            </div>
+
+            <!-- ✈️ Travel Vastu -->
+            <div class="card" style="border-left: 4px solid #e67e22;">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                <span style="font-size:1.4rem;">✈️</span>
+                <h4 style="margin:0; color:#fff;"><span class="k-lbl-en">Travel & Expansion Directions</span><span class="k-lbl-hi" style="display:none;">यात्रा एवं विस्तार दिशाएं</span></h4>
+              </div>
+              <div id="v-travel-text" style="font-size:0.88rem; line-height:1.6; color:var(--text-muted);"></div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2494,8 +2578,8 @@
         <span><span class="k-lbl-en">Matching</span><span class="k-lbl-hi" style="display:none;">मिलान</span></span>
       </button>
       <button class="nav-item" onclick="switchTab(4, this)">
-        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-        <span><span class="k-lbl-en">Tarot</span><span class="k-lbl-hi" style="display:none;">टैरो</span></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span><span class="k-lbl-en">Vastu</span><span class="k-lbl-hi" style="display:none;">वास्तु</span></span>
       </button>
       <button class="nav-item" onclick="switchTab(5, this)">
         <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm8.32 8.26L12 15.8 3.68 11.26 1.7 10.18l10.3 5.62 10.3-5.62-1.98-1.08z"/></svg>
@@ -7226,12 +7310,18 @@
           generateLalKitabReport();
         }
       }
+      // TAB 4: VASTU - Generate personalized Vastu report
+      if (index === 4) {
+        if (typeof generatePersonalizedVastuReport === 'function') {
+          generatePersonalizedVastuReport();
+        }
+      }
       // Deactivate other tabs
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
       
       // Activate target tab
-      const tabIds = ['tab-home', 'tab-kundli', 'tab-lalkitab', 'tab-matching', 'tab-tarot', 'tab-coach', 'tab-settings'];
+      const tabIds = ['tab-home', 'tab-kundli', 'tab-lalkitab', 'tab-matching', 'tab-vastu', 'tab-coach', 'tab-settings'];
       const targetEl = document.getElementById(tabIds[index]);
       if (targetEl) targetEl.classList.add('active');
       if (btn) btn.classList.add('active');
@@ -8971,6 +9061,192 @@
       setKundliLang(currentAppLang);
     }
 
+    function generatePersonalizedVastuReport() {
+      // If placements not loaded, try to auto-fill first
+      if (!cachedPlacementsList || cachedPlacementsList.length === 0) {
+        // Check if there is stored profile details in localStorage to auto fill and calculate
+        const hasStored = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
+        if (hasStored) {
+          autoFillKundliFromOnboarding();
+        }
+      }
+
+      const notCalc = document.getElementById('vastu-not-calculated-view');
+      const resView = document.getElementById('vastu-result-view');
+
+      if (!cachedPlacementsList || cachedPlacementsList.length === 0) {
+        if (notCalc) notCalc.style.display = 'block';
+        if (resView) resView.style.display = 'none';
+        return;
+      }
+
+      if (notCalc) notCalc.style.display = 'none';
+      if (resView) resView.style.display = 'block';
+
+      // 1. Get core planetary indices
+      const lagnaSign = cachedLagnaSignNum;
+      
+      const moonPl = cachedPlacementsList.find(p => p.name === 'Moon');
+      const moonSign = moonPl ? moonPl.sign : 0;
+
+      const mercuryPl = cachedPlacementsList.find(p => p.name === 'Mercury');
+      const mercuryHouse = mercuryPl ? ((mercuryPl.sign - lagnaSign + 12) % 12) + 1 : 1;
+
+      const jupiterPl = cachedPlacementsList.find(p => p.name === 'Jupiter');
+      const jupHouse = jupiterPl ? ((jupiterPl.sign - lagnaSign + 12) % 12) + 1 : 1;
+
+      const sunPl = cachedPlacementsList.find(p => p.name === 'Sun');
+      const sunHouse = sunPl ? ((sunPl.sign - lagnaSign + 12) % 12) + 1 : 1;
+
+      const lagnaLord = rasiLords[lagnaSign] || "Sun";
+
+      // 2. Set Header Profile Values
+      const elementNamesEn = ["Fire (Agnitattva)", "Earth (Prithvitattva)", "Air (Vayutattva)", "Water (Jalatattva)"];
+      const elementNamesHi = ["अग्नि तत्व", "पृथ्वी तत्व", "वायु तत्व", "जल तत्व"];
+      const elementsMap = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3]; // Aries(Fire)=0, Taurus(Earth)=1...
+      const elIdx = elementsMap[lagnaSign];
+
+      const dirMapEn = { "Sun": "East", "Moon": "North-West", "Mars": "South", "Mercury": "North", "Jupiter": "North-East", "Venus": "South-East", "Saturn": "West", "Rahu": "South-West", "Ketu": "North-East" };
+      const dirMapHi = { "Sun": "पूर्व", "Moon": "उत्तर-पश्चिम", "Mars": "दक्षिण", "Mercury": "उत्तर", "Jupiter": "उत्तर-पूर्व", "Venus": "दक्षिण-पूर्व", "Saturn": "पश्चिम", "Rahu": "दक्षिण-पश्चिम", "Ketu": "उत्तर-पूर्व" };
+      const powerDirEn = dirMapEn[lagnaLord] || "East";
+      const powerDirHi = dirMapHi[lagnaLord] || "पूर्व";
+
+      const lagnaLabel = signNames[lagnaSign] + " / " + signNamesHi[lagnaSign];
+      document.getElementById('vastu-lagna-name').innerText = lagnaLabel;
+      document.getElementById('vastu-element-name').innerText = elementNamesEn[elIdx] + " / " + elementNamesHi[elIdx];
+      document.getElementById('vastu-power-dir').innerText = powerDirEn + " / " + powerDirHi;
+
+      // 3. House & Living Vastu Content
+      const houseVastuData = {
+        0: { // Fire Signs: Aries, Leo, Sag
+          en: `Your physical energy is governed by the <strong>Fire Element (Agnitattva)</strong>. Keep your kitchen or electrical appliances located in the <strong>South-East (Agni zone)</strong> of the house. Paint your rooms in warm peach, light orange, or soft cream colors. Keep your East entrance clear and open to absorb morning solar energy.`,
+          hi: `आपकी शारीरिक ऊर्जा <strong>अग्नि तत्व</strong> द्वारा संचालित होती है। अपने घर की रसोई या बिजली के उपकरणों को <strong>दक्षिण-पूर्व (अग्नि क्षेत्र)</strong> में रखें। कमरों को हल्के आड़ू (peach), हल्के नारंगी या मलाईदार क्रीम रंगों में पेंट करें। सुबह की सौर ऊर्जा को अवशोषित करने के लिए अपने पूर्वी प्रवेश द्वार को खुला और साफ रखें।`
+        },
+        1: { // Earth Signs: Taurus, Virgo, Cap
+          en: `Your body is aligned with the <strong>Earth Element (Prithvitattva)</strong>. Keep the <strong>South-West (Nairutya corner)</strong> of your home heavy and stable by placing massive cupboards, wardrobes, or storage units there. Paint the walls in grounding sand-brown, light yellow, or warm ivory. Ensure the center of the home (Brahmasthan) remains completely open.`,
+          hi: `आपका शरीर <strong>पृथ्वी तत्व</strong> के साथ संरेखित है। भारी अलमारियों, वार्डरोब या स्टोरेज यूनिट्स को <strong>दक्षिण-पश्चिम (नैऋत्य कोण)</strong> में रखकर इस क्षेत्र को भारी और स्थिर रखें। दीवारों को रेतीले-भूरे, हल्के पीले या हाथीदांत (ivory) रंगों में पेंट करें। सुनिश्चित करें कि घर का केंद्र (ब्रह्मस्थान) पूरी तरह खाली रहे।`
+        },
+        2: { // Air Signs: Gemini, Libra, Aqu
+          en: `Your mental focus is governed by the <strong>Air Element (Vayutattva)</strong>. The <strong>North-West (Vayu corner)</strong> of your living space rules communication and relationships. Keep this corner highly ventilated by opening windows daily or using a metal wind chime here. Paint in refreshing pastel green, light gray, or off-white.`,
+          hi: `आपका मानसिक ध्यान <strong>वायु तत्व</strong> द्वारा संचालित होता. है। आपके रहने की जगह का <strong>उत्तर-पश्चिम (वायव्य कोण)</strong> संचार और संबंधों को नियंत्रित करता है। दैनिक रूप से खिड़कियां खोलकर या धातु के विंड चाइम का उपयोग करके इस क्षेत्र को हवादार रखें। दीवारों पर पेस्टल ग्रीन, हल्के ग्रे या ऑफ-व्हाइट रंगों का प्रयोग करें।`
+        },
+        3: { // Water Signs: Cancer, Sco, Pis
+          en: `Your emotions are aligned with the <strong>Water Element (Jalatattva)</strong>. The <strong>North-East (Ishan corner)</strong> is highly sacred for you and represents spiritual peace. Keep this corner absolutely clean, clutter-free, and light. Place a glass bowl with fresh water or a small indoor water fountain here. Paint in serene light blue, silver, or pure white.`,
+          hi: `आपकी भावनाएं <strong>जल तत्व</strong> के साथ संरेखित हैं। आपके लिए <strong>उत्तर-पूर्व (ईशान कोण)</strong> अत्यंत पवित्र है और आध्यात्मिक शांति का प्रतिनिधित्व करता है। इस कोने को पूरी तरह से साफ, हल्का और खाली रखें। यहाँ ताजे पानी का कांच का कटोरा या छोटा फव्वारा रखें। शांत हल्के नीले, चांदी या शुद्ध सफेद रंगों से सजाएं।`
+        }
+      };
+      
+      document.getElementById('v-house-text').innerHTML = `
+        <p class="k-lbl-en">${houseVastuData[elIdx].en}</p>
+        <p class="k-lbl-hi" style="display:none;">${houseVastuData[elIdx].hi}</p>
+      `;
+
+      // 4. Business & Work Vastu Content
+      let busEn = '', busHi = '';
+      if ([1, 5, 9].includes(mercuryHouse)) {
+        busEn = `<strong>Best Office Direction: East (पूर्व)</strong>. Sit facing East while working to activate your Mercury placement. Keep your laptop and primary work documents on the East/North side of your table. Place a small brass Sun figurine or a crystal pyramid here to boost intellectual leadership.`;
+        busHi = `<strong>सर्वश्रेष्ठ कार्यालय दिशा: पूर्व (East)</strong>। अपने बुध की स्थिति को सक्रिय करने के लिए काम करते समय पूर्व की ओर मुंह करके बैठें। अपने लैपटॉप और मुख्य दस्तावेजों को टेबल के उत्तर-पूर्वी कोने पर रखें। बौद्धिक नेतृत्व को बढ़ावा देने के लिए यहाँ तांबे के सूर्य की छोटी मूर्ति या क्रिस्टल पिरामिड रखें।`;
+      } else if ([2, 6, 10].includes(mercuryHouse)) {
+        busEn = `<strong>Best Office Direction: North (उत्तर)</strong>. Sit facing North while managing finances, signings, or business deals. Place your cash box or safe locker in the South-West of your office cabin, opening towards the North. Keep a green aventurine gem tree on the North side of your desk.`;
+        busHi = `<strong>सर्वश्रेष्ठ कार्यालय दिशा: उत्तर (North)</strong>। वित्त, हस्ताक्षर या व्यावसायिक सौदों का प्रबंधन करते समय उत्तर की ओर मुंह करके बैठें। अपनी तिजोरी या कैश बॉक्स को केबिन के दक्षिण-पश्चिम कोने में रखें ताकि वह उत्तर की ओर खुले। डेस्क के उत्तरी भाग में एक ग्रीन एवेन्शुरिन का पेड़ रखें।`;
+      } else if ([3, 7, 11].includes(mercuryHouse)) {
+        busEn = `<strong>Best Office Direction: West (पश्चिम)</strong>. Sit facing West while consulting partners, sales calls, or negotiations. Place all heavy files and cabinets in the South-West sector of the room. Use steel-gray or dark blue desk accessories to ground decision-making.`;
+        busHi = `<strong>सर्वश्रेष्ठ कार्यालय दिशा: पश्चिम (West)</strong>। साझेदारों से परामर्श, सेल्स कॉल या बातचीत करते समय पश्चिम की ओर मुंह करके बैठें। भारी फाइलों और अलमारियों को कमरे के दक्षिण-पश्चिम क्षेत्र में रखें। निर्णय क्षमता को मजबूत करने के लिए स्टील-ग्रे या गहरे नीले रंग की डेस्क एक्सेसरीज का उपयोग करें।`;
+      } else {
+        busEn = `<strong>Best Office Direction: North-East (उत्तर-पूर्व)</strong>. Sit facing North-East for research, corporate planning, and strategy. Ensure your workspace is clean, quiet, and illuminated with natural light. Keep a bowl of sea salt on your table to absorb work-related anxieties.`;
+        busHi = `<strong>सर्वश्रेष्ठ कार्यालय दिशा: उत्तर-पूर्व (North-East)</strong>। अनुसंधान, योजना और रणनीति बनाते समय उत्तर-पूर्व की ओर मुंह करके बैठें। सुनिश्चित करें कि आपका कार्यक्षेत्र साफ, शांत और प्राकृतिक रोशनी से प्रकाशित हो। काम की चिंताओं को दूर करने के लिए टेबल पर समुद्री नमक का कटोरा रखें।`;
+      }
+
+      document.getElementById('v-business-text').innerHTML = `
+        <p class="k-lbl-en">${busEn}</p>
+        <p class="k-lbl-hi" style="display:none;">${busHi}</p>
+      `;
+
+      // 5. Sleeping Vastu Content
+      let sleepEn = '', sleepHi = '';
+      if ([0, 2, 4, 6, 8, 10].includes(moonSign)) { // Fire / Air signs
+        sleepEn = `<strong>Auspicious Head Orientation: South (दक्षिण)</strong>. Sleeping with your head pointing South anchors your high-frequency air/fire mental energy, drawing positive magnetic grounding currents from the earth to promote deep sleep. Decorate with soothing rose quartz spheres in the South-West.`;
+        sleepHi = `<strong>शुभ सिर की दिशा: दक्षिण (South)</strong>। दक्षिण दिशा में सिर करके सोने से आपकी उच्च आवृत्ति वाली वायु/अग्नि की मानसिक ऊर्जा शांत होती है, जिससे पृथ्वी से सकारात्मक चुंबकीय तरंगें मिलती हैं। बेडरूम के दक्षिण-पश्चिम कोने में रोज़ क्वार्ट्ज क्रिस्टल रखें।`;
+      } else { // Earth / Water signs
+        sleepEn = `<strong>Auspicious Head Orientation: East (पूर्व)</strong>. Sleeping with your head pointing East invites spiritually vitalizing solar rays into your crown chakra, helping you overcome water/earth heaviness, lethargy, or brain fog upon waking. Keep mirrors away from reflecting the bed.`;
+        sleepHi = `<strong>शुभ सिर की दिशा: पूर्व (East)</strong>। पूर्व दिशा में सिर करके सोने से आपके क्राउन चक्र में सौर किरणें प्रवेश करती हैं, जिससे जागने पर मानसिक भारीपन, सुस्ती या ब्रेन फॉग दूर होता है। सुनिश्चित करें कि कोई भी शीशा आपके बिस्तर को न दर्शाए।`;
+      }
+
+      document.getElementById('v-sleep-text').innerHTML = `
+        <p class="k-lbl-en">${sleepEn}</p>
+        <p class="k-lbl-hi" style="display:none;">${sleepHi}</p>
+      `;
+
+      // 6. Food Eating Vastu Content
+      let foodEn = '', foodHi = '';
+      if ([1, 2, 5, 9].includes(jupHouse)) {
+        foodEn = `<strong>Meal Eating Direction: Face East (पूर्व)</strong>. Sit facing East while eating to align your digestive fire (Jatharagni) with solar energy, ensuring complete nutrient absorption. Use brass or copper plates for maximum health benefit.`;
+        foodHi = `<strong>भोजन करने की शुभ दिशा: पूर्व की ओर (East)</strong>। भोजन करते समय पूर्व की ओर मुंह करके बैठें ताकि आपकी पाचन अग्नि (जठराग्नि) सौर ऊर्जा के साथ संरेखित हो। अधिकतम स्वास्थ्य लाभ के लिए पीतल या तांबे के बर्तनों का प्रयोग करें।`;
+      } else if ([3, 6, 7, 11].includes(jupHouse)) {
+        foodEn = `<strong>Meal Eating Direction: Face North (उत्तर)</strong>. Sit facing North while eating to energize your intelligence and wealth consciousness. Use silver or glass dinnerware, and ensure the cook faces East while cooking.`;
+        foodHi = `<strong>भोजन करने की शुभ दिशा: उत्तर की ओर (North)</strong>। बुद्धि और धन चेतना को जागृत करने के लिए भोजन करते समय उत्तर की ओर मुंह करके बैठें। चांदी या कांच के बर्तनों का प्रयोग करें, और खाना बनाते समय रसोइये का मुख पूर्व की ओर होना चाहिए।`;
+      } else {
+        foodEn = `<strong>Meal Eating Direction: Face West (पश्चिम)</strong>. Sit facing West while eating to strengthen your physical immunity and ward off negative energies. Use earthen clay plates or heavy brass vessels.`;
+        foodHi = `<strong>भोजन करने की शुभ दिशा: पश्चिम की ओर (West)</strong>। शारीरिक रोग प्रतिरोधक क्षमता बढ़ाने के लिए भोजन करते समय पश्चिम की ओर मुंह करके बैठें। मिट्टी के बर्तनों या भारी पीतल के बर्तनों का प्रयोग करें।`;
+      }
+
+      document.getElementById('v-food-text').innerHTML = `
+        <p class="k-lbl-en">${foodEn}</p>
+        <p class="k-lbl-hi" style="display:none;">${foodHi}</p>
+      `;
+
+      // 7. Bath & Purification Vastu Content
+      let bathEn = '', bathHi = '';
+      if ([1, 2, 3].includes(sunHouse)) {
+        bathEn = `<strong>Purification Vastu:</strong> Bathe with warm water using a copper or brass vessel. Infuse a pinch of red sandalwood powder or rose petals into the water to balance the high solar energy in your upper houses.`;
+        bathHi = `<strong>शुद्धिकरण वास्तु:</strong> तांबे या पीतल के बर्तन का उपयोग करके गर्म पानी से स्नान करें। अपने ऊपरी भावों में उच्च सौर ऊर्जा को संतुलित करने के लिए पानी में एक चुटकी लाल चंदन पाउडर या गुलाब की पंखुड़ियां मिलाएं।`;
+      } else if ([4, 5, 6].includes(sunHouse)) {
+        bathEn = `<strong>Purification Vastu:</strong> Bathe before 08:00 AM using lukewarm water to align with early sun rays. Add a few drops of Gangajal or rose water. Keep the bathroom floor dry and well-ventilated.`;
+        bathHi = `<strong>शुद्धिकरण वास्तु:</strong> सुबह की सौर किरणों के साथ तालमेल बिठाने के लिए सुबह 8:00 बजे से पहले गुनगुने पानी से स्नान करें। पानी में गंगाजल या गुलाब जल की कुछ बूंदें मिलाएं। बाथरूम के फर्श को सूखा और हवादार रखें।`;
+      } else if ([7, 8, 9].includes(sunHouse)) {
+        bathEn = `<strong>Purification Vastu:</strong> Bathe with cool water to activate nervous system recovery. Infuse water with a drop of sandalwood oil or green cardamom seeds. Ensure bathroom windows open to North/East.`;
+        bathHi = `<strong>शुद्धिकरण वास्तु:</strong> तंत्रिका तंत्र की रिकवरी को सक्रिय करने के लिए ठंडे या सामान्य पानी से स्नान करें। पानी में चंदन के तेल की एक बूंद या इलायची के दाने डालें। सुनिश्चित करें कि बाथरूम की खिड़की उत्तर या पूर्व में खुले।`;
+      } else {
+        bathEn = `<strong>Purification Vastu:</strong> Bathe with warm water mixed with a pinch of sea salt or Epsom salt. This dissolves external negative energy fields (aura cleansing) and neutralizes transit blockages in your karmic 12th/11th houses.`;
+        bathHi = `<strong>शुद्धिकरण वास्तु:</strong> एक चुटकी समुद्री नमक या सेंधा नमक (Epsom salt) मिश्रित गर्म पानी से स्नान करें। यह बाहरी नकारात्मक ऊर्जा क्षेत्रों को नष्ट करता है (आभा की सफाई) और आपके 12वें/11वें भावों के अवरोधों को दूर करता है।`;
+      }
+
+      document.getElementById('v-bath-text').innerHTML = `
+        <p class="k-lbl-en">${bathEn}</p>
+        <p class="k-lbl-hi" style="display:none;">${bathHi}</p>
+      `;
+
+      // 8. Travel & Expansion Directions Content
+      const travelDirectionsEn = {
+        "Sun": "East (पूर्व) — favorable for authority, government dealings, and expansion.",
+        "Moon": "North-West (उत्तर-पश्चिम) — favorable for creative travel, liquids trade, and partner meetings.",
+        "Mars": "South (दक्षिण) — favorable for land acquisitions, engineering ventures, and administrative tasks.",
+        "Mercury": "North (उत्तर) — highly favorable for trading, marketing negotiations, and business scaling.",
+        "Jupiter": "North-East (उत्तर-पूर्व) — highly auspicious for education, spiritual journeys, and advisory expansions.",
+        "Venus": "South-East (दक्षिण-पूर्व) — favorable for arts, luxury branding, female partnerships, and relationships.",
+        "Saturn": "West (पश्चिम) — favorable for long-term investments, logistics, labor setup, and structural ventures."
+      };
+      const travelDirectionsHi = {
+        "Sun": "पूर्व (East) — सरकारी कार्यों, सत्ता प्राप्त करने और नए विस्तार के लिए अत्यधिक शुभ।",
+        "Moon": "उत्तर-पश्चिम (North-West) — रचनात्मक कार्यों, तरल व्यापार और साझेदारी बैठकों के लिए अनुकूल।",
+        "Mars": "दक्षिण (South) — भूमि खरीद, तकनीकी कार्यों और प्रशासनिक डीलिंग के लिए अनुकूल।",
+        "Mercury": "उत्तर (North) — व्यापार, विपणन वार्ताओं और नए उद्यमों के विस्तार के लिए सबसे शुभ।",
+        "Jupiter": "उत्तर-पूर्व (North-East) — शिक्षा, आध्यात्मिक यात्राओं और सलाहकार विस्तार के लिए सर्वश्रेष्ठ।",
+        "Venus": "दक्षिण-पूर्व (South-East) — कला, लक्जरी ब्रांडिंग, और संबंधों के विस्तार के लिए उपयुक्त।",
+        "Saturn": "पश्चिम (West) — दीर्घकालिक निवेश, रसद (logistics) और श्रम-संबंधी कार्यों के लिए अनुकूल।"
+      };
+      const tEn = travelDirectionsEn[lagnaLord] || travelDirectionsEn["Sun"];
+      const tHi = travelDirectionsHi[lagnaLord] || travelDirectionsHi["Sun"];
+
+      document.getElementById('v-travel-text').innerHTML = `
+        <p class="k-lbl-en">Based on your Ascendant Lord (<strong>${lagnaLord}</strong>), your auspicious travel and business expansion direction is <strong>${tEn}</strong></p>
+        <p class="k-lbl-hi" style="display:none;">आपके लग्न स्वामी (<strong>${planetNamesHi[lagnaLord] || lagnaLord}</strong>) के आधार पर, आपके लिए शुभ यात्रा और व्यावसायिक विस्तार की दिशा <strong>${tHi}</strong> है।</p>
+      `;
+
+      // 9. Sync language classes
+      setKundliLang(currentAppLang);
+    }
+
     function drawChart() {
       const activePlacements = getActiveChartPlacements();
       if (!activePlacements || activePlacements.length === 0) return;
@@ -9131,26 +9407,7 @@
     }
 
     // 4. TAROT INTERACTIVE
-    const tarotCards = [
-      { name: "The Fool", arcana: "Major Arcana (0)", meaning: "A day of fresh beginnings, clean slates, and spontaneity. The cosmos is urging you to take a leap of faith." },
-      { name: "The Magician", arcana: "Major Arcana (I)", meaning: "You hold the creative focus and active power to manifest your goals today. Focus on active creation." },
-      { name: "The High Priestess", arcana: "Major Arcana (II)", meaning: "Silence and inner intuition are highlighted. Go within for the answers you seek." }
-    ];
 
-    function drawTarot(idx) {
-      const card = tarotCards[idx % tarotCards.length];
-      document.getElementById('tarot-deck').style.display = 'none';
-      
-      document.getElementById('tarot-card-name').innerText = card.name;
-      document.getElementById('tarot-card-arcana').innerText = card.arcana;
-      document.getElementById('tarot-card-meaning').innerText = card.meaning;
-      document.getElementById('tarot-result').style.display = 'block';
-    }
-
-    function resetTarot() {
-      document.getElementById('tarot-result').style.display = 'none';
-      document.getElementById('tarot-deck').style.display = 'flex';
-    }
 
     // 5. SYSTEM SETTINGS
         function changeLanguage() {
