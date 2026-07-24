@@ -5503,15 +5503,16 @@
             return;
           }
 
-          // RULE 4 (STRICT): If authenticated AND Supabase profile EXISTS → dashboard always.
-          // If authenticated BUT no Supabase profile → new user → onboarding path.
+          // RULE 4 (STRICT): If authenticated AND Supabase profile EXISTS (or local profile exists) → dashboard always.
+          // If authenticated BUT no Supabase profile & no local profile → new user → onboarding path.
           if (validBackendUser) {
-            if (cloudProfileExists) {
+            const hasLocalProfile = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
+            if (cloudProfileExists || hasLocalProfile) {
               if (onboarding) onboarding.style.display = 'none';
               if (appLayout) appLayout.style.display = 'block';
               if (typeof initApp === 'function') initApp();
             } else {
-              // Genuinely new user — no profile row in DB yet
+              // Genuinely new user — no profile row in DB yet and no local cache
               if (appLayout) appLayout.style.display = 'none';
               if (onboarding) onboarding.style.display = 'flex';
               showOnboardingStep('select-path');
@@ -5586,11 +5587,11 @@
         const { data: { user } } = await supabaseClient.auth.getUser();
         if (!user) return;
 
-        const name = localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || 'Seeker';
+        const name = (localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || 'Seeker').trim() || 'Seeker';
         const gender = localStorage.getItem('user_gender') || localStorage.getItem('kundli_gender') || 'M';
         const dob = localStorage.getItem('user_dob') || localStorage.getItem('kundli_date') || '1990-01-01';
         const tob = localStorage.getItem('user_tob') || localStorage.getItem('kundli_time') || '12:00';
-        const pob = localStorage.getItem('user_pob') || localStorage.getItem('kundli_city') || 'New Delhi';
+        const pob = (localStorage.getItem('user_pob') || localStorage.getItem('kundli_city') || 'New Delhi').trim() || 'New Delhi';
         const goal = localStorage.getItem('user_goal') || 'job';
         const onboardingPath = localStorage.getItem('onboarding_path') || 'single';
 
@@ -5599,17 +5600,17 @@
         let tz = 5.5;
 
         if (typeof coachSelectedCity !== 'undefined' && coachSelectedCity && coachSelectedCity.lat) {
-          lat = parseFloat(coachSelectedCity.lat);
-          lng = parseFloat(coachSelectedCity.lng);
-          tz = parseFloat(coachSelectedCity.tz || 5.5);
+          lat = parseFloat(coachSelectedCity.lat) || 28.6139;
+          lng = parseFloat(coachSelectedCity.lng) || 77.2090;
+          tz = parseFloat(coachSelectedCity.tz || 5.5) || 5.5;
         } else if (typeof onboardingSelectedCity !== 'undefined' && onboardingSelectedCity && onboardingSelectedCity.lat) {
-          lat = parseFloat(onboardingSelectedCity.lat);
-          lng = parseFloat(onboardingSelectedCity.lng);
-          tz = parseFloat(onboardingSelectedCity.tz || 5.5);
+          lat = parseFloat(onboardingSelectedCity.lat) || 28.6139;
+          lng = parseFloat(onboardingSelectedCity.lng) || 77.2090;
+          tz = parseFloat(onboardingSelectedCity.tz || 5.5) || 5.5;
         } else {
-          lat = parseFloat(localStorage.getItem('user_lat') || '28.6139');
-          lng = parseFloat(localStorage.getItem('user_lng') || '77.2090');
-          tz = parseFloat(localStorage.getItem('user_timezone') || '5.5');
+          lat = parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139;
+          lng = parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090;
+          tz = parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5;
         }
 
         const activeGoalsPayload = {
@@ -5619,9 +5620,9 @@
           property_number: localStorage.getItem('property_number') || '',
           property_type: localStorage.getItem('property_type') || '',
           property_city: localStorage.getItem('property_city') || '',
-          user_streak: parseInt(localStorage.getItem('user_streak') || '0'),
-          user_xp: parseInt(localStorage.getItem('user_xp') || '0'),
-          user_level: parseInt(localStorage.getItem('user_level') || '1'),
+          user_streak: parseInt(localStorage.getItem('user_streak') || '0') || 0,
+          user_xp: parseInt(localStorage.getItem('user_xp') || '0') || 0,
+          user_level: parseInt(localStorage.getItem('user_level') || '1') || 1,
           user_moon_rashi_idx: localStorage.getItem('user_moon_rashi_idx') || '',
           karma_daily_roadmap_history: localStorage.getItem('karma_daily_roadmap_history') || '{}'
         };
@@ -9456,16 +9457,17 @@
 
             const onboardingScreen = document.getElementById('onboarding-screen');
             const appLayout = document.getElementById('app-layout');
-            // STRICT RULE: Use `restored` boolean (Supabase profile EXISTS) as the ONLY routing truth.
-            // Never check localStorage here — it is cleared on logout and may be stale.
+            // STRICT RULE: Use `restored` boolean (Supabase profile EXISTS) as the ONLY routing truth when local cache is absent.
+            // If local cache is present, bypass query to avoid loading delays.
+            const hasLocalCache = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
             restoreProfileFromCloud(session.user.id).then((restored) => {
               const appVisible = appLayout && (appLayout.style.display === 'block' || appLayout.style.display === 'flex');
               if (!appVisible) {
-                if (restored) {
-                  // Profile EXISTS in Supabase DB → go to dashboard always
+                if (restored || hasLocalCache) {
+                  // Profile EXISTS in Supabase DB OR local cache exists → go to dashboard always
                   openAppDashboard();
                 } else {
-                  // No profile row in DB → genuinely new user → onboarding
+                  // No profile row in DB AND no local cache → genuinely new user → onboarding
                   if (onboardingScreen) onboardingScreen.style.display = 'flex';
                   if (appLayout) appLayout.style.display = 'none';
                   showOnboardingStep('select-path');
