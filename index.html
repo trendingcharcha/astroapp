@@ -3290,6 +3290,217 @@
       const propertyType = localStorage.getItem('property_type') || 'home';
       const propertyCity = localStorage.getItem('property_city') || cityName;
 
+      // Practical Actions Database
+      const practicalActions = {
+        "job": [
+          `Open job boards (Naukri, LinkedIn, or specialized portals) and apply to at least 3 relevant roles matching your profile as a ${profession}.`,
+          `Rewrite your resume headline to explicitly emphasize your key technical competencies as a ${profession}.`,
+          `Identify 5 recruitment managers in the ${profession} domain on LinkedIn and send tailored connection requests.`,
+          `Spend 45 minutes upskilling - learn a trending tool or concept required for advanced ${profession} roles.`,
+          `Record your daily progress: list 3 applications sent today and track response timelines.`,
+          `Ask one senior colleague, mentor, or professional contact for a candid review of your resume or interview performance.`
+        ],
+        "debt": [
+          `List all your active debts in a spreadsheet, ordering them by interest rate - focus extra payments on highest-interest debt first (Avalanche method).`,
+          `Review your ${profession} work expenses and cancel one non-essential subscription or service today.`,
+          `Contact one creditor or bank representative to negotiate a lower interest rate, consolidated plan, or fee waiver.`,
+          `Set aside a small emergency buffer (Rs. 500-1000) before any discretionary spending today.`,
+          `Set up an automatic monthly SIP (Systematic Investment Plan) of any amount to a debt repayment fund.`,
+          `Calculate your total debt-to-income ratio and write out a 3-month debt clearance milestones list.`
+        ],
+        "marriage": [
+          isSingleMarriage ?
+            `Take 15 minutes to journal your ideal partner qualities compatible with your lifestyle as a ${profession}.` :
+            `Take 15 minutes to write down one quality you appreciate most about your partner and share it with them today.`,
+          isSingleMarriage ?
+            `Participate in a community club, hobby class, or professional networking event to meet people organically.` :
+            `Plan one small shared activity or date this week that you both enjoy equally.`,
+          isSingleMarriage ?
+            `Consult with a trusted family elder or astrologer about favorable marriage muhurtas (auspicious timings) for your horoscope.` :
+            `Have an honest 15-minute conversation with your partner about your shared vision for the next 12 months.`,
+          isSingleMarriage ?
+            `Reach out to 2 prospective matches on matrimonial or social platforms with a personalized and respectful message.` :
+            `Perform one shared routine task (like cooking or organizing space) together to strengthen cooperative vibrations.`,
+          isSingleMarriage ?
+            `Refine your personal online matrimonial profiles with fresh, professional portraits and updated descriptions.` :
+            `Set aside 10 minutes to discuss mutual financial allocations or joint asset targets for this quarter.`,
+          isSingleMarriage ?
+            `Spend 20 minutes updating your personal budget ledger to prepare for upcoming life goals.` :
+            `Apologize or resolve one minor outstanding conflict with your partner with complete empathy.`
+        ],
+        "custom_job": [
+          `Update your professional profile headline, emphasizing skills as a ${profession}.`,
+          `Identify 3 target companies and apply to their openings today.`,
+          `Connect with 3 managers or peers in your field on LinkedIn.`,
+          `Spend 30 minutes upgrading your skills on current tools.`
+        ],
+        "custom_money": [
+          `List all active monthly subscriptions and cancel at least one non-essential service today.`,
+          `Create a detailed weekly expense tracker to review cash flow limits.`,
+          `Put a fixed, small amount of savings into a separate bank account today.`,
+          `Contact a financial advisor or creditor to discuss interest options.`
+        ],
+        "custom_marriage": [
+          `Write down three qualities you seek or appreciate in a long-term partner.`,
+          `Plan a small, warm connection gesture or communication step today.`,
+          `Clean the South-West relationship zone of your room to remove heavy clutter.`,
+          `Speak with a family elder or partner about relationship plans.`
+        ],
+        "custom_education": [
+          `Define a specific study goal for today and study for at least 2 hours in focused 30-minute blocks (Pomodoro technique).`,
+          `Write a concise summary of the most complex topic you studied today in your own words.`,
+          `Practice solving 3 sample questions or test exercises related to your target subject to test your grasp.`,
+          `Organize your study table, clear all non-essential items, and keep only current reference books to boost focus.`
+        ],
+        "custom_health": [
+          `Drink at least 3 liters of water today and record your consumption to flush bodily toxins.`,
+          `Spend 25 minutes doing simple stretching or walking outdoors to release physical and mental stress.`,
+          `Research or schedule an appointment with a professional specialist regarding your health concern: "${issueText}".`,
+          `Write down a daily menu focusing on clean, unprocessed, high-fiber food for the next 7 days.`
+        ],
+        "custom_visa": [
+          `Log in to the official immigration portal and review the checklist status of your issue: "${issueText}".`,
+          `Double-check all submission files to ensure stamps, signatures, and dates are valid.`,
+          `Read or post on an immigration forum/community to check recent processing times for similar travel cases.`,
+          `Prepare all travel documents in a secure folder, and update your personal travel budget spreadsheet.`
+        ],
+        "custom_legal": [
+          `Draft a concise status update email to your legal consultant/lawyer regarding: "${issueText}".`,
+          `Organize all evidentiary documents and correspondence chronologically in a digital folder today.`,
+          `List 3 key potential compromise points or resolution outcomes for this dispute to discuss next.`,
+          `Spend 20 minutes reviewing current laws or similar case precedents online to stay informed.`
+        ],
+        "custom_mental": [
+          `Dedicate 10 minutes to deep breathing exercises (Pranayama) or mindfulness meditation to calm your mind today.`,
+          `Write down 3 items you are deeply grateful for in a journal to shift focus from: "${issueText}".`,
+          `Reach out and talk to a supportive friend, family member, or professional counselor to express your feelings.`,
+          `Disconnect from social media and electronic screens for at least 2 hours before going to sleep tonight.`
+        ],
+        "custom_property": [
+          `Open property finder apps or portals and shortlist at least 3 homes/plots matching your budget today.`,
+          `Write down a detailed checklist of your absolute requirements (e.g. location, distance to work, room count).`,
+          `Contact at least 2 real estate brokers or property listings owners to schedule site visits for this week.`,
+          `Review your bank balance or calculate mortgage/home loan affordability limits on your banking dashboard.`
+        ],
+        "custom_pregnancy": [
+          `Prepare a nutritious diet chart rich in folic acid, iron, and green vegetables, and track your meals today.`,
+          `Research and shortlist highly rated gynecologists or maternity hospitals in your local city area.`,
+          `Spend 20 minutes doing light breathing exercises (Pranayama) or mindfulness yoga to reduce bodily cortisol.`,
+          `Create a daily health tracking diary to log your fertility, body temperature, or prenatal vitamin intakes.`
+        ],
+        "custom_general": [
+          `Write down a clear list of 3 specific actions you can take today to address the issue: "${issueText}".`,
+          `Execute the most immediate or simplest action from your list today to gain momentum.`,
+          `Dedicate 30 minutes to search online or read books for solutions from experts who solved the issue: "${issueText}".`,
+          `Create a tracking file or note to record daily improvements and actions related to this goal.`
+        ]
+      };
+
+      const practicalActionsHi = {
+        "job": [
+          `नौकरी बोर्ड (Naukri, LinkedIn आदि) खोलें और ${profession} के रूप में अपनी प्रोफाइल से मेल खाने वाली कम से कम 3 भूमिकाओं के लिए आवेदन करें।`,
+          `${profession} के रूप में अपनी प्रमुख तकनीकी दक्षताओं पर जोर देने के लिए अपनी रिज्यूम हेडलाइन को अपडेट करें।`,
+          `LinkedIn पर ${profession} क्षेत्र के 5 भर्ती प्रबंधकों की पहचान करें और संबंध अनुरोध भेजें।`,
+          `45 मिनट कौशल विकास में लगाएं - ${profession} भूमिकाओं के लिए आवश्यक एक नया टूल या अवधारणा सीखें।`,
+          `अपनी दैनिक प्रगति रिकॉर्ड करें: आज भेजे गए 3 आवेदनों की सूची बनाएं और प्रतिक्रिया समय ट्रैक करें।`,
+          `अपने रिज्यूम या इंटरव्यू प्रदर्शन की निष्पक्ष समीक्षा के लिए किसी वरिष्ठ सहयोगी या संपर्क से पूछें।`
+        ],
+        "debt": [
+          `अपने बहीखाते में सभी ऋणों को ब्याज दर के अनुसार सूचीबद्ध करें - सबसे अधिक ब्याज वाले ऋण के भुगतान पर ध्यान दें (हिमस्खलन विधि)।`,
+          `${profession} के रूप में अपने कार्य खर्चों की समीक्षा करें और आज एक गैर-आवश्यक सदस्यता या सेवा को रद्द करें।`,
+          `कम ब्याज दर या समेकित योजना पर बातचीत करने के लिए एक लेनदार या बैंक प्रतिनिधि से संपर्क करें।`,
+          `आज किसी भी अतिरिक्त खर्च से पहले एक छोटा आपातकालीन बफर (रु. 500-1000) अलग रखें।`,
+          `ऋण भुगतान कोष के लिए किसी भी राशि का स्वचालित मासिक सिप (SIP) स्थापित करें।`,
+          `अपनी आय-से-ऋण अनुपात की गणना करें और 3-महीने की ऋण निकासी मील के पत्थर की सूची लिखें।`
+        ],
+        "marriage": [
+          isSingleMarriage ?
+            `${profession} के रूप में अपनी जीवनशैली के अनुकूल आदर्श साथी के गुणों को लिखने के लिए 15 मिनट का समय लें।` :
+            `अपने साथी के बारे में एक गुण लिखने के लिए 15 मिनट का समय लें जिसे आप सबसे अधिक पसंद करते हैं और आज उनके साथ साझा करें।`,
+          isSingleMarriage ?
+            `लोगों से मिलने के लिए किसी सामुदायिक क्लब, हॉबी क्लास या पेशेवर नेटवर्किंग कार्यक्रम में भाग लें।` :
+            `इस सप्ताह एक छोटी साझा गतिविधि या डेट की योजना बनाएं जिसका आप दोनों समान रूप से आनंद लें।`,
+          isSingleMarriage ?
+            `अपनी कुंडली के लिए अनुकूल विवाह मुहूर्त (शुभ समय) के बारे में किसी भरोसेमंद परिवार के बुजुर्ग या ज्योतिषी से सलाह लें।` :
+            `अगले 12 महीनों के लिए अपने साझा दृष्टिकोण के बारे में अपने साथी के साथ 15 मिनट की ईमानदार बातचीत करें।`,
+          isSingleMarriage ?
+            `एक व्यक्तिगत और संदेश के साथ वैवाहिक या सामाजिक मंचों पर 2 संभावित मैचों से संपर्क करें।` :
+            `सहयोगात्मक स्पंदनों को मजबूत करने के लिए एक साथ मिलकर एक नियमित घरेलू कार्य (जैसे खाना बनाना या जगह व्यवस्थित करना) करें।`,
+          isSingleMarriage ?
+            `ताजा पेशेवर चित्रों और अद्यतन विवरणों के साथ अपने व्यक्तिगत वैवाहिक प्रोफाइल को परिष्कृत करें।` :
+            `इस तिमाही के लिए आपसी वित्तीय आवंटन या संयुक्त संपत्ति लक्ष्यों पर चर्चा करने के लिए 10 मिनट का समय निकालें।`,
+          isSingleMarriage ?
+            `आगामी जीवन लक्ष्यों की तैयारी के लिए अपने व्यक्तिगत बजट बहीखाते को अपडेट करने में 20 मिनट का समय लगाएं।` :
+            `पूर्ण सहानुभूति के साथ अपने साथी के साथ किसी भी छोटे विवाद या गलतफहमी को तुरंत हल करें।`
+        ],
+        "custom_job": [
+          `${profession} के रूप में कौशल पर जोर देते हुए अपने पेशेवर प्रोफाइल को अपडेट करें।`,
+          `3 लक्षित कंपनियों की पहचान करें और आज ही उनके यहां आवेदन करें।`,
+          `LinkedIn पर अपने क्षेत्र के 3 प्रबंधकों या साथियों से जुड़ें।`,
+          `कौशल उन्नयन के लिए वर्तमान टूल्स सीखने में 30 मिनट का समय लगाएं।`
+        ],
+        "custom_money": [
+          `सक्रिय मासिक सदस्यताओं की सूची बनाएं और आज ही कम से कम एक गैर-आवश्यक सेवा रद्द करें।`,
+          `नकदी प्रवाह सीमा की समीक्षा के लिए एक विस्तृत साप्ताहिक व्यय ट्रैकर बनाएं।`,
+          `बचत की एक निश्चित, छोटी राशि आज ही एक अलग बैंक खाते में रखें।`,
+          `ब्याज विकल्पों पर चर्चा करने के लिए एक वित्तीय सलाहकार या लेनदार से संपर्क करें।`
+        ],
+        "custom_marriage": [
+          `दीर्घकालिक साथी में जो तीन गुण आप चाहते हैं या पसंद करते हैं उन्हें लिखें।`,
+          `आज ही एक छोटे, मधुर संबंध हाव-भाव या संचार कदम की योजना बनाएं।`,
+          `कबाड़ हटाने के लिए अपने बेडरूम के दक्षिण-पश्चिम संबंध क्षेत्र को साफ करें।`,
+          `पारिवारिक बुजुर्ग या साथी से संबंध योजनाओं के बारे में बात करें।`
+        ],
+        "custom_education": [
+          `आज के लिए एक विशिष्ट अध्ययन लक्ष्य परिभाषित करें और केंद्रित 30-मिनट के ब्लॉकों (पोमोडोरो तकनीक) में कम से कम 2 घंटे अध्ययन करें।`,
+          `आज आपके द्वारा अध्ययन किए गए सबसे जटिल विषय का अपने शब्दों में एक संक्षिप्त सारांश लिखें।`,
+          `अपनी पकड़ का परीक्षण करने के लिए अपने लक्षित विषय से संबंधित 3 नमूना प्रश्नों या परीक्षण अभ्यासों को हल करने का अभ्यास करें।`,
+          `अपने अध्ययन की मेज को व्यवस्थित करें, सभी गैर-आवश्यक वस्तुओं को हटा दें और ध्यान बढ़ाने के लिए केवल संदर्भ पुस्तकें रखें।`
+        ],
+        "custom_health": [
+          `शरीर के विषाक्त पदार्थों को बाहर निकालने के लिए आज कम से कम 3 लीटर पानी पिएं और अपना  का सेवन रिकॉर्ड करें।`,
+          `शारीरिक और मानसिक तनाव को दूर करने के लिए बाहर साधारण स्ट्रेचिंग या टहलने में 25 मिनट का समय बिताएं।`,
+          `अपनी स्वास्थ्य संबंधी चिंता के संबंध में किसी पेशेवर विशेषज्ञ से संपर्क करें या अपॉइंटमेंट लें: "${issueText}"।`,
+          `अगले 7 दिनों के लिए स्वच्छ, असंसाधित, उच्च फाइबर वाले भोजन पर ध्यान केंद्रित करते हुए एक दैनिक मेनू लिखें।`
+        ],
+        "custom_visa": [
+          `आधिकारिक आव्रजन पोर्टल पर लॉग इन करें और अपनी समस्या की स्थिति की समीक्षा करें: "${issueText}"।`,
+          `यह सुनिश्चित करने के लिए सभी सबमिशन फाइलों की दोबारा जांच करें कि स्टैम्प, हस्ताक्षर और तारीखें मान्य हैं।`,
+          `समान यात्रा मामलों के प्रसंस्करण समय की जांच करने के लिए आव्रजन मंच/समुदाय पर पढ़ें या पोस्ट करें।`,
+          `सभी यात्रा दस्तावेजों को एक सुरक्षित फ़ोल्डर में तैयार रखें और अपने व्यक्तिगत यात्रा बजट स्प्रेडशीट को अपडेट करें।`
+        ],
+        "custom_legal": [
+          `अपनी कानूनी विवाद समस्या के बारे में अपने कानूनी सलाहकार/वकील को एक संक्षिप्त स्थिति अपडेट ईमेल का मसौदा तैयार करें: "${issueText}"।`,
+          `सभी साक्ष्य दस्तावेजों और पत्राचार को आज ही एक डिजिटल फ़ोल्डर में क्रमानुसार व्यवस्थित करें।`,
+          `चर्चा करने के लिए इस विवाद के 3 प्रमुख संभावित समाधान बिंदुओं या परिणामों की सूची बनाएं।`,
+          `सूचित रहने के लिए ऑनलाइन समान अदालती मामलों के निर्णयों या कानूनों की समीक्षा करने में 20 मिनट का समय लगाएं।`
+        ],
+        "custom_mental": [
+          `अपने मन को शांत करने के लिए आज 10 मिनट गहरी सांस लेने के व्यायाम (प्राणायाम) या ध्यान को समर्पित करें।`,
+          `इस समस्या से ध्यान हटाने के लिए एक डायरी में 3 चीजें लिखें जिनके लिए आप आभारी हैं: "${issueText}"।`,
+          `अपनी भावनाओं को व्यक्त करने के लिए एक सहायक मित्र, परिवार के सदस्य या पेशेवर परामर्शदाता से बात करें।`,
+          `आज रात सोने से कम से कम 2 घंटे पहले सोशल मीडिया और इलेक्ट्रॉनिक स्क्रीन से दूरी बना लें।`
+        ],
+        "custom_property": [
+          `ऑनलाइन संपत्ति खोजने वाले ऐप्स खोलें और आज ही अपने बजट से मेल खाने वाले कम से कम 3 घरों/प्लॉटों को शॉर्टलिस्ट करें।`,
+          `अपनी पूर्ण आवश्यकताओं (जैसे स्थान, काम से दूरी, कमरों की संख्या) की एक विस्तृत सूची लिखें।`,
+          `इस सप्ताह साइट विजिट के लिए कम से कम 2 रियल एस्टेट ब्रोकर्स या संपत्ति मालिकों से संपर्क करें।`,
+          `अपने बैंक बैलेंस की समीक्षा करें या होम लोन की सामर्थ्य सीमा की गणना करें।`
+        ],
+        "custom_pregnancy": [
+          `फोलिक एसिड, आयरन और हरी सब्जियों से भरपूर एक पौष्टिक आहार चार्ट तैयार करें और आज ही अपने भोजन को ट्रैक करें।`,
+          `अपने स्थानीय शहर क्षेत्र में उच्च श्रेणी के स्त्री रोग विशेषज्ञों या मातृत्व अस्पतालों की सूची बनाएं।`,
+          `शारीरिक तनाव के स्तर को कम करने के लिए हल्के श्वास व्यायाम (प्राणायाम) या माइंडफुलनेस योग करने में 20 मिनट का समय बिताएं।`,
+          `अपनी प्रजनन क्षमता या विटामिन सेवन को लॉग करने के लिए एक दैनिक स्वास्थ्य ट्रैकिंग डायरी बनाएं।`
+        ],
+        "custom_general": [
+          `इस समस्या के समाधान के लिए आज आप जो 3 विशिष्ट कदम उठा सकते हैं, उनकी एक स्पष्ट सूची लिखें: "${issueText}"।`,
+          `गति प्राप्त करने के लिए आज ही अपनी सूची में से सबसे सरल कदम उठाएं।`,
+          `इस समस्या का समाधान करने वाले विशेषज्ञों के सुझावों को पढ़ने या ऑनलाइन खोजने के लिए 30 मिनट का समय दें: "${issueText}"।`,
+          `इस लक्ष्य से जुड़े दैनिक सुधारों और कार्यों को रिकॉर्ड करने के लिए एक ट्रैकिंग नोट बनाएं।`
+        ]
+      };
+
       // ---------------------------------------------------------------
       // RESOLVE baby planning configurations
       // ---------------------------------------------------------------
