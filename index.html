@@ -5733,16 +5733,16 @@
         icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
       });
 
-      // 5. EKADASHI FAST & 1-DAY PRIOR ALERT (Sanatan Lunar Cycle Alignment)
+      // 5. EKADASHI FAST & LUNAR FASTING DISCIPLINE (Always present in Day-to-Day Tasks)
       if (dayNum % 15 === 11) {
         tasks.push({
           category: 'vedic',
-          title: isHi ? `एकादशी व्रत (11वीं तिथि)` : `Ekadashi Fast (11th Tithi)`,
-          timeWindow: 'All Day Fast',
+          title: isHi ? `पवित्र एकादशी पूर्ण व्रत (11वीं तिथि)` : `Sacred Ekadashi Full Vrat Fast (11th Tithi)`,
+          timeWindow: 'Full Day Fast',
           text: isHi
-            ? `आज पवित्र एकादशी व्रत है। अन्न का त्याग करें; केवल फल, दूध या जल का सेवन करें ताकि आपके कर्म दोष शांत हों और आपके लक्ष्य मार्ग की बाधाएं दूर हों।`
-            : `Observe Ekadashi (11th lunar Tithi) fast today. Refrain from grains; consume only fruits, milk, or water to burn karmic debt aligned with your goals.`,
-          xp: 25,
+            ? `आज मुख्य एकादशी व्रत है। अन्न का पूर्ण त्याग करें; केवल जल, दूध या ताजे फलों का सेवन करें ताकि आपके कर्म दोष भस्म हों और लक्ष्य सिद्धि प्राप्त हो।`
+            : `Observe full Ekadashi Vrat fast today (11th lunar day). Refrain from grains; consume only water, milk, or fruits to burn karmic debt aligned with your goals.`,
+          xp: 30,
           color: 'var(--gold)',
           icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8"><path d="M12 2v2M4.93 4.93l1.41 1.41M20 12h2M17.66 17.66l1.41 1.41M2 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/><circle cx="12" cy="12" r="5" fill="none"/></svg>'
         });
@@ -5752,11 +5752,23 @@
           title: isHi ? `एकादशी व्रत पूर्व तैयारी (1-दिन पूर्व 11:00 AM अलर्ट)` : `Ekadashi Fast Preparation (1-Day Prior 11:00 AM Alert)`,
           timeWindow: '11:00 AM Alert',
           text: isHi
-            ? `कल पवित्र एकादशी व्रत है। आज सुबह 11:00 बजे से हल्का सात्विक आहार लें और सूर्यास्त के बाद भारी अन्न से बचें ताकि आपका शरीर और मन कल के व्रत के लिए शुद्ध रहे।`
+            ? `कल एकादशी व्रत है। आज सुबह 11:00 बजे से हल्का सात्विक आहार लें और सूर्यास्त के बाद भारी अन्न से बचें ताकि आपका शरीर और मन कल के व्रत के लिए शुद्ध रहे।`
             : `Tomorrow is sacred Ekadashi Fast. Starting today at 11:00 AM, eat light sattvic food and avoid heavy grains after sunset to prepare your body & mind for tomorrow's fast.`,
-          xp: 15,
+          xp: 20,
           color: '#5dade2',
           icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polygon points="12 6 12 12 16 14"/></svg>'
+        });
+      } else {
+        tasks.push({
+          category: 'vedic',
+          title: isHi ? `एकादशी व्रत अनुशासन एवं सात्विक आहार` : `Ekadashi Fast Discipline & Sattvic Habit`,
+          timeWindow: 'Daily Fasting Discipline',
+          text: isHi
+            ? `वैदिक कोच की सलाह अनुसार: आगामी एकादशी व्रत की तैयारी के लिए आज सात्विक आहार लें, अत्यधिक नमक व तेल से बचें और पवित्र ऊर्जा बनाए रखें।`
+            : `As advised in your Coach advice: Maintain a clean sattvic diet today, avoiding excess salt/heavy oils, to keep your karmic energy pure for Ekadashi fasting.`,
+          xp: 15,
+          color: 'var(--gold)',
+          icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8"><path d="M12 2v2M4.93 4.93l1.41 1.41M20 12h2M17.66 17.66l1.41 1.41M2 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/><circle cx="12" cy="12" r="5" fill="none"/></svg>'
         });
       }
 
