@@ -2546,53 +2546,161 @@
       </div>
 
       <!-- TAB 3: MATCHING -->
+      <!-- TAB 3: KUNDLI MATCHING -->
       <div id="tab-matching" class="tab-content">
-        <h3 style="margin-bottom: 15px;"><span class="k-lbl-en">Kundli Matching</span><span class="k-lbl-hi" style="display:none;">मिलान</span></h3>
-        <div class="card">
-          <div class="form-group">
-            <label><span class="k-lbl-en">Bride's Moon Sign</span><span class="k-lbl-hi" style="display:none;">वधू की चंद्र राशि</span></label>
-            <select id="m-bride-sign">
-              <option value="0">Aries</option>
-              <option value="1">Taurus</option>
-              <option value="2">Gemini</option>
-              <option value="3">Cancer</option>
-              <option value="4">Leo</option>
-              <option value="5">Virgo</option>
-              <option value="6">Libra</option>
-              <option value="7">Scorpio</option>
-              <option value="8">Sagittarius</option>
-              <option value="9">Capricorn</option>
-              <option value="10">Aquarius</option>
-              <option value="11">Pisces</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label><span class="k-lbl-en">Groom's Moon Sign</span><span class="k-lbl-hi" style="display:none;">वर की चंद्र राशि</span></label>
-            <select id="m-groom-sign">
-              <option value="0">Aries</option>
-              <option value="1">Taurus</option>
-              <option value="2">Gemini</option>
-              <option value="3">Cancer</option>
-              <option value="4">Leo</option>
-              <option value="5">Virgo</option>
-              <option value="6">Libra</option>
-              <option value="7">Scorpio</option>
-              <option value="8">Sagittarius</option>
-              <option value="9">Capricorn</option>
-              <option value="10">Aquarius</option>
-              <option value="11">Pisces</option>
-            </select>
-          </div>
-          <button class="btn" onclick="calculateCompatibility()"><span class="k-lbl-en">CHECK COMPATIBILITY</span><span class="k-lbl-hi" style="display:none;">संगति की जांच करें</span></button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+          <h3 style="margin: 0;"><span class="k-lbl-en">Kundli Compatibility Matching</span><span class="k-lbl-hi" style="display:none;">कुंडली संगति मिलान</span></h3>
+          <span style="background: rgba(232, 200, 121, 0.15); color: var(--gold); border: 1px solid rgba(232, 200, 121, 0.4); padding: 4px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: bold;">
+            <span class="k-lbl-en">Multi-Couple Matching</span><span class="k-lbl-hi" style="display:none;">बहु-युगल मिलान</span>
+          </span>
         </div>
 
-        <div id="matching-result" style="display: none;" class="card">
-          <h4 style="color: var(--gold); text-align: center;"><span class="k-lbl-en">Result</span><span class="k-lbl-hi" style="display:none;">परिणाम</span></h4>
-          <div class="score-circle">
-            <div class="score-num" id="matching-score">24</div>
-            <div style="font-size: 0.75rem; color: var(--text-muted);"><span class="k-lbl-en">out of 36</span><span class="k-lbl-hi" style="display:none;">36 में से</span></div>
+        <div id="matching-form-card" class="card" style="background: linear-gradient(135deg, rgba(23, 18, 48, 0.95), rgba(30, 24, 60, 0.95)); border: 1px solid rgba(232, 200, 121, 0.3);">
+          
+          <!-- PERSON 1 DETAILS (USER / FIRST INDIVIDUAL) -->
+          <div style="margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px;">
+            <h4 style="margin: 0 0 12px 0; color: var(--gold); font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span class="k-lbl-en">Person 1 Details (First Individual)</span>
+              <span class="k-lbl-hi" style="display:none;">प्रथम व्यक्ति का विवरण</span>
+            </h4>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+              <div>
+                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;"><span class="k-lbl-en">Full Name</span><span class="k-lbl-hi" style="display:none;">पूरा नाम</span></label>
+                <input type="text" id="m-p1-name" placeholder="Enter Name" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 0.85rem;">
+              </div>
+              <div>
+                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;"><span class="k-lbl-en">Gender</span><span class="k-lbl-hi" style="display:none;">लिंग</span></label>
+                <select id="m-p1-gender" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 0.85rem;">
+                  <option value="Male">Male / पुरुष</option>
+                  <option value="Female">Female / महिला</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+              <div>
+                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;"><span class="k-lbl-en">Date of Birth</span><span class="k-lbl-hi" style="display:none;">जन्म तिथि</span></label>
+                <input type="date" id="m-p1-dob" style="width: 100%; padding: 8px 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 0.82rem;">
+              </div>
+              <div>
+                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;"><span class="k-lbl-en">Time of Birth</span><span class="k-lbl-hi" style="display:none;">जन्म समय</span></label>
+                <input type="time" id="m-p1-tob" style="width: 100%; padding: 8px 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 0.82rem;">
+              </div>
+              <div>
+                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;"><span class="k-lbl-en">Place of Birth</span><span class="k-lbl-hi" style="display:none;">जन्म स्थान</span></label>
+                <input type="text" id="m-p1-pob" placeholder="City/Place" style="width: 100%; padding: 8px 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 0.82rem;">
+              </div>
+            </div>
           </div>
-          <p id="matching-verdict" style="text-align: center; font-weight: bold; margin-bottom: 15px;"></p>
+
+          <!-- PERSON 2 DETAILS (PARTNER / SECOND INDIVIDUAL) -->
+          <div style="margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px;">
+            <h4 style="margin: 0 0 12px 0; color: #5dade2; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+              <span class="k-lbl-en">Person 2 Details (Partner / Second Individual)</span>
+              <span class="k-lbl-hi" style="display:none;">द्वितीय व्यक्ति / साथी का विवरण</span>
+            </h4>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+              <div>
+                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;"><span class="k-lbl-en">Full Name</span><span class="k-lbl-hi" style="display:none;">पूरा नाम</span></label>
+                <input type="text" id="m-p2-name" placeholder="Enter Partner Name" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 0.85rem;">
+              </div>
+              <div>
+                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;"><span class="k-lbl-en">Gender</span><span class="k-lbl-hi" style="display:none;">लिंग</span></label>
+                <select id="m-p2-gender" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 0.85rem;">
+                  <option value="Female">Female / महिला</option>
+                  <option value="Male">Male / पुरुष</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+              <div>
+                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;"><span class="k-lbl-en">Date of Birth</span><span class="k-lbl-hi" style="display:none;">जन्म तिथि</span></label>
+                <input type="date" id="m-p2-dob" style="width: 100%; padding: 8px 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 0.82rem;">
+              </div>
+              <div>
+                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;"><span class="k-lbl-en">Time of Birth</span><span class="k-lbl-hi" style="display:none;">जन्म समय</span></label>
+                <input type="time" id="m-p2-tob" style="width: 100%; padding: 8px 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 0.82rem;">
+              </div>
+              <div>
+                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;"><span class="k-lbl-en">Place of Birth</span><span class="k-lbl-hi" style="display:none;">जन्म स्थान</span></label>
+                <input type="text" id="m-p2-pob" placeholder="City/Place" style="width: 100%; padding: 8px 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 0.82rem;">
+              </div>
+            </div>
+          </div>
+
+          <button class="btn" style="width: 100%; padding: 14px; font-weight: 700; background: linear-gradient(135deg, var(--gold), #d4ac0d); color: #120D2B;" onclick="calculateCompatibility()">
+            <span class="k-lbl-en">CHECK COMPATIBILITY &amp; KUNDLI MILAN</span>
+            <span class="k-lbl-hi" style="display:none;">संगति की जांच करें और गुण मिलान</span>
+          </button>
+        </div>
+
+        <!-- MATCHING RESULT DISPLAY -->
+        <div id="matching-result" style="display: none;" class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 15px;">
+            <h4 style="color: var(--gold); margin: 0; font-size: 1.05rem;" id="matching-couple-title">Couple Match Summary</h4>
+            <button onclick="resetMatchingForm()" class="btn btn-outline" style="width: auto; padding: 4px 10px; font-size: 0.75rem; border-color: rgba(232,200,121,0.5); color: var(--gold);">
+              <span class="k-lbl-en">MATCH ANOTHER COUPLE</span>
+              <span class="k-lbl-hi" style="display:none;">अन्य युगल का मिलान करें</span>
+            </button>
+          </div>
+
+          <!-- 4 STAT CARDS -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px;">
+            <!-- CARD 1: GUN MILAN -->
+            <div style="background: rgba(232,200,121,0.1); border: 1px solid rgba(232,200,121,0.3); border-radius: 12px; padding: 12px; text-align: center;">
+              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">
+                <span class="k-lbl-en">Gun Milan Score</span>
+                <span class="k-lbl-hi" style="display:none;">अष्टकूट गुण मिलान</span>
+              </div>
+              <div style="font-size: 1.5rem; font-weight: bold; color: var(--gold);" id="matching-gun-score">28 / 36</div>
+              <div style="font-size: 0.7rem; color: var(--text-muted);" id="matching-gun-label">Gunas Matched</div>
+            </div>
+
+            <!-- CARD 2: RASHI COMPATIBILITY -->
+            <div style="background: rgba(93,173,226,0.1); border: 1px solid rgba(93,173,226,0.3); border-radius: 12px; padding: 12px; text-align: center;">
+              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">
+                <span class="k-lbl-en">Rashi Compatibility</span>
+                <span class="k-lbl-hi" style="display:none;">राशि अनुकूलता</span>
+              </div>
+              <div style="font-size: 1.5rem; font-weight: bold; color: #5dade2;" id="matching-rashi-score">84%</div>
+              <div style="font-size: 0.7rem; color: var(--text-muted);" id="matching-rashi-names">Moon Sign Synergy</div>
+            </div>
+
+            <!-- CARD 3: BUSINESS COMPATIBILITY -->
+            <div style="background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.3); border-radius: 12px; padding: 12px; text-align: center;">
+              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">
+                <span class="k-lbl-en">Business &amp; Finance</span>
+                <span class="k-lbl-hi" style="display:none;">व्यावसायिक साझेदारी</span>
+              </div>
+              <div style="font-size: 1.5rem; font-weight: bold; color: #2ecc71;" id="matching-biz-score">88%</div>
+              <div style="font-size: 0.7rem; color: var(--text-muted);">Commercial Harmony</div>
+            </div>
+
+            <!-- CARD 4: MARRIAGE COMPATIBILITY -->
+            <div style="background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.3); border-radius: 12px; padding: 12px; text-align: center;" id="marriage-card-box">
+              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">
+                <span class="k-lbl-en">Marriage Compatibility</span>
+                <span class="k-lbl-hi" style="display:none;">विवाह अनुकूलता</span>
+              </div>
+              <div style="font-size: 1.5rem; font-weight: bold; color: #ff6b6b;" id="matching-marriage-score">85%</div>
+              <div style="font-size: 0.7rem; color: var(--text-muted);" id="matching-marriage-note">Opposite Genders Required</div>
+            </div>
+          </div>
+
+          <!-- DETAILED VERDICT & ADVICE -->
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px; margin-bottom: 15px;">
+            <p id="matching-verdict" style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin: 0;"></p>
+          </div>
+
+          <button class="btn btn-outline" style="width: 100%; padding: 10px; font-size: 0.85rem; border-color: rgba(232,200,121,0.4); color: var(--gold);" onclick="resetMatchingForm()">
+            <span class="k-lbl-en">↻ CHECK COMPATIBILITY FOR ANOTHER PAIR</span>
+            <span class="k-lbl-hi" style="display:none;">↻ किसी अन्य जोड़ी की जांच करें</span>
+          </button>
         </div>
       </div>
 
@@ -8694,6 +8802,12 @@
     }
 
     function switchTab(index, btn) {
+      // TAB 3: MATCHING - Auto-initialize Person 1 from stored profile
+      if (index === 3) {
+        if (typeof initMatchingForm === 'function') {
+          initMatchingForm();
+        }
+      }
       // TAB 2: LAL KITAB - Generate report and draw fixed chart
       if (index === 2) {
         if (typeof generateLalKitabReport === 'function') {
@@ -10795,20 +10909,134 @@
       drawChartGeneric('chartCanvas', currentKundliChartType, document.body.classList.contains('print-pdf-active'));
     }
 
-    // 3. MATCHING COMPATIBILITY
+    // 3. KUNDLI & COMPATIBILITY MATCHING ENGINE
+    function initMatchingForm() {
+      const p1Name = document.getElementById('m-p1-name');
+      const p1Gender = document.getElementById('m-p1-gender');
+      const p1Dob = document.getElementById('m-p1-dob');
+      const p1Tob = document.getElementById('m-p1-tob');
+      const p1Pob = document.getElementById('m-p1-pob');
+
+      if (p1Name && !p1Name.value) p1Name.value = localStorage.getItem('user_name') || '';
+      if (p1Gender && localStorage.getItem('user_gender')) {
+        const storedG = localStorage.getItem('user_gender') || '';
+        if (storedG.toLowerCase().includes('female')) p1Gender.value = 'Female';
+        else p1Gender.value = 'Male';
+      }
+      if (p1Dob && !p1Dob.value) p1Dob.value = localStorage.getItem('user_dob') || '1995-05-15';
+      if (p1Tob && !p1Tob.value) p1Tob.value = localStorage.getItem('user_tob') || '08:30';
+      if (p1Pob && !p1Pob.value) p1Pob.value = localStorage.getItem('user_pob') || 'New Delhi';
+    }
+
     function calculateCompatibility() {
-      const bride = parseInt(document.getElementById('m-bride-sign').value);
-      const groom = parseInt(document.getElementById('m-groom-sign').value);
+      const p1Name = (document.getElementById('m-p1-name')?.value || 'Person 1').trim();
+      const p1Gender = document.getElementById('m-p1-gender')?.value || 'Male';
+      const p1Dob = document.getElementById('m-p1-dob')?.value || '1995-05-15';
+      const p1Tob = document.getElementById('m-p1-tob')?.value || '08:30';
+      const p1Pob = (document.getElementById('m-p1-pob')?.value || 'Delhi').trim();
 
-      // Simple deterministic formula for Gunas match (out of 36)
-      const diff = Math.abs(bride - groom);
-      const score = 18 + Math.floor(Math.abs(Math.sin(diff) * 18));
+      const p2Name = (document.getElementById('m-p2-name')?.value || 'Person 2').trim();
+      const p2Gender = document.getElementById('m-p2-gender')?.value || 'Female';
+      const p2Dob = document.getElementById('m-p2-dob')?.value || '1997-08-20';
+      const p2Tob = document.getElementById('m-p2-tob')?.value || '10:15';
+      const p2Pob = (document.getElementById('m-p2-pob')?.value || 'Mumbai').trim();
 
-      document.getElementById('matching-score').innerText = score;
-      document.getElementById('matching-verdict').innerText = score >= 18 
-        ? "Highly Compatible Connection" 
-        : "Astro Remedies Required for Harmony";
-      document.getElementById('matching-result').style.display = 'block';
+      // Seed for deterministic calculation based on DOBs and strings
+      const d1 = new Date(p1Dob).getTime() || 800000000000;
+      const d2 = new Date(p2Dob).getTime() || 870000000000;
+      const seed = Math.abs((d1 + d2 + p1Name.length * 31 + p2Name.length * 47) % 1000);
+
+      // Gun Milan Score out of 36
+      const gunScore = 18 + Math.floor((seed % 17) + (seed % 3 === 0 ? 2 : 0)); // Range 18 to 36
+      const rashiScore = 65 + Math.floor((seed % 32)); // Range 65% to 96%
+      const bizScore = 70 + Math.floor(((seed * 7) % 28)); // Range 70% to 97%
+
+      const lang = currentAppLang;
+      const isHi = lang === 'hi';
+
+      // Marriage compatibility check: ONLY for Male + Female or Female + Male
+      const isOppositeGender = (p1Gender !== p2Gender);
+
+      let marriageScore = 0;
+      let marriageNote = "";
+      if (isOppositeGender) {
+        marriageScore = Math.min(98, Math.max(50, Math.floor(gunScore * 2.5 + (seed % 10))));
+        marriageNote = isHi ? "शुभ विवाह अनुकूलता" : "Auspicious Marriage Match";
+      } else {
+        marriageScore = 0;
+        marriageNote = isHi
+          ? "0% - पारंपरिक वैदिक गुण मिलान केवल पुरुष और महिला जोड़ी के लिए मान्य है।"
+          : "0% - Marriage Gun Milan applies exclusively to Male & Female couples in traditional Vedic astrology.";
+      }
+
+      // Update Result Elements
+      const titleEl = document.getElementById('matching-couple-title');
+      if (titleEl) {
+        titleEl.innerHTML = `<span style="color:var(--gold);">${p1Name}</span> (${p1Gender}) <span style="color:#ff6b6b;">❤️</span> <span style="color:#5dade2;">${p2Name}</span> (${p2Gender})`;
+      }
+
+      const gunEl = document.getElementById('matching-gun-score');
+      if (gunEl) gunEl.innerText = `${gunScore} / 36`;
+
+      const rashiEl = document.getElementById('matching-rashi-score');
+      if (rashiEl) rashiEl.innerText = `${rashiScore}%`;
+
+      const bizEl = document.getElementById('matching-biz-score');
+      if (bizEl) bizEl.innerText = `${bizScore}%`;
+
+      const marriageEl = document.getElementById('matching-marriage-score');
+      if (marriageEl) marriageEl.innerText = isOppositeGender ? `${marriageScore}%` : `0%`;
+
+      const marriageNoteEl = document.getElementById('matching-marriage-note');
+      if (marriageNoteEl) marriageNoteEl.innerText = marriageNote;
+
+      const verdictEl = document.getElementById('matching-verdict');
+      if (verdictEl) {
+        let verdictText = "";
+        if (isOppositeGender) {
+          if (gunScore >= 28) {
+            verdictText = isHi
+              ? `✨ <strong>अति उत्तम मिलान (${gunScore}/36 गुण):</strong> ${p1Name} और ${p2Name} के बीच उत्कृष्ट भावनात्मक, मानसिक और आध्यात्मिक सामंजस्य है। विवाह एवं दीर्घकालिक साझेदारी के लिए यह अत्यंत शुभ योग है।`
+              : `✨ <strong>Exceptional Match (${gunScore}/36 Gunas):</strong> ${p1Name} and ${p2Name} demonstrate outstanding emotional, mental, and spiritual harmony. Highly auspicious for marriage and long-term union.`;
+          } else if (gunScore >= 21) {
+            verdictText = isHi
+              ? `👍 <strong>शुभ एवं अनुकूल संबंध (${gunScore}/36 गुण):</strong> ${p1Name} और ${p2Name} का गुण मिलान उत्तम है। व्यावसायिक एवं वैवाहिक जीवन में संतुलन रहेगा।`
+              : `👍 <strong>Harmonious & Balanced Connection (${gunScore}/36 Gunas):</strong> ${p1Name} and ${p2Name} share a strong foundational bond. Business growth and domestic life will thrive with mutual respect.`;
+          } else {
+            verdictText = isHi
+              ? `⚠️ <strong>औसत मिलान (${gunScore}/36 गुण):</strong> संबंधों में संतुलन बनाए रखने के लिए कुछ वैदिक उपायों (जैसे बृहस्पति व शुक्र शांति) की आवश्यकता होगी।`
+              : `⚠️ <strong>Moderate Connection (${gunScore}/36 Gunas):</strong> Essential remedies for Venus and Jupiter planetary alignment are recommended to smooth out communication gaps.`;
+          }
+        } else {
+          verdictText = isHi
+            ? `🤝 <strong>व्यावसायिक एवं मैत्री अनुकूलता:</strong> ${p1Name} और ${p2Name} का व्यावसायिक संबंध स्कोर <strong>${bizScore}%</strong> और चंद्र राशि अनुकूलता <strong>${rashiScore}%</strong> है। पारंपरिक विवाह अष्टकूट नियम केवल विपरीत लिंग (पुरुष व महिला) के लिए 36 गुणों की गणना करता है, इसलिए विवाह अनुकूलता 0% प्रदर्शित है।`
+            : `🤝 <strong>Business & Friendship Compatibility:</strong> ${p1Name} and ${p2Name} share a strong commercial compatibility score of <strong>${bizScore}%</strong> and Moon sign synergy of <strong>${rashiScore}%</strong>. Traditional Ashta Koota marriage Gun Milan applies exclusively to Male & Female pairs, so Marriage score is 0%.`;
+        }
+        verdictEl.innerHTML = verdictText;
+      }
+
+      const resCard = document.getElementById('matching-result');
+      if (resCard) resCard.style.display = 'block';
+
+      resCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function resetMatchingForm() {
+      const p2Name = document.getElementById('m-p2-name');
+      const p2Dob = document.getElementById('m-p2-dob');
+      const p2Tob = document.getElementById('m-p2-tob');
+      const p2Pob = document.getElementById('m-p2-pob');
+
+      if (p2Name) p2Name.value = '';
+      if (p2Dob) p2Dob.value = '';
+      if (p2Tob) p2Tob.value = '';
+      if (p2Pob) p2Pob.value = '';
+
+      const resCard = document.getElementById('matching-result');
+      if (resCard) resCard.style.display = 'none';
+
+      const formCard = document.getElementById('matching-form-card');
+      if (formCard) formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     // 4. TAROT INTERACTIVE
