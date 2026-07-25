@@ -1721,7 +1721,7 @@
             <span id="quests-completed-count" style="font-size: 0.8rem; color: var(--gold); font-weight: normal;">0 / 4 Complete</span>
           </h3>
 
-          <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div id="quests-list-container" style="display: flex; flex-direction: column; gap: 12px;">
             <!-- Quest 1: Vedic -->
             <div class="quest-card" id="q-vedic-card" style="display: flex; gap: 15px; padding: 15px; background: rgba(255,255,255,0.02); border: 1px solid rgba(42, 36, 78, 0.8); border-radius: 12px; transition: all 0.3s; align-items: center;">
               <input type="checkbox" id="q-vedic" onchange="toggleQuest('vedic', this)" style="width: 22px; height: 22px; cursor: pointer; accent-color: var(--gold); flex-shrink: 0;">
@@ -5575,6 +5575,201 @@
       renderRoadmapDayTasks(selectedRoadmapDay);
     }
 
+    function extractIndividualDayTasks(dayNum, lang) {
+      const activeGoals = (typeof getActiveGoals === 'function') ? getActiveGoals() : ['job'];
+      const primaryGoal = activeGoals[0] || 'job';
+      const normGoal = normalizeGoalKey(primaryGoal);
+
+      let planStartDate = localStorage.getItem('karma_plan_start_date') || getFormattedDate();
+      let targetDate = new Date(new Date(planStartDate).getTime() + (dayNum - 1) * 86400000);
+      const daysOfWeekEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const daysOfWeekHi = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
+      const dayNameEn = daysOfWeekEn[targetDate.getDay()];
+      const dayNameHi = daysOfWeekHi[targetDate.getDay()];
+
+      let chantCount = 21;
+      if (dayNum > 10 && dayNum <= 20) chantCount = 54;
+      else if (dayNum > 20) chantCount = 108;
+
+      const isHi = lang === 'hi';
+      const tasks = [];
+
+      // 1. VEDIC TASKS
+      tasks.push({
+        category: 'vedic',
+        title: isHi ? `स्वामी ग्रह मंत्र (${chantCount} जाप)` : `Ruling Planet Mantra (${chantCount} Chants)`,
+        timeWindow: '06:00 AM - 07:15 AM',
+        text: isHi
+          ? `पूर्व की ओर मुंह करके अपने स्वामी ग्रह मंत्र का ${chantCount} बार जाप करें।`
+          : `Chant your ruling planet mantra ${chantCount} times facing East between 06:00 AM–07:15 AM.`,
+        xp: 15,
+        color: 'var(--gold)',
+        icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
+      });
+
+      let vGoalText = "";
+      if (normGoal === 'job') vGoalText = isHi ? "करियर ऊर्जा सक्रिय करने के लिए 12 चक्र सूर्य नमस्कार करें।" : "Perform 12 rounds of Surya Namaskar to activate career & authority vibrations.";
+      else if (normGoal === 'debt') vGoalText = isHi ? "भोजन से पहले \"ॐ नमः शिवाय\" का 108 बार जाप करें।" : "Recite \"Om Namah Shivaya\" 108 times before meals to dissolve financial anxieties.";
+      else if (normGoal === 'marriage') vGoalText = isHi ? "कात्यायनी मंत्र का 108 बार जाप करें।" : "Recite Katyayani mantra 108 times to attract your destined partner.";
+      else if (normGoal === 'baby') vGoalText = isHi ? "संतान गोपाल मंत्र का 108 बार जाप करें।" : "Recite Santan Gopal mantra \"Om Devaki Sut Govind\" 108 times for progeny blessings.";
+      else if (normGoal === 'business') vGoalText = isHi ? "व्यावसायिक वृद्धि के लिए गणेश पूजा करें।" : "Perform Ganesh puja and light incense at your business entrance for growth.";
+      else if (normGoal === 'property') vGoalText = isHi ? "भूमि आशीर्वाद के लिए \"ॐ भौमाय नमः\" का 11 बार जाप करें।" : "Chant \"Om Bhaumaya Namah\" 11 times for Mars blessings on land and assets.";
+      else if (normGoal === 'health') vGoalText = isHi ? "सूर्योदय के समय सूर्य नमस्कार करें और तांबे के बर्तन का पानी पिएं।" : "Perform Surya Namaskar at sunrise and drink copper vessel water for vitality.";
+      else vGoalText = isHi ? "मानसिक शांति के लिए 15 मिनट प्राणायाम करें।" : "Practice 15 minutes of Pranayama deep breathing for mental equilibrium.";
+
+      tasks.push({
+        category: 'vedic',
+        title: isHi ? `वैदिक अनुष्ठान एवं साधना` : `Vedic Ritual & Practice`,
+        timeWindow: '07:15 AM - 08:00 AM',
+        text: vGoalText,
+        xp: 15,
+        color: 'var(--gold)',
+        icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8"><path d="M12 2v2M4.93 4.93l1.41 1.41M20 12h2M17.66 17.66l1.41 1.41M2 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/><circle cx="12" cy="12" r="5" fill="none"/></svg>'
+      });
+
+      // 2. LAL KITAB REMEDIES
+      const lBase1En = {
+        job: "Offer water to the rising Sun from a copper vessel with a pinch of kumkum.",
+        debt: "Offer sweet milk to a banyan tree root every morning.",
+        marriage: "Offer white flowers and fresh milk at a Shiva temple.",
+        baby: "Offer yellow fruits to a temple or feed a cow with green grass and jaggery.",
+        business: "Light a ghee lamp at your shop or business entrance every morning.",
+        property: "Offer fresh water mixed with honey to the rising Sun to invoke Mars.",
+        health: "Donate food to a stray dog in the morning to pacify Saturn.",
+        custom: "Offer water or light a ghee lamp facing East at sunset."
+      };
+      const lBase1Hi = {
+        job: "तांबे के बर्तन से रोली मिलाकर उगते सूर्य को जल अर्पित करें।",
+        debt: "रोजाना सुबह बरगद के पेड़ की जड़ में मीठा दूध अर्पित करें।",
+        marriage: "शिव मंदिर में ताजे सफेद फूल और दूध अर्पित करें।",
+        baby: "मंदिर में पीले फल अर्पित करें या गाय को हरा घास और गुड़ खिलाएं।",
+        business: "अपनी दुकान या व्यावसायिक प्रवेश द्वार पर रोजाना सुबह घी का दीपक जलाएं।",
+        property: "मंगल देव की कृपा के लिए उगते सूर्य को शहद मिला जल अर्पित करें।",
+        health: "शनि शांति के लिए सुबह आवारा कुत्ते को भोजन दान करें।",
+        custom: "सूर्यास्त पर पूर्व की ओर मुंह करके जल अर्पित करें या घी का दीपक जलाएं।"
+      };
+
+      tasks.push({
+        category: 'lalkitab',
+        title: isHi ? `लाल किताब उपाय 1 (प्रातःकाल)` : `Lal Kitab Remedy 1 (Morning)`,
+        timeWindow: '08:00 AM - 09:00 AM',
+        text: isHi ? (lBase1Hi[normGoal] || lBase1Hi.custom) : (lBase1En[normGoal] || lBase1En.custom),
+        xp: 15,
+        color: '#ff6b6b',
+        icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>'
+      });
+
+      let lDayRemedyEn = `Keep a small piece of solid silver or turmeric root in your wallet/pocket today.`;
+      let lDayRemedyHi = `आज अपने बटुए या जेब में चांदी का एक छोटा टुकड़ा या कच्ची हल्दी की गांठ रखें।`;
+      if (dayNameEn === "Wednesday") {
+        lDayRemedyEn = `Wednesday Mercury Remedy: Feed green fodder (Palak/grass) to cows or offer 7 grains (Satnaja) to birds.`;
+        lDayRemedyHi = `बुधवार बुध उपाय: गायों को हरा चारा (पालक/घास) खिलाएं या पक्षियों को 7 अनाज खिलाएं।`;
+      } else if (dayNameEn === "Thursday") {
+        lDayRemedyEn = `Thursday Jupiter Remedy: Offer yellow flowers or a pinch of turmeric in water to rising Sun.`;
+        lDayRemedyHi = `गुरुवार बृहस्पति उपाय: उगते सूर्य को पीले फूल या पानी में एक चुटकी हल्दी अर्पित करें।`;
+      } else if (dayNameEn === "Friday") {
+        lDayRemedyEn = `Friday Venus Remedy: Offer white sweets or milk to young girls or needy individuals.`;
+        lDayRemedyHi = `शुक्रवार शुक्र उपाय: युवा लड़कियों या जरूरतमंद व्यक्तियों को सफेद मिठाई या दूध अर्पित करें।`;
+      } else if (dayNameEn === "Saturday") {
+        lDayRemedyEn = `Saturday Saturn Remedy: Light a mustard oil lamp under a Peepal tree or donate black sesame seeds.`;
+        lDayRemedyHi = `शनिवार शनि उपाय: पीपल के पेड़ के नीचे सरसों के तेल का दीपक जलाएं या काले तिल का दान करें।`;
+      } else if (dayNameEn === "Tuesday") {
+        lDayRemedyEn = `Tuesday Mars Remedy: Avoid taking or granting loans on Tuesday; donate red lentils (Masoor Dal).`;
+        lDayRemedyHi = `मंगलवार मंगल उपाय: मंगलवार को कर्ज लेने या देने से बचें; लाल मसूर दाल का दान करें।`;
+      }
+
+      tasks.push({
+        category: 'lalkitab',
+        title: isHi ? `${dayNameHi} विशेष लाल किताब उपाय` : `${dayNameEn} Special Lal Kitab Remedy`,
+        timeWindow: '06:30 PM - 07:15 PM',
+        text: isHi ? lDayRemedyHi : lDayRemedyEn,
+        xp: 15,
+        color: '#ff6b6b',
+        icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>'
+      });
+
+      // 3. VASTU DIRECTIVES
+      tasks.push({
+        category: 'vastu',
+        title: isHi ? `उत्तर-पूर्व (ईशान कोण) सफाई` : `North-East Corner Cleanup`,
+        timeWindow: '09:00 AM - 10:00 AM',
+        text: isHi
+          ? `अपने कमरे या कार्यस्थल के उत्तर-पूर्व (ईशान) कोण को पूरी तरह साफ और अव्यवस्था मुक्त रखें।`
+          : `Keep your North-East (Ishan) room/office corner completely clean & clutter-free today.`,
+        xp: 15,
+        color: '#5dade2',
+        icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>'
+      });
+
+      tasks.push({
+        category: 'vastu',
+        title: isHi ? `दैनिक दिशा संरेखण` : `Daily Direction Alignment`,
+        timeWindow: 'All Day',
+        text: isHi
+          ? `सकारात्मक ऊर्जा प्रवाह के लिए काम करते या ध्यान लगाते समय पूर्व या उत्तर दिशा की ओर मुख करें।`
+          : `Face East or North while working or meditating to align with positive energetic currents.`,
+        xp: 15,
+        color: '#5dade2',
+        icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>'
+      });
+
+      // 4. PRACTICAL ACTIONS
+      const pTaskStr = get90DayPracticalTask(dayNum, primaryGoal);
+      const pParts = pTaskStr.split(':');
+      const pTitle = pParts[0] || (isHi ? 'व्यावहारिक कदम' : 'Practical Action Step');
+      const pDetail = pParts.slice(1).join(':') || pTaskStr;
+
+      tasks.push({
+        category: 'practical',
+        title: pTitle,
+        timeWindow: '11:45 AM - 01:30 PM',
+        text: pDetail,
+        xp: 30,
+        color: '#2ecc71',
+        icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
+      });
+
+      return tasks;
+    }
+
+    function toggleIndividualTask(dayNum, taskIdx, checkbox, xpValue) {
+      const card = document.getElementById(`task-card-${dayNum}-${taskIdx}`);
+      const isChecked = checkbox.checked;
+
+      const roadmapHistory = JSON.parse(localStorage.getItem('karma_daily_roadmap_history') || '{}');
+      const dayState = roadmapHistory[dayNum] || [];
+      dayState[taskIdx] = isChecked;
+      roadmapHistory[dayNum] = dayState;
+      localStorage.setItem('karma_daily_roadmap_history', JSON.stringify(roadmapHistory));
+
+      if (card) {
+        if (isChecked) {
+          card.classList.add('completed');
+          gainXP(xpValue || 15);
+          playSparkle(card);
+        } else {
+          card.classList.remove('completed');
+          gainXP(-(xpValue || 15));
+        }
+      }
+
+      const completedCount = dayState.filter(Boolean).length;
+      const totalTasks = dayState.length;
+      const countEl = document.getElementById('quests-completed-count');
+      if (countEl) {
+        countEl.innerText = `${completedCount} / ${totalTasks} Complete`;
+      }
+
+      const todayStr = getFormattedDate();
+      let dedicationHistory = JSON.parse(localStorage.getItem('karma_dedication_history') || '{}');
+      dedicationHistory[todayStr] = completedCount;
+      localStorage.setItem('karma_dedication_history', JSON.stringify(dedicationHistory));
+
+      if (typeof renderDedicationGrid === 'function') {
+        renderDedicationGrid();
+      }
+    }
+
     function renderRoadmapDayTasks(dayNum) {
       selectedRoadmapDay = dayNum;
       
@@ -5589,7 +5784,6 @@
       let planStartDate = localStorage.getItem('karma_plan_start_date') || getFormattedDate();
       let targetDate = new Date(new Date(planStartDate).getTime() + (dayNum - 1) * 86400000);
       
-      // Update date format based on selected language
       let dateString = '';
       if (lang === 'hi') {
         const daysHi = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
@@ -5599,15 +5793,10 @@
         dateString = targetDate.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
       }
 
-      if (titleEl) {
-        titleEl.textContent = lang === 'hi' ? `90 में से दिन ${dayNum}` : `Day ${dayNum} of 90`;
-      }
+      if (titleEl) titleEl.textContent = lang === 'hi' ? `90 में से दिन ${dayNum}` : `Day ${dayNum} of 90`;
       if (dateEl) dateEl.textContent = dateString;
-      if (secTitleEl) {
-        secTitleEl.textContent = lang === 'hi' ? `दिन ${dayNum} के लिए कार्य` : `Day ${dayNum} Doable Tasks`;
-      }
+      if (secTitleEl) secTitleEl.textContent = lang === 'hi' ? `दिन ${dayNum} के कार्य` : `Day ${dayNum} Doable Tasks`;
 
-      // Slow Progression Calculations
       let chantCount = 21;
       let phaseName = "";
       if (dayNum <= 10) {
@@ -5628,141 +5817,54 @@
       }
 
       if (phaseEl) phaseEl.textContent = phaseName;
-      if (intensityEl) {
-        intensityEl.textContent = lang === 'hi' ? `तीव्रता: ${chantCount} जाप` : `Intensity: ${chantCount} Chants`;
-      }
+      if (intensityEl) intensityEl.textContent = lang === 'hi' ? `तीव्रता: ${chantCount} जाप` : `Intensity: ${chantCount} Chants`;
 
-      // Get Active Goal Context
-      const activeGoals = (typeof getActiveGoals === 'function') ? getActiveGoals() : ['job'];
-      const primaryGoal = activeGoals[0] || 'job';
-
-      // Goal-specific Vedic Task texts per goal
-      const goalVedicDayTextEn = {
-        job:      `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Chant your ruling planet mantra facing East (06:00–07:15 AM). Then perform 12 rounds of Surya Namaskar to activate career & authority vibrations.`,
-        debt:     `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Chant your ruling planet mantra ${chantCount} times facing East (06:00–07:15 AM). Then recite "Om Namah Shivaya" 108 times before meals to dissolve financial anxieties.`,
-        marriage: `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Chant your ruling planet mantra facing East (06:00–07:15 AM). On Fridays, additionally recite the Katyayani mantra 108 times to attract your destined partner.`,
-        baby:     `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Chant your ruling planet mantra facing East (06:00–07:15 AM). Additionally recite Santan Gopal mantra "Om Devaki Sut Govind" 108 times for progeny blessings.`,
-        business: `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Chant your ruling planet mantra facing East (06:00–07:15 AM). On Wednesdays, perform Ganesh puja and light incense at your business entrance for growth.`,
-        property: `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Chant your ruling planet mantra facing East (06:00–07:15 AM). Before property visits, chant "Om Bhaumaya Namah" 11 times for Mars blessings on land and assets.`,
-        health:   `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Perform Surya Namaskar at sunrise, then chant your ruling planet mantra ${chantCount} times (06:00–07:15 AM). Drink copper vessel water afterward for vitality.`,
-        custom:   `<span style="color:var(--gold);font-weight:600;">Morning Chant (${chantCount} Chants):</span> Chant your ruling planet mantra ${chantCount} times facing East between 06:00 AM–07:15 AM for Day ${dayNum} alignment.`
-      };
-      const goalVedicDayTextHi = {
-        job:      `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> सुबह 06:00–07:15 के बीच पूर्व की ओर मुंह करके अपने स्वामी ग्रह मंत्र का जाप करें। फिर करियर ऊर्जा सक्रिय करने के लिए 12 चक्र सूर्य नमस्कार करें।`,
-        debt:     `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> सुबह 06:00–07:15 के बीच पूर्व की ओर ${chantCount} बार स्वामी ग्रह मंत्र जाप करें। फिर भोजन से पहले "ॐ नमः शिवाय" 108 बार जाप करें।`,
-        marriage: `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> सुबह 06:00–07:15 के बीच पूर्व की ओर मुंह करके स्वामी ग्रह मंत्र का जाप करें। शुक्रवार को कात्यायनी मंत्र का 108 बार जाप करें।`,
-        baby:     `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> सुबह 06:00–07:15 के बीच स्वामी ग्रह मंत्र का जाप करें। साथ ही संतान गोपाल मंत्र "ॐ देवकी सुत गोविंद" का 108 बार जाप करें।`,
-        business: `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> सुबह 06:00–07:15 के बीच पूर्व की ओर मुंह करके स्वामी ग्रह मंत्र का जाप करें। बुधवार को गणेश पूजा करें।`,
-        property: `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> सुबह 06:00–07:15 के बीच स्वामी ग्रह मंत्र का जाप करें। संपत्ति भ्रमण से पहले "ॐ भौमाय नमः" का 11 बार जाप करें।`,
-        health:   `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> सूर्योदय के समय सूर्य नमस्कार करें, फिर 06:00–07:15 के बीच स्वामी ग्रह मंत्र का ${chantCount} बार जाप करें। तांबे के बर्तन का पानी पिएं।`,
-        custom:   `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> दिन ${dayNum} के संरेखण के लिए सुबह 06:00–07:15 के बीच पूर्व की ओर मुंह करके अपने स्वामी ग्रह मंत्र का जाप करें।`
-      };
-      const normGoal = normalizeGoalKey(primaryGoal);
-      const _vGoalKey = normGoal;
-      const vText = lang === 'hi' ? (goalVedicDayTextHi[_vGoalKey] || goalVedicDayTextHi.custom) : (goalVedicDayTextEn[_vGoalKey] || goalVedicDayTextEn.custom);
+      // Dynamically extract individual tasks for dayNum
+      const tasks = extractIndividualDayTasks(dayNum, lang);
+      const container = document.getElementById('quests-list-container');
       
-      // Goal-specific Evening Remedy texts per goal
-      const daysOfWeekEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-      const daysOfWeekHi = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
-      const dayNameEn = daysOfWeekEn[targetDate.getDay()];
-      const dayNameHi = daysOfWeekHi[targetDate.getDay()];
-      
-      // Goal-specific base remedy then day-override
-      const goalBaseRemedyEn = {
-        job:      `Offer water to the rising Sun from a copper vessel. Keep your desk facing East or North and free of clutter.`,
-        debt:     `Offer sweet milk to a banyan tree root. Avoid taking loans on Tuesdays.`,
-        marriage: `Offer white flowers and milk at a Shiva temple. Keep a rose quartz crystal in your bedroom's South-West.`,
-        baby:     `Offer yellow fruits to a temple or feed a cow with green grass and jaggery to strengthen Jupiter.`,
-        business: `Light a ghee lamp at your shop or business entrance. Keep a whole coconut at the entrance for prosperity.`,
-        property: `Offer fresh water mixed with honey to the rising Sun to invoke Mars (ruler of land/property).`,
-        health:   `Donate food to a stray dog in the morning to pacify Saturn. Keep a piece of raw turmeric in your pocket.`,
-        custom:   `Offer water or light a ghee lamp facing East at sunset (06:30 PM).`
-      };
-      const goalBaseRemedyHi = {
-        job:      `तांबे के बर्तन से उगते सूर्य को जल अर्पित करें। अपने डेस्क का मुख पूर्व या उत्तर की ओर रखें।`,
-        debt:     `बरगद के पेड़ की जड़ में मीठा दूध अर्पित करें। मंगलवार को कर्ज लेने से बचें।`,
-        marriage: `शिव मंदिर में सफेद फूल और दूध अर्पित करें। बेडरूम के दक्षिण-पश्चिम में रोज़ क्वार्ट्ज क्रिस्टल रखें।`,
-        baby:     `मंदिर में पीले फल अर्पित करें या गाय को हरा घास और गुड़ खिलाएं।`,
-        business: `दुकान या व्यावसायिक प्रवेश द्वार पर घी का दीपक जलाएं।`,
-        property: `मंगल के लिए उगते सूर्य को शहद मिला जल अर्पित करें।`,
-        health:   `आवारा कुत्ते को भोजन दान करें। अपनी जेब में कच्ची हल्दी की गांठ रखें।`,
-        custom:   `सूर्यास्त (शाम 06:30 बजे) पर पूर्व की ओर मुंह करके जल अर्पित करें या घी का दीपक जलाएं।`
-      };
-      const _lGoalKey = normGoal;
-      let lText = '';
-      if (lang === 'hi') {
-        lText = `<span style="color:#ff6b6b;font-weight:600;">${dayNameHi} का लक्ष्य उपाय:</span> ${goalBaseRemedyHi[_lGoalKey] || goalBaseRemedyHi.custom}`;
-        if (dayNameEn === "Wednesday") {
-          lText = `<span style="color:#ff6b6b;font-weight:600;">बुधवार बुध उपाय:</span> गायों को हरा चारा (पालक/घास) खिलाएं या पक्षियों को 7 अनाज खिलाएं।`;
-        } else if (dayNameEn === "Thursday") {
-          lText = `<span style="color:#ff6b6b;font-weight:600;">गुरुवार बृहस्पति उपाय:</span> उगते सूर्य को पीले फूल या पानी में एक चुटकी हल्दी अर्पित करें।`;
-        } else if (dayNameEn === "Friday") {
-          lText = `<span style="color:#ff6b6b;font-weight:600;">शुक्रवार शुक्र उपाय:</span> युवा लड़कियों या जरूरतमंद व्यक्तियों को सफेद मिठाई या दूध अर्पित करें।`;
-        } else if (dayNameEn === "Saturday") {
-          lText = `<span style="color:#ff6b6b;font-weight:600;">शनिवार शनि उपाय:</span> पीपल के पेड़ के नीचे सरसों के तेल का दीपक जलाएं या काले तिल का दान करें।`;
-        }
-      } else {
-        lText = `<span style="color:#ff6b6b;font-weight:600;">${dayNameEn} Goal Remedy:</span> ${goalBaseRemedyEn[_lGoalKey] || goalBaseRemedyEn.custom}`;
-        if (dayNameEn === "Wednesday") {
-          lText = `<span style="color:#ff6b6b;font-weight:600;">Wednesday Mercury Remedy:</span> Feed green fodder (Palak/grass) to cows or offer 7 grains to birds.`;
-        } else if (dayNameEn === "Thursday") {
-          lText = `<span style="color:#ff6b6b;font-weight:600;">Thursday Jupiter Remedy:</span> Offer yellow flowers or a pinch of turmeric in water to rising Sun.`;
-        } else if (dayNameEn === "Friday") {
-          lText = `<span style="color:#ff6b6b;font-weight:600;">Friday Venus Remedy:</span> Offer white sweets or milk to young girls or needy individuals.`;
-        } else if (dayNameEn === "Saturday") {
-          lText = `<span style="color:#ff6b6b;font-weight:600;">Saturday Saturn Remedy:</span> Light a mustard oil lamp under a Peepal tree or donate black sesame seeds.`;
-        }
-      }
-
-      // Progressive Vastu & Asset Purchasing Muhurat
-      let vaText = lang === 'hi'
-        ? `<span style="color:#5dade2;font-weight:600;">वास्तु संरेखण:</span> आज अपने कमरे के उत्तर-पूर्व कोने को साफ और अव्यवस्था मुक्त रखें।`
-        : `<span style="color:#5dade2;font-weight:600;">Vastu Alignment:</span> Keep your North-East room corner clean &amp; clutter-free today.`;
-      
-      if (normGoal === 'property') {
-        if (lang === 'hi') {
-          vaText += `<br/><span style="color:var(--gold);font-weight:600;">संपत्ति खरीद मुहूर्त:</span> संपत्ति खरीद मुहूर्त: अभिजीत मुहूर्त (सुबह 11:45 - दोपहर 12:30 बजे) के दौरान ${dayNameHi} पर आगामी शुभ समय।`;
-        } else {
-          vaText += `<br/><span style="color:var(--gold);font-weight:600;">Asset Purchasing Muhurat:</span> Upcoming auspicious window on ${dayNameEn} during Abhijit Muhurat (11:45 AM - 12:30 PM).`;
-        }
-      }
-
-      // Progressive Doable Practical Task Matrix (Days 1 to 90)
-      const pTaskStr = get90DayPracticalTask(dayNum, primaryGoal);
-      let pText = `<span style="color:#2ecc71;font-weight:600;">${pTaskStr.split(':')[0]}:</span> ${pTaskStr.split(':').slice(1).join(':')}`;
-
-      if (document.getElementById('q-vedic-text')) document.getElementById('q-vedic-text').innerHTML = vText;
-      if (document.getElementById('q-lalkitab-text')) document.getElementById('q-lalkitab-text').innerHTML = lText;
-      if (document.getElementById('q-vastu-text')) document.getElementById('q-vastu-text').innerHTML = vaText;
-      if (document.getElementById('q-practical-text')) document.getElementById('q-practical-text').innerHTML = pText;
-
-      // Check task completion status for dayNum
       const roadmapHistory = JSON.parse(localStorage.getItem('karma_daily_roadmap_history') || '{}');
-      const dayState = roadmapHistory[dayNum] || [false, false, false, false];
+      const dayState = roadmapHistory[dayNum] || [];
 
-      document.getElementById('q-vedic').checked = dayState[0];
-      document.getElementById('q-lalkitab').checked = dayState[1];
-      document.getElementById('q-vastu').checked = dayState[2];
-      document.getElementById('q-practical').checked = dayState[3];
+      let completedCount = 0;
+      let html = '';
 
-      ['q-vedic-card','q-lalkitab-card','q-vastu-card','q-practical-card'].forEach((id, idx) => {
-        const el = document.getElementById(id);
-        if (el) {
-          if (dayState[idx]) el.classList.add('completed');
-          else el.classList.remove('completed');
-        }
+      tasks.forEach((t, i) => {
+        const isDone = !!dayState[i];
+        if (isDone) completedCount++;
+
+        const bgMap = {
+          'vedic': 'rgba(232, 200, 121, 0.15)',
+          'lalkitab': 'rgba(255, 107, 107, 0.15)',
+          'vastu': 'rgba(93, 173, 226, 0.15)',
+          'practical': 'rgba(46, 204, 113, 0.15)'
+        };
+        const badgeBg = bgMap[t.category] || 'rgba(232, 200, 121, 0.15)';
+
+        html += `
+          <div class="quest-card ${isDone ? 'completed' : ''}" id="task-card-${dayNum}-${i}" style="display: flex; gap: 15px; padding: 15px; background: rgba(255,255,255,0.02); border: 1px solid rgba(42, 36, 78, 0.8); border-radius: 12px; transition: all 0.3s; align-items: center;">
+            <input type="checkbox" id="task-chk-${dayNum}-${i}" ${isDone ? 'checked' : ''} onchange="toggleIndividualTask(${dayNum}, ${i}, this, ${t.xp})" style="width: 22px; height: 22px; cursor: pointer; accent-color: ${t.color}; flex-shrink: 0;">
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
+                <strong style="color: ${t.color}; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;">
+                  ${t.icon} <span>${t.title}</span>
+                </strong>
+                <span style="font-size: 0.75rem; background: ${badgeBg}; color: ${t.color}; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+${t.xp} XP</span>
+              </div>
+              <div style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">${t.text}</div>
+            </div>
+          </div>
+        `;
       });
 
-      // Synchronize the global questsState variable to match the currently viewed day's checkbox states
-      if (typeof questsState !== 'undefined') {
-        questsState.vedic = dayState[0];
-        questsState.lalkitab = dayState[1];
-        questsState.vastu = dayState[2];
-        questsState.practical = dayState[3];
-        localStorage.setItem('user_quests_state', JSON.stringify(questsState));
+      if (container) {
+        container.innerHTML = html;
       }
 
-      updateQuestCompletionCount();
+      const countEl = document.getElementById('quests-completed-count');
+      if (countEl) {
+        countEl.innerText = `${completedCount} / ${tasks.length} Complete`;
+      }
     }
 
     
@@ -6383,14 +6485,14 @@
     }
 
     function updateQuestCompletionCount() {
-      // Read completion count from per-day karma_daily_roadmap_history
-      // so it stays accurate as the user navigates between days
       const roadmapHistory = JSON.parse(localStorage.getItem('karma_daily_roadmap_history') || '{}');
       const dayNum = (typeof selectedRoadmapDay !== 'undefined') ? selectedRoadmapDay : 1;
-      const dayState = roadmapHistory[dayNum] || [false, false, false, false];
+      const dayState = roadmapHistory[dayNum] || [];
       const count = dayState.filter(Boolean).length;
+      const tasks = (typeof extractIndividualDayTasks === 'function') ? extractIndividualDayTasks(dayNum, currentAppLang) : [];
+      const total = tasks.length || dayState.length || 7;
       const el = document.getElementById('quests-completed-count');
-      if (el) el.innerText = `${count} / 4 Complete`;
+      if (el) el.innerText = `${count} / ${total} Complete`;
     }
 
     function goToCoachTab() {
