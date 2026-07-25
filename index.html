@@ -8841,6 +8841,9 @@
         
         // Auto-fill from single master profile and generate chart if needed
         autoFillKundliFromOnboarding();
+        setTimeout(() => {
+          if (typeof drawChart === 'function') drawChart();
+        }, 150);
       }
 
       // TAB 4: COACH - Automatically generate & show active Mission for all goals
@@ -10917,6 +10920,14 @@
 
     function drawChart() {
       drawChartGeneric('chartCanvas', currentKundliChartType, document.body.classList.contains('print-pdf-active'));
+      if (typeof requestAnimationFrame === 'function') {
+        requestAnimationFrame(() => {
+          drawChartGeneric('chartCanvas', currentKundliChartType, document.body.classList.contains('print-pdf-active'));
+        });
+      }
+      setTimeout(() => {
+        drawChartGeneric('chartCanvas', currentKundliChartType, document.body.classList.contains('print-pdf-active'));
+      }, 100);
     }
 
     // MATCHING TAB GEOLOCATION & CITY AUTOCOMPLETE LOGIC
