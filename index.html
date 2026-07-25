@@ -9051,6 +9051,11 @@
           }
         }
       });
+
+      // Re-render enhanced sections in selected language if cached
+      if (typeof cachedPlacementsList !== 'undefined' && typeof cachedLagnaSignNum !== 'undefined' && typeof renderKundliEnhancedSections === 'function' && cachedPlacementsList && cachedPlacementsList.length > 0) {
+        renderKundliEnhancedSections(cachedPlacementsList, cachedLagnaSignNum, cachedBirthDateStr || '');
+      }
     }
 
     function selectKundliGender(el, val) {
@@ -9671,27 +9676,30 @@
       const ninthLordPlanet = placements.find(p => p.name === ninthLord);
       const ninthLordHouse = ninthLordPlanet ? (((ninthLordPlanet.sign - lagnaSign + 12) % 12) + 1) : 1;
 
-      let luckType = "Self-Made Luck";
+      let luckTypeEn = "Self-Made Luck";
+      let luckTypeHi = "स्वयं-निर्मित भाग्य";
       let luckDescEn = `Your 9th Lord (${ninthLord}) is positioned in House ${ninthLordHouse}. Your luck is <strong>Self-Made</strong> - fortune favors your bold personal decisions, continuous learning, and direct initiative.`;
-      let luckDescHi = `आपके 9वें भाव के स्वामी (${signLordsHi[ninthHouseSign]}) ${ninthLordHouse}वें घर में हैं। आपका भाग्य <strong>स्वयं-निर्मित (Self-Made)</strong> है - आपके साहसी निर्णयों और निरंतर प्रयासों से भाग्य जागृत होता है।`;
+      let luckDescHi = `आपके 9वें भाव के स्वामी (${signLordsHi[ninthHouseSign]}) ${ninthLordHouse}वें घर में हैं। आपका भाग्य <strong>स्वयं-निर्मित</strong> है - आपके साहसी निर्णयों और निरंतर प्रयासों से भाग्य जागृत होता है।`;
       let luckScore = 85;
 
       if ([2, 4].includes(ninthLordHouse)) {
-        luckType = "Inherited Luck";
+        luckTypeEn = "Inherited Luck";
+        luckTypeHi = "पैतृक एवं पारिवारिक भाग्य";
         luckDescEn = `Your 9th Lord (${ninthLord}) is in House ${ninthLordHouse}. Your luck is <strong>Inherited & Ancestral</strong> - fortune flows through family assets, maternal blessings, and inherited wisdom.`;
-        luckDescHi = `आपका भाग्य <strong>पैतृक एवं पारिवारिक (Inherited)</strong> है - पारिवारिक संपत्ति, मातृ आशीर्वाद व परंपराओं से लाभ मिलता है।`;
+        luckDescHi = `आपका भाग्य <strong>पैतृक एवं पारिवारिक</strong> है - पारिवारिक संपत्ति, मातृ आशीर्वाद व परंपराओं से लाभ मिलता है।`;
         luckScore = 90;
       } else if ([8, 12].includes(ninthLordHouse)) {
-        luckType = "Spiritual Activation";
+        luckTypeEn = "Spiritual Activation";
+        luckTypeHi = "आध्यात्मिक जागृति";
         luckDescEn = `Your 9th Lord (${ninthLord}) is in House ${ninthLordHouse}. Your luck requires <strong>Spiritual Activation</strong> - fortune unlocks through meditation, pilgrimages, charity, and foreign connections.`;
-        luckDescHi = `आपका भाग्य <strong>आध्यात्मिक जागृति (Spiritual Activation)</strong> मांगता है - ध्यान, तीर्थयात्रा, दान व विदेशी संबंधों से भाग्योदय होता है।`;
+        luckDescHi = `आपका भाग्य <strong>आध्यात्मिक जागृति</strong> मांगता है - ध्यान, तीर्थयात्रा, दान व विदेशी संबंधों से भाग्योदय होता है।`;
         luckScore = 78;
       }
 
       const scoreBadge = document.getElementById('k-luck-score-badge');
       const barFill = document.getElementById('k-luck-progress-bar');
       const descEl = document.getElementById('k-luck-type-desc');
-      if (scoreBadge) scoreBadge.innerText = `${luckScore}% ${luckType}`;
+      if (scoreBadge) scoreBadge.innerText = (currentAppLang === 'hi') ? `${luckScore}% ${luckTypeHi}` : `${luckScore}% ${luckTypeEn}`;
       if (barFill) barFill.style.width = `${luckScore}%`;
       if (descEl) descEl.innerHTML = currentAppLang === 'hi' ? luckDescHi : luckDescEn;
 
@@ -9712,13 +9720,13 @@
       if (houseBars) {
         const isHi = (currentAppLang === 'hi');
         const keyHouses = [
-          {num: 1, name: isHi ? 'प्रथम भाव (स्वयं एवं स्वास्थ्य)' : '1st (Self & Health)', score: 88, color: '#e74c3c'},
-          {num: 2, name: isHi ? 'द्वितीय भाव (धन एवं वाणी)' : '2nd (Wealth & Speech)', score: 75, color: '#2ecc71'},
-          {num: 7, name: isHi ? 'सप्तम भाव (विवाह एवं साथी)' : '7th (Marriage & Partner)', score: 82, color: '#e67e22'},
-          {num: 10, name: isHi ? 'दशम भाव (करियर एवं प्रतिष्ठा)' : '10th (Career & Status)', score: 92, color: '#5dade2'},
-          {num: 11, name: isHi ? 'एकादश भाव (आय एवं मनोकामना)' : '11th (Gains & Fulfillment)', score: 85, color: 'var(--gold)'}
+          {num: 1, name: isHi ? '1म भाव (स्वयं एवं स्वास्थ्य)' : '1st (Self & Health)', score: 88, color: '#e74c3c'},
+          {num: 2, name: isHi ? '2रा भाव (धन एवं वाणी)' : '2nd (Wealth & Speech)', score: 75, color: '#2ecc71'},
+          {num: 7, name: isHi ? '7वां भाव (विवाह एवं साथी)' : '7th (Marriage & Partner)', score: 82, color: '#e67e22'},
+          {num: 10, name: isHi ? '10वां भाव (करियर एवं प्रतिष्ठा)' : '10th (Career & Status)', score: 92, color: '#5dade2'},
+          {num: 11, name: isHi ? '11वां भाव (आय एवं मनोकामना)' : '11th (Gains & Fulfillment)', score: 85, color: 'var(--gold)'}
         ];
-        const powerText = isHi ? 'बल' : 'Power';
+        const powerText = isHi ? 'ऊर्जा' : 'Power';
         houseBars.innerHTML = keyHouses.map(h => `
           <div>
             <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:2px;">
@@ -9797,13 +9805,13 @@
       // ── SECTION 5: GEMSTONE, POWER COLORS & FINANCIAL DIET ──
       const lagnaLord = signLords[lagnaSign];
       const gemMap = {
-        'Sun': {stoneEn: 'Ruby (माणिक्य)', stoneHi: 'माणिक्य (Ruby)', metalEn: 'Gold / Copper', metalHi: 'सोना / तांबा', fingerEn: 'Ring Finger', fingerHi: 'अनामिका उंगली'},
-        'Moon': {stoneEn: 'Pearl (मोती)', stoneHi: 'मोती (Pearl)', metalEn: 'Silver', metalHi: 'चांदी', fingerEn: 'Little Finger', fingerHi: 'कनिष्ठिका उंगली'},
-        'Mars': {stoneEn: 'Red Coral (मूंगा)', stoneHi: 'मूंगा (Red Coral)', metalEn: 'Gold / Copper', metalHi: 'सोना / तांबा', fingerEn: 'Ring Finger', fingerHi: 'अनामिका उंगली'},
-        'Mercury': {stoneEn: 'Emerald (पन्ना)', stoneHi: 'पन्ना (Emerald)', metalEn: 'Gold / Silver', metalHi: 'सोना / चांदी', fingerEn: 'Little Finger', fingerHi: 'कनिष्ठिका उंगली'},
-        'Jupiter': {stoneEn: 'Yellow Sapphire (पुखराज)', stoneHi: 'पुखराज (Yellow Sapphire)', metalEn: 'Gold', metalHi: 'सोना', fingerEn: 'Index Finger', fingerHi: 'तर्जनी उंगली'},
-        'Venus': {stoneEn: 'Diamond / Opal (हीरा/ओपल)', stoneHi: 'हीरा / ओपल (Diamond/Opal)', metalEn: 'Platinum / Silver', metalHi: 'प्लैटिनम / चांदी', fingerEn: 'Middle/Little Finger', fingerHi: 'मध्यमा/कनिष्ठिका उंगली'},
-        'Saturn': {stoneEn: 'Blue Sapphire (नीलम)', stoneHi: 'नीलम (Blue Sapphire)', metalEn: 'Iron / Steel', metalHi: 'लोहा / स्टील', fingerEn: 'Middle Finger', fingerHi: 'मध्यमा उंगली'}
+        'Sun': {stoneEn: 'Ruby', stoneHi: 'माणिक्य', metalEn: 'Gold / Copper', metalHi: 'सोना / तांबा', fingerEn: 'Ring Finger', fingerHi: 'अनामिका उंगली'},
+        'Moon': {stoneEn: 'Pearl', stoneHi: 'मोती', metalEn: 'Silver', metalHi: 'चांदी', fingerEn: 'Little Finger', fingerHi: 'कनिष्ठिका उंगली'},
+        'Mars': {stoneEn: 'Red Coral', stoneHi: 'मूंगा', metalEn: 'Gold / Copper', metalHi: 'सोना / तांबा', fingerEn: 'Ring Finger', fingerHi: 'अनामिका उंगली'},
+        'Mercury': {stoneEn: 'Emerald', stoneHi: 'पन्ना', metalEn: 'Gold / Silver', metalHi: 'सोना / चांदी', fingerEn: 'Little Finger', fingerHi: 'कनिष्ठिका उंगली'},
+        'Jupiter': {stoneEn: 'Yellow Sapphire', stoneHi: 'पुखराज', metalEn: 'Gold', metalHi: 'सोना', fingerEn: 'Index Finger', fingerHi: 'तर्जनी उंगली'},
+        'Venus': {stoneEn: 'Diamond / Opal', stoneHi: 'हीरा / ओपल', metalEn: 'Platinum / Silver', metalHi: 'प्लैटिनम / चांदी', fingerEn: 'Middle/Little Finger', fingerHi: 'मध्यमा/कनिष्ठिका उंगली'},
+        'Saturn': {stoneEn: 'Blue Sapphire', stoneHi: 'नीलम', metalEn: 'Iron / Steel', metalHi: 'लोहा / स्टील', fingerEn: 'Middle Finger', fingerHi: 'मध्यमा उंगली'}
       };
 
       const gem = gemMap[lagnaLord] || gemMap['Mercury'];
@@ -10160,8 +10168,8 @@
         const summaryHi = `
           <p><strong>नाम:</strong> ${name} &nbsp;&nbsp;&nbsp;&nbsp; <strong>लिंग:</strong> ${gender === 'M' ? 'पुरुष' : gender === 'F' ? 'महिला' : 'अन्य'}</p>
           <p><strong>जन्म विवरण:</strong> ${date}, समय ${time}, स्थान: ${city.name.split(',')[0]}</p>
-          <p><strong>लग्न (Ascendant):</strong> ${signNamesHi[lagnaSignNum]} (${Math.floor(lagnaDegree)}° ${Math.round((lagnaDegree % 1) * 60)}') स्वामी: ${signLordsHi[lagnaSignNum]}</p>
-          <p><strong>चन्द्र राशि (Rashi):</strong> ${moonPl ? signNamesHi[moonPl.sign] : 'N/A'}</p>
+          <p><strong>लग्न:</strong> ${signNamesHi[lagnaSignNum]} (${Math.floor(lagnaDegree)}° ${Math.round((lagnaDegree % 1) * 60)}') स्वामी: ${signLordsHi[lagnaSignNum]}</p>
+          <p><strong>चन्द्र राशि:</strong> ${moonPl ? signNamesHi[moonPl.sign] : 'उपलब्ध नहीं'}</p>
           <p><strong>जन्म नक्षत्र:</strong> ${moonNak.h} (स्वामी: ${moonNak.lordH})</p>
           <p><strong>वर्तमान महादशा:</strong> ${planetNamesHi[dashaInfo.planet] || dashaInfo.planet} महादशा (समाप्ति: ${dashaInfo.end.toLocaleDateString()})</p>
           ${strongPlanets.length > 0 ? `<p><strong>बलवान ग्रह (अत्यंत शुभ):</strong> ${strongPlanets.map(n => planetNamesHi[n] || n).join(', ')}</p>` : ''}
