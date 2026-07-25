@@ -1698,7 +1698,7 @@
         <!-- Today's Quests -->
         <div id="quests-section" style="margin-bottom: 25px; text-align: left; display: block;">
           <!-- Day-by-Day Progressive Roadmap Navigator -->
-          <div class="card" style="border: 1px solid rgba(232, 200, 121, 0.3); background: linear-gradient(135deg, rgba(20,16,44,0.95), rgba(10,8,25,0.98)); margin-bottom: 15px; padding: 14px;">
+          <div id="journey-day-navigator" class="card" style="border: 1px solid rgba(232, 200, 121, 0.3); background: linear-gradient(135deg, rgba(20,16,44,0.95), rgba(10,8,25,0.98)); margin-bottom: 15px; padding: 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
               <button class="btn btn-outline" style="width: auto; padding: 4px 10px; font-size: 0.72rem; margin: 0;" onclick="navigateRoadmapDay(-1)">◄ Prev</button>
               <div style="text-align: center;">
@@ -4959,20 +4959,12 @@
       localStorage.setItem('today_quest_vedic_text', targetMission.vListHTML);
       localStorage.setItem('today_quest_lalkitab_text', targetMission.lListHTML);
       localStorage.setItem('today_quest_vastu_text', targetMission.vVastuHTML);
-      localStorage.setItem('today_quest_practical_text', targetMission.pListHTML);      // Reset today's quest completion state in localStorage for the new day's generation
-      questsState = {"vedic":false,"lalkitab":false,"vastu":false,"practical":false};
-      localStorage.setItem('user_quests_state', JSON.stringify(questsState));
+      localStorage.setItem('today_quest_practical_text', targetMission.pListHTML);
       
-      // Update checkmark UI
-      document.getElementById('q-vedic').checked = false;
-      document.getElementById('q-lalkitab').checked = false;
-      document.getElementById('q-vastu').checked = false;
-      document.getElementById('q-practical').checked = false;
-      
-      document.getElementById('q-vedic-card').classList.remove('completed');
-      document.getElementById('q-lalkitab-card').classList.remove('completed');
-      document.getElementById('q-vastu-card').classList.remove('completed');
-      document.getElementById('q-practical-card').classList.remove('completed');
+      // Restore/maintain per-day checkbox state from history for selectedRoadmapDay instead of resetting it
+      if (typeof renderRoadmapDayTasks === 'function') {
+        renderRoadmapDayTasks(selectedRoadmapDay);
+      }
 
       // Populate Active Goals UI
       if (typeof renderActiveGoalsUI === 'function') renderActiveGoalsUI();
@@ -5234,29 +5226,46 @@
     // ═══════════════════════════════════════════════════════════════
     // TAILORED 90-DAY PROGRESSIVE MILESTONE MATRIX (DAYS 1 TO 90)
     // ═══════════════════════════════════════════════════════════════
+    function normalizeGoalKey(g) {
+      if (!g) return 'job';
+      g = g.toLowerCase();
+      if (['job', 'career-change', 'exam-study', 'promotion-raise'].includes(g)) return 'job';
+      if (['business', 'business-launch', 'business-growth', 'partnership-deal'].includes(g)) return 'business';
+      if (['debt', 'wealth-grow', 'debt-free', 'savings', 'savings-goal'].includes(g)) return 'debt';
+      if (['marriage-single', 'marriage-couple', 'relationship-harmony', 'love', 'love-couple'].includes(g)) return 'marriage';
+      if (['baby', 'baby-planning', 'baby-pregnancy', 'baby-parenting'].includes(g)) return 'baby';
+      if (['property-single', 'property-couple', 'buy-car', 'buy-gold', 'stock-market', 'buy-land', 'property'].includes(g)) return 'property';
+      if (['health', 'health-fitness', 'health-mental', 'health-energy', 'chronic-healing', 'mental-peace'].includes(g)) return 'health';
+      return 'custom';
+    }
+
     function get90DayPracticalTask(dayNum, primaryGoal) {
       const lang = currentAppLang;
-      const goalStr = (primaryGoal || 'job').toLowerCase();
-      const isJob = goalStr.includes('job') || goalStr.includes('career') || goalStr.includes('business');
-      const isDebt = goalStr.includes('debt') || goalStr.includes('wealth');
-      const isProperty = goalStr.includes('property') || goalStr.includes('asset');
-      const isLove = goalStr.includes('marriage') || goalStr.includes('love');
+      const goalStr = normalizeGoalKey(primaryGoal);
+      const isJob = goalStr === 'job' || goalStr === 'business';
+      const isDebt = goalStr === 'debt';
+      const isProperty = goalStr === 'property';
+      const isLove = goalStr === 'marriage' || goalStr === 'baby';
+      const isHealth = goalStr === 'health';
 
       if (lang === 'hi') {
         if (dayNum === 1) {
           return isJob ? "दिन 1 कार्य: अपनी शीर्ष 3 लक्षित करियर भूमिकाओं को लिखें और अपना मूल रेज़्यूमे हेडलाइन अपडेट करें।" :
                  isDebt ? "दिन 1 कार्य: अपने बही-खाते में वर्तमान ऋण, ब्याज दरें और न्यूनतम मासिक देनदारियों को सूचीबद्ध करें।" :
                  isProperty ? "दिन 1 कार्य: अपना लक्षित संपत्ति/वाहन बजट, स्थान प्राथमिकताएं और पसंदीदा संपत्ति प्रकार तय करें।" :
+                 isHealth ? "दिन 1 कार्य: अपने स्वास्थ्य और फिटनेस लक्ष्यों, लक्षित वजन या जीवन शैली में सुधारों को लिखें।" :
                  "दिन 1 कार्य: अपने मुख्य संबंध मूल्यों और जीवन साथी से प्रमुख अपेक्षाओं को लिखें।";
         } else if (dayNum === 2) {
           return isJob ? "दिन 2 कार्य: जॉब पोर्टल्स (नौकरी/लिंक्डइन) पर खोजें और अपने कौशल से मेल खाने वाले 5 आदर्श पदों को शॉर्टलिस्ट करें।" :
                  isDebt ? "दिन 2 कार्य: जल्दी भुगतान के लिए अपनी उच्चतम ब्याज दर वाले ऋण की पहचान करें।" :
                  isProperty ? "दिन 2 कार्य: ऑनलाइन संपत्ति/वाहन सूचियों की खोज करें और बजट के भीतर 3 विकल्पों को शॉर्टलिस्ट करें।" :
+                 isHealth ? "दिन 2 कार्य: अपने वर्तमान आहार सेवन, नींद चक्र को दर्ज करें और समाप्त करने के लिए 3 बुरी आदतों की पहचान करें।" :
                  "दिन 2 कार्य: अपनी सामाजिक या वैवाहिक प्रोफ़ाइल को स्पष्ट, वास्तविक विवरण के साथ अपडेट करें।";
         } else if (dayNum === 3) {
           return isJob ? "दिन 3 कार्य: अपनी शीर्ष लक्षित भूमिका के लिए अपना रेज़्यूमे सारांश और प्रमुख तकनीकी कौशल तैयार करें।" :
                  isDebt ? "दिन 3 कार्य: ब्याज दर कम करने या ऋण पुनर्गठन के बारे में पूछताछ करने के लिए अपने बैंक या लेनदार को कॉल करें।" :
                  isProperty ? "दिन 3 कार्य: शॉर्टलिस्ट की गई संपत्तियों के बारे में पूछताछ करने के लिए एक सत्यापित रियल एस्टेट डीलर / सलाहकार से संपर्क करें।" :
+                 isHealth ? "दिन 3 कार्य: सप्ताह के लिए एक स्वच्छ, संतुलित भोजन चार्ट की योजना बनाएं और 30 मिनट की दैनिक शारीरिक गतिविधि के लिए रिमाइंडर सेट करें।" :
                  "दिन 3 कार्य: एक गर्मजोशी भरे संदेश के साथ 2 संभावित मैचों से संपर्क शुरू करें या जवाब दें।";
         } else if (dayNum === 4) {
           return "दिन 4 कार्य: सकारात्मक प्रगति ऊर्जा का स्वागत करने के लिए अपने उत्तर-पूर्व कार्यस्थल कोने (वास्तु) को साफ और संरेखित करें।";
@@ -5288,16 +5297,19 @@
           return isJob ? "Day 1 Action Step: Write down your top 3 target career roles and update your basic resume headline." :
                  isDebt ? "Day 1 Action Step: List all current debts, interest rates, and minimum monthly obligations in your ledger." :
                  isProperty ? "Day 1 Action Step: Define your target property/asset budget, location preferences, and preferred asset type." :
+                 isHealth ? "Day 1 Action Step: Write down your health and fitness goals, target weight, or lifestyle improvements." :
                  "Day 1 Action Step: Write down your core relationship values and key expectations for a life partner.";
         } else if (dayNum === 2) {
           return isJob ? "Day 2 Action Step: Search job portals (Naukri/LinkedIn) and shortlist 5 ideal postings matching your skills." :
                  isDebt ? "Day 2 Action Step: Identify your highest interest rate debt to prioritize for early payoff." :
                  isProperty ? "Day 2 Action Step: Search online property/vehicle listings and shortlist 3 choices within budget." :
+                 isHealth ? "Day 2 Action Step: Log your current dietary intake, sleep cycle, and identify 3 bad habits to eliminate." :
                  "Day 2 Action Step: Update your social or matrimonial profile with clear, genuine details.";
         } else if (dayNum === 3) {
           return isJob ? "Day 3 Action Step: Tailor your resume summary and key technical competencies for your top target role." :
                  isDebt ? "Day 3 Action Step: Call your bank or creditor to inquire about interest rate reduction or loan restructuring." :
                  isProperty ? "Day 3 Action Step: Contact a verified real estate dealer / advisor to inquire about shortlisted properties." :
+                 isHealth ? "Day 3 Action Step: Plan a clean, balanced meal chart for the week and set a reminder for 30 minutes of daily physical activity." :
                  "Day 3 Action Step: Initiate outreach or respond to 2 potential matches with a warm, engaging message.";
         } else if (dayNum === 4) {
           return "Day 4 Action Step: Clean & align your North-East workspace corner (Vastu) to welcome positive progress energy.";
@@ -5424,7 +5436,8 @@
         health:   `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> सूर्योदय के समय सूर्य नमस्कार करें, फिर 06:00–07:15 के बीच स्वामी ग्रह मंत्र का ${chantCount} बार जाप करें। तांबे के बर्तन का पानी पिएं।`,
         custom:   `<span style="color:var(--gold);font-weight:600;">सुबह का जाप (${chantCount} जाप):</span> दिन ${dayNum} के संरेखण के लिए सुबह 06:00–07:15 के बीच पूर्व की ओर मुंह करके अपने स्वामी ग्रह मंत्र का जाप करें।`
       };
-      const _vGoalKey = (primaryGoal.includes('marriage') ? 'marriage' : primaryGoal.includes('property') ? 'property' : primaryGoal in goalVedicDayTextEn ? primaryGoal : 'custom');
+      const normGoal = normalizeGoalKey(primaryGoal);
+      const _vGoalKey = normGoal;
       const vText = lang === 'hi' ? (goalVedicDayTextHi[_vGoalKey] || goalVedicDayTextHi.custom) : (goalVedicDayTextEn[_vGoalKey] || goalVedicDayTextEn.custom);
       
       // Goal-specific Evening Remedy texts per goal
@@ -5454,7 +5467,7 @@
         health:   `आवारा कुत्ते को भोजन दान करें। अपनी जेब में कच्ची हल्दी की गांठ रखें।`,
         custom:   `सूर्यास्त (शाम 06:30 बजे) पर पूर्व की ओर मुंह करके जल अर्पित करें या घी का दीपक जलाएं।`
       };
-      const _lGoalKey = (primaryGoal.includes('marriage') ? 'marriage' : primaryGoal.includes('property') ? 'property' : primaryGoal in goalBaseRemedyEn ? primaryGoal : 'custom');
+      const _lGoalKey = normGoal;
       let lText = '';
       if (lang === 'hi') {
         lText = `<span style="color:#ff6b6b;font-weight:600;">${dayNameHi} का लक्ष्य उपाय:</span> ${goalBaseRemedyHi[_lGoalKey] || goalBaseRemedyHi.custom}`;
@@ -5485,9 +5498,9 @@
         ? `<span style="color:#5dade2;font-weight:600;">वास्तु संरेखण:</span> आज अपने कमरे के उत्तर-पूर्व कोने को साफ और अव्यवस्था मुक्त रखें।`
         : `<span style="color:#5dade2;font-weight:600;">Vastu Alignment:</span> Keep your North-East room corner clean &amp; clutter-free today.`;
       
-      if (primaryGoal.includes('property') || primaryGoal.includes('asset')) {
+      if (normGoal === 'property') {
         if (lang === 'hi') {
-          vaText += `<br/><span style="color:var(--gold);font-weight:600;">संपत्ति खरीद मुहूर्त:</span> अभिजीत मुहूर्त (सुबह 11:45 - दोपहर 12:30 बजे) के दौरान ${dayNameHi} पर आगामी शुभ समय।`;
+          vaText += `<br/><span style="color:var(--gold);font-weight:600;">संपत्ति खरीद मुहूर्त:</span> संपत्ति खरीद मुहूर्त: अभिजीत मुहूर्त (सुबह 11:45 - दोपहर 12:30 बजे) के दौरान ${dayNameHi} पर आगामी शुभ समय।`;
         } else {
           vaText += `<br/><span style="color:var(--gold);font-weight:600;">Asset Purchasing Muhurat:</span> Upcoming auspicious window on ${dayNameEn} during Abhijit Muhurat (11:45 AM - 12:30 PM).`;
         }
@@ -5518,6 +5531,15 @@
           else el.classList.remove('completed');
         }
       });
+
+      // Synchronize the global questsState variable to match the currently viewed day's checkbox states
+      if (typeof questsState !== 'undefined') {
+        questsState.vedic = dayState[0];
+        questsState.lalkitab = dayState[1];
+        questsState.vastu = dayState[2];
+        questsState.practical = dayState[3];
+        localStorage.setItem('user_quests_state', JSON.stringify(questsState));
+      }
 
       updateQuestCompletionCount();
     }
