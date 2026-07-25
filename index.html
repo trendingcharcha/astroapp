@@ -901,15 +901,17 @@
       margin-top: 15px;
       border-radius: 12px;
       overflow: hidden;
+      table-layout: fixed;
     }
 
     .table th, .table td {
       border: 1px solid var(--table-border);
-      padding: 11px 12px;
+      padding: 6px 4px;
       text-align: center;
-      font-size: 0.85rem;
+      font-size: 0.72rem;
       color: var(--text);
       transition: border-color 0.3s ease, color 0.3s ease;
+      word-break: break-word;
     }
 
     .table th {
@@ -2141,16 +2143,24 @@
                 <span class="k-lbl-hi" style="display:none;">ग्रह स्थिति</span>
               </h4>
             </div>
-            <div style="overflow-x:auto;">
-              <table class="table" style="margin:0; font-size:0.8rem;">
+            <div style="overflow: hidden; width: 100%;">
+              <table class="table" style="margin:0; font-size:0.72rem; table-layout: fixed; width: 100%; border-collapse: collapse;">
+                <colgroup>
+                  <col style="width: 18%;">
+                  <col style="width: 16%;">
+                  <col style="width: 24%;">
+                  <col style="width: 10%;">
+                  <col style="width: 18%;">
+                  <col style="width: 14%;">
+                </colgroup>
                 <thead>
                   <tr>
-                    <th><span class="k-lbl-en">Planet / ग्रह</span><span class="k-lbl-hi" style="display:none;">ग्रह</span></th>
-                    <th><span class="k-lbl-en">Rashi / Sign</span><span class="k-lbl-hi" style="display:none;">राशि</span></th>
-                    <th><span class="k-lbl-en">Nakshatra</span><span class="k-lbl-hi" style="display:none;">नक्षत्र</span></th>
-                    <th><span class="k-lbl-en">House</span><span class="k-lbl-hi" style="display:none;">भाव</span></th>
-                    <th><span class="k-lbl-en">Deg</span><span class="k-lbl-hi" style="display:none;">अंश</span></th>
-                    <th><span class="k-lbl-en">Status</span><span class="k-lbl-hi" style="display:none;">स्थिति</span></th>
+                    <th style="padding: 6px 3px; font-size: 0.72rem;"><span class="k-lbl-en">Planet / ग्रह</span><span class="k-lbl-hi" style="display:none;">ग्रह</span></th>
+                    <th style="padding: 6px 3px; font-size: 0.72rem;"><span class="k-lbl-en">Rashi / Sign</span><span class="k-lbl-hi" style="display:none;">राशि</span></th>
+                    <th style="padding: 6px 3px; font-size: 0.72rem;"><span class="k-lbl-en">Nakshatra</span><span class="k-lbl-hi" style="display:none;">नक्षत्र</span></th>
+                    <th style="padding: 6px 3px; font-size: 0.72rem;"><span class="k-lbl-en">House</span><span class="k-lbl-hi" style="display:none;">भाव</span></th>
+                    <th style="padding: 6px 3px; font-size: 0.72rem;"><span class="k-lbl-en">Deg</span><span class="k-lbl-hi" style="display:none;">अंश</span></th>
+                    <th style="padding: 6px 3px; font-size: 0.72rem;"><span class="k-lbl-en">Status</span><span class="k-lbl-hi" style="display:none;">स्थिति</span></th>
                   </tr>
                 </thead>
                 <tbody id="placements-tbody"></tbody>
@@ -9429,21 +9439,21 @@
         const status = p.name === 'Lagna' ? {en: '-', hi: '-', color: '#aaa'} : getPlanetStatus(p.name, p.sign);
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td style="color:var(--gold); font-weight:700;">
+          <td style="color:var(--gold); font-weight:700; padding: 6px 3px; font-size: 0.72rem; word-break: break-word;">
             <span class="k-lbl-en">${p.name}</span>
             <span class="k-lbl-hi" style="display:none;">${planetNamesHi[p.name] || p.name}</span>
           </td>
-          <td>
+          <td style="padding: 6px 3px; font-size: 0.72rem; word-break: break-word;">
             <span class="k-lbl-en">${signNames[p.sign]}</span>
             <span class="k-lbl-hi" style="display:none;">${signNamesHi[p.sign]}</span>
           </td>
-          <td style="font-size:0.78rem;">
+          <td style="font-size:0.7rem; padding: 6px 3px; word-break: break-word;">
             <span class="k-lbl-en">${nak.n}</span>
             <span class="k-lbl-hi" style="display:none;">${nak.h}</span>
           </td>
-          <td style="color:var(--purple); font-weight:bold;">${houseNum}</td>
-          <td style="color:var(--text-muted);">${Math.floor(p.degree)}°${Math.round((p.degree % 1) * 60)}'</td>
-          <td style="color:${status.color}; font-size:0.78rem; font-weight:600;">
+          <td style="color:var(--purple); font-weight:bold; padding: 6px 3px; font-size: 0.72rem; word-break: break-word;">${houseNum}</td>
+          <td style="color:var(--text-muted); padding: 6px 3px; font-size: 0.72rem; word-break: break-word;">${Math.floor(p.degree)}°${Math.round((p.degree % 1) * 60)}'</td>
+          <td style="color:${status.color}; font-size:0.7rem; font-weight:600; padding: 6px 3px; word-break: break-word;">
             <span class="k-lbl-en">${status.en}</span>
             <span class="k-lbl-hi" style="display:none;">${status.hi}</span>
           </td>
