@@ -10838,10 +10838,16 @@
       const dashaPeriodEl = document.getElementById('k-dasha-period');
       if (dashaPeriodEl) dashaPeriodEl.textContent = 'Until: ' + endM + '/' + endY;
       const dm = dashaMeanings[dashaInfo.planet] || dashaMeanings['Sun'];
+      const dashaPlan = dashaInfo.planet;
+      const dashaPlanHi = planetNamesHi[dashaPlan] || dashaPlan;
+      const userName = name || localStorage.getItem('user_name') || 'Seeker';
+      const lagnaName = signNames[lagnaSignNum];
+      const lagnaNameHi = signNamesHi[lagnaSignNum];
+
       const meaningEnEl = document.getElementById('k-dasha-meaning-en');
-      if (meaningEnEl) meaningEnEl.innerHTML = dm.en;
+      if (meaningEnEl) meaningEnEl.innerHTML = `For <strong>${userName}</strong> (<strong>${lagnaName} Ascendant</strong>), your current <strong>${dashaPlan} Mahadasha</strong> (active until ${endM}/${endY}) is actively ruling your karmic phase. ${dm.en}`;
       const meaningHiEl = document.getElementById('k-dasha-meaning-hi');
-      if (meaningHiEl) meaningHiEl.innerHTML = dm.hi;
+      if (meaningHiEl) meaningHiEl.innerHTML = `<strong>${userName}</strong> (<strong>${lagnaNameHi} लग्न</strong>) के लिए, आपकी वर्तमान <strong>${dashaPlanHi} महादशा</strong> (समाप्ति: ${endM}/${endY}) आपके कर्मिक चक्र को निर्देशित कर रही है। ${dm.hi}`;
 
       // Render Dosha Card
       const doshaList = document.getElementById('k-dosha-list');
@@ -11301,13 +11307,16 @@
       const bInfo = budhData[mercuryHouse];
       const tInfo = tevaData[tevaType];
 
+      const lagnaName = signNames[cachedLagnaSignNum] || "Aries";
+      const lagnaNameHi = signNamesHi[cachedLagnaSignNum] || "मेष";
+
       // Mangal HTML
       document.getElementById('lk-mangal-details').innerHTML = `
         <div style="background: rgba(255, 107, 107, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #ff6b6b; margin-bottom: 10px;">
           <strong>Status:</strong> ${mInfo.status} (House ${marsHouse})
         </div>
-        <p class="k-lbl-en">${mInfo.en}</p>
-        <p class="k-lbl-hi" style="display:none;">${mInfo.hi}</p>
+        <p class="k-lbl-en">For <strong>${userName}</strong> (<strong>${lagnaName} Ascendant</strong>), Mars is placed in House ${marsHouse}. ${mInfo.en}</p>
+        <p class="k-lbl-hi" style="display:none;"><strong>${userName}</strong> (<strong>${lagnaNameHi} लग्न</strong>) के लिए, मंगल भाव ${marsHouse} में स्थित है। ${mInfo.hi}</p>
       `;
 
       // Budh HTML
@@ -11315,8 +11324,8 @@
         <div style="background: rgba(93, 173, 226, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #5dade2; margin-bottom: 10px;">
           <strong>Status:</strong> ${bInfo.status} (House ${mercuryHouse})
         </div>
-        <p class="k-lbl-en">${bInfo.en}</p>
-        <p class="k-lbl-hi" style="display:none;">${bInfo.hi}</p>
+        <p class="k-lbl-en">For <strong>${userName}</strong>, Mercury is placed in House ${mercuryHouse}. ${bInfo.en}</p>
+        <p class="k-lbl-hi" style="display:none;"><strong>${userName}</strong> के लिए, बुध भाव ${mercuryHouse} में स्थित है। ${bInfo.hi}</p>
       `;
 
       // Teva HTML
@@ -11324,8 +11333,8 @@
         <div style="background: rgba(195, 155, 211, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #c39bd3; margin-bottom: 10px;">
           <strong>Type:</strong> ${tInfo.title}
         </div>
-        <p class="k-lbl-en">${tInfo.en}</p>
-        <p class="k-lbl-hi" style="display:none;">${tInfo.hi}</p>
+        <p class="k-lbl-en"><strong>${userName}</strong>, ${tInfo.en}</p>
+        <p class="k-lbl-hi" style="display:none;"><strong>${userName}</strong>, ${tInfo.hi}</p>
       `;
 
       // Remedies HTML
@@ -11433,30 +11442,34 @@
         }
       };
       
+      const userName = localStorage.getItem('user_name') || 'Seeker';
+      const userProf = localStorage.getItem('user_profession') || 'Professional';
+      const userGoal = localStorage.getItem('user_goal') || 'Success';
+
       document.getElementById('v-house-text').innerHTML = `
-        <p class="k-lbl-en">${houseVastuData[elIdx].en}</p>
-        <p class="k-lbl-hi" style="display:none;">${houseVastuData[elIdx].hi}</p>
+        <p class="k-lbl-en">For <strong>${userName}</strong> (<strong>${signNames[lagnaSign]} Ascendant</strong>), ${houseVastuData[elIdx].en}</p>
+        <p class="k-lbl-hi" style="display:none;"><strong>${userName}</strong> (<strong>${signNamesHi[lagnaSign]} लग्न</strong>) के लिए, ${houseVastuData[elIdx].hi}</p>
       `;
 
       // 4. Business & Work Vastu Content
       let busEn = '', busHi = '';
       if ([1, 5, 9].includes(mercuryHouse)) {
-        busEn = `<strong>Best Office Direction: East (पूर्व)</strong>. Sit facing East while working to activate your Mercury placement. Keep your laptop and primary work documents on the East/North side of your table. Place a small brass Sun figurine or a crystal pyramid here to boost intellectual leadership.`;
-        busHi = `<strong>सर्वश्रेष्ठ कार्यालय दिशा: पूर्व (East)</strong>। अपने बुध की स्थिति को सक्रिय करने के लिए काम करते समय पूर्व की ओर मुंह करके बैठें। अपने लैपटॉप और मुख्य दस्तावेजों को टेबल के उत्तर-पूर्वी कोने पर रखें। बौद्धिक नेतृत्व को बढ़ावा देने के लिए यहाँ तांबे के सूर्य की छोटी मूर्ति या क्रिस्टल पिरामिड रखें।`;
+        busEn = `<strong>Best Office Direction: East (पूर्व)</strong>. Sit facing East while working as a ${userProf} to activate your Mercury placement. Keep your laptop and primary work documents on the East/North side of your table. Place a small brass Sun figurine or a crystal pyramid here to boost intellectual leadership for your ${userGoal} goal.`;
+        busHi = `<strong>सर्वश्रेष्ठ कार्यालय दिशा: पूर्व (East)</strong>। ${userProf} के रूप में कार्य करते समय अपने बुध की स्थिति को सक्रिय करने के लिए पूर्व की ओर मुंह करके बैठें। अपने लैपटॉप और मुख्य दस्तावेजों को टेबल के उत्तर-पूर्वी कोने पर रखें। अपने ${userGoal} लक्ष्य के लिए बौद्धिक नेतृत्व को बढ़ावा देने के लिए यहाँ तांबे के सूर्य की छोटी मूर्ति या क्रिस्टल पिरामिड रखें।`;
       } else if ([2, 6, 10].includes(mercuryHouse)) {
-        busEn = `<strong>Best Office Direction: North (उत्तर)</strong>. Sit facing North while managing finances, signings, or business deals. Place your cash box or safe locker in the South-West of your office cabin, opening towards the North. Keep a green aventurine gem tree on the North side of your desk.`;
-        busHi = `<strong>सर्वश्रेष्ठ कार्यालय दिशा: उत्तर (North)</strong>। वित्त, हस्ताक्षर या व्यावसायिक सौदों का प्रबंधन करते समय उत्तर की ओर मुंह करके बैठें। अपनी तिजोरी या कैश बॉक्स को केबिन के दक्षिण-पश्चिम कोने में रखें ताकि वह उत्तर की ओर खुले। डेस्क के उत्तरी भाग में एक ग्रीन एवेन्शुरिन का पेड़ रखें।`;
+        busEn = `<strong>Best Office Direction: North (उत्तर)</strong>. Sit facing North while managing finances, signings, or business deals as a ${userProf}. Place your cash box or safe locker in the South-West of your office cabin, opening towards the North. Keep a green aventurine gem tree on the North side of your desk.`;
+        busHi = `<strong>सर्वश्रेष्ठ कार्यालय दिशा: उत्तर (North)</strong>। ${userProf} के रूप में वित्त, हस्ताक्षर या व्यावसायिक सौदों का प्रबंधन करते समय उत्तर की ओर मुंह करके बैठें। अपनी तिजोरी या कैश बॉक्स को केबिन के दक्षिण-पश्चिम कोने में रखें ताकि वह उत्तर की ओर खुले। डेस्क के उत्तरी भाग में एक ग्रीन एवेन्शुरिन का पेड़ रखें।`;
       } else if ([3, 7, 11].includes(mercuryHouse)) {
-        busEn = `<strong>Best Office Direction: West (पश्चिम)</strong>. Sit facing West while consulting partners, sales calls, or negotiations. Place all heavy files and cabinets in the South-West sector of the room. Use steel-gray or dark blue desk accessories to ground decision-making.`;
-        busHi = `<strong>सर्वश्रेष्ठ कार्यालय दिशा: पश्चिम (West)</strong>। साझेदारों से परामर्श, सेल्स कॉल या बातचीत करते समय पश्चिम की ओर मुंह करके बैठें। भारी फाइलों और अलमारियों को कमरे के दक्षिण-पश्चिम क्षेत्र में रखें। निर्णय क्षमता को मजबूत करने के लिए स्टील-ग्रे या गहरे नीले रंग की डेस्क एक्सेसरीज का उपयोग करें।`;
+        busEn = `<strong>Best Office Direction: West (पश्चिम)</strong>. Sit facing West while consulting partners, sales calls, or negotiations as a ${userProf}. Place all heavy files and cabinets in the South-West sector of the room. Use steel-gray or dark blue desk accessories to ground decision-making.`;
+        busHi = `<strong>सर्वश्रेष्ठ कार्यालय दिशा: पश्चिम (West)</strong>। ${userProf} के रूप में साझेदारों से परामर्श, सेल्स कॉल या बातचीत करते समय पश्चिम की ओर मुंह करके बैठें। भारी फाइलों और अलमारियों को कमरे के दक्षिण-पश्चिम क्षेत्र में रखें। निर्णय क्षमता को मजबूत करने के लिए स्टील-ग्रे या गहरे नीले रंग की डेस्क एक्सेसरीज का उपयोग करें।`;
       } else {
-        busEn = `<strong>Best Office Direction: North-East (उत्तर-पूर्व)</strong>. Sit facing North-East for research, corporate planning, and strategy. Ensure your workspace is clean, quiet, and illuminated with natural light. Keep a bowl of sea salt on your table to absorb work-related anxieties.`;
-        busHi = `<strong>सर्वश्रेष्ठ कार्यालय दिशा: उत्तर-पूर्व (North-East)</strong>। अनुसंधान, योजना और रणनीति बनाते समय उत्तर-पूर्व की ओर मुंह करके बैठें। सुनिश्चित करें कि आपका कार्यक्षेत्र साफ, शांत और प्राकृतिक रोशनी से प्रकाशित हो। काम की चिंताओं को दूर करने के लिए टेबल पर समुद्री नमक का कटोरा रखें।`;
+        busEn = `<strong>Best Office Direction: North-East (उत्तर-पूर्व)</strong>. Sit facing North-East for research, corporate planning, and strategy as a ${userProf}. Ensure your workspace is clean, quiet, and illuminated with natural light. Keep a bowl of sea salt on your table to absorb work-related anxieties.`;
+        busHi = `<strong>सर्वश्रेष्ठ कार्यालय दिशा: उत्तर-पूर्व (North-East)</strong>। ${userProf} के रूप में अनुसंधान, योजना और रणनीति बनाते समय उत्तर-पूर्व की ओर मुंह करके बैठें। सुनिश्चित करें कि आपका कार्यक्षेत्र साफ, शांत और प्राकृतिक रोशनी से प्रकाशित हो। काम की चिंताओं को दूर करने के लिए टेबल पर समुद्री नमक का कटोरा रखें।`;
       }
 
       document.getElementById('v-business-text').innerHTML = `
-        <p class="k-lbl-en">${busEn}</p>
-        <p class="k-lbl-hi" style="display:none;">${busHi}</p>
+        <p class="k-lbl-en">For <strong>${userName}</strong>, ${busEn}</p>
+        <p class="k-lbl-hi" style="display:none;"><strong>${userName}</strong> के लिए, ${busHi}</p>
       `;
 
       // 5. Sleeping Vastu Content
@@ -11470,8 +11483,8 @@
       }
 
       document.getElementById('v-sleep-text').innerHTML = `
-        <p class="k-lbl-en">${sleepEn}</p>
-        <p class="k-lbl-hi" style="display:none;">${sleepHi}</p>
+        <p class="k-lbl-en">For <strong>${userName}</strong>, ${sleepEn}</p>
+        <p class="k-lbl-hi" style="display:none;"><strong>${userName}</strong> के लिए, ${sleepHi}</p>
       `;
 
       // 6. Food Eating Vastu Content
@@ -11488,8 +11501,8 @@
       }
 
       document.getElementById('v-food-text').innerHTML = `
-        <p class="k-lbl-en">${foodEn}</p>
-        <p class="k-lbl-hi" style="display:none;">${foodHi}</p>
+        <p class="k-lbl-en">For <strong>${userName}</strong>, ${foodEn}</p>
+        <p class="k-lbl-hi" style="display:none;"><strong>${userName}</strong> के लिए, ${foodHi}</p>
       `;
 
       // 7. Bath & Purification Vastu Content
@@ -11509,8 +11522,8 @@
       }
 
       document.getElementById('v-bath-text').innerHTML = `
-        <p class="k-lbl-en">${bathEn}</p>
-        <p class="k-lbl-hi" style="display:none;">${bathHi}</p>
+        <p class="k-lbl-en">For <strong>${userName}</strong>, ${bathEn}</p>
+        <p class="k-lbl-hi" style="display:none;"><strong>${userName}</strong> के लिए, ${bathHi}</p>
       `;
 
       // 8. Travel & Expansion Directions Content
