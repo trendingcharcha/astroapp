@@ -1890,6 +1890,57 @@
           </div>
         </div>
 
+        <!-- NUMEROLOGY & NAME CORRECTION CARD -->
+        <div class="card" id="numerology-name-card" style="border: 1px solid rgba(142, 111, 214, 0.4); background: linear-gradient(135deg, rgba(16, 12, 38, 0.95), rgba(35, 28, 68, 0.85)); margin-top: 20px; margin-bottom: 24px; position: relative; overflow: hidden; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.4);">
+          <div style="position: absolute; top: -40px; right: -40px; width: 120px; height: 120px; background: radial-gradient(circle, rgba(142, 111, 214, 0.2) 0%, transparent 70%); pointer-events: none;"></div>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid rgba(142, 111, 214, 0.2); padding-bottom: 10px;">
+            <div>
+              <h3 style="color: var(--purple); margin: 0; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>
+                <span><span class="k-lbl-en">Numerology Profile & Name Vibration Alignment</span><span class="k-lbl-hi" style="display:none;">न्यूमरोलॉजी प्रोफाइल एवं नाम संशोधन संरेखण</span></span>
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.76rem; margin: 3px 0 0 0;"><span class="k-lbl-en">Based on your Kundli Birth Details & Chaldean Vibration</span><span class="k-lbl-hi" style="display:none;">आपकी कुंडली जन्म तिथि एवं चालडीन अंकशास्त्र पर आधारित</span></p>
+            </div>
+          </div>
+
+          <!-- 3-COL NUMEROLOGY STATS -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px;">
+            <div style="background: rgba(232, 200, 121, 0.08); border: 1px solid rgba(232, 200, 121, 0.25); padding: 10px; border-radius: 12px; text-align: center;">
+              <span style="font-size: 0.7rem; color: var(--gold); text-transform: uppercase; font-weight: 700; display: block;"><span class="k-lbl-en">Mulank (Birth)</span><span class="k-lbl-hi" style="display:none;">मूलांक (जन्म)</span></span>
+              <strong style="font-size: 1.35rem; color: #FFFFFF; display: block; margin: 2px 0;" id="num-mulank-val">-</strong>
+              <span style="font-size: 0.68rem; color: var(--text-muted);" id="num-mulank-planet">-</span>
+            </div>
+            <div style="background: rgba(142, 111, 214, 0.12); border: 1px solid rgba(142, 111, 214, 0.3); padding: 10px; border-radius: 12px; text-align: center;">
+              <span style="font-size: 0.7rem; color: var(--purple); text-transform: uppercase; font-weight: 700; display: block;"><span class="k-lbl-en">Bhagyank (Destiny)</span><span class="k-lbl-hi" style="display:none;">भाग्यांक (भाग्य)</span></span>
+              <strong style="font-size: 1.35rem; color: #FFFFFF; display: block; margin: 2px 0;" id="num-bhagyank-val">-</strong>
+              <span style="font-size: 0.68rem; color: var(--text-muted);" id="num-bhagyank-planet">-</span>
+            </div>
+            <div style="background: rgba(93, 173, 226, 0.1); border: 1px solid rgba(93, 173, 226, 0.3); padding: 10px; border-radius: 12px; text-align: center;">
+              <span style="font-size: 0.7rem; color: #5dade2; text-transform: uppercase; font-weight: 700; display: block;"><span class="k-lbl-en">Name Vibration</span><span class="k-lbl-hi" style="display:none;">नाम योग</span></span>
+              <strong style="font-size: 1.35rem; color: #FFFFFF; display: block; margin: 2px 0;" id="num-name-val">-</strong>
+              <span style="font-size: 0.68rem; color: var(--text-muted);" id="num-name-planet">-</span>
+            </div>
+          </div>
+
+          <!-- NAME CORRECTION ANALYSIS SECTION -->
+          <div style="background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--purple); padding: 12px 14px; border-radius: 8px; margin-bottom: 14px;">
+            <h4 style="margin: 0 0 6px 0; color: #FFFFFF; font-size: 0.88rem;">
+              <span><span class="k-lbl-en">Customized Name Correction & Prediction</span><span class="k-lbl-hi" style="display:none;">अनुकूलित नाम संशोधन एवं विश्लेषण</span></span>
+            </h4>
+            <div id="num-correction-text" style="font-size: 0.84rem; line-height: 1.6; color: #E0DFEC;">
+              Loading numerology profile...
+            </div>
+          </div>
+
+          <!-- DISCLAIMER GUIDANCE NOTE -->
+          <div style="background: rgba(232, 200, 121, 0.06); border: 1px dashed rgba(232, 200, 121, 0.35); padding: 10px 12px; border-radius: 10px; font-size: 0.76rem; line-height: 1.5; color: #D6C7E4;">
+            <strong style="color: var(--gold); display: block; margin-bottom: 3px;"><span class="k-lbl-en">Important Guidance Note:</span><span class="k-lbl-hi" style="display:none;">महत्वपूर्ण मार्गदर्शन टिप्पणी:</span></strong>
+            <span class="k-lbl-en">Note: This name vibration suggestion is based on authentic numerology calculation systems widely used today. We do not force or require you to change your official name. These suggestions provide an energetic alignment, but true success is built upon your dedication, continuous hard work, and destiny supporting your effort.</span>
+            <span class="k-lbl-hi" style="display:none;">नोट: यह नाम ऊर्जा संशोधन सुझाव आज के प्रचलित प्रामाणिक अंकशास्त्र सिद्धांतों पर आधारित है। हम आपको आधिकारिक दस्तावेजों में नाम बदलने के लिए बाध्य नहीं करते हैं। यह सुझाव केवल एक ऊर्जावान संरेखण प्रदान करता है, परंतु वास्तविक सफलता आपके निरंतर कठिन परिश्रम, समर्पण और कर्मयोग से ही प्राप्त होती है, जिसमें भाग्य आपका समर्थन करता है।</span>
+          </div>
+        </div>
+
         <!-- Level Up Modal Overlay -->
         <div id="level-up-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 20px;">
           <div class="auth-card" style="border: 2px solid var(--gold); background: linear-gradient(135deg, #171230, #2A244E); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
@@ -6288,6 +6339,11 @@
         renderPersonalizedRashiHoroscope();
       }
 
+      // Render Numerology Profile & Name Vibration Alignment
+      if (typeof renderNumerologyAndNameCorrection === 'function') {
+        renderNumerologyAndNameCorrection(lang);
+      }
+
       // 1. Translate Form Select options
       translateFormSelects(lang);
 
@@ -7831,6 +7887,121 @@
       const conclusion = conclusions[(weekdayIdx * 2 + rashiIdx) % conclusions.length];
       
       return `${intro} ${body} ${conclusion}`;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // NUMEROLOGY (MULANK, BHAGYANK & NAME CORRECTION) ENGINE
+    // ═══════════════════════════════════════════════════════════════
+    function renderNumerologyAndNameCorrection(langParam) {
+      const lang = langParam || (typeof currentAppLang !== 'undefined' ? currentAppLang : 'en');
+      const isHi = (lang === 'hi');
+
+      const storedName = localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || 'Cosmic Seeker';
+      const storedDob = localStorage.getItem('user_dob') || localStorage.getItem('kundli_dob') || '1995-08-14';
+
+      const chaldeanMap = {
+        'a':1, 'b':2, 'c':3, 'd':4, 'e':5, 'f':8, 'g':3, 'h':5, 'i':1, 'j':1,
+        'k':2, 'l':3, 'm':4, 'n':5, 'o':7, 'p':8, 'q':1, 'r':2, 's':3, 't':4,
+        'u':6, 'v':6, 'w':6, 'x':5, 'y':1, 'z':7
+      };
+
+      const getChaldeanSum = (str) => {
+        let sum = 0;
+        const clean = (str || '').toLowerCase().replace(/[^a-z]/g, '');
+        for (let i = 0; i < clean.length; i++) {
+          sum += (chaldeanMap[clean[i]] || 0);
+        }
+        return sum;
+      };
+
+      const reduceToSingleDigit = (num) => {
+        let s = num;
+        while (s > 9) {
+          let sum = 0;
+          String(s).split('').forEach(d => sum += parseInt(d));
+          s = sum;
+        }
+        return s || 1;
+      };
+
+      let day = 14, month = 8, year = 1995;
+      if (storedDob) {
+        const parts = storedDob.split(/[-/.]/);
+        if (parts.length === 3) {
+          if (parts[0].length === 4) {
+            year = parseInt(parts[0]); month = parseInt(parts[1]); day = parseInt(parts[2]);
+          } else {
+            day = parseInt(parts[0]); month = parseInt(parts[1]); year = parseInt(parts[2]);
+          }
+        }
+      }
+
+      const mulank = reduceToSingleDigit(day);
+
+      const fullDobDigits = `${day}${month}${year}`;
+      let bhagyankSum = 0;
+      fullDobDigits.split('').forEach(d => { if (!isNaN(parseInt(d))) bhagyankSum += parseInt(d); });
+      const bhagyank = reduceToSingleDigit(bhagyankSum);
+
+      const rawNameSum = getChaldeanSum(storedName);
+      const nameNum = reduceToSingleDigit(rawNameSum);
+
+      const planetInfo = {
+        1: { en: "Sun (Surya)", hi: "सूर्य (आत्मकारक)", traitEn: "Leadership & Energy", traitHi: "नेतृत्व एवं ऊर्जा" },
+        2: { en: "Moon (Chandra)", hi: "चंद्र (मनःकारक)", traitEn: "Intuition & Harmony", traitHi: "अंतर्ज्ञान एवं सद्भाव" },
+        3: { en: "Jupiter (Guru)", hi: "गुरु (ज्ञानकारक)", traitEn: "Wisdom & Growth", traitHi: "ज्ञान एवं समृद्धि" },
+        4: { en: "Rahu (North Node)", hi: "राहु (नवाचार)", traitEn: "Focus & Innovation", traitHi: "नवाचार एवं ध्यान" },
+        5: { en: "Mercury (Budh)", hi: "बुध (बुद्धिकारक)", traitEn: "Communication & Trade", traitHi: "संचार एवं व्यापार" },
+        6: { en: "Venus (Shukra)", hi: "शुक्र (सौंदर्यकारक)", traitEn: "Luxury & Prosperity", traitHi: "सौंदर्य एवं आकर्षण" },
+        7: { en: "Ketu (South Node)", hi: "केतु (मोक्षकारक)", traitEn: "Spiritual Depth", traitHi: "आध्यात्मिक गहराई" },
+        8: { en: "Saturn (Shani)", hi: "शनि (कर्मकारक)", traitEn: "Discipline & Duty", traitHi: "अनुशासन एवं कर्म" },
+        9: { en: "Mars (Mangal)", hi: "मंगल (ऊर्जाकारक)", traitEn: "Courage & Vitality", traitHi: "साहस एवं पराक्रम" }
+      };
+
+      const mulankEl = document.getElementById('num-mulank-val');
+      const mulankPlanetEl = document.getElementById('num-mulank-planet');
+      const bhagyankEl = document.getElementById('num-bhagyank-val');
+      const bhagyankPlanetEl = document.getElementById('num-bhagyank-planet');
+      const nameValEl = document.getElementById('num-name-val');
+      const namePlanetEl = document.getElementById('num-name-planet');
+      const textEl = document.getElementById('num-correction-text');
+
+      if (mulankEl) mulankEl.innerText = mulank;
+      if (mulankPlanetEl) mulankPlanetEl.innerText = isHi ? planetInfo[mulank].hi : planetInfo[mulank].en;
+
+      if (bhagyankEl) bhagyankEl.innerText = bhagyank;
+      if (bhagyankPlanetEl) bhagyankPlanetEl.innerText = isHi ? planetInfo[bhagyank].hi : planetInfo[bhagyank].en;
+
+      if (nameValEl) nameValEl.innerText = nameNum;
+      if (namePlanetEl) namePlanetEl.innerText = isHi ? planetInfo[nameNum].hi : planetInfo[nameNum].en;
+
+      const isFriendly = (nameNum === 1 || nameNum === 3 || nameNum === 5 || nameNum === 6 || nameNum === mulank || nameNum === bhagyank);
+      
+      if (textEl) {
+        if (isFriendly) {
+          textEl.innerHTML = isHi
+            ? `आपका नाम <strong>"${storedName}"</strong> चालडीन अंकशास्त्र में <strong>अंक ${nameNum} (${planetInfo[nameNum].hi})</strong> पर संरेखित है, जो आपके मूलांक <strong>${mulank} (${planetInfo[mulank].hi})</strong> एवं भाग्यांक <strong>${bhagyank} (${planetInfo[bhagyank].hi})</strong> के साथ पूर्णतया अनुकूल है। आपकी वर्तमान नाम वर्तनी (स्पेलिंग) ब्रह्मांडीय ऊर्जा के साथ संतुलित है।`
+            : `Your name <strong>"${storedName}"</strong> carries a Chaldean vibration of <strong>${nameNum} (${planetInfo[nameNum].en})</strong>, which naturally resonates with your Mulank <strong>${mulank} (${planetInfo[mulank].en})</strong> and Bhagyank <strong>${bhagyank} (${planetInfo[bhagyank].en})</strong>. Your current spelling maintains optimal cosmic energy!`;
+        } else {
+          let altSpelling = storedName;
+          if (!storedName.toLowerCase().includes('aa') && storedName.toLowerCase().includes('a')) {
+            altSpelling = storedName.replace(/a/i, 'aa');
+          } else if (!storedName.toLowerCase().includes('ee') && storedName.toLowerCase().includes('i')) {
+            altSpelling = storedName.replace(/i/i, 'ee');
+          } else if (!storedName.toLowerCase().includes('rr') && storedName.toLowerCase().includes('r')) {
+            altSpelling = storedName.replace(/r/i, 'rr');
+          } else {
+            altSpelling = storedName + "A";
+          }
+
+          const altRawSum = getChaldeanSum(altSpelling);
+          const altNum = reduceToSingleDigit(altRawSum);
+
+          textEl.innerHTML = isHi
+            ? `आपका वर्तमान नाम <strong>"${storedName}"</strong> चालडीन योग में <strong>अंक ${nameNum} (${planetInfo[nameNum].hi})</strong> पर आता है। आपके मूलांक <strong>${mulank}</strong> और भाग्यांक <strong>${bhagyank}</strong> के साथ इसे और अधिक संरेखित करने के लिए, वर्तनी (स्पेलिंग) में सूक्ष्म बदलाव जैसे <strong>"${altSpelling}"</strong> (अंक योग <strong>${altNum} - ${planetInfo[altNum].hi}</strong>) का सुझाव दिया जाता है। यह सूक्ष्म संशोधन आपके नेतृत्व, भाग्य और व्यापारिक ऊर्जा को गति प्रदान कर सकता है।`
+            : `Your current name <strong>"${storedName}"</strong> sums to Chaldean vibration <strong>${nameNum} (${planetInfo[nameNum].en})</strong>. To align it harmoniously with your Mulank <strong>${mulank}</strong> and Bhagyank <strong>${bhagyank}</strong>, a subtle spelling enhancement like <strong>"${altSpelling}"</strong> (Vibration <strong>${altNum} - ${planetInfo[altNum].en}</strong>) is recommended to optimize your luck, career, and communication vibrations.`;
+        }
+      }
     }
 
 
