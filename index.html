@@ -5524,6 +5524,30 @@
       generateCoachMission();
     }
 
+    const goalLabelsHi = {
+      'job': 'करियर / मनपसंद नौकरी',
+      'career-change': 'करियर परिवर्तन',
+      'debt': 'ऋण मुक्ति व धन प्राप्ति',
+      'savings': 'बचत व धन वृद्धि',
+      'marriage-single': 'विवाह भविष्यवाणि एवं समय',
+      'marriage-couple': 'दाम्पत्य सामंजस्य व संबंध',
+      'love': 'जीवनसाथी की खोज / प्रेम',
+      'love-couple': 'संबंधों में प्रगाढ़ता',
+      'baby': 'संतान प्राप्ति / संतान योग',
+      'business': 'व्यापार वृद्धि व नए अवसर',
+      'property-single': 'सपनों का घर / संपत्ति',
+      'property-couple': 'संयुक्त संपत्ति खरीद',
+      'health': 'स्वास्थ्य व कल्याण',
+      'health-mental': 'मानसिक शांति व तनाव मुक्ति',
+      'health-energy': 'ऊर्जा व रोग प्रतिरोधक क्षमता',
+      'health-fitness': 'शारीरिक तंदुरुस्ती',
+      'buy-car': 'नया वाहन / कार क्रय',
+      'buy-gold': 'स्वर्ण / आभूषण क्रय',
+      'stock-market': 'शेयर बाजार व निवेश',
+      'buy-land': 'भूमि / प्लॉट क्रय',
+      'custom': 'विशेष जीवन समस्या समाधान'
+    };
+
     function renderActiveGoalsUI() {
       const goalsListEl = document.getElementById('active-goals-list');
       const countEl = document.getElementById('active-goals-count');
@@ -5532,8 +5556,10 @@
       const activeGoals = getActiveGoals();
       if (countEl) countEl.textContent = activeGoals.length;
 
+      const isHi = (typeof currentAppLang !== 'undefined' && currentAppLang === 'hi');
+
       goalsListEl.innerHTML = activeGoals.map(gKey => {
-        const label = goalLabels[gKey] || gKey;
+        const label = isHi ? (goalLabelsHi[gKey] || goalLabels[gKey] || gKey) : (goalLabels[gKey] || gKey);
         return `
           <div style="display:flex; align-items:center; gap:6px; background:rgba(232,200,121,0.1); border:1px solid rgba(232,200,121,0.3); border-radius:16px; padding:6px 12px; font-size:0.78rem; color:var(--gold);">
             <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> ${label}</span>
@@ -10661,10 +10687,13 @@
       }
     }
 
-    function generateLalKitabReport() {
-      // 1. Auto-fill master details if placements are not generated yet
+    async function generateLalKitabReport() {
+      // 1. Auto-fill master details & calculate placements if not generated yet
       if (!cachedPlacementsList || cachedPlacementsList.length === 0) {
         autoFillKundliFromOnboarding();
+        if (typeof generateChart === 'function') {
+          await generateChart({ preventDefault: () => {} });
+        }
       }
       
       // Draw the Lal Kitab Teva chart
@@ -10901,13 +10930,12 @@
       setKundliLang(currentAppLang);
     }
 
-    function generatePersonalizedVastuReport() {
-      // If placements not loaded, try to auto-fill first
+    async function generatePersonalizedVastuReport() {
+      // If placements not loaded, auto-fill and calculate chart
       if (!cachedPlacementsList || cachedPlacementsList.length === 0) {
-        // Check if there is stored profile details in localStorage to auto fill and calculate
-        const hasStored = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
-        if (hasStored) {
-          autoFillKundliFromOnboarding();
+        autoFillKundliFromOnboarding();
+        if (typeof generateChart === 'function') {
+          await generateChart({ preventDefault: () => {} });
         }
       }
 
@@ -11410,17 +11438,32 @@
     }
 
     function calculateCompatibility() {
-      const p1Name = (document.getElementById('m-p1-name')?.value || 'Person 1').trim();
+      const p1Name = (document.getElementById('m-p1-name')?.value || '').trim();
       const p1Gender = document.getElementById('m-p1-gender')?.value || 'Male';
-      const p1Dob = document.getElementById('m-p1-dob')?.value || '1995-05-15';
-      const p1Tob = document.getElementById('m-p1-tob')?.value || '08:30';
-      const p1Pob = (document.getElementById('m-p1-pob')?.value || 'Delhi').trim();
+      const p1Dob = document.getElementById('m-p1-dob')?.value || '';
+      const p1Tob = document.getElementById('m-p1-tob')?.value || '';
+      const p1Pob = (document.getElementById('m-p1-pob')?.value || '').trim();
 
-      const p2Name = (document.getElementById('m-p2-name')?.value || 'Person 2').trim();
+      const p2Name = (document.getElementById('m-p2-name')?.value || '').trim();
       const p2Gender = document.getElementById('m-p2-gender')?.value || 'Female';
-      const p2Dob = document.getElementById('m-p2-dob')?.value || '1997-08-20';
-      const p2Tob = document.getElementById('m-p2-tob')?.value || '10:15';
-      const p2Pob = (document.getElementById('m-p2-pob')?.value || 'Mumbai').trim();
+      const p2Dob = document.getElementById('m-p2-dob')?.value || '';
+      const p2Tob = document.getElementById('m-p2-tob')?.value || '';
+      const p2Pob = (document.getElementById('m-p2-pob')?.value || '').trim();
+
+      const lang = currentAppLang;
+      const isHi = lang === 'hi';
+
+      if (!p1Name || !p1Dob) {
+        showToast(isHi ? 'कृपया प्रथम व्यक्ति (Person 1) का विवरण दर्ज करें।' : 'Please enter complete details for Person 1.', 'error');
+        return;
+      }
+
+      if (!p2Name || !p2Dob || !p2Tob || !p2Pob) {
+        showToast(isHi 
+          ? 'कुंडली मिलान के लिए कृपया द्वितीय व्यक्ति (पार्टनर) का पूरा विवरण (नाम, जन्म तिथि, समय व स्थान) दर्ज करें।' 
+          : 'Please enter complete details for Person 2 (Partner) to calculate Kundli Milan compatibility.', 'error');
+        return;
+      }
 
       // Seed for deterministic calculation based on DOBs and strings
       const d1 = new Date(p1Dob).getTime() || 800000000000;
@@ -11429,12 +11472,6 @@
 
       // Gun Milan Score out of 36
       const gunScore = 18 + Math.floor((seed % 17) + (seed % 3 === 0 ? 2 : 0)); // Range 18 to 36
-      const rashiScore = 65 + Math.floor((seed % 32)); // Range 65% to 96%
-      const bizScore = 70 + Math.floor(((seed * 7) % 28)); // Range 70% to 97%
-
-      const lang = currentAppLang;
-      const isHi = lang === 'hi';
-
       // Marriage compatibility check: ONLY for Male + Female or Female + Male
       const isOppositeGender = (p1Gender !== p2Gender);
 
