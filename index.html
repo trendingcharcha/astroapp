@@ -5578,8 +5578,8 @@
       return 'custom';
     }
 
-    function get90DayPracticalTask(dayNum, primaryGoal) {
-      const lang = currentAppLang;
+    function get90DayPracticalTask(dayNum, primaryGoal, langParam) {
+      const lang = langParam || (typeof currentAppLang !== 'undefined' ? currentAppLang : 'en');
       const goalStr = normalizeGoalKey(primaryGoal);
       const isJob = goalStr === 'job' || goalStr === 'business';
       const isDebt = goalStr === 'debt';
@@ -5832,7 +5832,7 @@
       });
 
       // 4. PRACTICAL ACTIONS
-      const pTaskStr = get90DayPracticalTask(dayNum, primaryGoal);
+      const pTaskStr = get90DayPracticalTask(dayNum, primaryGoal, lang);
       const pParts = pTaskStr.split(':');
       const pTitle = pParts[0] || (isHi ? 'व्यावहारिक कदम' : 'Practical Action Step');
       const pDetail = pParts.slice(1).join(':') || pTaskStr;
