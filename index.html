@@ -5820,6 +5820,10 @@
       const primaryGoal = activeGoals[0] || 'job';
       const normGoal = normalizeGoalKey(primaryGoal);
 
+      const userName = localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || 'Seeker';
+      const userProf = localStorage.getItem('user_profession') || 'Seeker';
+      const userCustomIssue = localStorage.getItem('user_custom_issue') || localStorage.getItem('onboarding_custom_issue') || '';
+
       let planStartDate = localStorage.getItem('karma_plan_start_date') || getFormattedDate();
       let targetDate = new Date(new Date(planStartDate).getTime() + (dayNum - 1) * 86400000);
       const daysOfWeekEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -5835,13 +5839,16 @@
       const tasks = [];
 
       // 1. VEDIC TASKS
+      const customNoteEn = userCustomIssue ? ` for focus on "${userCustomIssue}"` : '';
+      const customNoteHi = userCustomIssue ? ` ("${userCustomIssue}" पर ध्यान केंद्रित करते हुए)` : '';
+
       tasks.push({
         category: 'vedic',
         title: isHi ? `स्वामी ग्रह मंत्र (${chantCount} जाप)` : `Ruling Planet Mantra (${chantCount} Chants)`,
         timeWindow: '06:00 AM - 07:15 AM',
         text: isHi
-          ? `पूर्व की ओर मुंह करके अपने स्वामी ग्रह मंत्र का ${chantCount} बार जाप करें।`
-          : `Chant your ruling planet mantra ${chantCount} times facing East between 06:00 AM–07:15 AM.`,
+          ? `${userName} (${userProf}): पूर्व की ओर मुंह करके अपने स्वामी ग्रह मंत्र का ${chantCount} बार जाप करें${customNoteHi}।`
+          : `${userName} (${userProf}): Chant your ruling planet mantra ${chantCount} times facing East between 06:00 AM–07:15 AM${customNoteEn}.`,
         xp: 15,
         color: 'var(--gold)',
         icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
@@ -9169,10 +9176,11 @@
         const cProf = document.getElementById('c-profession'); if (cProf) cProf.value = profession;
         coachSelectedCity = onboardingSelectedCity || { name: cityName, lat: 28.6139, lng: 77.2090, tz: 5.5 };
 
-        if (goal === 'custom') {
-          const customVal = document.getElementById('o-custom-issue') ? document.getElementById('o-custom-issue').value : '';
+        const customVal = document.getElementById('o-custom-issue') ? document.getElementById('o-custom-issue').value.trim() : '';
+        if (customVal) {
           const cCustom = document.getElementById('c-custom-issue');
           if (cCustom) cCustom.value = customVal;
+          localStorage.setItem('user_custom_issue', customVal);
         }
         
         // Sync baby details if goal is baby
