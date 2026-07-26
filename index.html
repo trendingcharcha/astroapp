@@ -10897,7 +10897,7 @@
     }
 
     // Auto fill details from user profile/onboarding data
-    function autoFillKundliFromOnboarding() {
+    async function autoFillKundliFromOnboarding() {
       const name = localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || document.getElementById('o-name')?.value || 'User';
       const date = localStorage.getItem('user_dob') || localStorage.getItem('kundli_date') || document.getElementById('o-date')?.value || '1995-01-01';
       const time = localStorage.getItem('user_tob') || localStorage.getItem('kundli_time') || document.getElementById('o-time')?.value || '12:00';
@@ -10917,10 +10917,8 @@
       if (kForm) kForm.style.display = 'none';
       if (kRes) kRes.style.display = 'block';
 
-      // Generate Kundli directly if not drawn yet
-      // Generate Kundli chart and planetary placements directly
       if (typeof generateChart === 'function') {
-        generateChart({ preventDefault: () => {} });
+        await generateChart({ preventDefault: () => {} });
       }
     }
 
@@ -11800,21 +11798,93 @@
         return;
       }
 
-      // Seed for deterministic calculation based on DOBs and strings
-      const d1 = new Date(p1Dob).getTime() || 800000000000;
-      const d2 = new Date(p2Dob).getTime() || 870000000000;
-      const seed = Math.abs((d1 + d2 + p1Name.length * 31 + p2Name.length * 47) % 1000);
+      // Astronomical Moon calculation for Person 1 & Person 2
+      let year1 = 1995, month1 = 5, day1 = 15, hour1 = 8, min1 = 30;
+      let year2 = 1996, month2 = 8, day2 = 20, hour2 = 10, min2 = 15;
+      try {
+        const parts1 = p1Dob.split(/[-/]/);
+        if (parts1[0].length === 4) { year1 = parseInt(parts1[0]); month1 = parseInt(parts1[1]); day1 = parseInt(parts1[2]); }
+        else { year1 = parseInt(parts1[2]); month1 = parseInt(parts1[1]); day1 = parseInt(parts1[0]); }
+        const t1 = parseTimeString(p1Tob); hour1 = t1.hour; min1 = t1.min;
 
-      // Gun Milan Score out of 36
-      const gunScore = 18 + Math.floor((seed % 17) + (seed % 3 === 0 ? 2 : 0)); // Range 18 to 36
-      // Marriage compatibility check: ONLY for Male + Female or Female + Male
+        const parts2 = p2Dob.split(/[-/]/);
+        if (parts2[0].length === 4) { year2 = parseInt(parts2[0]); month2 = parseInt(parts2[1]); day2 = parseInt(parts2[2]); }
+        else { year2 = parseInt(parts2[2]); month2 = parseInt(parts2[1]); day2 = parseInt(parts2[0]); }
+        const t2 = parseTimeString(p2Tob); hour2 = t2.hour; min2 = t2.min;
+      } catch(e) {}
+
+      const jd1 = getJulianDay(year1, month1, day1, hour1, min1, 5.5);
+      const jd2 = getJulianDay(year2, month2, day2, hour2, min2, 5.5);
+
+      const ayanamsa1 = getLahiriAyanamsa(jd1);
+      const ayanamsa2 = getLahiriAyanamsa(jd2);
+
+      const moonLon1 = (getPlanetLongitude("Moon", jd1) - ayanamsa1 + 360) % 360;
+      const moonLon2 = (getPlanetLongitude("Moon", jd2) - ayanamsa2 + 360) % 360;
+
+      const marsLon1 = (getPlanetLongitude("Mars", jd1) - ayanamsa1 + 360) % 360;
+      const marsLon2 = (getPlanetLongitude("Mars", jd2) - ayanamsa2 + 360) % 360;
+
+      const rashi1 = Math.floor(moonLon1 / 30.0);
+      const rashi2 = Math.floor(moonLon2 / 30.0);
+
+      const nakshatra1 = Math.floor(moonLon1 / (360.0 / 27.0));
+      const nakshatra2 = Math.floor(moonLon2 / (360.0 / 27.0));
+
+      const rasiNamesEn = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+      const rasiNamesHi = ["मेष", "वृषभ", "मिथुन", "कर्क", "सिंह", "कन्या", "तुला", "वृश्चिक", "धनु", "मकर", "कुंभ", "मीन"];
+
+      // Manglik Check
+      const marsHouse1 = (Math.floor(marsLon1 / 30.0) - rashi1 + 12) % 12 + 1;
+      const marsHouse2 = (Math.floor(marsLon2 / 30.0) - rashi2 + 12) % 12 + 1;
+      const isManglik1 = [1, 4, 7, 8, 12].includes(marsHouse1);
+      const isManglik2 = [1, 4, 7, 8, 12].includes(marsHouse2);
+
+      // ── ASHTAKOOTA GUN MILAN (36 Gunas) ──
+      // 1. Varna (1 Pt)
+      const varnaMap = [4, 2, 1, 3, 4, 2, 1, 3, 4, 2, 1, 3];
+      const varnaScore = (varnaMap[rashi1] >= varnaMap[rashi2]) ? 1 : 0;
+
+      // 2. Vashya (2 Pts)
+      const rashiDiff = (rashi2 - rashi1 + 12) % 12;
+      let vashyaScore = (rashi1 === rashi2) ? 2 : ([0, 4, 8].includes(rashiDiff) ? 2 : ([1, 5, 9].includes(rashiDiff) ? 1.5 : 1));
+
+      // 3. Tara (3 Pts)
+      const taraDiff = (nakshatra2 - nakshatra1 + 27) % 9;
+      let taraScore = [1, 3, 5, 7].includes(taraDiff) ? 1.5 : 3;
+
+      // 4. Yoni (4 Pts)
+      let yoniScore = 4 - (Math.abs(nakshatra1 - nakshatra2) % 4);
+
+      // 5. Maitri (5 Pts)
+      const lords = [2, 3, 4, 1, 0, 4, 3, 2, 5, 6, 6, 5];
+      let maitriScore = (lords[rashi1] === lords[rashi2]) ? 5 : (Math.abs(lords[rashi1] - lords[rashi2]) <= 2 ? 4 : 2);
+
+      // 6. Gana (6 Pts)
+      const gana1 = nakshatra1 % 3;
+      const gana2 = nakshatra2 % 3;
+      let ganaScore = (gana1 === gana2 || (gana1 === 0 && gana2 === 1) || (gana1 === 1 && gana2 === 0)) ? 6 : 1;
+
+      // 7. Bhakoot (7 Pts)
+      const bDiff = Math.abs(rashi1 - rashi2);
+      let bhakootScore = (bDiff === 1 || bDiff === 11 || bDiff === 5 || bDiff === 7) ? 0 : 7;
+
+      // 8. Nadi (8 Pts)
+      let nadiScore = (nakshatra1 % 3 === nakshatra2 % 3) ? 0 : 8;
+
+      // Total Score
+      const gunScore = Math.min(36, Math.max(14, Math.round(varnaScore + vashyaScore + taraScore + yoniScore + maitriScore + ganaScore + bhakootScore + nadiScore)));
+
       const isOppositeGender = (p1Gender !== p2Gender);
+
+      const rashiScore = Math.min(98, Math.max(50, Math.round((maitriScore + bhakootScore + 3) / 15 * 100)));
+      const bizScore = Math.min(98, Math.max(55, Math.round((varnaScore + maitriScore + ganaScore + 3) / 15 * 100)));
 
       let marriageScore = 0;
       let marriageNote = "";
       if (isOppositeGender) {
-        marriageScore = Math.min(98, Math.max(50, Math.floor(gunScore * 2.5 + (seed % 10))));
-        marriageNote = isHi ? "शुभ विवाह अनुकूलता" : "Auspicious Marriage Match";
+        marriageScore = Math.min(98, Math.max(45, Math.round(gunScore / 36 * 100)));
+        marriageNote = isHi ? `शुभ विवाह अनुकूलता (${gunScore}/36 गुण मिलान)` : `Auspicious Marriage Match (${gunScore}/36 Gunas Matched)`;
       } else {
         marriageScore = 0;
         marriageNote = isHi
@@ -11849,16 +11919,22 @@
         if (isOppositeGender) {
           if (gunScore >= 28) {
             verdictText = isHi
-              ? `✨ <strong>अति उत्तम मिलान (${gunScore}/36 गुण):</strong> ${p1Name} और ${p2Name} के बीच उत्कृष्ट भावनात्मक, मानसिक और आध्यात्मिक सामंजस्य है। विवाह एवं दीर्घकालिक साझेदारी के लिए यह अत्यंत शुभ योग है।`
-              : `✨ <strong>Exceptional Match (${gunScore}/36 Gunas):</strong> ${p1Name} and ${p2Name} demonstrate outstanding emotional, mental, and spiritual harmony. Highly auspicious for marriage and long-term union.`;
+              ? `✨ <strong>अति उत्तम मिलान (${gunScore}/36 गुण):</strong> ${p1Name} (${rasiNamesHi[rashi1]} राशि) और ${p2Name} (${rasiNamesHi[rashi2]} राशि) के बीच उत्कृष्ट भावनात्मक, मानसिक और आध्यात्मिक सामंजस्य है। विवाह एवं दीर्घकालिक साझेदारी के लिए यह अत्यंत शुभ योग है।`
+              : `✨ <strong>Exceptional Match (${gunScore}/36 Gunas):</strong> ${p1Name} (${rasiNamesEn[rashi1]}) and ${p2Name} (${rasiNamesEn[rashi2]}) demonstrate outstanding emotional, mental, and spiritual harmony. Highly auspicious for marriage and long-term union.`;
           } else if (gunScore >= 21) {
             verdictText = isHi
-              ? `👍 <strong>शुभ एवं अनुकूल संबंध (${gunScore}/36 गुण):</strong> ${p1Name} और ${p2Name} का गुण मिलान उत्तम है। व्यावसायिक एवं वैवाहिक जीवन में संतुलन रहेगा।`
-              : `👍 <strong>Harmonious & Balanced Connection (${gunScore}/36 Gunas):</strong> ${p1Name} and ${p2Name} share a strong foundational bond. Business growth and domestic life will thrive with mutual respect.`;
+              ? `👍 <strong>शुभ एवं अनुकूल संबंध (${gunScore}/36 गुण):</strong> ${p1Name} (${rasiNamesHi[rashi1]} राशि) और ${p2Name} (${rasiNamesHi[rashi2]} राशि) का गुण मिलान उत्तम है। व्यावसायिक एवं वैवाहिक जीवन में संतुलन रहेगा।`
+              : `👍 <strong>Harmonious & Balanced Connection (${gunScore}/36 Gunas):</strong> ${p1Name} (${rasiNamesEn[rashi1]}) and ${p2Name} (${rasiNamesEn[rashi2]}) share a strong foundational bond. Business growth and domestic life will thrive with mutual respect.`;
           } else {
             verdictText = isHi
-              ? `⚠️ <strong>औसत मिलान (${gunScore}/36 गुण):</strong> संबंधों में संतुलन बनाए रखने के लिए कुछ वैदिक उपायों (जैसे बृहस्पति व शुक्र शांति) की आवश्यकता होगी।`
+              ? `⚠️ <strong>औसत मिलान (${gunScore}/36 गुण):</strong> ${p1Name} और ${p2Name} के संबंधों में संतुलन बनाए रखने के लिए कुछ वैदिक उपायों (जैसे बृहस्पति व शुक्र शांति) की आवश्यकता होगी।`
               : `⚠️ <strong>Moderate Connection (${gunScore}/36 Gunas):</strong> Essential remedies for Venus and Jupiter planetary alignment are recommended to smooth out communication gaps.`;
+          }
+
+          if (isManglik1 || isManglik2) {
+            verdictText += isHi
+              ? `<br><br>🔥 <strong>मांगलिक दोष स्थिति:</strong> ${isManglik1 ? p1Name + ' मांगलिक हैं। ' : ''}${isManglik2 ? p2Name + ' मांगलिक हैं।' : ''} मंगलवार को हनुमान चालीसा का पाठ शांति प्रदान करेगा।`
+              : `<br><br>🔥 <strong>Manglik Status:</strong> ${isManglik1 ? p1Name + ' is Manglik. ' : ''}${isManglik2 ? p2Name + ' is Manglik.' : ''} Reciting Hanuman Chalisa on Tuesdays will pacify Mars.`;
           }
         } else {
           verdictText = isHi
