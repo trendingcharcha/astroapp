@@ -3127,6 +3127,17 @@
   <!-- Astrological Scripts -->
   <script>
     // 1. ZODIAC DICTIONARIES
+    function escapeHTML(str) {
+      if (str === null || str === undefined) return '';
+      if (typeof str !== 'string') return String(str);
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
     const signNames = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
     const horoscopes = {
       "Aries": "Your energy is aligned for career initiatives today. Trust your intuition.",
@@ -5981,6 +5992,12 @@
           card.classList.add('completed');
           gainXP(xpValue || 15);
           playSparkle(card);
+          // Soft cloud sync prompt for guest mode
+          if (!supabaseUser && !localStorage.getItem('supabase_user_id')) {
+            showToast(currentAppLang === 'hi' 
+              ? 'कार्य दर्ज हुआ! अपनी 90-दिन की प्रगति क्लाउड में सुरक्षित रखने के लिए साइन इन करें।' 
+              : 'Task saved locally! Sign in to sync your 90-day progress across devices.', 'info');
+          }
         } else {
           card.classList.remove('completed');
           gainXP(-(xpValue || 15));
