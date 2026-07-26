@@ -6407,7 +6407,273 @@
         renderRoadmapDayTasks(selectedRoadmapDay);
       }
 
+      // 7. Force-translate ALL remaining dynamic English text in the entire app
+      forceTranslateAllDynamicText(lang);
+
+      // 8. Re-render Karmic Journey grid with correct language
+      if (typeof renderKarmicJourney === 'function') {
+        renderKarmicJourney();
+      }
+
       console.log('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> App language switched to:', lang.toUpperCase());
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // FORCE FULL-APP TRANSLATION ENGINE
+    // Translates every dynamic text element across all screens/tabs
+    // ═══════════════════════════════════════════════════════════════
+    function forceTranslateAllDynamicText(lang) {
+      const isHi = (lang === 'hi');
+
+      // ── BOTTOM NAV TAB LABELS ────────────────────────────────────
+      const navMap = {
+        'nav-label-home':     { en: 'Home',       hi: 'होम' },
+        'nav-label-kundli':   { en: 'Kundli',     hi: 'कुंडली' },
+        'nav-label-lalkitab': { en: 'Lal Kitab',  hi: 'लाल किताब' },
+        'nav-label-matching': { en: 'Matching',   hi: 'मिलान' },
+        'nav-label-vastu':    { en: 'Vastu',      hi: 'वास्तु' },
+        'nav-label-coach':    { en: 'Coach',      hi: 'कोच' },
+        'nav-label-settings': { en: 'Settings',   hi: 'सेटिंग' }
+      };
+      Object.entries(navMap).forEach(([id, t]) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = isHi ? t.hi : t.en;
+      });
+
+      // ── HOME TAB: Panchang Section Labels ───────────────────────
+      const panchangLabelMap = {
+        'p-tithi-label':     { en: 'Tithi',      hi: 'तिथि' },
+        'p-nakshatra-label': { en: 'Nakshatra',  hi: 'नक्षत्र' },
+        'p-yoga-label':      { en: 'Yoga',       hi: 'योग' },
+        'p-vara-label':      { en: 'Day (Vara)', hi: 'वार' }
+      };
+      Object.entries(panchangLabelMap).forEach(([id, t]) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = isHi ? t.hi : t.en;
+      });
+
+      // Section heading: "Today's Panchang"
+      const panchangHeading = document.getElementById('panchang-section-title');
+      if (panchangHeading) panchangHeading.textContent = isHi ? 'आज का पंचांग' : "Today's Panchang";
+
+      // ── HOME TAB: Daily Rashi Horoscope Card ────────────────────
+      const rashiCardTitle = document.getElementById('rashi-horoscope-card-title');
+      if (rashiCardTitle) rashiCardTitle.textContent = isHi ? 'दैनिक राशि कुंडली राशिफल' : 'Daily Kundli Rashi Horoscope';
+
+      const rashiRemLabel = document.getElementById('rashi-remedy-label');
+      if (rashiRemLabel) rashiRemLabel.textContent = isHi ? 'दैनिक राशि उपाय' : 'DAILY RASHI REMEDY';
+
+      const rashiLuckNum = document.getElementById('rashi-lucky-number-label');
+      if (rashiLuckNum) rashiLuckNum.textContent = isHi ? 'भाग्यशाली अंक' : 'Lucky Number';
+
+      const rashiLuckColor = document.getElementById('rashi-lucky-color-label');
+      if (rashiLuckColor) rashiLuckColor.textContent = isHi ? 'भाग्यशाली रंग' : 'Lucky Color';
+
+      const rashiTransFocus = document.getElementById('rashi-transit-focus-label');
+      if (rashiTransFocus) rashiTransFocus.textContent = isHi ? 'ट्रांजिट फोकस' : 'Transit Focus';
+
+      const rashiJanmaBtn = document.getElementById('rashi-janma-btn');
+      if (rashiJanmaBtn) rashiJanmaBtn.textContent = isHi ? 'जन्म\nराशि' : 'JANMA\nRASHI';
+
+      // ── HOME TAB: 90-Day Karmic Journey Section ──────────────────
+      const journeyTitle = document.getElementById('journey-section-title');
+      if (journeyTitle) journeyTitle.textContent = isHi ? '90-दिवसीय कर्म यात्रा' : '90-DAY KARMIC JOURNEY';
+
+      // Day Badge: "Day 1 of 90" / "90 में से दिन 1"
+      const dayBadge = document.getElementById('journey-day-badge');
+      if (dayBadge) {
+        const txt = dayBadge.textContent || '';
+        const dayMatch = txt.match(/\d+/);
+        const dayNum = dayMatch ? parseInt(dayMatch[0]) : 1;
+        dayBadge.textContent = isHi ? `90 में से दिन ${dayNum}` : `Day ${dayNum} of 90`;
+      }
+
+      // Phase title
+      const phaseTitle = document.getElementById('journey-phase-title');
+      if (phaseTitle) {
+        const txt = phaseTitle.textContent || '';
+        if (txt.includes('1') || txt.includes('शिलान्यास') || txt.includes('Foundation')) {
+          phaseTitle.textContent = isHi ? 'चरण 1: शिलान्यास (दिन 1-30)' : 'Phase 1: Foundation (Days 1-30)';
+        } else if (txt.includes('2') || txt.includes('संरेखण') || txt.includes('Alignment')) {
+          phaseTitle.textContent = isHi ? 'चरण 2: कर्म संरेखण (दिन 31-60)' : 'Phase 2: Karmic Alignment (Days 31-60)';
+        } else {
+          phaseTitle.textContent = isHi ? 'चरण 3: अभिव्यक्ति (दिन 61-90)' : 'Phase 3: Manifestation (Days 61-90)';
+        }
+      }
+
+      // Percent completion label
+      const percentEl = document.getElementById('journey-percent');
+      if (percentEl) {
+        const txt = percentEl.textContent || '';
+        const pctMatch = txt.match(/(\d+)%/);
+        const daysMatch = txt.match(/(\d+)\/90/);
+        const pct = pctMatch ? pctMatch[1] : '0';
+        const days = daysMatch ? daysMatch[1] : '0';
+        percentEl.textContent = isHi ? `${pct}% पूर्ण (${days}/90 दिन)` : `${pct}% Complete (${days}/90 Days)`;
+      }
+
+      // Grid page label: "Days 1-30" etc.
+      const pageLabelEl = document.getElementById('grid-page-label');
+      if (pageLabelEl) {
+        const txt = pageLabelEl.textContent || '';
+        if (txt.includes('1') || txt.includes('1–30')) {
+          pageLabelEl.textContent = isHi ? 'दिन 1–30' : 'Days 1–30';
+        } else if (txt.includes('31')) {
+          pageLabelEl.textContent = isHi ? 'दिन 31–60' : 'Days 31–60';
+        } else {
+          pageLabelEl.textContent = isHi ? 'दिन 61–90' : 'Days 61–90';
+        }
+      }
+
+      // Prev/Next journey nav buttons
+      const prevBtn = document.getElementById('journey-prev-btn');
+      if (prevBtn) prevBtn.textContent = isHi ? '◄ पिछला' : '◄ Prev';
+      const nextBtn = document.getElementById('journey-next-btn');
+      if (nextBtn) nextBtn.textContent = isHi ? 'अगला ►' : 'Next ►';
+
+      // Journey "Today" context label
+      const journeyTodayLabel = document.getElementById('journey-today-label');
+      if (journeyTodayLabel) {
+        const now = new Date();
+        const dayNames = isHi
+          ? ['रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार']
+          : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const months = isHi
+          ? ['जनवरी', 'फरवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितंबर', 'अक्टूबर', 'नवंबर', 'दिसंबर']
+          : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        journeyTodayLabel.textContent = isHi
+          ? `आज: ${dayNames[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`
+          : `Today: ${dayNames[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+      }
+
+      // Journey sub-desc
+      const journeyDesc = document.getElementById('journey-task-desc');
+      if (journeyDesc) {
+        journeyDesc.textContent = isHi
+          ? 'आपकी 90-दिवसीय दैनिक कार्य योजना: मंत्र जाप, लाल किताब उपाय और व्यावहारिक लक्ष्य पूरे करें।'
+          : 'Your 90-day daily task plan: chant mantras, do Lal Kitab remedies, & complete practical goals';
+      }
+
+      // Legend labels
+      const legendPending = document.getElementById('legend-pending-label');
+      if (legendPending) legendPending.textContent = isHi ? 'लंबित' : 'Pending';
+      const legendActive = document.getElementById('legend-active-label');
+      if (legendActive) legendActive.textContent = isHi ? 'सक्रिय' : 'Active';
+      const legendDone = document.getElementById('legend-done-label');
+      if (legendDone) legendDone.textContent = isHi ? 'पूर्ण' : 'Done';
+
+      // ── KUNDLI TAB: Section Headings & Buttons ──────────────────
+      const kundliTabTitle = document.getElementById('kundli-tab-title');
+      if (kundliTabTitle) kundliTabTitle.textContent = isHi ? 'जन्म कुंडली' : 'Janma Kundli';
+
+      const kundliGenerateBtn = document.getElementById('kundli-generate-btn');
+      if (kundliGenerateBtn) kundliGenerateBtn.textContent = isHi ? 'कुंडली बनाएं' : 'Generate Kundli';
+
+      const kundliDownloadBtn = document.getElementById('kundli-download-btn');
+      if (kundliDownloadBtn) kundliDownloadBtn.textContent = isHi ? 'PDF डाउनलोड करें' : 'Download PDF';
+
+      // ── LAL KITAB TAB: Section Headings ─────────────────────────
+      const lkTitle = document.getElementById('lalkitab-tab-title');
+      if (lkTitle) lkTitle.textContent = isHi ? 'लाल किताब तेवा' : 'Lal Kitab Teva';
+
+      const lkRemedyTitle = document.getElementById('lalkitab-remedy-title');
+      if (lkRemedyTitle) lkRemedyTitle.textContent = isHi ? 'घर-वार उपाय' : 'House-wise Remedies';
+
+      // ── MATCHING TAB: Section Labels ─────────────────────────────
+      const matchTitle = document.getElementById('matching-tab-title');
+      if (matchTitle) matchTitle.textContent = isHi ? 'कुंडली मिलान' : 'Kundli Milan';
+
+      const p1Label = document.getElementById('matching-p1-label');
+      if (p1Label) p1Label.textContent = isHi ? 'व्यक्ति 1 (आप)' : 'Person 1 (You)';
+      const p2Label = document.getElementById('matching-p2-label');
+      if (p2Label) p2Label.textContent = isHi ? 'व्यक्ति 2 (साथी)' : 'Person 2 (Partner)';
+
+      const matchBtn = document.getElementById('matching-calculate-btn');
+      if (matchBtn) matchBtn.textContent = isHi ? 'अनुकूलता जांचें और कुंडली मिलान करें' : 'CHECK COMPATIBILITY & KUNDLI MILAN';
+
+      // ── VASTU TAB: Section Labels ─────────────────────────────────
+      const vastuTitle = document.getElementById('vastu-tab-title');
+      if (vastuTitle) vastuTitle.textContent = isHi ? 'वास्तु दिशा-निर्देश' : 'Vastu Directions';
+
+      // ── COACH TAB: Section Labels ─────────────────────────────────
+      const coachTitle = document.getElementById('coach-tab-title');
+      if (coachTitle) coachTitle.textContent = isHi ? 'कोच भविष्यवाणियाँ' : 'Coach Predictions';
+
+      const coachGenerateBtn = document.getElementById('coach-generate-btn');
+      if (coachGenerateBtn) coachGenerateBtn.textContent = isHi ? 'मेरी 90-दिवसीय कार्य योजना बनाएं' : 'GENERATE MY 90-DAY ACTION PLAN';
+
+      // ── SETTINGS TAB: Section Labels ──────────────────────────────
+      const settingsTitle = document.getElementById('settings-tab-title');
+      if (settingsTitle) settingsTitle.textContent = isHi ? 'सेटिंग्स' : 'Settings';
+
+      const langLabel = document.getElementById('settings-lang-label');
+      if (langLabel) langLabel.textContent = isHi ? 'भाषा' : 'Language';
+
+      const themeLabel = document.getElementById('settings-theme-label');
+      if (themeLabel) themeLabel.textContent = isHi ? 'थीम' : 'Theme';
+
+      const logoutBtn = document.getElementById('settings-logout-btn');
+      if (logoutBtn) logoutBtn.textContent = isHi ? 'लॉग आउट करें' : 'Log Out';
+
+      const deleteBtn = document.getElementById('settings-delete-btn');
+      if (deleteBtn) deleteBtn.textContent = isHi ? 'खाता हटाएं' : 'Delete Account';
+
+      // ── NOTIFICATION DRAWER ───────────────────────────────────────
+      const notifTitle = document.getElementById('notification-drawer-title');
+      if (notifTitle) notifTitle.textContent = isHi ? 'सनातन सूचनाएं' : 'Sanatan Notifications';
+
+      // ── ROADMAP PHASE LABEL (Home tab inline) ─────────────────────
+      const roadmapPhaseLabel = document.getElementById('roadmap-phase-label');
+      if (roadmapPhaseLabel) {
+        const txt = roadmapPhaseLabel.textContent || '';
+        if (txt.includes('1') || txt.includes('Foundation') || txt.includes('शिलान्यास')) {
+          roadmapPhaseLabel.textContent = isHi ? 'चरण 1: शिलान्यास (दिन 1)' : 'Phase 1: Foundation (Day 1)';
+        } else if (txt.includes('2') || txt.includes('Alignment') || txt.includes('संरेखण')) {
+          roadmapPhaseLabel.textContent = isHi ? 'चरण 2: कर्म संरेखण' : 'Phase 2: Karmic Alignment';
+        } else {
+          roadmapPhaseLabel.textContent = isHi ? 'चरण 3: अभिव्यक्ति' : 'Phase 3: Manifestation';
+        }
+      }
+
+      // ── TODAY'S QUEST SECTION LABELS ──────────────────────────────
+      const questTitle = document.getElementById('today-quest-title');
+      if (questTitle) questTitle.textContent = isHi ? 'आज का कार्य' : "Today's Quest";
+
+      const vedicQuestLabel = document.getElementById('quest-vedic-label');
+      if (vedicQuestLabel) vedicQuestLabel.textContent = isHi ? 'वैदिक मंत्र' : 'Vedic Mantra';
+
+      const lkQuestLabel = document.getElementById('quest-lalkitab-label');
+      if (lkQuestLabel) lkQuestLabel.textContent = isHi ? 'लाल किताब उपाय' : 'Lal Kitab Remedy';
+
+      const vastuQuestLabel = document.getElementById('quest-vastu-label');
+      if (vastuQuestLabel) vastuQuestLabel.textContent = isHi ? 'वास्तु समायोजन' : 'Vastu Adjustment';
+
+      const practicalQuestLabel = document.getElementById('quest-practical-label');
+      if (practicalQuestLabel) practicalQuestLabel.textContent = isHi ? 'व्यावहारिक कार्य' : 'Practical Action';
+
+      // ── ACTIVE GOALS SECTION ──────────────────────────────────────
+      const activeGoalsTitle = document.getElementById('active-goals-title');
+      if (activeGoalsTitle) activeGoalsTitle.textContent = isHi ? 'सक्रिय लक्ष्य' : 'Active Goals';
+
+      const addGoalBtn = document.getElementById('add-goal-btn');
+      if (addGoalBtn && !addGoalBtn.querySelector('svg')) {
+        addGoalBtn.textContent = isHi ? '+ लक्ष्य जोड़ें' : '+ Add Goal';
+      }
+
+      // ── QUESTS COMPLETED COUNT ────────────────────────────────────
+      const questCount = document.getElementById('quests-completed-count');
+      if (questCount) {
+        const txt = questCount.textContent || '';
+        const nums = txt.match(/(\d+)\s*\/\s*(\d+)/);
+        if (nums) {
+          questCount.textContent = isHi ? `${nums[1]} / ${nums[2]} पूर्ण` : `${nums[1]} / ${nums[2]} Complete`;
+        }
+      }
+
+      // ── RE-RENDER ACTIVE GOAL PILLS ──────────────────────────────
+      if (typeof renderActiveGoalsUI === 'function') {
+        renderActiveGoalsUI();
+      }
     }
 
     function translatePlaceholders(lang) {
@@ -6845,7 +7111,7 @@
     function checkInMood(rating, btn) {
       const todayStr = getFormattedDate();
       if (moodCheckedDate === todayStr) {
-        showToast("Cosmic energy already checked in today!");
+        showToast(currentAppLang === 'hi' ? 'आपकी ब्रह्मांडीय ऊर्जा आज पहले ही दर्ज की जा चुकी है!' : 'Cosmic energy already checked in today!');
         return;
       }
       
@@ -6868,7 +7134,8 @@
         level += 1;
         localStorage.setItem('user_level', level);
         
-        document.getElementById('level-up-rank-text').innerText = `Level ${level} - ${getLevelTitle(level)}`;
+        const _lvlLang = (typeof currentAppLang !== 'undefined') ? currentAppLang : 'en';
+        document.getElementById('level-up-rank-text').innerText = _lvlLang === 'hi' ? `स्तर ${level} - ${getLevelTitle(level, 'hi')}` : `Level ${level} - ${getLevelTitle(level)}`;
         document.getElementById('level-up-modal').style.display = 'flex';
       } else if (xp < 0) {
         xp = 0;
@@ -6956,7 +7223,11 @@
           updateGamificationHeader();
           
           setTimeout(() => {
-            showToast(`<svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg> COSMIC TRIUMPH! All daily quests completed (+50 XP)!`);
+            const _triumpLang = (typeof currentAppLang !== 'undefined') ? currentAppLang : 'en';
+            const _star = `<svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>`;
+            showToast(_triumpLang === 'hi'
+              ? `${_star} ब्रह्मांडीय विजय! सभी दैनिक कार्य पूर्ण! (+50 XP)!`
+              : `${_star} COSMIC TRIUMPH! All daily quests completed (+50 XP)!`);
           }, 300);
         }
       }
@@ -6970,7 +7241,7 @@
       const tasks = (typeof extractIndividualDayTasks === 'function') ? extractIndividualDayTasks(dayNum, currentAppLang) : [];
       const total = tasks.length || dayState.length || 7;
       const el = document.getElementById('quests-completed-count');
-      if (el) el.innerText = `${count} / ${total} Complete`;
+      if (el) el.innerText = currentAppLang === 'hi' ? `${count} / ${total} पूर्ण` : `${count} / ${total} Complete`;
     }
 
     function goToCoachTab() {
@@ -7050,8 +7321,15 @@
       // Update today's date display
       const todayDateEl = document.getElementById('journey-today-date');
       if (todayDateEl) {
-        const todayFormatted = todayObj.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-        todayDateEl.textContent = 'Today: ' + todayFormatted;
+        const isHiDate = (typeof currentAppLang !== 'undefined' && currentAppLang === 'hi');
+        if (isHiDate) {
+          const hiDays = ['रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'];
+          const hiMonths = ['जनवरी', 'फरवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितंबर', 'अक्टूबर', 'नवंबर', 'दिसंबर'];
+          todayDateEl.textContent = `आज: ${hiDays[todayObj.getDay()]}, ${todayObj.getDate()} ${hiMonths[todayObj.getMonth()]} ${todayObj.getFullYear()}`;
+        } else {
+          const todayFormatted = todayObj.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+          todayDateEl.textContent = 'Today: ' + todayFormatted;
+        }
       }
 
       let completedDaysCount = 0;
@@ -7065,20 +7343,21 @@
       }
 
       // Update Header Badges & Progress Bar
+      const isHiJourney = (typeof currentAppLang !== 'undefined' && currentAppLang === 'hi');
       const dayBadge = document.getElementById('journey-day-badge');
-      if (dayBadge) dayBadge.textContent = `Day ${currentDayNum} of 90`;
+      if (dayBadge) dayBadge.textContent = isHiJourney ? `90 में से दिन ${currentDayNum}` : `Day ${currentDayNum} of 90`;
 
       const phaseTitle = document.getElementById('journey-phase-title');
       if (phaseTitle) {
-        if (currentDayNum <= 30) phaseTitle.textContent = "Phase 1: Foundation (Days 1-30)";
-        else if (currentDayNum <= 60) phaseTitle.textContent = "Phase 2: Karmic Alignment (Days 31-60)";
-        else phaseTitle.textContent = "Phase 3: Manifestation (Days 61-90)";
+        if (currentDayNum <= 30) phaseTitle.textContent = isHiJourney ? 'चरण 1: शिलान्यास (दिन 1-30)' : 'Phase 1: Foundation (Days 1-30)';
+        else if (currentDayNum <= 60) phaseTitle.textContent = isHiJourney ? 'चरण 2: कर्म संरेखण (दिन 31-60)' : 'Phase 2: Karmic Alignment (Days 31-60)';
+        else phaseTitle.textContent = isHiJourney ? 'चरण 3: अभिव्यक्ति (दिन 61-90)' : 'Phase 3: Manifestation (Days 61-90)';
       }
 
       const percent = Math.round((completedDaysCount / 90) * 100);
       const percentEl = document.getElementById('journey-percent');
       const progressFill = document.getElementById('journey-progress-fill');
-      if (percentEl) percentEl.textContent = `${percent}% Complete (${completedDaysCount}/90 Days)`;
+      if (percentEl) percentEl.textContent = isHiJourney ? `${percent}% पूर्ण (${completedDaysCount}/90 दिन)` : `${percent}% Complete (${completedDaysCount}/90 Days)`;
       if (progressFill) progressFill.style.width = `${Math.max(1, percent)}%`;
 
       // Auto-set gridPage to the page containing today's day on first render (gridPage === 0 + currentDay > 30)
@@ -7087,7 +7366,9 @@
       }
 
       // Determine which 30-day page to show
-      const pageLabels = ['Days 1\u201330', 'Days 31\u201360', 'Days 61\u201390'];
+      const pageLabels = isHiJourney
+        ? ['दिन 1\u201330', 'दिन 31\u201360', 'दिन 61\u201390']
+        : ['Days 1\u201330', 'Days 31\u201360', 'Days 61\u201390'];
       const pageLabelEl = document.getElementById('grid-page-label');
       if (pageLabelEl) pageLabelEl.textContent = pageLabels[gridPage];
 
