@@ -6217,6 +6217,40 @@
     // ═══════════════════════════════════════════════════════════════
     let currentAppLang = localStorage.getItem('app_language') || 'en';
 
+    function updatePanchangCard(lang) {
+      const targetLang = lang || (typeof currentAppLang !== 'undefined' ? currentAppLang : 'en');
+      
+      const now = new Date();
+      const dayIdx = now.getDay();
+      
+      const tithiListEn = ["Prathama", "Dwitiya", "Tritiya", "Chaturthi", "Panchami", "Shasthi", "Saptami", "Ashtami", "Navami", "Dashami", "Ekadashi", "Dwadashi", "Trayodashi", "Chaturdashi", "Purnima / Amavasya"];
+      const tithiListHi = ["प्रथमा (एकम)", "द्वितीया (दूज)", "तृतीया (तीज)", "चतुर्थी (चौथ)", "पंचमी", "षष्ठी (छठ)", "सप्तमी", "अष्टमी (आठम)", "नवमी", "दशमी", "एकादशी (ग्यारस)", "द्वादशी (बारस)", "त्रयोदशी (तेरस)", "चतुर्दशी (चौदस)", "पूर्णिमा / अमावस्या"];
+      
+      const nakshatraListEn = ["Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra", "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha", "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"];
+      const nakshatraListHi = ["अश्विनी", "भरणी", "कृत्तिका", "रोहिणी", "मृगशिरा", "आर्द्रा", "पुनर्वसु", "पुष्य", "अश्लेषा", "मघा", "पूर्वाफाल्गुनी", "उत्तराफाल्गुनी", "हस्त", "चित्रा", "स्वाती", "विशाखा", "अनुराधा", "ज्येष्ठा", "मूल", "पूर्वाषाढ़ा", "उत्तराषाढ़ा", "श्रवण", "धनिष्ठा", "शतभिषा", "पूर्वाभाद्रपद", "उत्तराभाद्रपद", "रेवती"];
+      
+      const yogaListEn = ["Vishkumbha", "Priti", "Ayushman", "Saubhagya", "Sobhana", "Atiganda", "Sukarma", "Dhriti", "Shula", "Ganda", "Vriddhi", "Dhruva", "Vyaghata", "Harshana", "Vajra", "Siddhi", "Vyatipata", "Variyan", "Parigha", "Shiva", "Siddha", "Sadhya", "Subha", "Shukla", "Brahma", "Indra", "Vaidhriti"];
+      const yogaListHi = ["विष्कुम्भ", "प्रीति", "आयुष्मान", "सौभाग्य", "शोभन", "अतिगण्ड", "सुकर्मा", "धृति", "शूल", "गण्ड", "वृद्धि", "ध्रुव", "व्याघात", "हर्षण", "वज्र", "सिद्धि", "व्यतीपात", "वरीयान्", "परिघ", "शिव", "सिद्ध", "साध्य", "शुभ", "शुक्ल", "ब्रह्म", "इन्द्र", "वैधृति"];
+      
+      const varaListEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const varaListHi = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
+
+      const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+      const tithiIdx = (dayOfYear % 15);
+      const nakIdx = (dayOfYear % 27);
+      const yogaIdx = ((dayOfYear * 2) % 27);
+
+      const tithiEl = document.getElementById('p-tithi');
+      const nakEl = document.getElementById('p-nakshatra');
+      const yogaEl = document.getElementById('p-yoga');
+      const varaEl = document.getElementById('p-vara');
+
+      if (tithiEl) tithiEl.innerText = targetLang === 'hi' ? tithiListHi[tithiIdx] : tithiListEn[tithiIdx];
+      if (nakEl) nakEl.innerText = targetLang === 'hi' ? nakshatraListHi[nakIdx] : nakshatraListEn[nakIdx];
+      if (yogaEl) yogaEl.innerText = targetLang === 'hi' ? yogaListHi[yogaIdx] : yogaListEn[yogaIdx];
+      if (varaEl) varaEl.innerText = targetLang === 'hi' ? varaListHi[dayIdx] : varaListEn[dayIdx];
+    }
+
     function setAppLanguage(lang) {
       currentAppLang = lang;
       localStorage.setItem('app_language', lang);
@@ -6235,6 +6269,14 @@
       // Synchronize Settings tab select dropdown if present
       const langSel = document.getElementById('lang-select');
       if (langSel) langSel.value = lang;
+
+      // Update Panchang Card
+      updatePanchangCard(lang);
+
+      // Update Sanatan Notifications Drawer
+      if (typeof updateSanatanNotifications === 'function') {
+        updateSanatanNotifications(lang);
+      }
 
       // Toggle all bilingual labels across DOM (.k-lbl-en vs .k-lbl-hi)
       if (typeof setKundliLang === 'function') {
@@ -7628,7 +7670,7 @@
       const lang = currentAppLang;
 
       const rashiNamesEn = ["Aries (Mesh)", "Taurus (Vrishabh)", "Gemini (Mithun)", "Cancer (Karka)", "Leo (Simha)", "Virgo (Kanya)", "Libra (Tula)", "Scorpio (Vrischik)", "Sagittarius (Dhanu)", "Capricorn (Makar)", "Aquarius (Kumbh)", "Pisces (Meen)"];
-      const rashiNamesHi = ["मेष (Mesh)", "वृषभ (Vrishabh)", "मिथुन (Mithun)", "कर्क (Karka)", "सिंह (Simha)", "कन्या (Kanya)", "तुला (Tula)", "वृश्चिक (Vrischik)", "धनु (Dhanu)", "मकर (Makar)", "कुंभ (Kumbh)", "मीन (Meen)"];
+      const rashiNamesHi = ["मेष राशि", "वृषभ राशि", "मिथुन राशि", "कर्क राशि", "सिंह राशि", "कन्या राशि", "तुला राशि", "वृश्चिक राशि", "धनु राशि", "मकर राशि", "कुंभ राशि", "मीन राशि"];
 
       if (rashiBadge) {
         rashiBadge.innerText = lang === 'hi' ? rashiNamesHi[rashiIdx] : rashiNamesEn[rashiIdx];
