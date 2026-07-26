@@ -3705,8 +3705,8 @@
         } else {
           year = parseInt(parts[2]); month = parseInt(parts[1]); day = parseInt(parts[0]);
         }
-        const timeParts = time.split(":");
-        hour = parseInt(timeParts[0]); min = parseInt(timeParts[1]);
+        const parsedT = parseTimeString(time);
+        hour = parsedT.hour; min = parsedT.min;
       } catch (err) {
         const now = new Date();
         year = now.getFullYear(); month = now.getMonth() + 1; day = now.getDate();
@@ -3781,8 +3781,8 @@
           } else {
             pYear = parseInt(parts[2]); pMonth = parseInt(parts[1]); pDay = parseInt(parts[0]);
           }
-          const timeParts = pTime.split(":");
-          pHour = parseInt(timeParts[0]); pMin = parseInt(timeParts[1]);
+          const parsedPT = parseTimeString(pTime);
+          pHour = parsedPT.hour; pMin = parsedPT.min;
         } catch (err) {
           const now = new Date();
           pYear = now.getFullYear(); pMonth = now.getMonth() + 1; pDay = now.getDate();
@@ -8950,6 +8950,29 @@
       document.getElementById('horoscope-overlay').style.display = 'none';
     }
 
+    // Universal Time String Parser (Handles 24-hour and 12-hour AM/PM formats seamlessly)
+    function parseTimeString(timeStr) {
+      if (!timeStr || typeof timeStr !== 'string') {
+        return { hour: 12, min: 0 };
+      }
+      const cleanStr = timeStr.trim().toUpperCase();
+      const isPM = cleanStr.includes('PM');
+      const isAM = cleanStr.includes('AM');
+      const parts = cleanStr.replace(/[^\d:]/g, '').split(':');
+      
+      let hour = parseInt(parts[0], 10);
+      let min = parseInt(parts[1], 10);
+      if (isNaN(hour)) hour = 12;
+      if (isNaN(min)) min = 0;
+
+      if (isPM && hour < 12) {
+        hour += 12;
+      } else if (isAM && hour === 12) {
+        hour = 0;
+      }
+      return { hour, min };
+    }
+
     // 2. KUNDLI CALCULATIONS (Pure JS with Keplerian elements & Lahiri Ayanamsa)
     function getJulianDay(year, month, day, hour, min, tz) {
       let decimalHour = hour + min / 60.0 - tz;
@@ -8970,8 +8993,8 @@
     }
 
     function getLahiriAyanamsa(jd) {
-      let t = (jd - 2451545.0) / 36525.0; // J2000
-      let ayanamsa = 23.856083 + 1.39634 * t + 0.000308 * t * t;
+      let t = (jd - 2451545.0) / 36525.0; // J2000.0
+      let ayanamsa = 23.853056 + 1.3969 * t + 0.000308 * t * t;
       return ayanamsa;
     }
 
@@ -10032,9 +10055,9 @@
           month = parseInt(parts[1]);
           day = parseInt(parts[0]);
         }
-        const timeParts = time.split(':');
-        hour = parseInt(timeParts[0]);
-        min = parseInt(timeParts[1]);
+        const parsedT = parseTimeString(time);
+        hour = parsedT.hour;
+        min = parsedT.min;
       } catch(e) {
         const now = new Date();
         year = now.getFullYear();
