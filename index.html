@@ -9397,7 +9397,7 @@
       }
 
       // 1-TIME CACHE MIGRATION ENGINE (Purges old stale dummy task cache for existing users)
-      const SYSTEM_CACHE_VERSION = 'v2026_07_26_custom_engine_v4';
+      const SYSTEM_CACHE_VERSION = 'v2026_07_26_custom_engine_v5';
       const userCacheVer = localStorage.getItem('app_cache_version');
 
       if (userCacheVer !== SYSTEM_CACHE_VERSION) {
@@ -9977,49 +9977,118 @@
        hi:"नवम भाव - भाग्य, उच्च शिक्षा, धर्म और आध्यात्मिक आशीर्वाद।"}
     ];
 
-    // Goal predictions EN+HI
-    const goalPredictions = {
-      job: {
-        en: "Your 10th house lord and its position in the chart indicate the nature of your career path. The Sun's placement brings authority roles; Mercury favors communication, IT, and writing; Saturn indicates discipline-based fields like law, government, or engineering. Your current Mahadasha ruler significantly influences whether promotions or new opportunities will materialize in the next 12-18 months. Strengthening your 10th house through Surya mantras and career-focused rituals will accelerate professional progress.",
-        hi: "आपके दशम भाव के स्वामी और सूर्य की स्थिति करियर की प्रकृति निर्धारित करती है। वर्तमान महादशा के ग्रह का प्रभाव अगले 12-18 महीनों में पदोन्नति या नई संभावनाएं लाएगा। सूर्य मंत्र और करियर-केंद्रित अनुष्ठान से व्यावसायिक प्रगति तेज होगी।",
-        label: "Career / Job"
-      },
-      marriage: {
-        en: "The 7th house is the primary indicator of marriage and partnerships. Venus as the natural karaka of marriage, along with the 7th house lord's placement, shows the timing and quality of your union. Jupiter's aspect on the 7th house or Venus is highly auspicious for marriage prospects. Your Mahadasha and Antardasha planets play the most critical role - Venus, Moon, or Jupiter dashas typically trigger marriage events.",
-        hi: "सप्तम भाव विवाह का प्राथमिक संकेतक है। शुक्र और सप्तम भाव के स्वामी की स्थिति विवाह का समय और गुणवत्ता निर्धारित करती है। गुरु का सप्तम भाव पर दृष्टि विवाह संभावनाओं के लिए अत्यंत शुभ है।",
-        label: "Marriage / Relationship"
-      },
-      baby: {
-        en: "The 5th house governs progeny, and Jupiter is the primary natural significator (karaka) for children. The 5th house lord's strength, Jupiter's placement, and the current dasha ruler's connection to the 5th house are the key indicators of conception timing. If the 5th house is strong with benefic planets (Jupiter, Venus, Moon), children come naturally. Purification rituals and Santan Gopal mantra chanting over 40 consecutive days can strengthen progeny yoga.",
-        hi: "पंचम भाव संतान का कारक है और गुरु संतान के नैसर्गिक कारक हैं। पंचम भाव के स्वामी की शक्ति और वर्तमान दशा का पंचम भाव से संबंध गर्भधारण के समय का मुख्य संकेत है। संतान गोपाल मंत्र का 40 दिन तक जाप संतान योग को बलवान बनाता है।",
-        label: "Baby / Progeny"
-      },
-      property: {
-        en: "The 4th house represents home, property, and real estate. Its lord's placement and Mars (natural karaka for property and land) determine your property acquisition timing. A strong 4th house lord in a kendra or trikona, combined with an auspicious Mars placement, indicates favorable property purchase prospects. The best time for property decisions is typically during Mars, Moon, or the 4th house lord's dasha or antardasha periods.",
-        hi: "चतुर्थ भाव घर और संपत्ति का कारक है। इसके स्वामी और मंगल (भूमि के नैसर्गिक कारक) की स्थिति संपत्ति प्राप्ति का समय निर्धारित करती है। मंगल, चन्द्र या चतुर्थेश की दशा-अंतर्दशा में संपत्ति निर्णय लेना श्रेष्ठ होता है।",
-        label: "Property / Home"
-      },
-      debt: {
-        en: "The 2nd house rules wealth accumulation, and the 11th house governs income and gains. Saturn's placement often indicates financial discipline requirements. If Rahu or malefic planets afflict the 2nd or 12th house, financial leakage and debt patterns emerge. Your Saturn dasha or Rahu periods may intensify financial obligations. Key remedies include donating silver on Saturdays and strengthening your 2nd house lord through consistent ritual practice.",
-        hi: "द्वितीय भाव धन संचय और एकादश भाव आय का कारक है। शनि की स्थिति वित्तीय अनुशासन की आवश्यकता दर्शाती है। शनिवार को चांदी का दान और द्वितयेश को बलवान करने से वित्तीय उपाय होते हैं।",
-        label: "Finance / Debt"
-      },
-      business: {
-        en: "The 10th house governs profession and public standing, while the 7th house indicates business partnerships. Mercury-ruled individuals excel in trade, communication, and intellectual businesses. Jupiter's placement in a kendra brings large-scale success. If the 10th lord is strong in the birth chart, business ventures initiated during the 10th lord's dasha period have the highest probability of sustained success.",
-        hi: "दशम भाव व्यवसाय और सप्तम भाव व्यापारिक साझेदारी का कारक है। बुध-प्रधान व्यक्ति व्यापार, संचार और बौद्धिक व्यवसाय में सफल होते हैं। दशमेश की दशा में शुरू किया व्यवसाय सर्वाधिक सफल रहता है।",
-        label: "Business"
-      },
-      health: {
-        en: "The 1st house (vitality), 6th house (disease and healing), and 8th house (chronic illness and longevity) are the key health indicators. A strong Lagna lord and Sun indicate robust vitality. Afflictions from malefic planets (Mars, Saturn, Rahu, Ketu) to the 1st, 6th, or 8th house lords can indicate areas of health vulnerability. The Moon's placement strongly influences mental health and emotional wellbeing.",
-        hi: "लग्न (जीवन शक्ति), षष्ठ भाव (रोग) और अष्टम भाव (दीर्घायु) स्वास्थ्य के प्रमुख संकेतक हैं। बलवान लग्न स्वामी और सूर्य उत्तम स्वास्थ्य देते हैं। चन्द्र की स्थिति मानसिक स्वास्थ्य को सर्वाधिक प्रभावित करती है।",
-        label: "Health"
-      },
-      general: {
-        en: "Your overall Kundali shows the unique karmic blueprint of your current life journey. The strength of the Lagna lord, benefic vs. malefic planet balance, and the current Mahadasha all shape the primary themes of this phase of your life. Key upcoming transits of Jupiter and Saturn will mark the most significant turning points in the next 2-3 years.",
-        hi: "आपकी समग्र कुंडली वर्तमान जीवन यात्रा का अद्वितीय कर्मिक नक्शा दर्शाती है। लग्न स्वामी की शक्ति, शुभ-अशुभ ग्रहों का संतुलन और वर्तमान महादशा इस चरण के प्रमुख विषयों को आकार देते हैं।",
-        label: "General Life"
+    // Dynamic Goal Predictions Generator (100% customized to user's birth chart, Lagna, Lords & Dasha)
+    function generateDynamicGoalPrediction(goal, name, lagnaSignNum, moonSignNum, dashaInfo, placementsList) {
+      const normGoal = normalizeGoalKey(goal);
+      const userName = name || localStorage.getItem('user_name') || 'Seeker';
+      const userCustom = localStorage.getItem('user_custom_issue') || '';
+      const lagnaName = signNames[lagnaSignNum] || "Aries";
+      const lagnaNameHi = signNamesHi[lagnaSignNum] || "मेष";
+      const lagnaLord = signLords[lagnaSignNum] || "Mars";
+      const lagnaLordHi = signLordsHi[lagnaSignNum] || "मंगल";
+      const moonName = signNames[moonSignNum] || "Aries";
+      const moonNameHi = signNamesHi[moonSignNum] || "मेष";
+      const dashaPlanet = dashaInfo ? dashaInfo.planet : "Jupiter";
+      const dashaPlanetHi = planetNamesHi[dashaPlanet] || dashaPlanet;
+
+      const customStrEn = userCustom ? ` Focus area: "${userCustom}".` : '';
+      const customStrHi = userCustom ? ` विशेष ध्यान क्षेत्र: "${userCustom}"।` : '';
+
+      const getPl = n => (placementsList && Array.isArray(placementsList)) ? placementsList.find(p => p.name === n) : null;
+
+      if (normGoal === 'job') {
+        const h10SignNum = (lagnaSignNum + 9) % 12;
+        const h10Sign = signNames[h10SignNum];
+        const h10SignHi = signNamesHi[h10SignNum];
+        const h10Lord = signLords[h10SignNum];
+        const h10LordHi = signLordsHi[h10SignNum];
+        const h10Pl = getPl(h10Lord);
+        const h10HousePos = h10Pl ? ((h10Pl.sign - lagnaSignNum + 12) % 12) + 1 : 10;
+
+        return {
+          label: "Career / Job",
+          en: `For <strong>${userName}</strong> (<strong>${lagnaName} Ascendant</strong> / Lagna lord <strong>${lagnaLord}</strong>), your 10th house of career falls in <strong>${h10Sign}</strong>, governed by <strong>${h10Lord}</strong> located in House ${h10HousePos}. Under your active <strong>${dashaPlanet} Mahadasha</strong>, professional growth is driven by taking initiative in alignment with your 10th lord ${h10Lord}. Strengthening ${h10Lord} and performing Surya Arghya facing East will accelerate career advancements and authority roles.${customStrEn}`,
+          hi: `<strong>${userName}</strong> (<strong>${lagnaNameHi} लग्न</strong> / लग्नेश <strong>${lagnaLordHi}</strong>) के लिए, आपका दशम (करियर) भाव <strong>${h10SignHi}</strong> में पड़ता है, जिसके स्वामी <strong>${h10LordHi}</strong> हैं (भाव ${h10HousePos} में स्थित)। आपकी वर्तमान <strong>${dashaPlanetHi} महादशा</strong> के तहत, व्यावसायिक प्रगति आपके दशमेश ${h10LordHi} के अनुकूल प्रयास करने से होगी। सूर्य देव को जल अर्पित करने और ${h10LordHi} का जाप करने से पदोन्नति के योग बनेंगे।${customStrHi}`
+        };
+      } else if (normGoal === 'marriage') {
+        const h7SignNum = (lagnaSignNum + 6) % 12;
+        const h7Sign = signNames[h7SignNum];
+        const h7SignHi = signNamesHi[h7SignNum];
+        const h7Lord = signLords[h7SignNum];
+        const h7LordHi = signLordsHi[h7SignNum];
+
+        return {
+          label: "Marriage / Relationship",
+          en: `For <strong>${userName}</strong> (<strong>${lagnaName} Ascendant</strong> / Moon in <strong>${moonName}</strong>), your 7th house of marriage falls in <strong>${h7Sign}</strong>, governed by <strong>${h7Lord}</strong>. With your active <strong>${dashaPlanet} Mahadasha</strong> influencing relational karmic cycles, the alignment of ${h7Lord} and Venus determines your union prospects. Worshiping Lord Shiva & Goddess Parvati on Mondays will remove relationship delays and foster harmony.${customStrEn}`,
+          hi: `<strong>${userName}</strong> (<strong>${lagnaNameHi} लग्न</strong> / चंद्र राशि <strong>${moonNameHi}</strong>) के लिए, आपका सप्तम (विवाह) भाव <strong>${h7SignHi}</strong> में स्थित है, जिसके स्वामी <strong>${h7LordHi}</strong> हैं। आपकी वर्तमान <strong>${dashaPlanetHi} महादशा</strong> के दौरान ${h7LordHi} और शुक्र का प्रभाव आपके विवाह योग को सक्रिय कर रहा है। सोमवार को शिव-पार्वती की पूजा करने से बाधाएं दूर होंगी।${customStrHi}`
+        };
+      } else if (normGoal === 'baby') {
+        const h5SignNum = (lagnaSignNum + 4) % 12;
+        const h5Sign = signNames[h5SignNum];
+        const h5SignHi = signNamesHi[h5SignNum];
+        const h5Lord = signLords[h5SignNum];
+        const h5LordHi = signLordsHi[h5SignNum];
+
+        return {
+          label: "Baby / Progeny",
+          en: `For <strong>${userName}</strong> (<strong>${lagnaName} Ascendant</strong>), your 5th house of progeny falls in <strong>${h5Sign}</strong>, governed by <strong>${h5Lord}</strong>. Combined with natural progeny significator Jupiter and your current <strong>${dashaPlanet} Mahadasha</strong>, progeny blessings are activated through strengthening ${h5Lord}. Reciting Santan Gopal mantra ("Om Devaki Sut Govind") 108 times daily enhances positive vitality.${customStrEn}`,
+          hi: `<strong>${userName}</strong> (<strong>${lagnaNameHi} लग्न</strong>) के लिए, आपका पंचम (संतान) भाव <strong>${h5SignHi}</strong> में पड़ता है, जिसके स्वामी <strong>${h5LordHi}</strong> हैं। आपकी <strong>${dashaPlanetHi} महादशा</strong> और गुरु ग्रह की स्थिति के साथ संतान प्राप्ति के योग सक्रिय हैं। प्रतिदिन संतान गोपाल मंत्र का 108 बार जाप करने से सकारात्मक ऊर्जा मिलेगी।${customStrHi}`
+        };
+      } else if (normGoal === 'property') {
+        const h4SignNum = (lagnaSignNum + 3) % 12;
+        const h4Sign = signNames[h4SignNum];
+        const h4SignHi = signNamesHi[h4SignNum];
+        const h4Lord = signLords[h4SignNum];
+        const h4LordHi = signLordsHi[h4SignNum];
+
+        return {
+          label: "Property / Home",
+          en: `For <strong>${userName}</strong> (<strong>${lagnaName} Ascendant</strong>), your 4th house of real estate & vehicle falls in <strong>${h4Sign}</strong>, ruled by <strong>${h4Lord}</strong>. Mars as land significator alongside your <strong>${dashaPlanet} Mahadasha</strong> indicates favorable acquisition potential when honoring ${h4Lord}. Chanting "Om Bhaumaya Namah" on Tuesdays solidifies asset security.${customStrEn}`,
+          hi: `<strong>${userName}</strong> (<strong>${lagnaNameHi} लग्न</strong>) के लिए, आपका चतुर्थ (अचल संपत्ति एवं गृह) भाव <strong>${h4SignHi}</strong> में स्थित है, जिसके स्वामी <strong>${h4LordHi}</strong> हैं। आपकी <strong>${dashaPlanetHi} महादशा</strong> और मंगल का प्रभाव भूमि-भवन क्रय के योग बना रहा है। मंगलवार को "ॐ भौमाय नमः" का जाप करने से संपत्ति सुरक्षा मजबूत होगी।${customStrHi}`
+        };
+      } else if (normGoal === 'debt') {
+        const h2SignNum = (lagnaSignNum + 1) % 12;
+        const h2Sign = signNames[h2SignNum];
+        const h2SignHi = signNamesHi[h2SignNum];
+        const h2Lord = signLords[h2SignNum];
+        const h2LordHi = signLordsHi[h2SignNum];
+
+        return {
+          label: "Finance / Debt",
+          en: `For <strong>${userName}</strong> (<strong>${lagnaName} Ascendant</strong>), your 2nd house of wealth accumulation falls in <strong>${h2Sign}</strong>, governed by <strong>${h2Lord}</strong>. Your <strong>${dashaPlanet} Mahadasha</strong> requires disciplined financial planning to convert liabilities into assets. Offering water to the Sun and chanting Lakshmi-Kuber mantras will clear monetary blockages.${customStrEn}`,
+          hi: `<strong>${userName}</strong> (<strong>${lagnaNameHi} लग्न</strong>) के लिए, आपका द्वितीय (धन संचय) भाव <strong>${h2SignHi}</strong> में स्थित है, जिसके स्वामी <strong>${h2LordHi}</strong> हैं। आपकी <strong>${dashaPlanetHi} महादशा</strong> में वित्तीय अनुशासन और सही नियोजन से कर्ज मुक्ति और धन वृद्धि के द्वार खुलेंगे। लक्ष्मीनारायण उपासना से आर्थिक समृद्धि प्राप्त होगी।${customStrHi}`
+        };
+      } else if (normGoal === 'business') {
+        const h7SignNum = (lagnaSignNum + 6) % 12;
+        const h10SignNum = (lagnaSignNum + 9) % 12;
+        const h7Lord = signLords[h7SignNum];
+        const h10Lord = signLords[h10SignNum];
+        const h7LordHi = signLordsHi[h7SignNum];
+        const h10LordHi = signLordsHi[h10SignNum];
+
+        return {
+          label: "Business",
+          en: `For <strong>${userName}</strong> (<strong>${lagnaName} Ascendant</strong>), your commercial engine is powered by 7th lord <strong>${h7Lord}</strong> and 10th lord <strong>${h10Lord}</strong>. Under your active <strong>${dashaPlanet} Mahadasha</strong>, expanding partnerships and commercial operations aligned with ${h10Lord} will accelerate revenue. Performing Ganesh Puja on Wednesdays ensures smooth enterprise growth.${customStrEn}`,
+          hi: `<strong>${userName}</strong> (<strong>${lagnaNameHi} लग्न</strong>) के लिए, व्यापारिक सफलता आपके सप्तमेश <strong>${h7LordHi}</strong> और दशमेश <strong>${h10LordHi}</strong> द्वारा संचालित है। वर्तमान <strong>${dashaPlanetHi} महादशा</strong> में व्यावसायिक रणनीतियों और साझेदारी से बड़ा लाभ होगा। बुधवार को गणेश पूजन से व्यापार में विघ्न दूर होंगे।${customStrHi}`
+        };
+      } else if (normGoal === 'health') {
+        const h6SignNum = (lagnaSignNum + 5) % 12;
+        const h6Lord = signLords[h6SignNum];
+        const h6LordHi = signLordsHi[h6SignNum];
+
+        return {
+          label: "Health",
+          en: `For <strong>${userName}</strong> (<strong>${lagnaName} Ascendant</strong>), your vitality is governed by Lagna lord <strong>${lagnaLord}</strong> while 6th house of wellness is ruled by <strong>${h6Lord}</strong>. Your current <strong>${dashaPlanet} Mahadasha</strong> emphasizes physical discipline and immunity. Daily Pranayama and drinking water from a copper vessel will strengthen your energetic aura.${customStrEn}`,
+          hi: `<strong>${userName}</strong> (<strong>${lagnaNameHi} लग्न</strong>) के लिए, आपकी आरोग्य शक्ति लग्नेश <strong>${lagnaLordHi}</strong> और षष्ठेश <strong>${h6LordHi}</strong> पर आधारित है। आपकी <strong>${dashaPlanetHi} महादशा</strong> के दौरान रोग प्रतिरोधक क्षमता बढ़ाना महत्वपूर्ण है। तांबे के पात्र का जल पीने और सूर्य प्राणायाम से स्वास्थ्य उत्तम रहेगा।${customStrHi}`
+        };
+      } else {
+        return {
+          label: "General Life",
+          en: `For <strong>${userName}</strong> (<strong>${lagnaName} Ascendant</strong> / Moon in <strong>${moonName}</strong>), your karmic blueprint is led by <strong>${lagnaLord}</strong>. Running <strong>${dashaPlanet} Mahadasha</strong> shapes your core focus. Maintaining daily Vedic discipline and aligning actions with ${lagnaLord} brings peace, fulfillment, and steady growth.${customStrEn}`,
+          hi: `<strong>${userName}</strong> (<strong>${lagnaNameHi} लग्न</strong> / चंद्र राशि <strong>${moonNameHi}</strong>) के लिए, आपका कर्म चक्र <strong>${lagnaLordHi}</strong> द्वारा निर्देशित है। वर्तमान <strong>${dashaPlanetHi} महादशा</strong> आपके जीवन की मुख्य दिशा निर्धारित कर रही है। सात्विक जीवन शैली अपनाने से जीवन में उन्नति होगी।${customStrHi}`
+        };
       }
-    };
+    }
 
     // Planet exaltation/debilitation
     const planetStrength = {
@@ -10892,8 +10961,8 @@
         document.getElementById('k-summary-hi').innerHTML = summaryHi;
       }
 
-      // Render Goal Predictions Card
-      const pred = goalPredictions[goal] || goalPredictions['general'];
+      // Render Goal Predictions Card (100% Customized per User & Birth Chart)
+      const pred = generateDynamicGoalPrediction(goal, name, lagnaSignNum, moonPl ? moonPl.sign : 0, dashaInfo, placementsList);
       const goalTagEl = document.getElementById('k-goal-label-tag');
       if (goalTagEl) goalTagEl.textContent = pred.label;
       const predEnEl = document.getElementById('k-prediction-en');
