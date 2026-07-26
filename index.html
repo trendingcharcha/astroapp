@@ -143,7 +143,41 @@
       if (okBtn) okBtn.onclick = function() { modal.style.display = 'none'; onConfirm(); };
     }
 </script>
+  <script>
+    // ── INSTANT LANGUAGE BOOTSTRAP ─────────────────────────────────────────
+    // Sets data-lang on <html> BEFORE the browser paints anything.
+    // This makes the CSS bilingual engine apply the saved language immediately
+    // on every page load — zero flicker, zero refresh needed.
+    // ───────────────────────────────────────────────────────────────────────
+    (function() {
+      try {
+        var savedLang = localStorage.getItem('app_language') || 'en';
+        document.documentElement.setAttribute('data-lang', savedLang);
+      } catch(e) {
+        document.documentElement.setAttribute('data-lang', 'en');
+      }
+    })();
+  </script>
   <style>
+    /* ── INSTANT BILINGUAL CSS ENGINE ───────────────────────────────────────
+       Setting data-lang on <html> instantly toggles ALL bilingual label pairs
+       across every tab and section. No JS loops. No refresh. Pure CSS speed.
+    */
+
+    /* DEFAULT (English): show EN spans, hide HI spans */
+    .k-lbl-hi { display: none !important; }
+    .k-lbl-en { display: inline !important; }
+
+    /* HINDI MODE: flip all pairs globally when html[data-lang="hi"] */
+    html[data-lang="hi"] .k-lbl-en { display: none !important; }
+    html[data-lang="hi"] .k-lbl-hi { display: inline !important; }
+
+    /* Also handle block-level bilingual elements (paragraphs, divs) */
+    .k-lbl-hi-block { display: none !important; }
+    .k-lbl-en-block { display: block !important; }
+    html[data-lang="hi"] .k-lbl-en-block { display: none !important; }
+    html[data-lang="hi"] .k-lbl-hi-block { display: block !important; }
+
     /* Premium Cosmic Theme & Advanced UI System */
     :root {
       --font-heading: 'Cinzel Decorative', 'Cormorant Garamond', serif;
@@ -6348,6 +6382,9 @@
     function setAppLanguage(lang) {
       currentAppLang = lang;
       localStorage.setItem('app_language', lang);
+
+      // ── INSTANT CSS TOGGLE: sets one attribute → entire app switches ──
+      document.documentElement.setAttribute('data-lang', lang);
       
       // Update header brand title
       const title = document.getElementById('header-title');
