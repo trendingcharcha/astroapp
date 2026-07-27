@@ -9449,62 +9449,54 @@ if (nav) nav.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 async function switchTab(index, btn) {
-// TAB 3: MATCHING - Auto-initialize Person 1 from stored profile
-if (index === 3) {
-if (typeof initMatchingForm === 'function') {
-initMatchingForm();
-}
-}
-// TAB 2: LAL KITAB - Generate report and draw fixed chart
-if (index === 2) {
-if (typeof generateLalKitabReport === 'function') {
-// await to prevent double-generateChart race condition
-await generateLalKitabReport();
-}
-}
-// TAB 4: VASTU - Generate personalized Vastu report
-if (index === 4) {
-    if (typeof generatePersonalizedVastuReport === 'function') {
-      generatePersonalizedVastuReport().then(() => {
-        const notCalc = document.getElementById('vastu-not-calculated-view');
-        const resView = document.getElementById('vastu-result-view');
-        if (notCalc && resView) {
-          notCalc.style.display = 'none';
-          resView.style.display = 'block';
-        }
-      });
-    }
-  }
-// Deactivate other tabs
+// 1. Instant tab & nav bar activation
 document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
 document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-// Activate target tab
 const tabIds = ['tab-home', 'tab-kundli', 'tab-lalkitab', 'tab-matching', 'tab-vastu', 'tab-coach', 'tab-settings'];
 const targetEl = document.getElementById(tabIds[index]);
 if (targetEl) targetEl.classList.add('active');
+const navItems = document.querySelectorAll('.nav-item');
+if (navItems[index]) navItems[index].classList.add('active');
 if (btn) btn.classList.add('active');
 
-// TAB 1: KUNDLI - Automatically generate & show chart directly (Zero secondary form)
+// 2. Safe async tab data population
+try {
 if (index === 1) {
 const kForm = document.getElementById('kundli-form-view');
 const kRes = document.getElementById('kundli-result-view');
 if (kForm) kForm.style.display = 'none';
 if (kRes) kRes.style.display = 'block';
-// Await autoFill (which internally calls generateChart) before drawing — fixes race condition
 await autoFillKundliFromOnboarding();
-// drawChart is now safe to call since cachedPlacementsList is populated
 if (typeof drawChart === 'function') drawChart();
+} else if (index === 2) {
+if (typeof generateLalKitabReport === 'function') {
+await generateLalKitabReport();
 }
-
-// TAB 5: COACH - Automatically generate & show active Mission for all goals
-if (index === 5) {
+} else if (index === 3) {
+if (typeof initMatchingForm === 'function') {
+initMatchingForm();
+}
+} else if (index === 4) {
+if (typeof generatePersonalizedVastuReport === 'function') {
+await generatePersonalizedVastuReport();
+const notCalc = document.getElementById('vastu-not-calculated-view');
+const resView = document.getElementById('vastu-result-view');
+if (notCalc && resView) {
+notCalc.style.display = 'none';
+resView.style.display = 'block';
+}
+}
+} else if (index === 5) {
 const cForm = document.getElementById('coach-form-view');
 const cRes = document.getElementById('coach-result-view');
 if (cForm) cForm.style.display = 'none';
 if (cRes) cRes.style.display = 'block';
 if (typeof generateCoachMission === 'function') {
-generateCoachMission();
+await generateCoachMission();
 }
+}
+} catch(err) {
+console.error('[Astro AI] switchTab error:', err);
 }
 }
 
@@ -11214,8 +11206,9 @@ ctx.fillText(text, houseCenters[h-1].x, houseCenters[h-1].y);
 async function generateLalKitabReport() {
 // 1. Auto-fill master details & calculate placements if not generated yet
 if (!cachedPlacementsList || cachedPlacementsList.length === 0) {
-autoFillKundliFromOnboarding();
-if (typeof generateChart === 'function') {
+if (typeof autoFillKundliFromOnboarding === 'function') {
+await autoFillKundliFromOnboarding();
+} else if (typeof generateChart === 'function') {
 await generateChart({ preventDefault: () => {} });
 }
 }
@@ -11459,8 +11452,9 @@ setKundliLang(currentAppLang);
 async function generatePersonalizedVastuReport() {
 // If placements not loaded, auto-fill and calculate chart
 if (!cachedPlacementsList || cachedPlacementsList.length === 0) {
-autoFillKundliFromOnboarding();
-if (typeof generateChart === 'function') {
+if (typeof autoFillKundliFromOnboarding === 'function') {
+await autoFillKundliFromOnboarding();
+} else if (typeof generateChart === 'function') {
 await generateChart({ preventDefault: () => {} });
 }
 }
