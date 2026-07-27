@@ -19,7 +19,7 @@
 // Clears: localStorage, sessionStorage, browser HTTP cache, SW cache.
 // ═══════════════════════════════════════════════════════════════
 (function() {
-var APP_CACHE_VER = 'cv_20260723_r3';
+var APP_CACHE_VER = 'cv_20260727_r100_fresh';
 
 // ── STEP 1: Detect old version or garbled localStorage ──────
 var storedVer = '';
@@ -9360,7 +9360,7 @@ targetBtn.classList.add('selected');
 }
 
 // GLOBAL CACHE PURGE ENGINE (Purges old stale cache for all existing & new users)
-  const SYSTEM_CACHE_VERSION = 'v2026_07_27_full_dynamic_v15';
+  const SYSTEM_CACHE_VERSION = 'v2026_07_27_fresh_release_v100';
   const userCacheVer = localStorage.getItem('app_cache_version');
 
   if (userCacheVer !== SYSTEM_CACHE_VERSION) {
