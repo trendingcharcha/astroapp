@@ -6379,7 +6379,11 @@ if (yogaEl) yogaEl.innerText = targetLang === 'hi' ? yogaListHi[yogaIdx] : yogaL
 if (varaEl) varaEl.innerText = targetLang === 'hi' ? varaListHi[dayIdx] : varaListEn[dayIdx];
 }
 
+let _isSettingAppLang = false;
 function setAppLanguage(lang) {
+if (_isSettingAppLang) return;
+_isSettingAppLang = true;
+try {
 currentAppLang = lang;
 localStorage.setItem('app_language', lang);
 
@@ -6451,12 +6455,7 @@ if (typeof renderKarmicJourney === 'function') {
 renderKarmicJourney();
 }
 
-// 9. Re-render Coach Cosmic Mission in target language
-if (typeof generateCoachMission === 'function') {
-generateCoachMission();
-}
-
-// 10. Re-render Kundli Analysis Sections & Chart in target language
+// 9. Re-render reports ONLY if placements are already calculated (prevents circular autoFill calls)
 if (typeof cachedPlacementsList !== 'undefined' && cachedPlacementsList && cachedPlacementsList.length > 0) {
 if (typeof renderKundliEnhancedSections === 'function') {
 renderKundliEnhancedSections(cachedPlacementsList, cachedLagnaSignNum, cachedBirthDateStr || '');
@@ -6464,19 +6463,21 @@ renderKundliEnhancedSections(cachedPlacementsList, cachedLagnaSignNum, cachedBir
 if (typeof drawChart === 'function') {
 drawChart();
 }
-}
-
-// 11. Re-render Lal Kitab Report in target language
 if (typeof generateLalKitabReport === 'function') {
 generateLalKitabReport();
 }
-
-// 12. Re-render Personalized Vastu Report in target language
 if (typeof generatePersonalizedVastuReport === 'function') {
 generatePersonalizedVastuReport();
 }
+}
+if (typeof generateCoachMission === 'function') {
+generateCoachMission();
+}
 
 console.log('App language switched immediately to:', lang.toUpperCase());
+} finally {
+_isSettingAppLang = false;
+}
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -10755,7 +10756,7 @@ btn.disabled = true;
 }
 
 // Force view labels refresh
-setKundliLang(kundliLang); setAppLanguage(currentAppLang);
+setKundliLang(kundliLang);
 
 // Read real user birth details from input OR stored profile (NEVER fallback to today's date)
 const storedName = localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || '';
