@@ -4380,7 +4380,7 @@ const vastuDirectivesHTML = vastuDirectives.map(d => `<div style="margin-top: 4p
 
 const vVastuHTML = `
 <li style="margin-bottom: 10px;"><strong>${lang === 'hi' ? 'वास्तु निर्देश' : 'Vastu Directive(s)'}:</strong> ${vastuDirectivesHTML}</li>
-<li><strong>${lang === 'hi' ? 'दैनिक दिशा संरेखण' : 'Daily Direction Alignment'}:</strong> ${lang === 'hi' ? 'सकारात्मक ऊर्जा प्रवाह के लिए काम करते या ध्यान लगाते समय पूर्व या उत्तर दिशा की ओर मुख करें।' : 'Face East or North while working or meditating to align with positive energetic currents.'}</li>
+<li><strong>${lang === 'hi' ? 'व्यक्तिगत दिशा संरेखण' : 'Personalized Direction Alignment'}:</strong> ${(() => { const _dmapEn={'Sun':'East','Moon':'North-West','Mars':'South','Mercury':'North','Jupiter':'North-East','Venus':'South-East','Saturn':'West'}; const _dmapHi={'Sun':'पूर्व','Moon':'उत्तर-पश्चिम','Mars':'दक्षिण','Mercury':'उत्तर','Jupiter':'उत्तर-पूर्व','Venus':'दक्षिण-पूर्व','Saturn':'पश्चिम'}; const _sla=['Mars','Venus','Mercury','Moon','Sun','Mercury','Venus','Mars','Jupiter','Saturn','Saturn','Jupiter']; const _li=(typeof cachedLagnaSignNum!=='undefined'&&cachedLagnaSignNum!==null)?cachedLagnaSignNum:-1; const _ll=(_li>=0)?(_sla[_li]||'Mercury'):'Mercury'; const _lhi={'Sun':'सूर्य','Moon':'चन्द्र','Mars':'मंगल','Mercury':'बुध','Jupiter':'गुरु','Venus':'शुक्र','Saturn':'शनि'}; const _dir=lang==='hi'?(_dmapHi[_ll]||'उत्तर-पूर्व'):(_dmapEn[_ll]||'North-East'); return lang==='hi'?`आपके लग्न स्वामी (${_lhi[_ll]||_ll}) के अनुसार ${_dir} दिशा की ओर मुंह करके काम करें। यही आपकी शक्ति दिशा है।`:`Based on your Ascendant Lord (${_ll}), face ${_dir} while working or meditating. This is your personal power direction.`; })()}</li>
 `;
 
 // Practical Tasks
@@ -5864,13 +5864,22 @@ color: '#5dade2',
 icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>'
 });
 
+// Compute personalized power direction from Lagna Lord (from computed Kundli)
+const _powerDirMapEn = { 'Sun': 'East', 'Moon': 'North-West', 'Mars': 'South', 'Mercury': 'North', 'Jupiter': 'North-East', 'Venus': 'South-East', 'Saturn': 'West' };
+const _powerDirMapHi = { 'Sun': 'पूर्व', 'Moon': 'उत्तर-पश्चिम', 'Mars': 'दक्षिण', 'Mercury': 'उत्तर', 'Jupiter': 'उत्तर-पूर्व', 'Venus': 'दक्षिण-पूर्व', 'Saturn': 'पश्चिम' };
+const _signLordsArr = ['Mars','Venus','Mercury','Moon','Sun','Mercury','Venus','Mars','Jupiter','Saturn','Saturn','Jupiter'];
+const _lagnaIdx = (typeof cachedLagnaSignNum !== 'undefined' && cachedLagnaSignNum !== null) ? cachedLagnaSignNum : -1;
+const _lagnaLordTask = (_lagnaIdx >= 0) ? (_signLordsArr[_lagnaIdx] || 'Mercury') : 'Mercury';
+const _lagnaLordHiTask = {'Sun':'सूर्य','Moon':'चन्द्र','Mars':'मंगल','Mercury':'बुध','Jupiter':'गुरु','Venus':'शुक्र','Saturn':'शनि'};
+const _dirEn = _powerDirMapEn[_lagnaLordTask] || 'North-East';
+const _dirHi = _powerDirMapHi[_lagnaLordTask] || 'उत्तर-पूर्व';
 tasks.push({
 category: 'vastu',
-title: isHi ? `दैनिक दिशा संरेखण` : `Daily Direction Alignment`,
+title: isHi ? `व्यक्तिगत दिशा संरेखण (${_dirHi})` : `Personalized Direction Alignment (${_dirEn})`,
 timeWindow: 'All Day',
 text: isHi
-? `सकारात्मक ऊर्जा प्रवाह के लिए काम करते या ध्यान लगाते समय पूर्व या उत्तर दिशा की ओर मुख करें।`
-: `Face East or North while working or meditating to align with positive energetic currents.`,
+? `आपके लग्न स्वामी ${_lagnaLordHiTask[_lagnaLordTask] || _lagnaLordTask} के अनुसार, काम करते या ध्यान लगाते समय ${_dirHi} दिशा की ओर मुख करें। यह आपकी व्यक्तिगत ऊर्जा के साथ पूर्ण संरेखण स्थापित करेगा।`
+: `Based on your Ascendant Lord (${_lagnaLordTask}), face ${_dirEn} while working or meditating to align with your personal astral power current for maximum daily output.`,
 xp: 15,
 color: '#5dade2',
 icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5dade2" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>'
@@ -9325,7 +9334,7 @@ targetBtn.classList.add('selected');
 }
 
 // GLOBAL CACHE PURGE ENGINE (Purges old stale cache for all existing & new users)
-  const SYSTEM_CACHE_VERSION = 'v2026_07_27_purge_all_v12';
+  const SYSTEM_CACHE_VERSION = 'v2026_07_27_full_dynamic_v15';
   const userCacheVer = localStorage.getItem('app_cache_version');
 
   if (userCacheVer !== SYSTEM_CACHE_VERSION) {
@@ -9338,9 +9347,20 @@ targetBtn.classList.add('selected');
       'today_mission_practical_en', 'today_mission_practical_hi',
       'today_mission_title_en', 'today_mission_title_hi',
       'today_astro_prediction_en', 'today_astro_prediction_hi',
-      'cachedPlacementsList', 'cachedLagnaSignNum', 'cachedBirthDateStr'
+      'cachedPlacementsList', 'cachedLagnaSignNum', 'cachedBirthDateStr',
+      'coach_mission_cache_date', 'coach_mission_cache_en', 'coach_mission_cache_hi',
+      'daily_sanatan_notif_en', 'daily_sanatan_notif_hi', 'daily_notif_date',
+      'karma_daily_vastu_dir', 'karma_daily_lagna_lord'
     ];
     keysToPurge.forEach(k => localStorage.removeItem(k));
+
+    // Clear all session-level computed state too
+    if (typeof cachedPlacementsList !== 'undefined') {
+      try { cachedPlacementsList = null; } catch(e) {}
+    }
+    if (typeof cachedLagnaSignNum !== 'undefined') {
+      try { cachedLagnaSignNum = null; } catch(e) {}
+    }
 
     // Clear browser CacheStorage for PWA / ServiceWorker if active
     if ('caches' in window) {
@@ -9350,6 +9370,7 @@ targetBtn.classList.add('selected');
     }
 
     localStorage.setItem('app_cache_version', SYSTEM_CACHE_VERSION);
+    console.log('[Astro AI] Cache purged & upgraded to', SYSTEM_CACHE_VERSION);
   }
 
 const todayMissionDate = localStorage.getItem('today_mission_date');
