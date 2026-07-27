@@ -6451,7 +6451,32 @@ if (typeof renderKarmicJourney === 'function') {
 renderKarmicJourney();
 }
 
-console.log('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> App language switched to:', lang.toUpperCase());
+// 9. Re-render Coach Cosmic Mission in target language
+if (typeof generateCoachMission === 'function') {
+generateCoachMission();
+}
+
+// 10. Re-render Kundli Analysis Sections & Chart in target language
+if (typeof cachedPlacementsList !== 'undefined' && cachedPlacementsList && cachedPlacementsList.length > 0) {
+if (typeof renderKundliEnhancedSections === 'function') {
+renderKundliEnhancedSections(cachedPlacementsList, cachedLagnaSignNum, cachedBirthDateStr || '');
+}
+if (typeof drawChart === 'function') {
+drawChart();
+}
+}
+
+// 11. Re-render Lal Kitab Report in target language
+if (typeof generateLalKitabReport === 'function') {
+generateLalKitabReport();
+}
+
+// 12. Re-render Personalized Vastu Report in target language
+if (typeof generatePersonalizedVastuReport === 'function') {
+generatePersonalizedVastuReport();
+}
+
+console.log('App language switched immediately to:', lang.toUpperCase());
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -9667,6 +9692,11 @@ let kundliLang = 'en';
 
 function setKundliLang(lang) {
 kundliLang = lang;
+if (typeof currentAppLang !== 'undefined' && currentAppLang !== lang) {
+currentAppLang = lang;
+localStorage.setItem('app_language', lang);
+document.documentElement.setAttribute('data-lang', lang);
+}
 // Show/hide EN and HI labels
 document.querySelectorAll('.k-lbl-en').forEach(el => el.style.display = lang === 'en' ? '' : 'none');
 document.querySelectorAll('.k-lbl-hi').forEach(el => el.style.display = lang === 'hi' ? '' : 'none');
