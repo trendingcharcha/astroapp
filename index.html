@@ -4570,6 +4570,7 @@ let predictionHTML;
 if (lang === 'hi') {
 predictionHTML = `
 <p style="margin: 0 0 10px 0;"><strong>ज्योतिषीय लग्न (Lagna):</strong> <span style="color: var(--gold);">${lagnaNameHi} (${lagnaName})</span> | <strong>शासक ग्रह:</strong> <span style="color: #5dade2;">${rulingLord}</span></p>
+ <p style="margin: 0 0 8px 0; font-size: 0.85rem; color: var(--text-muted);"><strong>जन्म तिथि:</strong> ${date || 'अज्ञात'} &nbsp;|&nbsp; <strong>जन्म स्थान:</strong> ${cityName || 'अज्ञात'}</p>
 <p style="margin: 0 0 10px 0;">आपकी कुंडली बताती है कि आपके लग्न स्वामी <strong>${rulingLord}</strong> वर्तमान में आपके 90-दिवसीय कर्म चक्र की ओर मजबूत ऊर्जा किरणें संचारित कर रहे हैं। समर्पित अनुशासन के साथ, आपका व्यक्तिगत ऊर्जा संरेखण आगामी 90 दिनों में चरम प्रकटीकरण शक्ति तक पहुंच जाएगा।</p>
 <div style="background: rgba(232, 200, 121, 0.06); padding: 12px; border-radius: 8px; border-left: 3px solid var(--gold); margin-top: 10px;">
 <strong style="color: var(--gold); display: block; margin-bottom: 4px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> सक्रिय लक्ष्यों का ज्योतिषीय पूर्वानुमान:</strong>
@@ -4584,6 +4585,7 @@ return `<li style="margin-bottom: 4px;"><strong>${gLabel}:</strong> ${rulingLord
 } else {
 predictionHTML = `
 <p style="margin: 0 0 10px 0;"><strong>Astrological Ascendant (Lagna):</strong> <span style="color: var(--gold);">${lagnaName} (${lagnaNameHi})</span> | <strong>Ruling Planet:</strong> <span style="color: #5dade2;">${rulingLord}</span></p>
+ <p style="margin: 0 0 8px 0; font-size: 0.85rem; color: var(--text-muted);"><strong>Date of Birth:</strong> ${date || 'Unknown'} &nbsp;|&nbsp; <strong>Place of Birth:</strong> ${cityName || 'Unknown'}</p>
 <p style="margin: 0 0 10px 0;">Your horoscope indicates that your Lagna Lord <strong>${rulingLord}</strong> is currently transmitting strong activating rays towards your 90-day karmic cycle. With dedicated discipline, your personal energy alignment will reach peak manifestation power over the upcoming 90 days.</p>
 <div style="background: rgba(232, 200, 121, 0.06); padding: 12px; border-radius: 8px; border-left: 3px solid var(--gold); margin-top: 10px;">
 <strong style="color: var(--gold); display: block; margin-bottom: 4px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Active Goals Astrological Forecast:</strong>
@@ -9446,7 +9448,7 @@ if (nav) nav.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }, 150);
 }
 
-function switchTab(index, btn) {
+async function switchTab(index, btn) {
 // TAB 3: MATCHING - Auto-initialize Person 1 from stored profile
 if (index === 3) {
 if (typeof initMatchingForm === 'function') {
@@ -9456,7 +9458,8 @@ initMatchingForm();
 // TAB 2: LAL KITAB - Generate report and draw fixed chart
 if (index === 2) {
 if (typeof generateLalKitabReport === 'function') {
-generateLalKitabReport();
+// await to prevent double-generateChart race condition
+await generateLalKitabReport();
 }
 }
 // TAB 4: VASTU - Generate personalized Vastu report
@@ -9487,14 +9490,13 @@ const kForm = document.getElementById('kundli-form-view');
 const kRes = document.getElementById('kundli-result-view');
 if (kForm) kForm.style.display = 'none';
 if (kRes) kRes.style.display = 'block';
-// Auto-fill from single master profile and generate chart if needed
-autoFillKundliFromOnboarding();
-setTimeout(() => {
+// Await autoFill (which internally calls generateChart) before drawing — fixes race condition
+await autoFillKundliFromOnboarding();
+// drawChart is now safe to call since cachedPlacementsList is populated
 if (typeof drawChart === 'function') drawChart();
-}, 150);
 }
 
-// TAB 4: COACH - Automatically generate & show active Mission for all goals
+// TAB 5: COACH - Automatically generate & show active Mission for all goals
 if (index === 5) {
 const cForm = document.getElementById('coach-form-view');
 const cRes = document.getElementById('coach-result-view');
@@ -10815,12 +10817,15 @@ const parsedT = parseTimeString(time);
 hour = parsedT.hour;
 min = parsedT.min;
 } catch(e) {
-const now = new Date();
-year = now.getFullYear();
-month = now.getMonth() + 1;
-day = now.getDate();
-hour = now.getHours();
-min = now.getMinutes();
+// CRITICAL: Never fallback to today's date for birth data.
+// Using today's date silently generates a completely wrong Kundli for the user.
+console.error('[Astro AI] Invalid birth date/time format. Aborting chart generation.', date, time);
+if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+const _chartErrMsg = (typeof currentAppLang !== 'undefined' && currentAppLang === 'hi')
+? '\u091c\u0928\u094d\u092e \u0924\u093f\u0925\u093f \u092f\u093e \u0938\u092e\u092f \u0915\u093e \u092a\u094d\u0930\u093e\u0930\u0942\u092a \u0905\u092e\u093e\u0928\u094d\u092f \u0939\u0948\u0964'
+: 'Invalid birth date or time format. Please correct your details.';
+if (typeof showToast === 'function') showToast(_chartErrMsg, 'error');
+return; // Abort chart generation
 }
 
 // Calculations
