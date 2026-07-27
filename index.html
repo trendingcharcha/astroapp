@@ -7476,6 +7476,11 @@ const splash = document.getElementById('splash-screen');
 const onboarding = document.getElementById('onboarding-screen');
 const appLayout = document.getElementById('app-layout');
 
+// Ensure Supabase client is initialized if not yet done
+if (!supabaseClient && typeof loadCloudConfig === 'function') {
+try { loadCloudConfig(); } catch(e) {}
+}
+
 // Check if URL contains Google OAuth Callback tokens/code
 const hash = window.location.hash;
 const search = window.location.search;
@@ -7490,20 +7495,13 @@ if (splash) {
 splash.style.opacity = '0';
 setTimeout(async () => {
 splash.style.display = 'none';
+try {
 const isAuthFlag = localStorage.getItem('user_authenticated') === 'true';
+const hasLocalProfile = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
 
-// RULE 1: If user manually logged out, ALWAYS REQUIRE SIGN IN!
-if (!isAuthFlag) {
-if (appLayout) appLayout.style.display = 'none';
-if (onboarding) onboarding.style.display = 'flex';
-showOnboardingStep('path');
-return;
-}
-
-// RULE 2: Validate backend user session with Supabase Cloud
 let validBackendUser = false;
 let currentUserId = null;
-if (supabaseClient) {
+if (supabaseClient && supabaseClient.auth) {
 try {
 const { data: { user }, error } = await supabaseClient.auth.getUser();
 if (user && !error) {
@@ -7515,48 +7513,38 @@ console.log("Supabase backend auth check error:", err);
 }
 }
 
-// STRICT RULE: ALWAYS restore from Supabase cloud when user is authenticated.
-// localStorage is NOT a routing source of truth — it may be stale or cleared on logout.
 let cloudProfileExists = false;
 if (validBackendUser && currentUserId) {
 try {
-const restored = await restoreProfileFromCloud(currentUserId);
-cloudProfileExists = restored;
+cloudProfileExists = await restoreProfileFromCloud(currentUserId);
 } catch(e) {
-// Fallback: if cloud fetch fails, check local cache only as last resort
-cloudProfileExists = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
+cloudProfileExists = hasLocalProfile;
 }
 }
 
-// RULE 3: If user was DELETED from backend database, wipe local cache & require sign in!
-if (supabaseClient && !validBackendUser && isAuthFlag) {
-localStorage.clear();
-sessionStorage.clear();
-if (appLayout) appLayout.style.display = 'none';
-if (onboarding) onboarding.style.display = 'flex';
-showOnboardingStep('path');
-return;
-}
-
-// RULE 4 (STRICT): If authenticated AND Supabase profile EXISTS (or local profile exists) → dashboard always.
-// If authenticated BUT no Supabase profile & no local profile → new user → onboarding path.
-if (validBackendUser) {
-const hasLocalProfile = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
-if (cloudProfileExists || hasLocalProfile) {
+// If user has active auth session OR cloud profile OR local profile -> Dashboard
+if (isAuthFlag || validBackendUser || cloudProfileExists || hasLocalProfile) {
 if (onboarding) onboarding.style.display = 'none';
 if (appLayout) appLayout.style.display = 'block';
 if (typeof initApp === 'function') initApp();
 } else {
-// Genuinely new user — no profile row in DB yet and no local cache
-if (appLayout) appLayout.style.display = 'none';
-if (onboarding) onboarding.style.display = 'flex';
-showOnboardingStep('select-path');
-}
-} else {
-// No valid backend session → show auth entrance screen
+// New unauthenticated guest -> Onboarding Auth gateway
 if (appLayout) appLayout.style.display = 'none';
 if (onboarding) onboarding.style.display = 'flex';
 showOnboardingStep('path');
+}
+} catch(err) {
+console.error('[Astro AI] Splash dismissal error:', err);
+const hasLocalProfile = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
+if (hasLocalProfile) {
+if (onboarding) onboarding.style.display = 'none';
+if (appLayout) appLayout.style.display = 'block';
+if (typeof initApp === 'function') initApp();
+} else {
+if (appLayout) appLayout.style.display = 'none';
+if (onboarding) onboarding.style.display = 'flex';
+showOnboardingStep('path');
+}
 }
 }, 600);
 }
@@ -7576,15 +7564,25 @@ let supabaseClient = null;
 function loadCloudConfig() {
 const url = localStorage.getItem('supabase_url') || 'https://rnunibjmmowhaxsytthf.supabase.co';
 const key = localStorage.getItem('supabase_key') || 'sb_publishable_jjYnowJojZtzDjqEmVXACg_C7J1PGlq';
-document.getElementById('db-url').value = url;
-document.getElementById('db-key').value = key;
+const urlEl = document.getElementById('db-url');
+const keyEl = document.getElementById('db-key');
+if (urlEl) urlEl.value = url;
+if (keyEl) keyEl.value = key;
 try {
+if (typeof supabase !== 'undefined' && supabase.createClient) {
 supabaseClient = supabase.createClient(url, key);
-document.getElementById('cloud-status').innerText = " Connected to Supabase Cloud Database";
-document.getElementById('cloud-status').style.color = "#E8C879";
+const statusEl = document.getElementById('cloud-status');
+if (statusEl) {
+statusEl.innerText = " Connected to Supabase Cloud Database";
+statusEl.style.color = "#E8C879";
+}
+}
 } catch (e) {
-document.getElementById('cloud-status').innerText = " Failed to initialize client";
-document.getElementById('cloud-status').style.color = "#ff6b6b";
+const statusEl = document.getElementById('cloud-status');
+if (statusEl) {
+statusEl.innerText = " Failed to initialize client";
+statusEl.style.color = "#ff6b6b";
+}
 }
 }
 
