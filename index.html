@@ -12563,7 +12563,7 @@ handleOAuthCallback();
 <div id="livechat-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(12, 9, 34, 0.95); backdrop-filter: blur(12px); z-index: 100010; align-items: center; justify-content: center; padding: 15px;">
   <div class="auth-card" style="max-width: 480px; width: 100%; height: 85vh; border: 1px solid var(--purple); box-shadow: 0 15px 40px rgba(0,0,0,0.9); display: flex; flex-direction: column; padding: 0; overflow: hidden; border-radius: 16px;">
     
-    <!-- Chat Header -->
+    <!-- Clean Header without Top Carousel -->
     <div style="background: linear-gradient(135deg, rgba(142, 111, 214, 0.25), rgba(12, 9, 34, 0.8)); padding: 12px 16px; border-bottom: 1px solid rgba(142, 111, 214, 0.3); display: flex; justify-content: space-between; align-items: center;">
       <button onclick="closeLiveChatModal()" class="btn" style="width: auto; padding: 6px 12px; font-size: 0.8rem; background: rgba(142, 111, 214, 0.2); border: 1px solid var(--purple); color: var(--purple); display: flex; align-items: center; gap: 6px; font-weight: bold; cursor: pointer;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
@@ -12574,23 +12574,15 @@ handleOAuthCallback();
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10a9.94 9.94 0 0 1-5-1.34L2 22l1.34-5A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2z"/></svg>
         </div>
         <h4 style="margin: 0; color: #fff; font-size: 0.9rem; font-weight: bold;">
-          <span class="k-lbl-en">AI Karma Assistant</span><span class="k-lbl-hi" style="display:none;">एआई कर्म सहचर</span>
+          <span class="k-lbl-en">AI Task Adapter Wizard</span><span class="k-lbl-hi" style="display:none;">एआई कार्य अनुकूलक सहायक</span>
         </h4>
       </div>
       <button onclick="closeLiveChatModal()" class="btn" style="width: auto; padding: 4px 10px; font-size: 0.9rem; background: rgba(255,255,255,0.1); color: var(--purple); border: 1px solid rgba(142,111,214,0.4); cursor: pointer;" title="Close">✕</button>
     </div>
 
-    <!-- Quick Scenario Prompts Carousel -->
-    <div style="background: rgba(255,255,255,0.02); padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; gap: 8px; overflow-x: auto; white-space: nowrap;">
-      <button onclick="sendQuickPrompt('office')" class="btn btn-outline" style="padding: 4px 10px; font-size: 0.72rem; border-color: rgba(142,111,214,0.4); color: var(--purple);">🏢 In Office Right Now</button>
-      <button onclick="sendQuickPrompt('time')" class="btn btn-outline" style="padding: 4px 10px; font-size: 0.72rem; border-color: rgba(232,200,121,0.4); color: var(--gold);">⏰ Missed Time Window</button>
-      <button onclick="sendQuickPrompt('items')" class="btn btn-outline" style="padding: 4px 10px; font-size: 0.72rem; border-color: rgba(255,255,255,0.3); color: #fff;">🏠 Don't Have Items</button>
-      <button onclick="sendQuickPrompt('desk')" class="btn btn-outline" style="padding: 4px 10px; font-size: 0.72rem; border-color: rgba(46,204,113,0.4); color: #2ecc71;">🧘 Quick Desk Remedy</button>
-    </div>
-
     <!-- Messages Container -->
     <div id="livechat-messages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: rgba(10,8,28,0.6);">
-      <!-- Messages rendered dynamically -->
+      <!-- Messages rendered dynamically by Wizard Engine -->
     </div>
 
     <!-- Chat Input Form -->
@@ -12724,22 +12716,26 @@ async function submitFeedback(e) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// LIVE AI ASSISTANT CHAT & TASK ADAPTER
+// LIVE AI TASK ADAPTER WIZARD ENGINE (4-STEP INTERACTIVE FLOW)
 // ═══════════════════════════════════════════════════════════════
-let pendingAlternativeTask = null;
+let wizardState = {
+  q1_issue: '',
+  q2_selected_tasks: [],
+  q3_location: '',
+  generatedAlternatives: {}
+};
 
 function openLiveChatModal() {
   const modal = document.getElementById('livechat-modal');
   if (!modal) return;
-  
   modal.style.display = 'flex';
+  
+  // Reset wizard state and start Q1 flow
+  wizardState = { q1_issue: '', q2_selected_tasks: [], q3_location: '', generatedAlternatives: {} };
   const msgContainer = document.getElementById('livechat-messages');
-  if (msgContainer && msgContainer.children.length === 0) {
-    // Initial welcome message from AI Karma Assistant
-    const name = localStorage.getItem('user_name') || 'Seeker';
-    const goal = localStorage.getItem('user_goal') || 'job';
-    const initialMsg = `Namaste <strong>${name}</strong>! I am your AI Karma Assistant.<br><br>I see your active goal is <strong>${goal.toUpperCase()}</strong>. If you are busy at office, traveling, or miss a specific time window, tell me here. I will dynamically generate a valid alternative task tailored for your situation that you can accept right away!`;
-    appendChatMessage('assistant', initialMsg);
+  if (msgContainer) {
+    msgContainer.innerHTML = '';
+    startWizardStep1();
   }
 }
 
@@ -12753,7 +12749,7 @@ function appendChatMessage(sender, htmlContent) {
   if (!msgContainer) return;
 
   const msgDiv = document.createElement('div');
-  msgDiv.style.maxWidth = '85%';
+  msgDiv.style.maxWidth = '90%';
   msgDiv.style.padding = '10px 14px';
   msgDiv.style.borderRadius = '12px';
   msgDiv.style.fontSize = '0.82rem';
@@ -12777,88 +12773,184 @@ function appendChatMessage(sender, htmlContent) {
   msgContainer.scrollTop = msgContainer.scrollHeight;
 }
 
-function sendQuickPrompt(type) {
-  const prompts = {
-    office: "I am in office right now and can't perform tasks requiring water/food offering. What is my desk alternative?",
-    time: "I missed the morning Brahma/Rahu Kaal time window. How can I perform today's remedy now?",
-    items: "I don't have copper coins or silver items at home today. What alternative item can I use?",
-    desk: "Suggest a quick 2-minute office desk remedy for today."
-  };
-  const text = prompts[type] || prompts.office;
-  document.getElementById('livechat-input').value = text;
-  handleLiveChatSubmit(new Event('submit'));
+function startWizardStep1() {
+  const userName = localStorage.getItem('user_name') || 'Seeker';
+  const q1HTML = `Namaste <strong>${userName}</strong>! I am your AI Task Adapter.<br><br>
+  <strong>Q1: What is the issue preventing you from completing your task today?</strong><br>
+  <span style="font-size: 0.75rem; color: var(--gold);">(Select 1 option below)</span>
+  <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+    <button onclick="handleWizardQ1(this, 'I skipped todays selective task')" class="btn btn-outline" style="text-align: left; padding: 8px 12px; font-size: 0.78rem; border-color: rgba(142,111,214,0.4); color: #fff;">1️⃣ I skipped today's selective task</button>
+    <button onclick="handleWizardQ1(this, 'I am not able to perform the selective task today')" class="btn btn-outline" style="text-align: left; padding: 8px 12px; font-size: 0.78rem; border-color: rgba(142,111,214,0.4); color: #fff;">2️⃣ I am not able to perform the selective task today</button>
+    <button onclick="handleWizardQ1(this, 'I was in hurry and forget the morning tasks')" class="btn btn-outline" style="text-align: left; padding: 8px 12px; font-size: 0.78rem; border-color: rgba(142,111,214,0.4); color: #fff;">3️⃣ I was in a hurry and forgot the morning tasks</button>
+    <button onclick="handleWizardQ1(this, 'I dont have the task items')" class="btn btn-outline" style="text-align: left; padding: 8px 12px; font-size: 0.78rem; border-color: rgba(142,111,214,0.4); color: #fff;">4️⃣ I don't have the required task items</button>
+  </div>`;
+  
+  appendChatMessage('assistant', q1HTML);
 }
 
-function handleLiveChatSubmit(e) {
-  if (e) e.preventDefault();
-  const inputEl = document.getElementById('livechat-input');
-  if (!inputEl) return;
-  const userText = inputEl.value.trim();
-  if (!userText) return;
-
-  appendChatMessage('user', userText);
-  inputEl.value = '';
-
-  // Generate dynamic contextual AI response & alternative task
+function handleWizardQ1(btn, issueText) {
+  wizardState.q1_issue = issueText;
+  appendChatMessage('user', `Issue Selected: "${issueText}"`);
+  
   setTimeout(() => {
-    generateAIAdaptationResponse(userText);
+    startWizardStep2();
+  }, 300);
+}
+
+function startWizardStep2() {
+  const taskVedic = localStorage.getItem('today_quest_vedic_text') || 'Vedic Mantra Chanting';
+  const taskLal = localStorage.getItem('today_quest_lalkitab_text') || 'Lal Kitab Remedial Action';
+  const taskVastu = localStorage.getItem('today_quest_vastu_text') || 'Vastu Alignment Step';
+  const taskPrac = localStorage.getItem('today_quest_practical_text') || 'Practical Goal Focus';
+
+  const q2HTML = `<strong>Q2: Select the task(s) you need an alternative for today:</strong><br>
+  <span style="font-size: 0.75rem; color: var(--gold);">(Check up to MAX 3 tasks)</span>
+  
+  <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; border: 1px solid rgba(142,111,214,0.3);">
+    <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 0.8rem;">
+      <input type="checkbox" class="q2-task-cb" value="vedic" onchange="limitQ2Selections(this)" style="width: 18px; height: 18px; margin-top: 2px;">
+      <span><strong>Vedic Task:</strong> ${taskVedic}</span>
+    </label>
+    <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 0.8rem;">
+      <input type="checkbox" class="q2-task-cb" value="lalkitab" onchange="limitQ2Selections(this)" style="width: 18px; height: 18px; margin-top: 2px;">
+      <span><strong>Lal Kitab Task:</strong> ${taskLal}</span>
+    </label>
+    <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 0.8rem;">
+      <input type="checkbox" class="q2-task-cb" value="vastu" onchange="limitQ2Selections(this)" style="width: 18px; height: 18px; margin-top: 2px;">
+      <span><strong>Vastu Task:</strong> ${taskVastu}</span>
+    </label>
+    <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 0.8rem;">
+      <input type="checkbox" class="q2-task-cb" value="practical" onchange="limitQ2Selections(this)" style="width: 18px; height: 18px; margin-top: 2px;">
+      <span><strong>Practical Task:</strong> ${taskPrac}</span>
+    </label>
+  </div>
+  
+  <button onclick="submitWizardQ2()" class="btn" style="margin-top: 10px; padding: 8px 14px; font-size: 0.8rem; background: linear-gradient(135deg, var(--gold), #d4af37); color: #0C0922; font-weight: bold;">
+    CONTINUE TO Q3 (LOCATION) →
+  </button>`;
+
+  appendChatMessage('assistant', q2HTML);
+}
+
+function limitQ2Selections(cb) {
+  const checked = document.querySelectorAll('.q2-task-cb:checked');
+  if (checked.length > 3) {
+    cb.checked = false;
+    showToast(currentAppLang === 'hi' ? 'आप अधिकतम 3 कार्य ही चुन सकते हैं!' : 'You can select a maximum of 3 tasks!');
+  }
+}
+
+function submitWizardQ2() {
+  const checkedEls = document.querySelectorAll('.q2-task-cb:checked');
+  if (checkedEls.length === 0) {
+    showToast(currentAppLang === 'hi' ? 'कृपया कम से कम 1 कार्य चुनें!' : 'Please select at least 1 task to continue!');
+    return;
+  }
+
+  wizardState.q2_selected_tasks = Array.from(checkedEls).map(el => el.value);
+  appendChatMessage('user', `Selected ${wizardState.q2_selected_tasks.length} task(s) for alternative solution.`);
+
+  setTimeout(() => {
+    startWizardStep3();
+  }, 300);
+}
+
+function startWizardStep3() {
+  const q3HTML = `<strong>Q3: Where are you located right now?</strong><br>
+  <span style="font-size: 0.75rem; color: var(--gold);">(Select 1 location below)</span>
+  
+  <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+    <button onclick="handleWizardQ3(this, 'Home')" class="btn btn-outline" style="text-align: left; padding: 8px 12px; font-size: 0.78rem; border-color: rgba(142,111,214,0.4); color: #fff;">🏠 Home</button>
+    <button onclick="handleWizardQ3(this, 'Office')" class="btn btn-outline" style="text-align: left; padding: 8px 12px; font-size: 0.78rem; border-color: rgba(142,111,214,0.4); color: #fff;">🏢 Office / Workplace</button>
+    <button onclick="handleWizardQ3(this, 'Outside in Market / Traveling')" class="btn btn-outline" style="text-align: left; padding: 8px 12px; font-size: 0.78rem; border-color: rgba(142,111,214,0.4); color: #fff;">🚗 Outside in Market / Traveling</button>
+  </div>`;
+
+  appendChatMessage('assistant', q3HTML);
+}
+
+function handleWizardQ3(btn, locationText) {
+  wizardState.q3_location = locationText;
+  appendChatMessage('user', `Location: "${locationText}"`);
+
+  setTimeout(() => {
+    generateStep4AlternativeSolutions();
   }, 400);
 }
 
-function generateAIAdaptationResponse(query) {
-  const userName = localStorage.getItem('user_name') || 'Seeker';
-  const goal = localStorage.getItem('user_goal') || 'job';
-  const qLower = query.toLowerCase();
+function generateStep4AlternativeSolutions() {
+  const issue = wizardState.q1_issue;
+  const tasks = wizardState.q2_selected_tasks;
+  const location = wizardState.q3_location;
+  const goal = (localStorage.getItem('user_goal') || 'job').toUpperCase();
 
-  let responseHTML = '';
-  let alternativeTaskText = '';
+  let solutionsHTML = `<strong>Dynamic Sattvic Alternatives for Today:</strong><br>
+  <span style="font-size: 0.75rem; color: var(--gold);">Evaluated for ${location} (${issue})</span><br><br>`;
 
-  if (qLower.includes('office') || qLower.includes('desk') || qLower.includes('work')) {
-    alternativeTaskText = "Desk Chant: Mentally repeat 'Om Namah Shivaya' 11x while facing East at your desk";
-    responseHTML = `No problem, <strong>${userName}</strong>! We never force rigid constraints. Since you are at your office desk, here is your valid office alternative:<br><br>
-    <strong>Alternative Remedy:</strong> Sit upright at your desk facing East, take 3 deep breaths, and mentally chant <em>'Om Namah Shivaya' 11 times</em> to harmonize your Lagna energy.`;
-  } else if (qLower.includes('time') || qLower.includes('missed') || qLower.includes('rahu')) {
-    alternativeTaskText = "Time Adapter: Offer 1 glass of clean drinking water to a colleague or drink mindfully facing North";
-    responseHTML = `Missing a time window is completely fine, <strong>${userName}</strong>! Astrological remedies can be adapted to evening sunset hours:<br><br>
-    <strong>Alternative Remedy:</strong> Drink a glass of clean water facing North, or offer water to a colleague at work with a positive intention for your <strong>${goal.toUpperCase()}</strong> goal.`;
-  } else if (qLower.includes('item') || qLower.includes('coin') || qLower.includes('silver')) {
-    alternativeTaskText = "No-Item Remedy: Touch green plant leaf or write your goal 3x in a notebook";
-    responseHTML = `You don't need physical coins or items to activate planetary grace, <strong>${userName}</strong>!<br><br>
-    <strong>Alternative Remedy:</strong> Touch a green leaf of any indoor plant, or write your goal 3 times in your personal notepad.`;
-  } else {
-    alternativeTaskText = "Desk Adaption: Take 5 conscious Sattvic breaths facing East at your desk";
-    responseHTML = `Understood, <strong>${userName}</strong>! Here is your custom Sattvic alternative for your <strong>${goal.toUpperCase()}</strong> goal:<br><br>
-    <strong>Alternative Remedy:</strong> Pause for 2 minutes, close your eyes, and take 5 conscious breaths while visualizing success in your target goal.`;
-  }
+  tasks.forEach(taskType => {
+    let altText = '';
+    if (location === 'Office') {
+      if (taskType === 'vedic') altText = "Desk Chant: Mentally repeat 'Om Namah Shivaya' 11x facing East at your desk";
+      else if (taskType === 'lalkitab') altText = "Workplace Sattva: Keep 1 clean glass of drinking water on your desk and offer 1 sip to a colleague";
+      else if (taskType === 'vastu') altText = "Desk Vastu: Adjust laptop/screen to face North or East while executing work tasks";
+      else altText = "Office Action: Take 3 deep conscious breaths before starting your next executive task";
+    } else if (location.includes('Outside') || location.includes('Market')) {
+      if (taskType === 'vedic') altText = "Travel Mantra: Silently recite your ruling planet mantra 7 times while walking/moving";
+      else if (taskType === 'lalkitab') altText = "Public Karma: Offer 1 coin or food to a needy person or street bird while outside";
+      else if (taskType === 'vastu') altText = "Travel Direction: Pause facing East for 10 seconds and visualize success in your " + goal + " goal";
+      else altText = "Mobile Note: Write 1 action step for your goal in your smartphone notepad";
+    } else { // Home
+      if (taskType === 'vedic') altText = "Home Sattva: Light a lamp or incense stick and offer silent gratitude for 1 minute";
+      else if (taskType === 'lalkitab') altText = "Home Remedy: Touch a green leaf of an indoor plant and drink 1 glass of water";
+      else if (taskType === 'vastu') altText = "Home Alignment: Sit in North-East corner for 2 minutes with calm mind";
+      else altText = "Home Action: Spend 5 minutes reviewing your 90-day karmic transformation plan";
+    }
 
-  pendingAlternativeTask = alternativeTaskText;
+    wizardState.generatedAlternatives[taskType] = altText;
 
-  responseHTML += `<div style="margin-top: 10px; background: rgba(232, 200, 121, 0.1); border: 1px dashed var(--gold); border-radius: 8px; padding: 10px; text-align: center;">
-    <p style="margin: 0 0 6px 0; font-size: 0.75rem; color: var(--gold); font-weight: bold;">PROPOSED ALTERNATIVE TASK:</p>
-    <p style="margin: 0 0 10px 0; font-size: 0.8rem; color: #fff;">"${alternativeTaskText}"</p>
-    <button onclick="acceptAlternativeTask()" class="btn" style="width: 100%; padding: 6px 12px; font-size: 0.78rem; background: linear-gradient(135deg, var(--gold), #d4af37); color: #0C0922; font-weight: bold;">
-      ✓ ACCEPT & UPDATE TODAY'S TASK
-    </button>
-  </div>`;
+    solutionsHTML += `<div style="margin-bottom: 12px; background: rgba(232, 200, 121, 0.08); border: 1px dashed var(--gold); border-radius: 8px; padding: 10px;">
+      <p style="margin: 0 0 4px 0; font-size: 0.75rem; color: var(--gold); font-weight: bold;">PROPOSED ALTERNATIVE (${taskType.toUpperCase()}):</p>
+      <p style="margin: 0 0 8px 0; font-size: 0.8rem; color: #fff;">"${altText}"</p>
+      <button onclick="acceptWizardAlternative(this, '${taskType}')" class="btn" style="width: 100%; padding: 6px 12px; font-size: 0.78rem; background: linear-gradient(135deg, var(--gold), #d4af37); color: #0C0922; font-weight: bold;">
+        ✓ MARK ALTERNATIVE AS DONE & CLAIM +20 XP
+      </button>
+    </div>`;
+  });
 
-  appendChatMessage('assistant', responseHTML);
+  solutionsHTML += `<p style="font-size: 0.72rem; color: var(--text-muted); font-style: italic; margin-top: 6px;">
+    Note: Submitting alternative as done updates TODAY'S task only. Tomorrow, the core automated dynamic engine resumes normally.
+  </p>`;
+
+  appendChatMessage('assistant', solutionsHTML);
 }
 
-function acceptAlternativeTask() {
-  if (!pendingAlternativeTask) return;
+function acceptWizardAlternative(btnBtn, taskType) {
+  const altText = wizardState.generatedAlternatives[taskType];
+  if (!altText) return;
 
-  // Replace today's active vedic quest text with accepted alternative
-  localStorage.setItem('today_quest_vedic_text', pendingAlternativeTask);
-  localStorage.setItem('today_quest_vedic_text_en', pendingAlternativeTask);
-  localStorage.setItem('today_quest_vedic_text_hi', pendingAlternativeTask);
+  // 1. Mark task as DONE for TODAY ONLY
+  const todayStr = getFormattedDate();
+  localStorage.setItem(`today_quest_${taskType}_done`, 'true');
+  localStorage.setItem(`today_quest_${taskType}_text`, altText);
 
-  // Update DOM elements on Home tab
-  const questEl = document.getElementById('q-vedic-text');
-  if (questEl) questEl.innerText = pendingAlternativeTask;
+  // 2. Update Home Tab DOM in real-time
+  const textEl = document.getElementById(`q-${taskType}-text`);
+  if (textEl) textEl.innerText = altText;
 
-  appendChatMessage('assistant', `✓ <strong>Alternative Task Accepted!</strong><br>Your active daily task has been updated on your Home Dashboard to:<br><em>"${pendingAlternativeTask}"</em><br><br>You can now complete it and check it off on your Home tab to claim your full XP!`);
+  const checkEl = document.getElementById(`q-${taskType}-check`);
+  if (checkEl) checkEl.checked = true;
 
-  showToast(currentAppLang === 'hi' ? 'दैनिक कार्य नया स्वीकार्य विकल्प के साथ अपडेट हो गया है!' : "Daily task updated to accepted alternative! Check it off on your Home tab.");
+  // 3. Award +20 XP instantly
+  gainXP(20);
+
+  // 4. Update button UI inside chat to confirmed status
+  if (btnBtn) {
+    btnBtn.disabled = true;
+    btnBtn.style.background = 'linear-gradient(135deg, #2ecc71, #27ae60)';
+    btnBtn.style.color = '#fff';
+    btnBtn.innerText = '✓ ALTERNATIVE COMPLETED & +20 XP CLAIMED!';
+  }
+
+  showToast(currentAppLang === 'hi' ? 'कार्य विकल्प संपन्न! +20 XP प्रदान किया गया।' : `Alternative ${taskType.toUpperCase()} task completed! +20 XP awarded.`);
 }
 </script>
 
