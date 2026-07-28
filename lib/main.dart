@@ -1,82 +1,39 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'screens/login_screen.dart';
-import 'screens/onboarding_screen.dart';
-import 'screens/home_dashboard.dart';
-import 'services/supabase_service.dart';
-import 'services/hive_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // 1. Initialize Hive Local Database
-  try {
-    await HiveService.init();
-  } catch (e) {
-    debugPrint("Hive initialization skipped/failed: $e");
-  }
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  // 2. Initialize Supabase 24/7 Live Cloud Database
-  try {
-    await Supabase.initialize(
-      url: 'https://rnunibjmmowhaxsytthf.supabase.co',
-      anonKey: 'sb_publishable_jjYnowJojZtzDjqEmVXACg_C7J1PGlq',
-    );
-  } catch (e) {
-    debugPrint("Failed to initialize Supabase client: $e");
-  }
-  
-  // 3. Resolve start screen path with STRICT backend session check
-  Widget initialScreen = const LoginScreen();
+  // Initialize Native Local Notifications
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  const DarwinInitializationSettings initializationSettingsIOS =
+      DarwinInitializationSettings();
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
+  );
 
-  try {
-    final prefs = await SharedPreferences.getInstance();
-    final hasManuallyLoggedOut = prefs.getBool('has_manually_logged_out') ?? false;
-    
-    if (hasManuallyLoggedOut) {
-      // User explicitly logged out → always show login screen, never auto-login
-      initialScreen = const LoginScreen();
-    } else {
-      // Check Supabase session is still valid (not deleted from backend)
-      final user = SupabaseService.currentUser;
-      if (user != null) {
-        // Verify session is still alive by checking Supabase
-        try {
-          final session = SupabaseService.client.auth.currentSession;
-          if (session != null && !session.isExpired) {
-            final hasOnboarded = prefs.getBool('has_completed_onboarding') ?? false;
-            initialScreen = hasOnboarded ? const HomeDashboard() : const OnboardingScreen();
-          } else {
-            // Session expired or invalid → sign out cleanly
-            await SupabaseService.client.auth.signOut();
-            initialScreen = const LoginScreen();
-          }
-        } catch (e) {
-          initialScreen = const LoginScreen();
-        }
-      } else {
-        // Check guest mode
-        final guestMode = prefs.getBool('guest_offline_mode') ?? false;
-        if (guestMode) {
-          final hasOnboarded = prefs.getBool('has_completed_onboarding') ?? false;
-          initialScreen = hasOnboarded ? const HomeDashboard() : const OnboardingScreen();
-        } else {
-          initialScreen = const LoginScreen();
-        }
-      }
-    }
-  } catch (e) {
-    debugPrint("Startup routing error: $e");
-    initialScreen = const LoginScreen();
-  }
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse: (NotificationResponse details) {
+      debugPrint('Notification clicked: ${details.payload}');
+    },
+  );
 
-  runApp(KarmaQuestApp(startScreen: initialScreen));
+  runApp(const CosmoVedicApp());
 }
 
-class KarmaQuestApp extends StatelessWidget {
-  final Widget startScreen;
-  const KarmaQuestApp({super.key, required this.startScreen});
+class CosmoVedicApp extends StatelessWidget {
+  const CosmoVedicApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -85,16 +42,149 @@ class KarmaQuestApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
-        primaryColor: const Color(0xFF8E6FD6),
-        scaffoldBackgroundColor: const Color(0xFF09071A),
-        colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF8E6FD6),
-          secondary: Color(0xFFE8C879),
-          surface: Color(0xFF14102C),
+        scaffoldBackgroundColor: const Color(0xFF0C0922),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFFE8C879),
+          brightness: Brightness.dark,
         ),
         useMaterial3: true,
       ),
-      home: startScreen,
+      home: const CosmoVedicMainScreen(),
+    );
+  }
+}
+
+class CosmoVedicMainScreen extends StatefulWidget {
+  const CosmoVedicMainScreen({super.key});
+
+  @override
+  State<CosmoVedicMainScreen> createState() => _CosmoVedicMainScreenState();
+}
+
+class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen> {
+  late final WebViewController _controller;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _requestPermissions();
+
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0xFF0C0922))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) {
+            setState(() {
+              _isLoading = true;
+            });
+          },
+          onPageFinished: (String url) {
+            setState(() {
+              _isLoading = false;
+            });
+          },
+          onWebResourceError: (WebResourceError error) {
+            debugPrint('WebView Error: ${error.description}');
+          },
+        ),
+      )
+      ..addJavaScriptChannel(
+        'FlutterNotificationBridge',
+        onMessageReceived: (JavaScriptMessage message) {
+          _handleNotificationMessage(message.message);
+        },
+      )
+      ..loadRequest(Uri.parse('https://trendingcharcha.github.io/astroapp/'));
+  }
+
+  Future<void> _requestPermissions() async {
+    await [
+      Permission.notification,
+      Permission.location,
+      Permission.microphone,
+    ].request();
+  }
+
+  void _handleNotificationMessage(String jsonStr) async {
+    try {
+      final Map<String, dynamic> data = jsonDecode(jsonStr);
+      debugPrint('Received Notification Bridge Payload: $data');
+
+      // Schedule local notification in Android / iOS native engine
+      const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+        'cosmovedic_daily_channel',
+        'CosmoVedic Daily Reminders',
+        channelDescription: 'Daily Astrology Tasks, Fast Alerts & Rahu Kaal Warnings',
+        importance: Importance.max,
+        priority: Priority.high,
+        color: Color(0xFFE8C879),
+      );
+      const NotificationDetails notifDetails = NotificationDetails(
+        android: androidDetails,
+        iOS: DarwinNotificationDetails(),
+      );
+
+      if (data.containsKey('fastPrep')) {
+        final fast = data['fastPrep'];
+        await flutterLocalNotificationsPlugin.show(
+          1,
+          fast['title'] ?? '🍎 1-Day Prior Fast Prep',
+          fast['body'] ?? 'Tomorrow is sacred fast day! Prepare your sattvic items today.',
+          notifDetails,
+        );
+      }
+    } catch (e) {
+      debugPrint('Error parsing notification bridge payload: $e');
+    }
+  }
+
+  Future<bool> _onWillPop() async {
+    if (await _controller.canGoBack()) {
+      _controller.goBack();
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              WebViewWidget(controller: _controller),
+              if (_isLoading)
+                Container(
+                  color: const Color(0xFF0C0922),
+                  child: const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFE8C879)),
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          'COSMOVEDIC',
+                          style: TextStyle(
+                            color: Color(0xFFE8C879),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
