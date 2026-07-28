@@ -19,7 +19,7 @@
 // Clears: localStorage, sessionStorage, browser HTTP cache, SW cache.
 // ═══════════════════════════════════════════════════════════════
 (function() {
-var APP_CACHE_VER = 'cv_20260728_v500_release';
+var APP_CACHE_VER = 'cv_20260728_TOTAL_GLOBAL_PURGE_v999';
 
 // ── STEP 1: Detect old version or garbled localStorage ──────
 var storedVer = '';
@@ -9464,7 +9464,7 @@ function checkTimelyAutoPurge() {
 setInterval(checkTimelyAutoPurge, 60000);
 
 // GLOBAL CACHE PURGE ENGINE (Purges old stale cache for all existing & new users)
-  const SYSTEM_CACHE_VERSION = 'v2026_07_28_v500_release';
+  const SYSTEM_CACHE_VERSION = 'v2026_07_28_TOTAL_GLOBAL_PURGE_v999';
   const userCacheVer = localStorage.getItem('app_cache_version');
 
   if (userCacheVer !== SYSTEM_CACHE_VERSION) {
