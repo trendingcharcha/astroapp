@@ -19,7 +19,7 @@
 // Clears: localStorage, sessionStorage, browser HTTP cache, SW cache.
 // ═══════════════════════════════════════════════════════════════
 (function() {
-var APP_CACHE_VER = 'cv_20260727_r100_fresh';
+var APP_CACHE_VER = 'cv_20260728_v500_release';
 
 // ── STEP 1: Detect old version or garbled localStorage ──────
 var storedVer = '';
@@ -95,7 +95,7 @@ regs.forEach(function(reg) { reg.unregister(); });
 
 // ── STEP 5: Hard reload with cache-busting timestamp ───────
 // Only reload if NOT already on a busted URL (prevent infinite loop)
-if (window.location.href.indexOf('_cb=') === -1) {
+if (window.location.href.indexOf('_cb=' + APP_CACHE_VER) === -1) {
 var cleanUrl = window.location.protocol + '//' +
 window.location.host +
 window.location.pathname +
@@ -7762,6 +7762,29 @@ goal = payload;
 }
 localStorage.setItem('user_goal', goal);
 localStorage.setItem('onboarding_path', onboardingPath);
+
+// AUTO-PURGE & ALIGN TODAY'S MISSION FOR CLOUD RESTORED USERS
+const todayStr = typeof getFormattedDate === 'function' ? getFormattedDate() : new Date().toISOString().split('T')[0];
+const cachedMissionDate = localStorage.getItem('today_mission_date');
+if (cachedMissionDate !== todayStr) {
+  const keysToPurge = [
+    'today_mission_date', 'today_quest_vedic_text', 'today_quest_lalkitab_text',
+    'today_quest_vastu_text', 'today_quest_practical_text',
+    'today_mission_vedic_en', 'today_mission_vedic_hi',
+    'today_mission_lalkitab_en', 'today_mission_lalkitab_hi',
+    'today_mission_vastu_en', 'today_mission_vastu_hi',
+    'today_mission_practical_en', 'today_mission_practical_hi',
+    'today_mission_title_en', 'today_mission_title_hi',
+    'today_astro_prediction_en', 'today_astro_prediction_hi',
+    'daily_sanatan_notif_en', 'daily_sanatan_notif_hi', 'daily_notif_date'
+  ];
+  keysToPurge.forEach(k => localStorage.removeItem(k));
+  try {
+    if (typeof generateCoachMission === 'function') {
+      generateCoachMission({ preventDefault: () => {} });
+    }
+  } catch(e) {}
+}
 return true;
 }
 } catch (err) {
@@ -9414,7 +9437,7 @@ function checkTimelyAutoPurge() {
 setInterval(checkTimelyAutoPurge, 60000);
 
 // GLOBAL CACHE PURGE ENGINE (Purges old stale cache for all existing & new users)
-  const SYSTEM_CACHE_VERSION = 'v2026_07_28_auto_purge_engine_v200';
+  const SYSTEM_CACHE_VERSION = 'v2026_07_28_v500_release';
   const userCacheVer = localStorage.getItem('app_cache_version');
 
   if (userCacheVer !== SYSTEM_CACHE_VERSION) {
