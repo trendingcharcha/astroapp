@@ -19,7 +19,7 @@
 // Clears: localStorage, sessionStorage, browser HTTP cache, SW cache.
 // ═══════════════════════════════════════════════════════════════
 (function() {
-var APP_CACHE_VER = 'cv_20260728_TOTAL_GLOBAL_PURGE_v1005';
+var APP_CACHE_VER = 'cv_20260728_TOTAL_GLOBAL_PURGE_v1008';
 
 // ── STEP 1: Detect old version or garbled localStorage ──────
 var storedVer = '';
@@ -12855,12 +12855,52 @@ function handleWizardQ1(btn, index) {
   }, 300);
 }
 
+function getCleanShortTaskText(cat) {
+  const lang = (typeof currentAppLang !== 'undefined') ? currentAppLang : 'en';
+  const el = document.getElementById(`q-${cat}-text`);
+  if (el) {
+    let txt = el.innerText || el.textContent || '';
+    txt = txt.trim();
+    if (txt) {
+      const lines = txt.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+      if (lines.length > 0) {
+        let firstLine = lines[0];
+        if (firstLine.length > 110) firstLine = firstLine.substring(0, 110) + '...';
+        return firstLine;
+      }
+    }
+  }
+  const raw = localStorage.getItem(`today_quest_${cat}_text`) || '';
+  if (raw) {
+    let clean = raw.replace(/<[^>]*>?/gm, '').trim();
+    const lines = clean.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    if (lines.length > 0) {
+      let firstLine = lines[0];
+      if (firstLine.length > 110) firstLine = firstLine.substring(0, 110) + '...';
+      return firstLine;
+    }
+  }
+  const defaultMapEn = {
+    vedic: 'Vedic Ruling Planet Morning Chanting',
+    lalkitab: 'Lal Kitab Daily Remedial Action',
+    vastu: 'Vastu Directional Element Alignment',
+    practical: 'Practical Goal Execution Step'
+  };
+  const defaultMapHi = {
+    vedic: 'वैदिक ग्रह मंत्र जाप',
+    lalkitab: 'लाल किताब दैनिक उपाय',
+    vastu: 'वास्तु दिशा संरेखन',
+    practical: 'व्यावहारिक लक्ष्य कार्य'
+  };
+  return lang === 'hi' ? defaultMapHi[cat] : defaultMapEn[cat];
+}
+
 function startWizardStep2() {
   const lang = (typeof currentAppLang !== 'undefined') ? currentAppLang : 'en';
-  const taskVedic = localStorage.getItem('today_quest_vedic_text') || (lang === 'hi' ? 'वैदिक मंत्र जाप' : 'Vedic Mantra Chanting');
-  const taskLal = localStorage.getItem('today_quest_lalkitab_text') || (lang === 'hi' ? 'लाल किताब उपाय' : 'Lal Kitab Remedial Action');
-  const taskVastu = localStorage.getItem('today_quest_vastu_text') || (lang === 'hi' ? 'वास्तु दिशा संरेखन' : 'Vastu Alignment Step');
-  const taskPrac = localStorage.getItem('today_quest_practical_text') || (lang === 'hi' ? 'व्यावहारिक लक्ष्य कार्य' : 'Practical Goal Focus');
+  const taskVedic = getCleanShortTaskText('vedic');
+  const taskLal = getCleanShortTaskText('lalkitab');
+  const taskVastu = getCleanShortTaskText('vastu');
+  const taskPrac = getCleanShortTaskText('practical');
 
   const title = lang === 'hi'
     ? `<strong>Q2: आज जिन कार्यों के लिए आपको विकल्प चाहिए, उन्हें चुनें:</strong><br><span style="font-size: 0.75rem; color: var(--gold);">(अधिकतम 3 कार्य तक चुनें)</span>`
