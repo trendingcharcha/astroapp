@@ -5604,14 +5604,20 @@ let selectedRoadmapDay = 1;
 function getPlanStartDayOffset() {
 let planStartDate = localStorage.getItem('karma_plan_start_date');
 if (!planStartDate) {
-planStartDate = getFormattedDate();
+planStartDate = typeof getFormattedDate === 'function' ? getFormattedDate() : new Date().toISOString().split('T')[0];
 localStorage.setItem('karma_plan_start_date', planStartDate);
 }
-const startDateObj = new Date(planStartDate);
-const todayObj = new Date();
-const diffTime = Math.abs(todayObj - startDateObj);
-let dayNum = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-return Math.min(Math.max(dayNum, 1), 90);
+try {
+const sParts = planStartDate.split('-');
+const tStr = typeof getFormattedDate === 'function' ? getFormattedDate() : new Date().toISOString().split('T')[0];
+const tParts = tStr.split('-');
+const startUtc = Date.UTC(parseInt(sParts[0]), parseInt(sParts[1]) - 1, parseInt(sParts[2]));
+const todayUtc = Date.UTC(parseInt(tParts[0]), parseInt(tParts[1]) - 1, parseInt(tParts[2]));
+const diffDays = Math.floor((todayUtc - startUtc) / 86400000) + 1;
+return Math.min(Math.max(diffDays, 1), 90);
+} catch(e) {
+return 1;
+}
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -7656,7 +7662,8 @@ user_streak: parseInt(localStorage.getItem('user_streak') || '0') || 0,
 user_xp: parseInt(localStorage.getItem('user_xp') || '0') || 0,
 user_level: parseInt(localStorage.getItem('user_level') || '1') || 1,
 user_moon_rashi_idx: localStorage.getItem('user_moon_rashi_idx') || '',
-karma_daily_roadmap_history: localStorage.getItem('karma_daily_roadmap_history') || '{}'
+karma_daily_roadmap_history: localStorage.getItem('karma_daily_roadmap_history') || '{}',
+karma_plan_start_date: localStorage.getItem('karma_plan_start_date') || (typeof getFormattedDate === 'function' ? getFormattedDate() : new Date().toISOString().split('T')[0])
 };
 
 const { error } = await supabaseClient.from('profiles').upsert({
@@ -7763,6 +7770,9 @@ if (payload.user_streak) streak = parseInt(payload.user_streak);
 
 if (payload.karma_daily_roadmap_history) {
 localStorage.setItem('karma_daily_roadmap_history', typeof payload.karma_daily_roadmap_history === 'string' ? payload.karma_daily_roadmap_history : JSON.stringify(payload.karma_daily_roadmap_history));
+}
+if (payload.karma_plan_start_date) {
+localStorage.setItem('karma_plan_start_date', payload.karma_plan_start_date);
 }
 } else if (Array.isArray(payload) && payload.length > 0) {
 goal = payload[0];
