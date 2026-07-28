@@ -7702,16 +7702,26 @@ return false;
 
 if (profile) {
 console.log("Profile found on cloud. Restoring...");
-localStorage.setItem('user_name', profile.full_name || '');
-localStorage.setItem('kundli_name', profile.full_name || '');
-localStorage.setItem('user_gender', profile.gender || 'M');
-localStorage.setItem('kundli_gender', profile.gender || 'M');
-localStorage.setItem('user_dob', profile.dob || '');
-localStorage.setItem('kundli_date', profile.dob || '');
-localStorage.setItem('user_tob', profile.tob || '');
-localStorage.setItem('kundli_time', profile.tob || '');
-localStorage.setItem('user_pob', profile.pob || '');
-localStorage.setItem('kundli_city', profile.pob || '');
+if (profile.full_name && profile.full_name !== 'Seeker') {
+  localStorage.setItem('user_name', profile.full_name);
+  localStorage.setItem('kundli_name', profile.full_name);
+}
+if (profile.gender) {
+  localStorage.setItem('user_gender', profile.gender);
+  localStorage.setItem('kundli_gender', profile.gender);
+}
+if (profile.dob && profile.dob !== '1990-01-01') {
+  localStorage.setItem('user_dob', profile.dob);
+  localStorage.setItem('kundli_date', profile.dob);
+}
+if (profile.tob) {
+  localStorage.setItem('user_tob', profile.tob);
+  localStorage.setItem('kundli_time', profile.tob);
+}
+if (profile.pob && profile.pob !== 'New Delhi') {
+  localStorage.setItem('user_pob', profile.pob);
+  localStorage.setItem('kundli_city', profile.pob);
+}
 
 if (profile.lat) localStorage.setItem('user_lat', profile.lat);
 if (profile.lng) localStorage.setItem('user_lng', profile.lng);
@@ -9144,6 +9154,13 @@ localStorage.setItem('user_pob', cityName);
 localStorage.setItem('user_goal', goal);
 localStorage.setItem('user_active_goals', JSON.stringify([goal]));
 localStorage.setItem('onboarding_path', onboardingPath || 'single');
+
+// Reset XP and level to fresh starting state on Day 1 onboarding submit
+xp = 0;
+level = 1;
+localStorage.setItem('user_xp', '0');
+localStorage.setItem('user_level', '1');
+if (typeof updateGamificationHeader === 'function') updateGamificationHeader();
 
 // Sync to Kundli-specific backup keys
 localStorage.setItem('kundli_name', name);
