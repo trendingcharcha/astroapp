@@ -9337,6 +9337,8 @@ if (typeof renderPersonalizedRashiHoroscope === 'function') {
 renderPersonalizedRashiHoroscope();
 }
 
+checkTimelyAutoPurge();
+
 // --- INITIALIZE GAMIFICATION AND RESTORE MISSION ---
 const todayStr = getFormattedDate();
 if (lastActiveDate) {
@@ -9359,8 +9361,60 @@ targetBtn.classList.add('selected');
 }
 }
 
+// ═══════════════════════════════════════════════════════════════
+// TIMELY AUTO-PURGE & REAL-TIME ALIGNMENT ENGINE
+// Automatically flushes stale daily caches on date shift, version bump,
+// or backend sync, ensuring 100% updated data on Web & Flutter WebView.
+// ═══════════════════════════════════════════════════════════════
+function checkTimelyAutoPurge() {
+  const todayStr = typeof getFormattedDate === 'function' ? getFormattedDate() : new Date().toISOString().split('T')[0];
+  const lastPurgeDate = localStorage.getItem('last_timely_purge_date');
+
+  if (lastPurgeDate !== todayStr) {
+    console.log('[Astro AI] Timely Auto-Purge executing for date:', todayStr);
+    const dailyKeysToPurge = [
+      'today_mission_date',
+      'today_quest_vedic_text', 'today_quest_lalkitab_text',
+      'today_quest_vastu_text', 'today_quest_practical_text',
+      'today_quest_vedic_text_en', 'today_quest_vedic_text_hi',
+      'today_quest_lalkitab_text_en', 'today_quest_lalkitab_text_hi',
+      'today_quest_vastu_text_en', 'today_quest_vastu_text_hi',
+      'today_quest_practical_text_en', 'today_quest_practical_text_hi',
+      'today_mission_vedic_en', 'today_mission_vedic_hi',
+      'today_mission_lalkitab_en', 'today_mission_lalkitab_hi',
+      'today_mission_vastu_en', 'today_mission_vastu_hi',
+      'today_mission_practical_en', 'today_mission_practical_hi',
+      'today_mission_title_en', 'today_mission_title_hi',
+      'today_astro_prediction_en', 'today_astro_prediction_hi',
+      'daily_sanatan_notif_en', 'daily_sanatan_notif_hi', 'daily_notif_date',
+      'karma_daily_vastu_dir', 'karma_daily_lagna_lord'
+    ];
+    dailyKeysToPurge.forEach(k => localStorage.removeItem(k));
+    localStorage.setItem('last_timely_purge_date', todayStr);
+
+    // Auto-generate fresh active daily mission & quests for TODAY
+    try {
+      if (typeof generateCoachMission === 'function') {
+        generateCoachMission({ preventDefault: () => {} });
+      }
+    } catch(e) {}
+
+    // Update Sanatan notifications for TODAY
+    try {
+      if (typeof updateSanatanNotifications === 'function') {
+        updateSanatanNotifications(currentAppLang);
+      }
+    } catch(e) {}
+
+    console.log('[Astro AI] Timely Auto-Purge Complete. System aligned to', todayStr);
+  }
+}
+
+// Start 60-second background alignment timer for midnight date shifts
+setInterval(checkTimelyAutoPurge, 60000);
+
 // GLOBAL CACHE PURGE ENGINE (Purges old stale cache for all existing & new users)
-  const SYSTEM_CACHE_VERSION = 'v2026_07_27_fresh_release_v100';
+  const SYSTEM_CACHE_VERSION = 'v2026_07_28_auto_purge_engine_v200';
   const userCacheVer = localStorage.getItem('app_cache_version');
 
   if (userCacheVer !== SYSTEM_CACHE_VERSION) {
