@@ -19,7 +19,7 @@
 // Clears: localStorage, sessionStorage, browser HTTP cache, SW cache.
 // ═══════════════════════════════════════════════════════════════
 (function() {
-var APP_CACHE_VER = 'cv_20260728_TOTAL_GLOBAL_PURGE_v999';
+var APP_CACHE_VER = 'cv_20260728_TOTAL_GLOBAL_PURGE_v1002';
 
 // ── STEP 1: Detect old version or garbled localStorage ──────
 var storedVer = '';
@@ -650,6 +650,16 @@ gap: 8px;
 transform: translateY(-2px);
 box-shadow: var(--btn-shadow);
 filter: brightness(1.05);
+}
+
+/* STRICT LEFT ALIGNMENT FOR WIZARD & MODAL BUTTONS */
+#livechat-messages .btn, #livechat-messages .btn-outline, #livechat-messages button, .btn-left {
+  justify-content: flex-start !important;
+  text-align: left !important;
+  padding-left: 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
 }
 
 .btn:active {
