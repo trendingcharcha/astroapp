@@ -558,8 +558,13 @@ padding: 36px 26px;
 width: 100%;
 max-width: 420px;
 box-shadow: 0 16px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08);
-text-align: center;
+text-align: left !important;
 margin-bottom: 30px;
+}
+
+/* GLOBAL STRICT LEFT-ALIGNMENT RULE */
+.auth-card, .card, .modal, [id$="-modal"], .form-group, #livechat-messages, #livechat-messages div, #onboarding-screen, #auth-screen {
+  text-align: left !important;
 }
 
 .form-group {
@@ -1250,7 +1255,7 @@ box-shadow: 0 0 10px var(--gold);
 </div>
 
 <!-- ── STEP A: Smart Auth Gateway ──────────────────────────── -->
-<div id="onboarding-step-path" class="auth-card" style="text-align: center; width: 100%;">
+<div id="onboarding-step-path" class="auth-card" style="text-align: left; width: 100%;">
 <div style="margin-bottom: 12px;">
 <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8">
 <circle cx="12" cy="12" r="10"/>
@@ -1305,7 +1310,7 @@ box-shadow: 0 0 10px var(--gold);
 </div>
 
 <!-- ── GUEST CHOICE SCREEN (KUNDLI VS GOAL) ─────────── -->
-<div id="guest-choice-screen" class="auth-card" style="text-align: center; width: 100%; display: none;">
+<div id="guest-choice-screen" class="auth-card" style="text-align: left; width: 100%; display: none;">
 <div style="margin-bottom: 16px;">
 <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8">
 <circle cx="12" cy="12" r="10"/>
@@ -1341,7 +1346,7 @@ box-shadow: 0 0 10px var(--gold);
 </div>
 </div>
 <!-- ── STEP A.5: Choose Your Path (Single vs Couple) ── -->
-<div id="onboarding-step-select-path" class="auth-card" style="text-align: center; width: 100%; display: none;">
+<div id="onboarding-step-select-path" class="auth-card" style="text-align: left; width: 100%; display: none;">
 <div style="margin-bottom: 16px;">
 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.5">
 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -1378,7 +1383,7 @@ box-shadow: 0 0 10px var(--gold);
 </div>
 
 <!-- ── STEP B: Choose Category ──────────────────────── -->
-<div id="onboarding-step-category" class="auth-card" style="text-align: center; width: 100%; display: none;">
+<div id="onboarding-step-category" class="auth-card" style="text-align: left; width: 100%; display: none;">
 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; width: 100%;">
 <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;"><span class="k-lbl-en">Your Focus Area</span><span class="k-lbl-hi" style="display:none;">आपका ध्यान क्षेत्र</span></h3>
 <button class="btn" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="showOnboardingStep('select-path')"><span class="k-lbl-en">BACK</span><span class="k-lbl-hi" style="display:none;">वापस</span></button>
@@ -1390,7 +1395,7 @@ box-shadow: 0 0 10px var(--gold);
 </div>
 
 <!-- ── STEP C: Select Specific Goal ─────────────────── -->
-<div id="onboarding-step-1" class="auth-card" style="text-align: center; width: 100%; display: none;">
+<div id="onboarding-step-1" class="auth-card" style="text-align: left; width: 100%; display: none;">
 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; width: 100%;">
 <div style="text-align:left;">
 <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;"><span class="k-lbl-en">Select Your Goal</span><span class="k-lbl-hi" style="display:none;">अपना लक्ष्य चुनें</span></h3>
@@ -1596,7 +1601,7 @@ Partner / Spouse Details
 <!-- 2. AUTH SCREEN -->
 <!-- 2. AUTH SCREEN (SMART AUTH GATEWAY) -->
 <div id="auth-screen">
-<div class="auth-card" style="text-align: center; width: 100%;">
+<div class="auth-card" style="text-align: left; width: 100%;">
 <div style="margin-bottom: 12px;">
 <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8">
 <circle cx="12" cy="12" r="10"/>
