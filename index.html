@@ -19,7 +19,7 @@
 // Clears: localStorage, sessionStorage, browser HTTP cache, SW cache.
 // ═══════════════════════════════════════════════════════════════
 (function() {
-var APP_CACHE_VER = 'cv_20260728_TOTAL_GLOBAL_PURGE_v1020';
+var APP_CACHE_VER = 'cv_20260728_TOTAL_GLOBAL_PURGE_v1025';
 
 // ── STEP 1: Detect old version or garbled localStorage ──────
 var storedVer = '';
@@ -12759,7 +12759,15 @@ function openLiveChatModal() {
   const modal = document.getElementById('livechat-modal');
   if (!modal) return;
   modal.style.display = 'flex';
-  
+
+  // DYNAMIC FIX: Always pre-render today's live task cards before Q2 reads them.
+  // This guarantees all 7 dynamic task cards exist in DOM regardless of which
+  // tab the user came from (Home, Settings, Coach etc.)
+  const todayDay = (typeof getPlanStartDayOffset === 'function') ? getPlanStartDayOffset() : 1;
+  if (typeof generateDailyQuestCards === 'function') {
+    generateDailyQuestCards(todayDay);
+  }
+
   // Reset wizard state and start Q1 flow
   wizardState = { q1_issue: '', q2_selected_tasks: [], q3_location: '', generatedAlternatives: {} };
   const msgContainer = document.getElementById('livechat-messages');
@@ -12860,41 +12868,26 @@ function getLiveDashboardDoableTasks() {
   const tasks = [];
 
   if (container) {
-    const cards = container.querySelectorAll('.quest-card, [id$="-card"], div[id^="q-"]');
+    // DYNAMIC FIX: Target ONLY dynamically-generated task cards [id^="task-card-"]
+    // These are rendered fresh every day by generateDailyQuestCards(dayNum).
+    // Static HTML shell cards (q-vedic-card etc.) are excluded — they are always empty.
+    const cards = container.querySelectorAll('[id^="task-card-"]');
+
     cards.forEach((card, idx) => {
-      const titleEl = card.querySelector('strong, h4, [class*="title"]');
-      const textEl = card.querySelector('div[id$="-text"], p, div:nth-child(2)');
+      const titleEl = card.querySelector('strong span, strong');
+      const textEl = card.querySelector('div[style*="color: var(--text-muted)"], div:last-child');
 
       let title = titleEl ? titleEl.innerText.trim() : `Task ${idx + 1}`;
-      let text = textEl ? textEl.innerText.trim() : card.innerText.trim();
+      let text = textEl ? textEl.innerText.trim() : '';
 
-      if (text.includes(title)) {
-        text = text.replace(title, '').trim();
-      }
+      // Strip XP badge text from title and body
+      title = title.replace(/\+\d+\s*XP/gi, '').trim();
       text = text.replace(/\+\d+\s*XP/gi, '').trim();
 
-      if (text.length > 95) {
-        text = text.substring(0, 95) + '...';
-      }
+      if (text.length > 95) text = text.substring(0, 95) + '...';
 
-      if (title && text) {
-        tasks.push({ index: idx, id: card.id || `task_${idx}`, title: title, text: text });
-      }
-    });
-  }
-
-  // Backup fallback: parse individual quest cards if container loop empty
-  if (tasks.length === 0) {
-    const categories = ['vedic', 'lalkitab', 'vastu', 'practical'];
-    categories.forEach((cat, idx) => {
-      const card = document.getElementById(`q-${cat}-card`);
-      const textEl = document.getElementById(`q-${cat}-text`);
-      if (textEl && textEl.innerText.trim()) {
-        const titleEl = card ? card.querySelector('strong') : null;
-        const title = titleEl ? titleEl.innerText.trim() : `${cat.toUpperCase()} Remedy`;
-        let text = textEl.innerText.trim();
-        if (text.length > 95) text = text.substring(0, 95) + '...';
-        tasks.push({ index: idx, id: `q-${cat}-card`, title: title, text: text });
+      if (title) {
+        tasks.push({ index: idx, id: card.id, title: title, text: text || title });
       }
     });
   }
@@ -13133,25 +13126,40 @@ function acceptWizardAlternative(btnBtn, taskIdx) {
   const altText = wizardState.generatedAlternatives[taskIdx];
   if (!altText) return;
 
-  const container = document.getElementById('quests-list-container');
-  if (container) {
-    const cards = container.querySelectorAll('.quest-card, [id$="-card"], div[id^="q-"]');
-    const targetCard = cards[taskIdx];
-    if (targetCard) {
-      // Mark checkbox checked on Home tab
-      const cb = targetCard.querySelector('input[type="checkbox"]');
-      if (cb) {
-        cb.checked = true;
-        if (typeof gainXP === 'function') gainXP(20);
-      }
+  const lang = (typeof currentAppLang !== 'undefined') ? currentAppLang : 'en';
 
-      // Update text description on Home tab card
-      const textEl = targetCard.querySelector('div[id$="-text"], p, div:nth-child(2)');
-      if (textEl) textEl.innerText = altText;
+  // DYNAMIC FIX: Target the exact dynamically-generated task card by its ID.
+  // generateDailyQuestCards() assigns ID = task-card-{dayNum}-{taskIdx}
+  // This works for ANY task index (1st, 5th, 7th) on ANY day automatically.
+  const todayDay = (typeof getPlanStartDayOffset === 'function') ? getPlanStartDayOffset() : 1;
+  const targetCard = document.getElementById(`task-card-${todayDay}-${taskIdx}`);
+
+  let alreadyDone = false;
+  if (targetCard) {
+    // Mark checkbox checked on Home tab (double-reward guard)
+    const cb = targetCard.querySelector('input[type="checkbox"]');
+    if (cb) {
+      alreadyDone = cb.checked;
+      cb.checked = true;
+      targetCard.classList.add('completed');
     }
+    // Update the task text on the Home tab card with the alternative remedy
+    const textEl = targetCard.querySelector('div[style*="text-muted"], div:last-child');
+    if (textEl) textEl.innerText = altText;
   }
 
-  const lang = (typeof currentAppLang !== 'undefined') ? currentAppLang : 'en';
+  // Award +20 XP — double-reward protection: only if not already ticked done
+  if (!alreadyDone && typeof gainXP === 'function') {
+    gainXP(20);
+  }
+
+  // Persist alternative completion into today's roadmap history in localStorage
+  try {
+    const hist = JSON.parse(localStorage.getItem('karma_daily_roadmap_history') || '{}');
+    if (!hist[todayDay]) hist[todayDay] = {};
+    hist[todayDay][taskIdx] = true;
+    localStorage.setItem('karma_daily_roadmap_history', JSON.stringify(hist));
+  } catch(e) {}
 
   if (btnBtn) {
     btnBtn.disabled = true;
