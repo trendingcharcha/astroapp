@@ -6623,32 +6623,56 @@ countEl.innerText = `${completedCount} / ${tasks.length} Complete`;
 let currentAppLang = localStorage.getItem('app_language') || 'en';
 
 function updatePanchangCard(lang) {
-const targetLang = lang || (typeof currentAppLang !== 'undefined' ? currentAppLang : 'en');
-const now = new Date();
-const dayIdx = now.getDay();
-const tithiListEn = ["Prathama", "Dwitiya", "Tritiya", "Chaturthi", "Panchami", "Shasthi", "Saptami", "Ashtami", "Navami", "Dashami", "Ekadashi", "Dwadashi", "Trayodashi", "Chaturdashi", "Purnima / Amavasya"];
-const tithiListHi = ["प्रथमा (एकम)", "द्वितीया (दूज)", "तृतीया (तीज)", "चतुर्थी (चौथ)", "पंचमी", "षष्ठी (छठ)", "सप्तमी", "अष्टमी (आठम)", "नवमी", "दशमी", "एकादशी (ग्यारस)", "द्वादशी (बारस)", "त्रयोदशी (तेरस)", "चतुर्दशी (चौदस)", "पूर्णिमा / अमावस्या"];
-const nakshatraListEn = ["Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra", "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha", "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"];
-const nakshatraListHi = ["अश्विनी", "भरणी", "कृत्तिका", "रोहिणी", "मृगशिरा", "आर्द्रा", "पुनर्वसु", "पुष्य", "अश्लेषा", "मघा", "पूर्वाफाल्गुनी", "उत्तराफाल्गुनी", "हस्त", "चित्रा", "स्वाती", "विशाखा", "अनुराधा", "ज्येष्ठा", "मूल", "पूर्वाषाढ़ा", "उत्तराषाढ़ा", "श्रवण", "धनिष्ठा", "शतभिषा", "पूर्वाभाद्रपद", "उत्तराभाद्रपद", "रेवती"];
-const yogaListEn = ["Vishkumbha", "Priti", "Ayushman", "Saubhagya", "Sobhana", "Atiganda", "Sukarma", "Dhriti", "Shula", "Ganda", "Vriddhi", "Dhruva", "Vyaghata", "Harshana", "Vajra", "Siddhi", "Vyatipata", "Variyan", "Parigha", "Shiva", "Siddha", "Sadhya", "Subha", "Shukla", "Brahma", "Indra", "Vaidhriti"];
-const yogaListHi = ["विष्कुम्भ", "प्रीति", "आयुष्मान", "सौभाग्य", "शोभन", "अतिगण्ड", "सुकर्मा", "धृति", "शूल", "गण्ड", "वृद्धि", "ध्रुव", "व्याघात", "हर्षण", "वज्र", "सिद्धि", "व्यतीपात", "वरीयान्", "परिघ", "शिव", "सिद्ध", "साध्य", "शुभ", "शुक्ल", "ब्रह्म", "इन्द्र", "वैधृति"];
-const varaListEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const varaListHi = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
+  const targetLang = lang || (typeof currentAppLang !== 'undefined' ? currentAppLang : 'en');
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+  const hour = now.getHours();
+  const min = now.getMinutes();
 
-const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
-const tithiIdx = (dayOfYear % 15);
-const nakIdx = (dayOfYear % 27);
-const yogaIdx = ((dayOfYear * 2) % 27);
+  const tithiListEn = ["Shukla Pratipada", "Shukla Dwitiya", "Shukla Tritiya", "Shukla Chaturthi", "Shukla Panchami", "Shukla Shasthi", "Shukla Saptami", "Shukla Ashtami", "Shukla Navami", "Shukla Dashami", "Shukla Ekadashi", "Shukla Dwadashi", "Shukla Trayodashi", "Shukla Chaturdashi", "Purnima", "Krishna Pratipada", "Krishna Dwitiya", "Krishna Tritiya", "Krishna Chaturthi", "Krishna Panchami", "Krishna Shasthi", "Krishna Saptami", "Krishna Ashtami", "Krishna Navami", "Krishna Dashami", "Krishna Ekadashi", "Krishna Dwadashi", "Krishna Trayodashi", "Krishna Chaturdashi", "Amavasya"];
+  const tithiListHi = ["शुक्ल प्रतिपदा", "शुक्ल द्वितीया", "शुक्ल तृतीया", "शुक्ल चतुर्थी", "शुक्ल पंचमी", "शुक्ल षष्ठी", "शुक्ल सप्तमी", "शुक्ल अष्टमी", "शुक्ल नवमी", "शुक्ल दशमी", "शुक्ल एकादशी", "शुक्ल द्वादशी", "शुक्ल त्रयोदशी", "शुक्ल चतुर्दशी", "पूर्णिमा", "कृष्ण प्रतिपदा", "कृष्ण द्वितीया", "कृष्ण तृतीया", "कृष्ण चतुर्थी", "कृष्ण पंचमी", "कृष्ण षष्ठी", "कृष्ण सप्तमी", "कृष्ण अष्टमी", "कृष्ण नवमी", "कृष्ण दशमी", "कृष्ण एकादशी", "कृष्ण द्वादशी", "कृष्ण त्रयोदशी", "कृष्ण चतुर्दशी", "अमावस्या"];
+  const nakshatraListEn = ["Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra", "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha", "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"];
+  const nakshatraListHi = ["अश्विनी", "भरणी", "कृत्तिका", "रोहिणी", "मृगशिरा", "आर्द्रा", "पुनर्वसु", "पुष्य", "अश्लेषा", "मघा", "पूर्वाफाल्गुनी", "उत्तराफाल्गुनी", "हस्त", "चित्रा", "स्वाती", "विशाखा", "अनुराधा", "ज्येष्ठा", "मूल", "पूर्वाषाढ़ा", "उत्तराषाढ़ा", "श्रवण", "धनिष्ठा", "शतभिषा", "पूर्वाभाद्रपद", "उत्तराभाद्रपद", "रेवती"];
+  const yogaListEn = ["Vishkumbha", "Priti", "Ayushman", "Saubhagya", "Sobhana", "Atiganda", "Sukarma", "Dhriti", "Shula", "Ganda", "Vriddhi", "Dhruva", "Vyaghata", "Harshana", "Vajra", "Siddhi", "Vyatipata", "Variyan", "Parigha", "Shiva", "Siddha", "Sadhya", "Subha", "Shukla", "Brahma", "Indra", "Vaidhriti"];
+  const yogaListHi = ["विष्कुम्भ", "प्रीति", "आयुष्मान", "सौभाग्य", "शोभन", "अतिगण्ड", "सुकर्मा", "धृति", "शूल", "गण्ड", "वृद्धि", "ध्रुव", "व्याघात", "हर्षण", "वज्र", "सिद्धि", "व्यतीपात", "वरीयान्", "परिघ", "शिव", "सिद्ध", "साध्य", "शुभ", "शुक्ल", "ब्रह्म", "इन्द्र", "वैधृति"];
+  const varaListEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const varaListHi = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
 
-const tithiEl = document.getElementById('p-tithi');
-const nakEl = document.getElementById('p-nakshatra');
-const yogaEl = document.getElementById('p-yoga');
-const varaEl = document.getElementById('p-vara');
+  let tithiIdx = 0, nakIdx = 0, yogaIdx = 0;
+  if (typeof getJulianDay === 'function' && typeof getPlanetLongitude === 'function') {
+    try {
+      const jd = getJulianDay(year, month, day, hour, min, 5.5);
+      const ayanamsa = getLahiriAyanamsa(jd);
+      const sunLon = (getPlanetLongitude("Sun", jd) - ayanamsa + 360) % 360;
+      const moonLon = (getPlanetLongitude("Moon", jd) - ayanamsa + 360) % 360;
+      const diff = (moonLon - sunLon + 360) % 360;
+      tithiIdx = Math.floor(diff / 12) % 30;
+      nakIdx = Math.floor(moonLon / (360 / 27)) % 27;
+      yogaIdx = Math.floor(((sunLon + moonLon) % 360) / (360 / 27)) % 27;
+    } catch(e) {
+      const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+      tithiIdx = (dayOfYear % 30);
+      nakIdx = (dayOfYear % 27);
+      yogaIdx = ((dayOfYear * 2) % 27);
+    }
+  } else {
+    const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+    tithiIdx = (dayOfYear % 30);
+    nakIdx = (dayOfYear % 27);
+    yogaIdx = ((dayOfYear * 2) % 27);
+  }
 
-if (tithiEl) tithiEl.innerText = targetLang === 'hi' ? tithiListHi[tithiIdx] : tithiListEn[tithiIdx];
-if (nakEl) nakEl.innerText = targetLang === 'hi' ? nakshatraListHi[nakIdx] : nakshatraListEn[nakIdx];
-if (yogaEl) yogaEl.innerText = targetLang === 'hi' ? yogaListHi[yogaIdx] : yogaListEn[yogaIdx];
-if (varaEl) varaEl.innerText = targetLang === 'hi' ? varaListHi[dayIdx] : varaListEn[dayIdx];
+  const tithiEl = document.getElementById('p-tithi');
+  const nakEl = document.getElementById('p-nakshatra');
+  const yogaEl = document.getElementById('p-yoga');
+  const varaEl = document.getElementById('p-vara');
+
+  if (tithiEl) tithiEl.innerText = targetLang === 'hi' ? tithiListHi[tithiIdx] : tithiListEn[tithiIdx];
+  if (nakEl) nakEl.innerText = targetLang === 'hi' ? nakshatraListHi[nakIdx] : nakshatraListEn[nakIdx];
+  if (yogaEl) yogaEl.innerText = targetLang === 'hi' ? yogaListHi[yogaIdx] : yogaListEn[yogaIdx];
+  if (varaEl) varaEl.innerText = targetLang === 'hi' ? varaListHi[now.getDay()] : varaListEn[now.getDay()];
 }
 
 let _isSettingAppLang = false;
