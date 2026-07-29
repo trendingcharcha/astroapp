@@ -5445,9 +5445,9 @@ let currentPlacements = [];
 // isNorthIndianStyle is declared globally below
 
 // Gamification state management
-let xp = parseInt(localStorage.getItem('user_xp') || '0');
-let level = parseInt(localStorage.getItem('user_level') || '1');
-let streak = parseInt(localStorage.getItem('user_streak') || '0');
+var xp = parseInt(localStorage.getItem('user_xp') || '0');
+var level = parseInt(localStorage.getItem('user_level') || '1');
+var streak = parseInt(localStorage.getItem('user_streak') || '0');
 let lastActiveDate = localStorage.getItem('user_last_active_date') || '';
 let moodCheckedDate = localStorage.getItem('user_mood_checked_date') || '';
 let questsState = JSON.parse(localStorage.getItem('user_quests_state') || '{"vedic":false,"lalkitab":false,"vastu":false,"practical":false}');
@@ -7549,8 +7549,9 @@ const search = window.location.search;
 const isOAuthRedirect = (hash && (hash.includes('access_token=') || hash.includes('type='))) || (search && search.includes('code='));
 
 if (isOAuthRedirect) {
-if (splash) splash.style.display = 'none';
-return; // Allow handleOAuthCallback to manage screen routing!
+  if (splash) splash.style.display = 'none';
+  if (typeof handleOAuthCallback === 'function') handleOAuthCallback();
+  return; // Allow handleOAuthCallback to manage screen routing!
 }
 
 try {
@@ -8719,7 +8720,7 @@ function showOnboardingStep(stepNum) {
   }
 }
 
-let onboardingSelectedCity = majorCities[0];
+var onboardingSelectedCity = majorCities[0];
 
 async function filterOnboardingCities(query) {
 const suggestionsDiv = document.getElementById('onboarding-city-suggestions');
@@ -12372,17 +12373,76 @@ setAppLanguage(lang);
 // ═══════════════════════════════════════════════════════════════
 // HANDLE RETURN FROM GOOGLE OAUTH REDIRECT
 // ═══════════════════════════════════════════════════════════════
-function handleOAuthCallback() {
+async function handleOAuthCallback() {
   const hash = window.location.hash;
   const search = window.location.search;
   const isOAuth = (hash && (hash.includes('access_token=') || hash.includes('type='))) || (search && search.includes('code='));
 
-  if (isOAuth) {
-    localStorage.setItem('user_authenticated', 'true');
-    localStorage.setItem('user_auth_provider', 'google');
-    const splash = document.getElementById('splash-screen');
-    if (splash) splash.style.display = 'none';
-    showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Google Sign-In Successful! Restoring profile...`, "gold");
+  if (!isOAuth) return;
+
+  localStorage.setItem('user_authenticated', 'true');
+  localStorage.setItem('user_auth_provider', 'google');
+
+  const splash = document.getElementById('splash-screen');
+  if (splash) splash.style.display = 'none';
+
+  showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Google Account Connected! Checking profile...`, "gold");
+
+  // Ensure Supabase client is active
+  if (!supabaseClient && typeof loadCloudConfig === 'function') {
+    try { loadCloudConfig(); } catch(e) {}
+  }
+
+  const onboardingScreen = document.getElementById('onboarding-screen');
+  const appLayout = document.getElementById('app-layout');
+
+  try {
+    if (supabaseClient && supabaseClient.auth) {
+      const { data, error } = await supabaseClient.auth.getSession();
+      if (data && data.session && data.session.user) {
+        const session = data.session;
+        const currentUserId = session.user.id;
+        localStorage.setItem('supabase_user_id', currentUserId);
+        if (session.user.email) localStorage.setItem('user_email', session.user.email);
+
+        const restored = await restoreProfileFromCloud(currentUserId);
+        const hasLocalProfile = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
+
+        // Clean up URL hash safely
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, null, window.location.pathname);
+        }
+
+        if (restored || hasLocalProfile) {
+          // Profile exists -> Direct to Dashboard!
+          if (onboardingScreen) onboardingScreen.style.display = 'none';
+          if (appLayout) appLayout.style.display = 'block';
+          if (typeof initApp === 'function') initApp();
+          showToast("Welcome back! Dashboard ready.", "gold");
+        } else {
+          // Brand New Google User -> Direct to Goal Path Selection!
+          if (appLayout) appLayout.style.display = 'none';
+          if (onboardingScreen) onboardingScreen.style.display = 'flex';
+          showOnboardingStep('select-path');
+          showToast("Choose your goal to personalize your experience.", "gold");
+        }
+        return;
+      }
+    }
+  } catch (err) {
+    console.error("[Astro AI] OAuth session resolution error:", err);
+  }
+
+  // Fallback if session parsing pending: show Goal Path Selection (NEVER bounce back to sign in!)
+  const hasLocalCache = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
+  if (hasLocalCache) {
+    if (onboardingScreen) onboardingScreen.style.display = 'none';
+    if (appLayout) appLayout.style.display = 'block';
+    if (typeof initApp === 'function') initApp();
+  } else {
+    if (appLayout) appLayout.style.display = 'none';
+    if (onboardingScreen) onboardingScreen.style.display = 'flex';
+    showOnboardingStep('select-path');
   }
 }
 
