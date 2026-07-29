@@ -12435,13 +12435,13 @@ restoreProfileFromCloud(session.user.id).then((restored) => {
     if (!appVisible) openAppDashboard();
     else if (typeof initApp === 'function') initApp();
   } else {
-    // BRAND NEW GOOGLE USER -> keep authenticated & show profile setup (NEVER bounce back to login!)
+    // BRAND NEW USER -> authenticated! Show Goal Path Selection (NEVER bounce back to login!)
     localStorage.setItem('user_authenticated', 'true');
-    localStorage.setItem('supabase_user_id', currentUserId);
+    if (currentUserId) localStorage.setItem('supabase_user_id', currentUserId);
     if (!appVisible) {
       if (appLayout) appLayout.style.display = 'none';
       if (onboardingScreen) onboardingScreen.style.display = 'flex';
-      showOnboardingStep('path');
+      showOnboardingStep('select-path');
     }
   }
 }).catch((err) => {
@@ -12454,7 +12454,7 @@ restoreProfileFromCloud(session.user.id).then((restored) => {
     } else {
       if (onboardingScreen) onboardingScreen.style.display = 'flex';
       if (appLayout) appLayout.style.display = 'none';
-      showOnboardingStep('path');
+      showOnboardingStep('select-path');
     }
   }
 });
