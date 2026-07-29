@@ -504,7 +504,9 @@ body.light-theme .btn-outline {
 }
 
 body.light-theme .lang-toggle-btn,
-body.light-theme .theme-toggle-btn {
+body.light-theme .theme-toggle-btn,
+body.light-theme .bell-toggle-btn,
+body.light-theme .refresh-toggle-btn {
   background: rgba(184, 142, 56, 0.12) !important;
   border: 1px solid rgba(184, 142, 56, 0.4) !important;
   color: #8F6B22 !important;
@@ -1928,10 +1930,13 @@ Partner / Spouse Details
 <div id="app-layout">
 <header style="display: flex; align-items: center; justify-content: space-between; padding: 0 16px;">
 <h1 id="header-title" style="margin: 0; font-size: 1.35rem;">COSMOVEDIC</h1>
-<div style="display: flex; gap: 8px; align-items: center;">
+<div style="display: flex; gap: 6px; align-items: center;">
 <button onclick="toggleNotificationDrawer()" class="bell-toggle-btn" title="Sanatan Muhurat & Fast Notifications" style="position: relative; background: rgba(240, 215, 123, 0.15); border: 1px solid rgba(240, 215, 123, 0.4); color: var(--gold); padding: 6px; border-radius: 50%; width: 28px; height: 28px; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.25s ease;">
 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
 <span id="bell-badge" style="position: absolute; top: -4px; right: -4px; background: #ff6b6b; color: white; font-size: 0.55rem; font-weight: bold; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #1A1438;">!</span>
+</button>
+<button onclick="softPurgeAndRefreshData()" class="refresh-toggle-btn" id="refresh-btn" title="Sync & Soft Refresh Data (डेटा सिंक एवं रिफ्रेश)" style="background: rgba(240, 215, 123, 0.15); border: 1px solid rgba(240, 215, 123, 0.4); color: var(--gold); padding: 6px; border-radius: 50%; width: 28px; height: 28px; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.25s ease;">
+<svg class="refresh-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
 </button>
 <button onclick="toggleTheme()" class="theme-toggle-btn" title="Toggle Light/Dark Theme" style="background: rgba(240, 215, 123, 0.15); border: 1px solid rgba(240, 215, 123, 0.4); color: var(--gold); padding: 6px; border-radius: 50%; width: 28px; height: 28px; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.25s ease;">
 <svg class="theme-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -7321,6 +7326,73 @@ updateThemeUI();
 
 // Initialize theme immediately on script load
 try { initTheme(); } catch(e) {}
+
+/**
+ * Soft Purge & Data Refresh Utility
+ * Clears volatile transient calculation caches, re-syncs state from Storage/Supabase,
+ * and re-calculates active dashboard engines without logging the user out or deleting persistent profile data.
+ */
+function softPurgeAndRefreshData() {
+  const btn = document.getElementById('refresh-btn');
+  const icon = btn ? btn.querySelector('.refresh-icon') : null;
+  if (icon) {
+    icon.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+    icon.style.transform = 'rotate(360deg)';
+    setTimeout(() => { 
+      icon.style.transform = 'rotate(0deg)'; 
+      icon.style.transition = 'none'; 
+    }, 650);
+  }
+
+  // 1. Soft purge volatile calculation variables (Never touching persistent user_name, user_dob, etc.)
+  window.cachedPlacementsList = null;
+  window.cachedLagnaSignNum = null;
+
+  // 2. Re-sync user profile & goal state
+  if (typeof syncProfileStateFromStorage === 'function') {
+    try { syncProfileStateFromStorage(); } catch(e) {}
+  }
+
+  // 3. Re-calculate Sanatan Muhurat & Panchang notifications
+  if (typeof updateSanatanNotifications === 'function') {
+    try { updateSanatanNotifications(); } catch(e) {}
+  }
+
+  // 4. Re-render active dashboard goals
+  if (typeof renderDashboardGoals === 'function') {
+    try { renderDashboardGoals(); } catch(e) {}
+  }
+
+  // 5. If birth details exist, quietly re-run ephemeris chart calculations
+  const dob = localStorage.getItem('user_dob');
+  const tob = localStorage.getItem('user_tob');
+  const pob = localStorage.getItem('user_pob');
+  if (dob && tob && pob && typeof calculateAndRenderKundli === 'function') {
+    try { calculateAndRenderKundli(false); } catch(e) {}
+  }
+
+  // 6. Re-draw active canvas charts
+  if (typeof drawChart === 'function') {
+    try { drawChart(); } catch(e) {}
+  }
+  if (typeof drawLalKitabChart === 'function') {
+    try { drawLalKitabChart(); } catch(e) {}
+  }
+
+  // 7. Update language UI labels
+  if (typeof updateLanguageUI === 'function') {
+    try { updateLanguageUI(); } catch(e) {}
+  }
+
+  // 8. Non-blocking Toast Feedback
+  const isHi = (typeof currentAppLang !== 'undefined' && currentAppLang === 'hi');
+  const msg = isHi 
+    ? `<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M23 4v6h-6'/><path d='M1 20v-6h6'/><path d='M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15'/></svg> डेटा सफलतापूर्वक सिंक एवं रिफ्रेश हुआ!`
+    : `<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M23 4v6h-6'/><path d='M1 20v-6h6'/><path d='M3.51 9a9 9 0 0 0 20.49 15'/></svg> Data Synchronized & Refreshed!`;
+  if (typeof showToast === 'function') {
+    showToast(msg, 'gold');
+  }
+}
 
 function handleLogout() {
 showCustomConfirm("Logout Confirmation", "Are you sure you want to log out of CosmoVedic?", async () => {
