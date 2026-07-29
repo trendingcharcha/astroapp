@@ -7519,6 +7519,19 @@ grid.appendChild(box);
 
 
 
+// Synchronous Early OAuth Token Capture Guard (Prevents replaceState race condition)
+(function() {
+  var h = window.location.hash || '';
+  var s = window.location.search || '';
+  if (h.includes('access_token=') || h.includes('type=') || s.includes('code=')) {
+    window.isProcessingOAuth = true;
+    try {
+      localStorage.setItem('user_authenticated', 'true');
+      localStorage.setItem('user_auth_provider', 'google');
+    } catch(e) {}
+  }
+})();
+
 // Smooth Transition Splash to Onboarding / Auth Screen
 async function dismissSplashScreen() {
 const splash = document.getElementById('splash-screen');
@@ -7539,7 +7552,7 @@ try { loadCloudConfig(); } catch(e) {}
 // Check if URL contains Google OAuth Callback tokens/code
 const hash = window.location.hash;
 const search = window.location.search;
-const isOAuthRedirect = (hash && (hash.includes('access_token=') || hash.includes('type='))) || (search && search.includes('code='));
+const isOAuthRedirect = window.isProcessingOAuth || (hash && (hash.includes('access_token=') || hash.includes('type='))) || (search && search.includes('code='));
 
 if (isOAuthRedirect) {
   if (splash) splash.style.display = 'none';
@@ -7548,7 +7561,7 @@ if (isOAuthRedirect) {
 }
 
 try {
-const isAuthFlag = localStorage.getItem('user_authenticated') === 'true';
+const isAuthFlag = (localStorage.getItem('user_authenticated') === 'true') || window.isProcessingOAuth;
 const hasLocalProfile = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
 
 let validBackendUser = false;
@@ -7595,9 +7608,15 @@ if ((isAuthFlag || validBackendUser) && hasProfileData) {
 }
 } catch(err) {
   console.error('[Astro AI] Splash dismissal error:', err);
-  if (appLayout) appLayout.style.display = 'none';
-  if (onboarding) onboarding.style.display = 'flex';
-  if (typeof showOnboardingStep === 'function') showOnboardingStep('path');
+  if (window.isProcessingOAuth || localStorage.getItem('user_authenticated') === 'true') {
+    if (appLayout) appLayout.style.display = 'none';
+    if (onboarding) onboarding.style.display = 'flex';
+    if (typeof showOnboardingStep === 'function') showOnboardingStep('select-path');
+  } else {
+    if (appLayout) appLayout.style.display = 'none';
+    if (onboarding) onboarding.style.display = 'flex';
+    if (typeof showOnboardingStep === 'function') showOnboardingStep('path');
+  }
 }
 }
 
