@@ -148,14 +148,20 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen>
   Future<void> _launchExternalAuth(String urlStr) async {
     try {
       final Uri url = Uri.parse(urlStr);
-      if (await canLaunchUrl(url)) {
-        await launchUrl(
-          url,
-          mode: LaunchMode.externalApplication,
-        );
+      bool launched = await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
+      if (!launched) {
+        await launchUrl(url, mode: LaunchMode.platformDefault);
       }
     } catch (e) {
       debugPrint('Error launching external Google Auth: $e');
+      try {
+        await launchUrl(Uri.parse(urlStr), mode: LaunchMode.inAppBrowserView);
+      } catch (err) {
+        debugPrint('Fallback launch error: $err');
+      }
     }
   }
 
