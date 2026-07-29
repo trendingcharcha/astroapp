@@ -105,12 +105,7 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen>
             debugPrint('WebView Error: ${error.description}');
           },
           onNavigationRequest: (NavigationRequest request) {
-            // Intercept Google OAuth URLs and launch external Chrome Custom Tab to bypass WebView restrictions
-            if (request.url.contains('accounts.google.com') ||
-                request.url.contains('supabase.co/auth/v1/authorize')) {
-              _launchExternalAuth(request.url);
-              return NavigationDecision.prevent;
-            }
+            // Allow all navigation inside WebView so Google OAuth completes directly in-app
             return NavigationDecision.navigate;
           },
         ),
@@ -124,7 +119,8 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen>
       ..addJavaScriptChannel(
         'FlutterGoogleAuthBridge',
         onMessageReceived: (JavaScriptMessage message) {
-          _launchExternalAuth(message.message);
+          // Load Google OAuth URL directly inside the APK WebView
+          _controller.loadRequest(Uri.parse(message.message));
         },
       )
       ..loadRequest(

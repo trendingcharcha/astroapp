@@ -5689,8 +5689,10 @@ document.getElementById('q-vastu-text').innerHTML = formatQuestHTML(localStorage
 document.getElementById('q-practical-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_practical_text'));
 
 // Show Quests Section on Home, Hide prompt
-document.getElementById('quest-unlock-prompt').style.display = 'none';
-document.getElementById('quests-section').style.display = 'block';
+const qUnlockPrompt = document.getElementById('quest-unlock-prompt');
+if (qUnlockPrompt) qUnlockPrompt.style.display = 'none';
+const qSec = document.getElementById('quests-section');
+if (qSec) qSec.style.display = 'block';
 updateQuestCompletionCount();
 
 // Restore button and switch views safely
@@ -5728,7 +5730,8 @@ let isGuestVisitorMode = false;
 
 function showGuestChoiceScreen() {
 document.querySelectorAll('#onboarding-screen > div').forEach(d => d.style.display = 'none');
-document.getElementById('guest-choice-screen').style.display = 'block';
+const gChoiceScr = document.getElementById('guest-choice-screen');
+if (gChoiceScr) gChoiceScr.style.display = 'block';
 }
 
 function startGuestKundliFlow() {
@@ -7328,7 +7331,7 @@ showToast("Password must be at least 6 characters.", "error");
 return;
 }
 
-const submitBtn = document.getElementById('auth-submit-btn');
+const submitBtn = document.getElementById('auth-submit-btn') || document.querySelector('.btn-auth-submit') || document.querySelector('#auth-screen button[type="submit"]');
 if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = '...'; }
 
 try {
@@ -12855,7 +12858,7 @@ handleOAuthCallback();
 
 <!-- Add Goal Modal Overlay -->
 <div id="add-goal-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 20px;">
-<div class="auth-card" style="max-height: 80vh; overflow-y: auto; width: 100%; border: 1px solid var(--gold);">
+<div class="auth-card" style="max-width: 440px; max-height: 80vh; overflow-y: auto; width: 100%; border: 1px solid var(--gold);">
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
 <h3 style="color: var(--gold); margin: 0; font-size: 1.1rem;">Add Another Life Goal</h3>
 <button class="btn" style="width: auto; padding: 4px 10px; font-size: 0.75rem;" onclick="closeAddGoalModal()">X</button>
