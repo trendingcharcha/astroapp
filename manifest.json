@@ -1,0 +1,27 @@
+{
+  "name": "CosmoVedic",
+  "short_name": "CosmoVedic",
+  "description": "Premium Vedic Astrology App with KarmaQuest, 90-Day Roadmap, Kundli & Daily Remedies",
+  "start_url": "/astroapp/",
+  "scope": "/astroapp/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0C0922",
+  "theme_color": "#0C0922",
+  "lang": "en",
+  "categories": ["lifestyle", "health", "education"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
