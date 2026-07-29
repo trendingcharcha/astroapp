@@ -40,3 +40,15 @@
 - **Mandatory Feedback System**: Settings tab MUST contain the `openFeedbackModal()` form with mandatory fields (`full_name`, `email`, `phone`, `profession`, `rating`) synced directly to Supabase Cloud `public.feedbacks` database table.
 - **Adaptive Task Negotiation**: Settings tab MUST contain `openLiveChatModal()`. When users are busy at work or miss a time window, the Live AI Assistant generates valid Sattvic office/desk alternatives with an interactive `[ ACCEPT & UPDATE TODAY'S TASK ]` button that updates the Home tab active tasks in real-time.
 - **Header Navigation**: Both Feedback and Live Chat modals MUST feature prominent, accessible `← BACK` navigation buttons at top-left.
+
+---
+
+### Rule 7: Single Universal Supabase Cloud Backend (`https://doxskublvyyosrmecxic.supabase.co`)
+- Single cloud database instance for all platforms (PC, Web URL, Mobile APK).
+
+---
+
+### Rule 8: Flutter Exclusive Mobile Packaging Engine
+- **Flutter Only**: Flutter (`lib/main.dart`, `pubspec.yaml`, `android/`) is the sole, permanent standard for all Android APK (`.apk`) and App Bundle (`.aab`) release builds.
+- **No Alternatives**: Never suggest, offer, or use any third-party alternative build tools or services (PWABuilder, TWA, external wrappers, etc.). All mobile builds must use Flutter exclusively.
+
