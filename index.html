@@ -104,15 +104,8 @@ regs.forEach(function(reg) { reg.unregister(); });
 }).catch(function(){});
 }
 
-// ── STEP 5: Hard reload with cache-busting timestamp ───────
-// Only reload if NOT already on a busted URL (prevent infinite loop)
-if (window.location.href.indexOf('_cb=' + APP_CACHE_VER) === -1) {
-var cleanUrl = window.location.protocol + '//' +
-window.location.host +
-window.location.pathname +
-'?_cb=' + APP_CACHE_VER;
-window.location.replace(cleanUrl);
-}
+// Cache cleared & upgraded safely without URL manipulation
+try { localStorage.setItem('cosmovedic_cache_ver', APP_CACHE_VER); } catch(e) {}
 } else {
 // Version matches and no garbled data — just stamp the version
 try { localStorage.setItem('cosmovedic_cache_ver', APP_CACHE_VER); } catch(e) {}
