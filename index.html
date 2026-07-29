@@ -489,6 +489,35 @@ body.light-theme [id$="-suggestions"] div:hover {
   color: #8F6B22 !important;
 }
 
+/* Animated Vedic Astrological SVG Utility Classes */
+@keyframes astroOrbitSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes astroPulseGlow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.65; transform: scale(0.92); }
+}
+@keyframes astroFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.astro-spin-icon {
+  animation: astroOrbitSpin 12s linear infinite;
+  transform-origin: center;
+}
+.astro-spin-slow {
+  animation: astroOrbitSpin 20s linear infinite;
+  transform-origin: center;
+}
+.astro-pulse-icon {
+  animation: astroPulseGlow 3s ease-in-out infinite;
+  transform-origin: center;
+}
+.astro-float-icon {
+  animation: astroFloat 4s ease-in-out infinite;
+}
+
 /* Live Chat Drawer & Messages */
 body.light-theme #livechat-messages {
   background: #F5EFE6 !important;
@@ -1564,7 +1593,7 @@ box-shadow: 0 0 10px var(--gold);
 <h2 style="margin-bottom: 6px; color: #FFFFFF; font-size: 1.35rem; font-weight: 700;"><span class="k-lbl-en">Welcome to CosmoVedic</span><span class="k-lbl-hi" style="display:none;">कोस्मोवैदिक में आपका स्वागत है</span></h2>
 <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 18px; line-height: 1.4;"><span class="k-lbl-en">One-tap instant access to your 90-Day KarmaQuest &amp; Kundli</span><span class="k-lbl-hi" style="display:none;">अपने 90-दिवसीय कर्मक्वेस्ट और कुंडली तक तुरंत 1-टैप पहुंच</span></p>
 
-<!-- ⚡ 1-TAP INSTANT GOOGLE AUTH BUTTON -->
+<!-- 1-TAP INSTANT GOOGLE AUTH BUTTON -->
 <button class="btn" style="background: linear-gradient(135deg, #FFFFFF, #F1F3F4); color: #1F1F1F; font-weight: 700; font-size: 0.95rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px; border-radius: 12px; padding: 14px 16px; cursor: pointer; border: 2px solid #E8C879; box-shadow: 0 6px 20px rgba(232, 200, 121, 0.35); transition: all 0.25s ease;" onclick="signInWithGoogle()">
 <svg width="20" height="20" viewBox="0 0 24 24">
 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -1574,7 +1603,10 @@ box-shadow: 0 0 10px var(--gold);
 </svg>
 <span><span class="k-lbl-en">Continue with Google</span><span class="k-lbl-hi" style="display:none;">गूगल से जुड़ें</span></span>
 </button>
-<p style="font-size: 0.72rem; color: #E8C879; margin-bottom: 14px; font-weight: 500;"><span class="k-lbl-en">⚡ Select account &amp; enter instantly</span><span class="k-lbl-hi" style="display:none;">⚡ खाता चुनें और तुरंत प्रवेश करें</span></p>
+<p style="font-size: 0.72rem; color: #E8C879; margin-bottom: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 4px;">
+<svg class="astro-spin-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+<span class="k-lbl-en">Select account &amp; enter instantly</span><span class="k-lbl-hi" style="display:none;">खाता चुनें और तुरंत प्रवेश करें</span>
+</p>
 
 <!-- Clean Divider -->
 <div style="display: flex; align-items: center; gap: 10px; margin: 14px 0 10px 0;">
