@@ -27,6 +27,11 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: Repair Android Scaffolding in CI
+        run: |
+          flutter config --no-analytics
+          flutter create --platforms=android .
+
       - name: Install dependencies
         run: flutter pub get
 
@@ -52,11 +57,3 @@ jobs:
           name: CosmoVedic-AAB-v1.0.1-PlayStore
           path: build/app/outputs/bundle/release/app-release.aab
           retention-days: 30
-
-      - name: Build summary
-        run: |
-          echo "✅ Build complete!"
-          echo "APK: build/app/outputs/flutter-apk/app-release.apk"
-          echo "AAB: build/app/outputs/bundle/release/app-release.aab"
-          ls -lh build/app/outputs/flutter-apk/ 2>/dev/null || true
-          ls -lh build/app/outputs/bundle/release/ 2>/dev/null || true

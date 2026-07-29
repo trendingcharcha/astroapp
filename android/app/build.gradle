@@ -13,13 +13,13 @@ if (localPropertiesFile.exists()) {
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
+if (flutterVersionCode == null || flutterVersionCode.isEmpty()) {
     flutterVersionCode = '1'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
+if (flutterVersionName == null || flutterVersionName.isEmpty()) {
+    flutterVersionName = '1.0.1'
 }
 
 android {
@@ -45,6 +45,7 @@ android {
         targetSdk 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
 
     buildTypes {
