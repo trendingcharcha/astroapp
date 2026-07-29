@@ -257,6 +257,244 @@ body.light-theme {
 --progress-bg: rgba(184, 142, 56, 0.12);
 }
 
+/* LIGHT THEME COMPONENT & OVERRIDE RULES */
+body.light-theme {
+  background-color: #F5EFE6 !important;
+  color: #1C1936 !important;
+}
+
+body.light-theme .phone-shell {
+  background: var(--bg-gradient) !important;
+  color: #1C1936 !important;
+  box-shadow: 0 15px 50px rgba(184, 142, 56, 0.15), 0 0 0 1px rgba(184, 142, 56, 0.25) !important;
+}
+
+/* Base text color overrides in Light Theme */
+body.light-theme p,
+body.light-theme span,
+body.light-theme h1,
+body.light-theme h2,
+body.light-theme h3,
+body.light-theme h4,
+body.light-theme h5,
+body.light-theme h6,
+body.light-theme label,
+body.light-theme li,
+body.light-theme strong,
+body.light-theme b,
+body.light-theme td,
+body.light-theme th,
+body.light-theme div:not(.btn):not(.btn-primary):not(.btn-gold) {
+  color: #1C1936;
+}
+
+/* Light background cards & containers override */
+body.light-theme .card,
+body.light-theme .auth-card,
+body.light-theme .feature-card,
+body.light-theme .dasha-card,
+body.light-theme .transits-card,
+body.light-theme .remedy-card,
+body.light-theme .vastu-card,
+body.light-theme .chart-card,
+body.light-theme .info-box,
+body.light-theme .custom-box,
+body.light-theme #active-goals-card,
+body.light-theme [class*="card"],
+body.light-theme [style*="background: rgba(20, 16, 44"],
+body.light-theme [style*="background:rgba(20,16,44"],
+body.light-theme [style*="background: rgba(18, 14, 46"],
+body.light-theme [style*="background:rgba(18,14,46"],
+body.light-theme [style*="background: rgba(12, 9, 34"],
+body.light-theme [style*="background:rgba(12,9,34"],
+body.light-theme [style*="background: rgba(16, 12, 36"],
+body.light-theme [style*="background:rgba(16,12,36"],
+body.light-theme [style*="background: #120D2B"],
+body.light-theme [style*="background: #0C0922"],
+body.light-theme [style*="background: #161233"],
+body.light-theme [style*="background:#120D2B"] {
+  background: #FFFFFF !important;
+  border-color: rgba(184, 142, 56, 0.28) !important;
+  color: #1C1936 !important;
+  box-shadow: 0 6px 20px rgba(184, 142, 56, 0.08), 0 1px 3px rgba(0,0,0,0.04) !important;
+}
+
+/* Sub-containers & inner badges in cards */
+body.light-theme [style*="background:rgba(142,111,214,0.06)"],
+body.light-theme [style*="background: rgba(142, 111, 214, 0.06)"],
+body.light-theme [style*="background:rgba(142,111,214,0.12)"],
+body.light-theme [style*="background: rgba(142, 111, 214, 0.12)"],
+body.light-theme [style*="background:rgba(142, 111, 214, 0.2)"],
+body.light-theme [style*="background: rgba(142, 68, 173, 0.15)"],
+body.light-theme [style*="background: rgba(195, 155, 211, 0.05)"] {
+  background: #F4EFFC !important;
+  border-color: rgba(88, 75, 155, 0.3) !important;
+  color: #1C1936 !important;
+}
+
+/* Light text color overrides to dark colors */
+body.light-theme .text-muted,
+body.light-theme [style*="color: #A59EBF"],
+body.light-theme [style*="color:#A59EBF"],
+body.light-theme [style*="color: #79739A"],
+body.light-theme [style*="color:#79739A"] {
+  color: #5C5675 !important;
+}
+
+body.light-theme [style*="color: #F0EBF9"],
+body.light-theme [style*="color:#F0EBF9"],
+body.light-theme [style*="color: white"],
+body.light-theme [style*="color:#fff"],
+body.light-theme [style*="color: #fff"],
+body.light-theme [style*="color: #ffffff"] {
+  color: #1C1936 !important;
+}
+
+/* Gold / Purple text high contrast dark tones in Light Mode */
+body.light-theme .gold-text,
+body.light-theme .header-title,
+body.light-theme [style*="color: var(--gold)"],
+body.light-theme [style*="color: #E8C879"],
+body.light-theme [style*="color:#E8C879"] {
+  color: #8F6B22 !important;
+}
+
+body.light-theme [style*="color: var(--purple)"],
+body.light-theme [style*="color: #9B86ED"],
+body.light-theme [style*="color: #c39bd3"] {
+  color: #584B9B !important;
+}
+
+/* Inputs, Selects & Textareas */
+body.light-theme input,
+body.light-theme select,
+body.light-theme textarea,
+body.light-theme .input-field,
+body.light-theme select[style*="background: #1A1438"],
+body.light-theme select[style*="background:#1A1438"] {
+  background: #FFFFFF !important;
+  color: #1C1936 !important;
+  border: 1px solid rgba(184, 142, 56, 0.35) !important;
+}
+
+body.light-theme input::placeholder,
+body.light-theme textarea::placeholder {
+  color: #7A7494 !important;
+}
+
+/* Modals & Backdrop */
+body.light-theme [id$="-modal"],
+body.light-theme [class$="-modal"] {
+  background: rgba(30, 24, 52, 0.45) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+body.light-theme [id$="-modal"] .auth-card,
+body.light-theme [id$="-modal"] .card,
+body.light-theme [class$="-modal"] .auth-card,
+body.light-theme [class$="-modal"] .card,
+body.light-theme [id$="-modal"] > div,
+body.light-theme [class$="-modal"] > div {
+  background: #FFFFFF !important;
+  color: #1C1936 !important;
+  border: 1px solid rgba(184, 142, 56, 0.35) !important;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.15) !important;
+}
+
+/* Header & Bottom Navbar */
+body.light-theme header {
+  background: rgba(253, 251, 247, 0.96) !important;
+  border-bottom: 1px solid rgba(184, 142, 56, 0.22) !important;
+  color: #1C1936 !important;
+}
+
+body.light-theme .nav-bar {
+  background: rgba(253, 251, 247, 0.98) !important;
+  border-top: 1px solid rgba(184, 142, 56, 0.22) !important;
+}
+
+body.light-theme .nav-item {
+  color: #5C5675 !important;
+}
+
+body.light-theme .nav-item.active {
+  color: #8F6B22 !important;
+  background: rgba(184, 142, 56, 0.12) !important;
+}
+
+/* Tables & Kundli Grid Labels */
+body.light-theme table {
+  color: #1C1936 !important;
+}
+
+body.light-theme th {
+  background: rgba(245, 239, 230, 0.98) !important;
+  color: #1C1936 !important;
+  border-color: rgba(184, 142, 56, 0.28) !important;
+}
+
+body.light-theme td {
+  border-color: rgba(184, 142, 56, 0.2) !important;
+  color: #1C1936 !important;
+}
+
+body.light-theme .k-val {
+  color: #8F6B22 !important;
+}
+
+body.light-theme .k-lbl {
+  color: #5C5675 !important;
+}
+
+/* Buttons */
+body.light-theme .btn-primary,
+body.light-theme .btn-gold,
+body.light-theme button[style*="background: linear-gradient"],
+body.light-theme button[style*="background:linear-gradient"] {
+  background: linear-gradient(135deg, #CBA34E 0%, #8F6B22 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+}
+
+body.light-theme .btn-outline {
+  border-color: rgba(184, 142, 56, 0.45) !important;
+  color: #8F6B22 !important;
+  background: rgba(184, 142, 56, 0.08) !important;
+}
+
+body.light-theme .lang-toggle-btn,
+body.light-theme .theme-toggle-btn {
+  background: rgba(184, 142, 56, 0.12) !important;
+  border: 1px solid rgba(184, 142, 56, 0.4) !important;
+  color: #8F6B22 !important;
+}
+
+/* City suggestions dropdown */
+body.light-theme #m-p1-city-suggestions,
+body.light-theme #m-p2-city-suggestions,
+body.light-theme [id$="-suggestions"] {
+  background: #FFFFFF !important;
+  color: #1C1936 !important;
+  border: 1px solid rgba(184, 142, 56, 0.4) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12) !important;
+}
+
+body.light-theme [id$="-suggestions"] div:hover {
+  background: rgba(184, 142, 56, 0.12) !important;
+  color: #8F6B22 !important;
+}
+
+/* Live Chat Drawer & Messages */
+body.light-theme #livechat-messages {
+  background: #F5EFE6 !important;
+}
+
+body.light-theme #livechat-messages form,
+body.light-theme #livechat-modal form {
+  background: #FFFFFF !important;
+  border-top: 1px solid rgba(184, 142, 56, 0.25) !important;
+}
+
 @media print {
 body, html {
 background: #ffffff !important;
