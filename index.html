@@ -1273,7 +1273,7 @@ box-shadow: 0 0 10px var(--gold);
 </div>
 
 <!-- 2.5. ONBOARDING SCREEN -->
-<div id="onboarding-screen" style="display: none; position: relative;">
+<div id="onboarding-screen" style="display: none; position: absolute; top:0; left:0; right:0; bottom:0; width:100%; height:100%; z-index: 999; flex-direction: column; align-items: center; justify-content: flex-start; padding: 40px 20px; overflow-y: auto; background: var(--bg-gradient);">
 <!-- Language & Theme Switcher Pill for Onboarding Screens -->
 <div style="position: absolute; top: 16px; right: 16px; z-index: 1000; display: flex; gap: 8px; align-items: center;">
 <button onclick="toggleTheme()" class="theme-toggle-btn" title="Toggle Light/Dark Theme" style="background: rgba(232, 200, 121, 0.15); border: 1px solid rgba(232, 200, 121, 0.4); color: var(--gold); padding: 6px; border-radius: 50%; width: 28px; height: 28px; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.25s ease;">
@@ -1285,7 +1285,7 @@ box-shadow: 0 0 10px var(--gold);
 </div>
 
 <!-- ── STEP A: Smart Auth Gateway ──────────────────────────── -->
-<div id="onboarding-step-path" class="auth-card" style="text-align: center; width: 100%; max-width: 440px; margin: 0 auto; padding: 28px 22px; background: rgba(18, 14, 46, 0.95); border: 1px solid rgba(232, 200, 121, 0.35); border-radius: 20px; box-shadow: 0 12px 40px rgba(0,0,0,0.6);">
+<div id="onboarding-step-path" class="auth-card" style="text-align: center; width: 100%; max-width: 420px; margin: 20px auto; padding: 28px 20px; background: rgba(18, 14, 46, 0.95); border: 1px solid rgba(232, 200, 121, 0.35); border-radius: 20px; box-shadow: 0 12px 40px rgba(0,0,0,0.6); box-sizing: border-box;">
 <div style="margin-bottom: 14px;">
 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8">
 <circle cx="12" cy="12" r="10"/>
@@ -1331,6 +1331,13 @@ box-shadow: 0 0 10px var(--gold);
 <div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
 <span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase;"><span class="k-lbl-en">Free Preview</span><span class="k-lbl-hi" style="display:none;">मुफ़्त पूर्वावलोकन</span></span>
 <div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
+</div>
+
+<!-- Free Guest Preview Button -->
+<button class="btn btn-outline" style="width: 100%; padding: 11px; font-weight: 600; border-color: rgba(232,200,121,0.3); color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px;" onclick="showGuestChoiceScreen()">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+<span class="k-lbl-en">Free Guest Kundli Preview</span><span class="k-lbl-hi" style="display:none;">मुफ़्त गेस्ट कुंडली पूर्वावलोकन</span>
+</button>
 </div>
 
 <!-- Free Guest Preview Button -->
@@ -7557,8 +7564,8 @@ return; // Allow handleOAuthCallback to manage screen routing!
 
 if (splash) {
 splash.style.opacity = '0';
-setTimeout(async () => {
 splash.style.display = 'none';
+(async () => {
 try {
 const isAuthFlag = localStorage.getItem('user_authenticated') === 'true';
 const hasLocalProfile = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
