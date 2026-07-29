@@ -30,7 +30,7 @@
 // Clears: localStorage, sessionStorage, browser HTTP cache, SW cache.
 // ═══════════════════════════════════════════════════════════════
 (function() {
-var APP_CACHE_VER = 'cv_20260729_MOBILE_SHELL_FIX_V1027';
+var APP_CACHE_VER = 'cv_20260730_HEAVY_PURGE_V1028';
 
 // ── STEP 1: Detect old version or garbled localStorage ──────
 var storedVer = '';
@@ -64,7 +64,10 @@ var savedKeys = ['user_authenticated','user_email','user_auth_provider',
 'user_name','user_dob','user_tob','user_pob','user_gender',
 'user_goal','user_category','user_lang',
 'kundli_name','kundli_dob','kundli_tob','kundli_pob',
-'user_streak','user_xp','user_level','user_moon_rashi_idx'];
+'user_streak','user_xp','user_level','user_moon_rashi_idx',
+'karma_plan_start_date','today_quest_vedic','today_quest_lalkitab',
+'today_quest_vastu','today_quest_practical','completed_quests_count',
+'active_goals_list','karmic_shield_active'];
 var rescued = {};
 try {
 savedKeys.forEach(function(key) {
