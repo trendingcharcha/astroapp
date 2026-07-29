@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -61,7 +62,8 @@ class CosmoVedicMainScreen extends StatefulWidget {
   State<CosmoVedicMainScreen> createState() => _CosmoVedicMainScreenState();
 }
 
-class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen> {
+class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen>
+    with WidgetsBindingObserver {
   late final WebViewController _controller;
   bool _isLoading = true;
 
@@ -83,15 +85,12 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _requestPermissions();
 
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0xFF0C0922))
-      // ── CRITICAL FIX: Custom User-Agent allows Google OAuth inside WebView ──
-      // Google blocks default WebView User-Agents ('wv'). By providing a standard
-      // mobile Chrome User-Agent, Google OAuth works seamlessly inside the app
-      // without opening an external Chrome browser or losing auth state!
       ..setUserAgent(
           'Mozilla/5.0 (Linux; Android 14; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36')
       ..setNavigationDelegate(
@@ -105,8 +104,14 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen> {
           onWebResourceError: (WebResourceError error) {
             debugPrint('WebView Error: ${error.description}');
           },
-          // Keep all auth navigation inside the app's WebView
           onNavigationRequest: (NavigationRequest request) {
+            final uriStr = request.url;
+            // ── CRITICAL FIX: Intercept Google OAuth URLs to trigger System Account Chooser (Image 2) ──
+            if (uriStr.contains('accounts.google.com') ||
+                uriStr.contains('supabase.co/auth/v1/authorize')) {
+              _launchExternalAuth(uriStr);
+              return NavigationDecision.prevent;
+            }
             return NavigationDecision.navigate;
           },
         ),
@@ -119,6 +124,34 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen> {
       )
       ..loadRequest(
           Uri.parse('https://trendingcharcha.github.io/astroapp/'));
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // When returning to app after Google Account Chooser selection, reload WebView to sync auth state
+    if (state == AppLifecycleState.resumed) {
+      _controller.reload();
+    }
+  }
+
+  Future<void> _launchExternalAuth(String urlStr) async {
+    try {
+      final Uri url = Uri.parse(urlStr);
+      if (await canLaunchUrl(url)) {
+        await launchUrl(
+          url,
+          mode: LaunchMode.externalApplication,
+        );
+      }
+    } catch (e) {
+      debugPrint('Error launching external Google Auth: $e');
+    }
   }
 
   Future<void> _requestPermissions() async {
