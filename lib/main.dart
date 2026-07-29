@@ -105,13 +105,7 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen>
             debugPrint('WebView Error: ${error.description}');
           },
           onNavigationRequest: (NavigationRequest request) {
-            final uriStr = request.url;
-            // ── CRITICAL FIX: Intercept Google OAuth URLs to trigger System Account Chooser (Image 2) ──
-            if (uriStr.contains('accounts.google.com') ||
-                uriStr.contains('supabase.co/auth/v1/authorize')) {
-              _launchExternalAuth(uriStr);
-              return NavigationDecision.prevent;
-            }
+            // Allow all web app navigation and Google OAuth account selection inside WebView
             return NavigationDecision.navigate;
           },
         ),
@@ -134,9 +128,8 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // When returning to app after Google Account Chooser selection, reload WebView to sync auth state
     if (state == AppLifecycleState.resumed) {
-      _controller.reload();
+      debugPrint('App resumed from background.');
     }
   }
 
@@ -167,52 +160,55 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen>
       final Map<String, dynamic> data = jsonDecode(jsonStr);
       debugPrint('Received Notification Bridge Payload: $data');
 
-      if (data.containsKey('fastPrep')) {
-        final fast = data['fastPrep'];
-        await flutterLocalNotificationsPlugin.show(
-          1,
-          fast['title'] ?? '🍎 1-Day Prior Fast Prep',
-          fast['body'] ??
-              'Tomorrow is a sacred fast day. Prepare your sattvic items today.',
-          _notifDetails,
-          payload: 'fastPrep',
-        );
-      }
+      // Only show immediate banner if triggerNow is explicitly requested
+      if (data['triggerNow'] == true) {
+        if (data.containsKey('fastPrep')) {
+          final fast = data['fastPrep'];
+          await flutterLocalNotificationsPlugin.show(
+            1,
+            fast['title'] ?? '🍎 1-Day Prior Fast Prep',
+            fast['body'] ??
+                'Tomorrow is a sacred fast day. Prepare your sattvic items today.',
+            _notifDetails,
+            payload: 'fastPrep',
+          );
+        }
 
-      if (data.containsKey('morning')) {
-        final morning = data['morning'];
-        await flutterLocalNotificationsPlugin.show(
-          2,
-          morning['title'] ?? '🌅 Your CosmoVedic Daily Plan is Ready',
-          morning['body'] ??
-              'Open the app to see today\'s personalized Vedic tasks and remedies.',
-          _notifDetails,
-          payload: 'morning',
-        );
-      }
+        if (data.containsKey('morning')) {
+          final morning = data['morning'];
+          await flutterLocalNotificationsPlugin.show(
+            2,
+            morning['title'] ?? '🌅 Your CosmoVedic Daily Plan is Ready',
+            morning['body'] ??
+                'Open the app to see today\'s personalized Vedic tasks and remedies.',
+            _notifDetails,
+            payload: 'morning',
+          );
+        }
 
-      if (data.containsKey('rahuKaal')) {
-        final rahu = data['rahuKaal'];
-        await flutterLocalNotificationsPlugin.show(
-          3,
-          rahu['title'] ?? '⚠️ Rahu Kaal Starts in 15 Minutes',
-          rahu['body'] ??
-              'Avoid new work and important decisions during Rahu Kaal period.',
-          _notifDetails,
-          payload: 'rahuKaal',
-        );
-      }
+        if (data.containsKey('rahuKaal')) {
+          final rahu = data['rahuKaal'];
+          await flutterLocalNotificationsPlugin.show(
+            3,
+            rahu['title'] ?? '⚠️ Rahu Kaal Starts in 15 Minutes',
+            rahu['body'] ??
+                'Avoid new work and important decisions during Rahu Kaal period.',
+            _notifDetails,
+            payload: 'rahuKaal',
+          );
+        }
 
-      if (data.containsKey('streakSaver')) {
-        final streak = data['streakSaver'];
-        await flutterLocalNotificationsPlugin.show(
-          4,
-          streak['title'] ?? '🔥 Don\'t Break Your Streak!',
-          streak['body'] ??
-              'Complete today\'s Karma tasks before midnight to keep your streak alive.',
-          _notifDetails,
-          payload: 'streakSaver',
-        );
+        if (data.containsKey('streakSaver')) {
+          final streak = data['streakSaver'];
+          await flutterLocalNotificationsPlugin.show(
+            4,
+            streak['title'] ?? '🔥 Don\'t Break Your Streak!',
+            streak['body'] ??
+                'Complete today\'s Karma tasks before midnight to keep your streak alive.',
+            _notifDetails,
+            payload: 'streakSaver',
+          );
+        }
       }
     } catch (e) {
       debugPrint('Error parsing notification bridge payload: $e');

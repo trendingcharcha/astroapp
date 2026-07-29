@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -9509,6 +9509,9 @@ function checkTimelyAutoPurge() {
       if (typeof updateSanatanNotifications === 'function') {
         updateSanatanNotifications(currentAppLang);
       }
+      if (typeof scheduleNativeLocalNotifications === 'function') {
+        scheduleNativeLocalNotifications();
+      }
     } catch(e) {}
 
     console.log('[Astro AI] Timely Auto-Purge Complete. System aligned to', todayStr);
@@ -13285,6 +13288,17 @@ async function downloadKundliPDF() {
 
 // 🔔 NATIVE FLUTTER & WEB LOCAL PUSH NOTIFICATION BRIDGE ENGINE
 function scheduleNativeLocalNotifications() {
+  const isAuthenticated = localStorage.getItem('user_authenticated') === 'true';
+  const hasProfile = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
+  const appLayout = document.getElementById('app-layout');
+  const isDashboardVisible = appLayout && (appLayout.style.display === 'block' || appLayout.style.display === 'flex');
+
+  // STRICT GUARD: Only schedule notifications if user is authenticated & actively inside the App Dashboard
+  if (!isAuthenticated || !hasProfile || !isDashboardVisible) {
+    console.log('[Notification Bridge] User not on active dashboard. Notification scheduling deferred.');
+    return;
+  }
+
   const todayStr = getFormattedDate();
   const userName = localStorage.getItem('user_name') || 'Seeker';
   const userGoal = (localStorage.getItem('user_goal') || 'job').toUpperCase();
@@ -13320,21 +13334,19 @@ function scheduleNativeLocalNotifications() {
   if (window.FlutterNotificationBridge && typeof window.FlutterNotificationBridge.postMessage === 'function') {
     try {
       window.FlutterNotificationBridge.postMessage(JSON.stringify(notifPayload));
-      console.log('[Notification Bridge] Scheduled Flutter Native Push Alerts:', notifPayload);
+      console.log('[Notification Bridge] Scheduled Flutter Native Push Alerts for active dashboard user:', userName);
     } catch(e) {}
   }
 
   // 2. Register Web Notification API if granted permission
   if ('Notification' in window && Notification.permission === 'granted') {
-    // Schedule browser local push alerts
     console.log('[Web Notification API] Active for local push reminders.');
   }
 }
 
-// Automatically check streak shield and notification bridge on startup
+// Automatically check streak shield on startup (notifications will ONLY schedule when reaching dashboard)
 setTimeout(() => {
   try { checkKarmicStreakShield(); } catch(e) {}
-  try { scheduleNativeLocalNotifications(); } catch(e) {}
 }, 1000);
 </script>
 
