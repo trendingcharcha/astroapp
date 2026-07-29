@@ -7810,7 +7810,7 @@ if (isOAuthRedirect) {
 
 try {
 const isAuthFlag = (localStorage.getItem('user_authenticated') === 'true') || window.isProcessingOAuth;
-const hasLocalProfile = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
+const hasLocalData = !!(localStorage.getItem('user_name') || localStorage.getItem('user_dob') || localStorage.getItem('user_goal') || localStorage.getItem('karma_plan_start_date'));
 
 let validBackendUser = false;
 let currentUserId = null;
@@ -7831,19 +7831,21 @@ if (validBackendUser && currentUserId) {
 try {
 cloudProfileExists = await restoreProfileFromCloud(currentUserId);
 } catch(e) {
-cloudProfileExists = hasLocalProfile;
+cloudProfileExists = hasLocalData;
 }
 }
 
-// If user has active auth session OR cloud profile OR local profile -> Dashboard
-const hasProfileData = cloudProfileExists || hasLocalProfile;
-if ((isAuthFlag || validBackendUser) && hasProfileData) {
+const userHasProfile = cloudProfileExists || hasLocalData;
+
+// STRICT ROUTING RULE:
+// 1) If user is authenticated & has profile/goal data -> STRICTLY SHOW DASHBOARD!
+if ((isAuthFlag || validBackendUser) && userHasProfile) {
   localStorage.setItem('user_authenticated', 'true');
   if (onboarding) onboarding.style.display = 'none';
   if (appLayout) appLayout.style.display = 'block';
   if (typeof initApp === 'function') initApp();
-} else if (isAuthFlag || validBackendUser) {
-  // Brand new Google user -> authenticated! Show Goal Path Selection (NEVER bounce back to login!)
+} else if (validBackendUser || isAuthFlag) {
+  // Brand new user (authenticated in backend, but NO profile row in Supabase and NO local profile data) -> Goal Selection Onboarding
   localStorage.setItem('user_authenticated', 'true');
   if (appLayout) appLayout.style.display = 'none';
   if (onboarding) onboarding.style.display = 'flex';
@@ -7856,7 +7858,12 @@ if ((isAuthFlag || validBackendUser) && hasProfileData) {
 }
 } catch(err) {
   console.error('[Astro AI] Splash dismissal error:', err);
-  if (window.isProcessingOAuth || localStorage.getItem('user_authenticated') === 'true') {
+  const hasLocalData = !!(localStorage.getItem('user_name') || localStorage.getItem('user_dob') || localStorage.getItem('user_goal'));
+  if (localStorage.getItem('user_authenticated') === 'true' && hasLocalData) {
+    if (onboarding) onboarding.style.display = 'none';
+    if (appLayout) appLayout.style.display = 'block';
+    if (typeof initApp === 'function') initApp();
+  } else if (window.isProcessingOAuth || localStorage.getItem('user_authenticated') === 'true') {
     if (appLayout) appLayout.style.display = 'none';
     if (onboarding) onboarding.style.display = 'flex';
     if (typeof showOnboardingStep === 'function') showOnboardingStep('select-path');
@@ -8039,26 +8046,17 @@ return false;
 
 if (profile) {
 console.log("Profile found on cloud. Restoring...");
-if (profile.full_name && profile.full_name !== 'Seeker') {
-  localStorage.setItem('user_name', profile.full_name);
-  localStorage.setItem('kundli_name', profile.full_name);
-}
-if (profile.gender) {
-  localStorage.setItem('user_gender', profile.gender);
-  localStorage.setItem('kundli_gender', profile.gender);
-}
-if (profile.dob && profile.dob !== '1990-01-01') {
-  localStorage.setItem('user_dob', profile.dob);
-  localStorage.setItem('kundli_date', profile.dob);
-}
-if (profile.tob) {
-  localStorage.setItem('user_tob', profile.tob);
-  localStorage.setItem('kundli_time', profile.tob);
-}
-if (profile.pob && profile.pob !== 'New Delhi') {
-  localStorage.setItem('user_pob', profile.pob);
-  localStorage.setItem('kundli_city', profile.pob);
-}
+localStorage.setItem('user_authenticated', 'true');
+localStorage.setItem('user_name', profile.full_name || 'Seeker');
+localStorage.setItem('kundli_name', profile.full_name || 'Seeker');
+localStorage.setItem('user_gender', profile.gender || 'M');
+localStorage.setItem('kundli_gender', profile.gender || 'M');
+localStorage.setItem('user_dob', profile.dob || '1990-01-01');
+localStorage.setItem('kundli_date', profile.dob || '1990-01-01');
+localStorage.setItem('user_tob', profile.tob || '12:00');
+localStorage.setItem('kundli_time', profile.tob || '12:00');
+localStorage.setItem('user_pob', profile.pob || 'New Delhi');
+localStorage.setItem('kundli_city', profile.pob || 'New Delhi');
 
 if (profile.lat) localStorage.setItem('user_lat', profile.lat);
 if (profile.lng) localStorage.setItem('user_lng', profile.lng);
