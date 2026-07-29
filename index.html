@@ -12421,43 +12421,45 @@ const appLayout = document.getElementById('app-layout');
 const hasGuestCache = !isDifferentUser && !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
 
 restoreProfileFromCloud(session.user.id).then((restored) => {
-// Only sync local guest cache if the user was genuinely completing a guest onboarding flow
-if (!restored && hasGuestCache) {
-syncProfileToCloud()
-.then(() => console.log("Successfully synced local guest profile to cloud after login."))
-.catch(err => console.error("Post-login background sync error:", err));
-}
+  // Only sync local guest cache if the user was genuinely completing a guest onboarding flow
+  if (!restored && hasGuestCache) {
+    syncProfileToCloud()
+      .then(() => console.log("Successfully synced local guest profile to cloud after login."))
+      .catch(err => console.error("Post-login background sync error:", err));
+  }
 
-const appVisible = appLayout && (appLayout.style.display === 'block' || appLayout.style.display === 'flex');
-if (restored) {
-// Profile EXISTS in Supabase DB for THIS user -> restore and open dashboard
-if (!appVisible) openAppDashboard();
-else if (typeof initApp === 'function') initApp();
-} else if (hasGuestCache) {
-// Guest user just authenticated after filling guest info -> open dashboard
-if (!appVisible) openAppDashboard();
-} else {
-// BRAND NEW USER with no cloud profile -> purge stale local cache & show onboarding screen
-purgeLocalUserProfileCache();
-localStorage.setItem('supabase_user_id', currentUserId);
-if (appLayout) appLayout.style.display = 'none';
-if (onboardingScreen) onboardingScreen.style.display = 'flex';
-showOnboardingStep('select-path');
-}
+  const hasLocalProfile = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
+  const appVisible = appLayout && (appLayout.style.display === 'block' || appLayout.style.display === 'flex');
+
+  if (restored || hasGuestCache || hasLocalProfile) {
+    // Profile EXISTS for this user -> set authenticated & open dashboard permanently
+    localStorage.setItem('user_authenticated', 'true');
+    if (onboardingScreen) onboardingScreen.style.display = 'none';
+    if (!appVisible) openAppDashboard();
+    else if (typeof initApp === 'function') initApp();
+  } else {
+    // BRAND NEW GOOGLE USER -> keep authenticated & show profile setup (NEVER bounce back to login!)
+    localStorage.setItem('user_authenticated', 'true');
+    localStorage.setItem('supabase_user_id', currentUserId);
+    if (!appVisible) {
+      if (appLayout) appLayout.style.display = 'none';
+      if (onboardingScreen) onboardingScreen.style.display = 'flex';
+      showOnboardingStep('path');
+    }
+  }
 }).catch((err) => {
-console.error("Auth listener restore error:", err);
-// On network error only: fallback to localStorage as last resort
-const hasLocalCache = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
-const appVisible = appLayout && (appLayout.style.display === 'block' || appLayout.style.display === 'flex');
-if (!appVisible) {
-if (hasLocalCache) {
-openAppDashboard();
-} else {
-if (onboardingScreen) onboardingScreen.style.display = 'flex';
-if (appLayout) appLayout.style.display = 'none';
-showOnboardingStep('select-path');
-}
-}
+  console.error("Auth listener restore error:", err);
+  const hasLocalCache = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
+  const appVisible = appLayout && (appLayout.style.display === 'block' || appLayout.style.display === 'flex');
+  if (!appVisible) {
+    if (hasLocalCache) {
+      openAppDashboard();
+    } else {
+      if (onboardingScreen) onboardingScreen.style.display = 'flex';
+      if (appLayout) appLayout.style.display = 'none';
+      showOnboardingStep('path');
+    }
+  }
 });
 }
 if (event === 'SIGNED_OUT') {

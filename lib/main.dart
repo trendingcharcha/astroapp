@@ -140,8 +140,8 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      debugPrint('App resumed from background. Syncing session...');
-      _controller.reload();
+      debugPrint('App resumed from background.');
+      _controller.runJavaScript("if (typeof checkSupabaseSession === 'function') checkSupabaseSession();");
     }
   }
 
