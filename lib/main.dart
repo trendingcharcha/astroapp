@@ -105,7 +105,12 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen>
             debugPrint('WebView Error: ${error.description}');
           },
           onNavigationRequest: (NavigationRequest request) {
-            // Allow all web app navigation and Google OAuth account selection inside WebView
+            // Intercept Google OAuth URLs and launch external Chrome Custom Tab to bypass WebView restrictions
+            if (request.url.contains('accounts.google.com') ||
+                request.url.contains('supabase.co/auth/v1/authorize')) {
+              _launchExternalAuth(request.url);
+              return NavigationDecision.prevent;
+            }
             return NavigationDecision.navigate;
           },
         ),
@@ -114,6 +119,12 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen>
         'FlutterNotificationBridge',
         onMessageReceived: (JavaScriptMessage message) {
           _handleNotificationMessage(message.message);
+        },
+      )
+      ..addJavaScriptChannel(
+        'FlutterGoogleAuthBridge',
+        onMessageReceived: (JavaScriptMessage message) {
+          _launchExternalAuth(message.message);
         },
       )
       ..loadRequest(
@@ -129,7 +140,8 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      debugPrint('App resumed from background.');
+      debugPrint('App resumed from background. Syncing session...');
+      _controller.reload();
     }
   }
 

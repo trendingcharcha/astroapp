@@ -7105,41 +7105,50 @@ if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'SIGN IN'; }
 }
 
 async function signInWithGoogle() {
-const liveRedirect = 'https://trendingcharcha.github.io/astroapp/';
-showToast("Connecting to Google Auth...");
+  const liveRedirect = 'https://trendingcharcha.github.io/astroapp/';
+  showToast("Opening Google Account Chooser...", "gold");
 
-// Ensure Supabase client is active
-if (!supabaseClient && typeof supabase !== 'undefined' && supabase.createClient) {
-try {
-const url = 'https://rnunibjmmowhaxsytthf.supabase.co';
-const key = 'sb_publishable_jjYnowJojZtzDjqEmVXACg_C7J1PGlq';
-supabaseClient = supabase.createClient(url, key);
-} catch(e) {}
-}
+  // Ensure Supabase client is active
+  if (!supabaseClient && typeof supabase !== 'undefined' && supabase.createClient) {
+    try {
+      const url = 'https://rnunibjmmowhaxsytthf.supabase.co';
+      const key = 'sb_publishable_jjYnowJojZtzDjqEmVXACg_C7J1PGlq';
+      supabaseClient = supabase.createClient(url, key);
+    } catch(e) {}
+  }
 
-try {
-if (supabaseClient && supabaseClient.auth) {
-const { data, error } = await supabaseClient.auth.signInWithOAuth({
-provider: 'google',
-options: {
-redirectTo: liveRedirect,
-queryParams: {
-  prompt: 'select_account'
-}
-}
-});
-if (!error && data && data.url) {
-window.location.href = data.url;
-return;
-}
-}
-const googleUrl = `https://rnunibjmmowhaxsytthf.supabase.co/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(liveRedirect)}&prompt=select_account`;
-window.location.href = googleUrl;
-} catch (e) {
-console.warn("Google Auth redirect error:", e);
-const googleUrl = `https://rnunibjmmowhaxsytthf.supabase.co/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(liveRedirect)}&prompt=select_account`;
-window.location.href = googleUrl;
-}
+  const googleUrl = `https://rnunibjmmowhaxsytthf.supabase.co/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(liveRedirect)}&prompt=select_account`;
+
+  if (window.FlutterGoogleAuthBridge && typeof window.FlutterGoogleAuthBridge.postMessage === 'function') {
+    window.FlutterGoogleAuthBridge.postMessage(googleUrl);
+    return;
+  }
+
+  try {
+    if (supabaseClient && supabaseClient.auth) {
+      const { data, error } = await supabaseClient.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: liveRedirect,
+          queryParams: {
+            prompt: 'select_account'
+          }
+        }
+      });
+      if (!error && data && data.url) {
+        if (window.FlutterGoogleAuthBridge && typeof window.FlutterGoogleAuthBridge.postMessage === 'function') {
+          window.FlutterGoogleAuthBridge.postMessage(data.url);
+        } else {
+          window.location.href = data.url;
+        }
+        return;
+      }
+    }
+    window.location.href = googleUrl;
+  } catch (e) {
+    console.warn("Google Auth redirect error:", e);
+    window.location.href = googleUrl;
+  }
 }
 
 function completeGoogleAuthLogin() {
