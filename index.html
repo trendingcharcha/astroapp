@@ -990,6 +990,61 @@ box-shadow: var(--btn-shadow);
 filter: brightness(1.05);
 }
 
+/* ANIMATED SVG ICON MICRO-ANIMATIONS */
+@keyframes animatedSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes animatedPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.85; }
+}
+@keyframes animatedGlow {
+  0%, 100% { filter: drop-shadow(0 0 2px var(--gold)); }
+  50% { filter: drop-shadow(0 0 8px var(--gold)); }
+}
+@keyframes animatedBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.animated-icon-spin {
+  animation: animatedSpin 4s linear infinite;
+}
+.btn:hover .animated-icon-spin, .nav-item:hover .animated-icon-spin {
+  animation: animatedSpin 1.2s linear infinite;
+}
+.animated-icon-pulse {
+  animation: animatedPulse 2s ease-in-out infinite;
+}
+.animated-icon-glow {
+  animation: animatedGlow 2s ease-in-out infinite;
+}
+.animated-icon-bounce {
+  animation: animatedBounce 2s ease-in-out infinite;
+}
+
+/* SLEEK COMPACT BUTTONS FOR UX/UI */
+.btn-compact {
+  padding: 8px 12px !important;
+  font-size: 0.78rem !important;
+  border-radius: 12px !important;
+  height: 40px !important;
+  letter-spacing: 0.3px !important;
+  font-weight: 600 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  margin-bottom: 0 !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.btn-compact:hover {
+  transform: translateY(-2px) !important;
+  filter: brightness(1.1) !important;
+}
+
 /* STRICT LEFT ALIGNMENT FOR WIZARD & MODAL BUTTONS */
 #livechat-messages .btn, #livechat-messages .btn-outline, #livechat-messages button, .btn-left {
   justify-content: flex-start !important;
@@ -1121,7 +1176,7 @@ text-decoration: none;
 background: none;
 border: none;
 outline: none;
-padding: 6px 4px;
+padding: 5px 2px;
 border-radius: 10px;
 transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 position: relative;
@@ -1130,9 +1185,9 @@ flex: 1;
 }
 
 .nav-item svg {
-width: 19px;
-height: 19px;
-margin-bottom: 3px;
+width: 20px;
+height: 20px;
+margin-bottom: 2px;
 fill: currentColor;
 transition: transform 0.25s ease, fill 0.25s ease;
 }
@@ -1142,13 +1197,14 @@ white-space: nowrap;
 overflow: hidden;
 text-overflow: ellipsis;
 max-width: 100%;
-line-height: 1.15;
+line-height: 1.2;
 display: block;
+margin-top: 1px;
 }
 
 .nav-item.active {
 color: var(--gold);
-transform: translateY(-2px);
+transform: translateY(-1px);
 }
 
 .nav-item.active svg {
@@ -1159,12 +1215,12 @@ filter: drop-shadow(0 2px 8px rgba(240, 215, 123, 0.4));
 .nav-item.active::after {
 content: '';
 position: absolute;
-bottom: 3px;
-width: 16px;
+top: 0;
+width: 22px;
 height: 3px;
 background: var(--gold);
-border-radius: 3px;
-box-shadow: 0 0 8px var(--gold);
+border-radius: 0 0 3px 3px;
+box-shadow: 0 2px 10px var(--gold);
 }
 
 /* Cards and Containers */
@@ -3376,26 +3432,38 @@ H12
 <p id="cloud-status" style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted); text-align: center;"></p>
 </div>
 
-<button onclick="handleLogout()" class="btn" style="background: #381414; color: #ff6b6b; box-shadow: none;"><span class="k-lbl-en">LOG OUT</span><span class="k-lbl-hi" style="display:none;">लॉग आउट</span></button>
+<!-- SYSTEM ACTIONS & UTILITIES CARD -->
+<div class="card" style="margin-top: 15px;">
+  <h4 style="color: var(--gold); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+    <svg class="animated-icon-pulse" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <span class="k-lbl-en">System Actions & Tools</span><span class="k-lbl-hi" style="display:none;">सिस्टम उपकरण</span>
+  </h4>
 
-<div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
-  <!-- RELOAD PAGE & REFRESH APP BUTTON -->
-  <button onclick="softPurgeAndRefreshData(this)" class="btn" style="background: rgba(240, 215, 123, 0.2); border: 1.5px solid var(--gold); color: var(--gold); box-shadow: 0 4px 15px rgba(232,200,121,0.25); font-weight: bold;">
-    <svg class="refresh-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-right:8px;"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-    <span class="k-lbl-en">RELOAD PAGE & REFRESH APP</span><span class="k-lbl-hi" style="display:none;">पेज रिफ्रेश करें (RELOAD PAGE)</span>
-  </button>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+    <!-- REFRESH APP BUTTON -->
+    <button onclick="softPurgeAndRefreshData(this)" class="btn btn-compact" style="background: rgba(240, 215, 123, 0.12); border: 1px solid rgba(232, 200, 121, 0.4); color: var(--gold);">
+      <svg class="animated-icon-spin" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      <span class="k-lbl-en">Refresh App</span><span class="k-lbl-hi" style="display:none;">रिफ्रेश ऐप</span>
+    </button>
 
-  <!-- MANDATORY FEEDBACK & RATING BUTTON -->
-  <button onclick="openFeedbackModal()" class="btn" style="background: rgba(232, 200, 121, 0.15); border: 1px solid var(--gold); color: var(--gold); box-shadow: 0 4px 15px rgba(232,200,121,0.15);">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:8px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-    <span class="k-lbl-en">APP FEEDBACK & RATING</span><span class="k-lbl-hi" style="display:none;">ऐप प्रतिक्रिया एवं रेटिंग</span>
-  </button>
+    <!-- APP FEEDBACK & RATING BUTTON -->
+    <button onclick="openFeedbackModal()" class="btn btn-compact" style="background: rgba(232, 200, 121, 0.12); border: 1px solid rgba(232, 200, 121, 0.4); color: var(--gold);">
+      <svg class="animated-icon-glow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span class="k-lbl-en">Feedback</span><span class="k-lbl-hi" style="display:none;">प्रतिक्रिया</span>
+    </button>
 
-  <!-- LIVE AI KARMA ASSISTANT CHAT BUTTON -->
-  <button onclick="openLiveChatModal()" class="btn" style="background: rgba(142, 111, 214, 0.18); border: 1px solid var(--purple); color: var(--purple); box-shadow: 0 4px 15px rgba(142,111,214,0.2);">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:8px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="13" y2="13"/></svg>
-    <span class="k-lbl-en">LIVE KARMA ASSISTANT</span><span class="k-lbl-hi" style="display:none;">लाइव कर्म सहचर</span>
-  </button>
+    <!-- LIVE AI KARMA ASSISTANT CHAT BUTTON -->
+    <button onclick="openLiveChatModal()" class="btn btn-compact" style="background: rgba(142, 111, 214, 0.15); border: 1px solid rgba(142, 111, 214, 0.5); color: var(--purple);">
+      <svg class="animated-icon-pulse" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="13" y2="13"/></svg>
+      <span class="k-lbl-en">AI Assistant</span><span class="k-lbl-hi" style="display:none;">AI सहचर</span>
+    </button>
+
+    <!-- LOG OUT BUTTON -->
+    <button onclick="handleLogout()" class="btn btn-compact" style="background: rgba(231, 76, 60, 0.12); border: 1px solid rgba(231, 76, 60, 0.4); color: #ff6b6b;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <span class="k-lbl-en">Log Out</span><span class="k-lbl-hi" style="display:none;">लॉग आउट</span>
+    </button>
+  </div>
 </div>
 </div>
 </main>
@@ -6654,7 +6722,7 @@ if (todayBadgeEl) {
 if (dayNum === currentPlanDay) {
 todayBadgeEl.innerHTML = `<span style="background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid #2ecc71; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; display: inline-flex; align-items: center; gap: 3px;">● ${lang === 'hi' ? 'आज' : 'TODAY'}</span>`;
 } else {
-todayBadgeEl.innerHTML = `<button onclick="renderRoadmapDayTasks(${currentPlanDay})" class="btn" style="width: auto; padding: 2px 8px; font-size: 0.68rem; background: rgba(232, 200, 121, 0.15); border: 1px solid var(--gold); color: var(--gold); cursor: pointer; border-radius: 12px; font-weight: bold;">🎯 ${lang === 'hi' ? `आज का दिन (${currentPlanDay})` : `GO TO TODAY (DAY ${currentPlanDay})`}</button>`;
+todayBadgeEl.innerHTML = `<button onclick="renderRoadmapDayTasks(${currentPlanDay})" class="btn" style="width: auto; padding: 2px 8px; font-size: 0.68rem; background: rgba(232, 200, 121, 0.15); border: 1px solid var(--gold); color: var(--gold); cursor: pointer; border-radius: 12px; font-weight: bold;"><svg class="animated-icon-pulse" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:3px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>${lang === 'hi' ? `आज का दिन (${currentPlanDay})` : `GO TO TODAY (DAY ${currentPlanDay})`}</button>`;
 }
 }
 
@@ -13098,10 +13166,10 @@ handleOAuthCallback();
       <div class="form-group">
         <label><span class="k-lbl-en">Feedback Topic</span><span class="k-lbl-hi" style="display:none;">प्रतिक्रिया विषय</span></label>
         <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-          <button type="button" class="btn btn-outline fb-tag-btn active" onclick="selectFbTag(this, 'UI & Design')" style="padding: 4px 8px; font-size: 0.72rem; border-color: var(--gold); color: var(--gold);">🎨 UI & Design</button>
-          <button type="button" class="btn btn-outline fb-tag-btn" onclick="selectFbTag(this, 'Kundli Accuracy')" style="padding: 4px 8px; font-size: 0.72rem; border-color: rgba(255,255,255,0.2); color: var(--text-muted);">🔮 Accuracy</button>
-          <button type="button" class="btn btn-outline fb-tag-btn" onclick="selectFbTag(this, 'Daily Remedies')" style="padding: 4px 8px; font-size: 0.72rem; border-color: rgba(255,255,255,0.2); color: var(--text-muted);">🧘 Remedies</button>
-          <button type="button" class="btn btn-outline fb-tag-btn" onclick="selectFbTag(this, 'App Performance')" style="padding: 4px 8px; font-size: 0.72rem; border-color: rgba(255,255,255,0.2); color: var(--text-muted);">⚡ Speed</button>
+          <button type="button" class="btn btn-outline fb-tag-btn active" onclick="selectFbTag(this, 'UI & Design')" style="padding: 4px 8px; font-size: 0.72rem; border-color: var(--gold); color: var(--gold); display: inline-flex; align-items: center; gap: 4px;"><svg class="animated-icon-pulse" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a7 7 0 1 0 7 7"/></svg> UI & Design</button>
+          <button type="button" class="btn btn-outline fb-tag-btn" onclick="selectFbTag(this, 'Kundli Accuracy')" style="padding: 4px 8px; font-size: 0.72rem; border-color: rgba(255,255,255,0.2); color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px;"><svg class="animated-icon-glow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> Accuracy</button>
+          <button type="button" class="btn btn-outline fb-tag-btn" onclick="selectFbTag(this, 'Daily Remedies')" style="padding: 4px 8px; font-size: 0.72rem; border-color: rgba(255,255,255,0.2); color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px;"><svg class="animated-icon-bounce" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"/><path d="M12 8v4l3 3"/></svg> Remedies</button>
+          <button type="button" class="btn btn-outline fb-tag-btn" onclick="selectFbTag(this, 'App Performance')" style="padding: 4px 8px; font-size: 0.72rem; border-color: rgba(255,255,255,0.2); color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px;"><svg class="animated-icon-pulse" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Speed</button>
         </div>
       </div>
 
@@ -13510,9 +13578,9 @@ function startWizardStep3() {
     ? `<strong>Q3: अभी आप कहाँ स्थित हैं?</strong><br><span style="font-size: 0.75rem; color: var(--gold);">(नीचे से 1 स्थान चुनें)</span>`
     : `<strong>Q3: Where are you located right now?</strong><br><span style="font-size: 0.75rem; color: var(--gold);">(Select 1 location below)</span>`;
 
-  const btn1 = lang === 'hi' ? "🏠 घर पर" : "🏠 Home";
-  const btn2 = lang === 'hi' ? "🏢 कार्यालय / कार्यस्थल पर" : "🏢 Office / Workplace";
-  const btn3 = lang === 'hi' ? "🚗 बाहर बाजार में / यात्रा में" : "🚗 Outside in Market / Traveling";
+  const btn1 = lang === 'hi' ? "घर पर (Home)" : "Home";
+  const btn2 = lang === 'hi' ? "कार्यालय / कार्यस्थल (Office)" : "Office / Workplace";
+  const btn3 = lang === 'hi' ? "बाहर बाजार / यात्रा (Travel)" : "Outside in Market / Traveling";
 
   const q3HTML = `${title}
   
@@ -13792,14 +13860,14 @@ function checkKarmicStreakShield() {
         const shieldSpan = document.createElement('span');
         shieldSpan.id = 'karmic-streak-shield-badge';
         shieldSpan.style.cssText = 'font-size: 0.68rem; background: linear-gradient(135deg, #1abc9c, #16a085); color: #fff; padding: 2px 6px; border-radius: 10px; margin-left: 6px; font-weight: bold; display: inline-flex; align-items: center; gap: 3px;';
-        shieldSpan.innerHTML = '🛡️ Shield Active';
+        shieldSpan.innerHTML = '<svg class="animated-icon-pulse" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="vertical-align:middle; margin-right:3px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Shield Active';
         streakContainer.parentElement.appendChild(shieldSpan);
       }
     }
   }
 }
 
-// 📄 HIGH-DPI KUNDLI PDF REPORT GENERATION WITH GLOWING PROGRESS
+// HIGH-DPI KUNDLI PDF REPORT GENERATION WITH GLOWING PROGRESS
 async function downloadKundliPDF() {
   showToast(`<svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/></svg> Preparing High-Resolution B&W PDF Report...`, "gold");
 
@@ -13816,7 +13884,7 @@ async function downloadKundliPDF() {
   }, 200);
 }
 
-// 🔔 NATIVE FLUTTER & WEB LOCAL PUSH NOTIFICATION BRIDGE ENGINE
+// NATIVE FLUTTER & WEB LOCAL PUSH NOTIFICATION BRIDGE ENGINE
 function scheduleNativeLocalNotifications() {
   const isAuthenticated = localStorage.getItem('user_authenticated') === 'true';
   const hasProfile = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
@@ -13836,25 +13904,25 @@ function scheduleNativeLocalNotifications() {
   const notifPayload = {
     fastPrep: {
       type: 'fast_prep',
-      title: '🍎 1-Day Prior Fast Preparation Alert',
+      title: '1-Day Prior Fast Preparation Alert',
       body: `Tomorrow is Sacred Fast Day! Arrange your fruits, milk, & sattvic items today and consume light meals after 11:00 AM.`,
       scheduledTime: `${todayStr}T11:00:00`
     },
     morningTask: {
       type: 'morning_summary',
-      title: `🌅 Good Morning ${userName}!`,
+      title: `Good Morning ${userName}!`,
       body: `Day active for your ${userGoal} Journey. Tap to complete today's 4 custom remedies and claim your XP.`,
       scheduledTime: `${todayStr}T07:00:00`
     },
     rahuKaalWarning: {
       type: 'rahu_warning',
-      title: `⚠️ Rahu Kaal Advance Warning`,
+      title: `Rahu Kaal Advance Warning`,
       body: `Rahu Kaal window begins in 15 minutes. Postpone major contract signings or debt agreements.`,
       scheduledTime: `${todayStr}T14:45:00`
     },
     streakKeeper: {
       type: 'streak_keeper',
-      title: `🏆 Protect Your Streak!`,
+      title: `Protect Your Streak!`,
       body: `Complete today's active remedies before midnight to keep your streak count alive!`,
       scheduledTime: `${todayStr}T20:30:00`
     }
