@@ -5825,71 +5825,98 @@ setActiveGoals(current);
 generateCoachMission();
 }
 
+const goalLabelsEn = {
+  'job': 'Career / Dream Job',
+  'career-change': 'Career Change',
+  'debt': 'Clear Financial Debt / Wealth',
+  'savings': 'Savings & Wealth Growth',
+  'marriage-single': 'Marriage Prediction & Timing',
+  'marriage-couple': 'Marital Harmony & Bond',
+  'love': 'Finding Soulmate / Love',
+  'love-couple': 'Relationship Depth',
+  'baby': 'Planning for Baby / Progeny',
+  'business': 'Business Growth & New Opportunities',
+  'property-single': 'Dream Home / Property',
+  'property-couple': 'Joint Property Purchase',
+  'health': 'Health & Wellbeing',
+  'health-mental': 'Mental Peace & Stress Relief',
+  'health-energy': 'Energy & Immunity',
+  'health-fitness': 'Physical Fitness',
+  'buy-car': 'New Vehicle / Car Purchase',
+  'buy-gold': 'Gold / Jewelry Purchase',
+  'stock-market': 'Stock Market & Investment',
+  'buy-land': 'Land / Plot Purchase',
+  'custom': 'Custom Life Issue Solution'
+};
+
 const goalLabelsHi = {
-'job': 'करियर / मनपसंद नौकरी',
-'career-change': 'करियर परिवर्तन',
-'debt': 'ऋण मुक्ति व धन प्राप्ति',
-'savings': 'बचत व धन वृद्धि',
-'marriage-single': 'विवाह भविष्यवाणि एवं समय',
-'marriage-couple': 'दाम्पत्य सामंजस्य व संबंध',
-'love': 'जीवनसाथी की खोज / प्रेम',
-'love-couple': 'संबंधों में प्रगाढ़ता',
-'baby': 'संतान प्राप्ति / संतान योग',
-'business': 'व्यापार वृद्धि व नए अवसर',
-'property-single': 'सपनों का घर / संपत्ति',
-'property-couple': 'संयुक्त संपत्ति खरीद',
-'health': 'स्वास्थ्य व कल्याण',
-'health-mental': 'मानसिक शांति व तनाव मुक्ति',
-'health-energy': 'ऊर्जा व रोग प्रतिरोधक क्षमता',
-'health-fitness': 'शारीरिक तंदुरुस्ती',
-'buy-car': 'नया वाहन / कार क्रय',
-'buy-gold': 'स्वर्ण / आभूषण क्रय',
-'stock-market': 'शेयर बाजार व निवेश',
-'buy-land': 'भूमि / प्लॉट क्रय',
-'custom': 'विशेष जीवन समस्या समाधान'
+  'job': 'करियर / मनपसंद नौकरी',
+  'career-change': 'करियर परिवर्तन',
+  'debt': 'ऋण मुक्ति व धन प्राप्ति',
+  'savings': 'बचत व धन वृद्धि',
+  'marriage-single': 'विवाह भविष्यवाणि एवं समय',
+  'marriage-couple': 'दाम्पत्य सामंजस्य व संबंध',
+  'love': 'जीवनसाथी की खोज / प्रेम',
+  'love-couple': 'संबंधों में प्रगाढ़ता',
+  'baby': 'संतान प्राप्ति / संतान योग',
+  'business': 'व्यापार वृद्धि व नए अवसर',
+  'property-single': 'सपनों का घर / संपत्ति',
+  'property-couple': 'संयुक्त संपत्ति खरीद',
+  'health': 'स्वास्थ्य व कल्याण',
+  'health-mental': 'मानसिक शांति व तनाव मुक्ति',
+  'health-energy': 'ऊर्जा व रोग प्रतिरोधक क्षमता',
+  'health-fitness': 'शारीरिक तंदुरुस्ती',
+  'buy-car': 'नया वाहन / कार क्रय',
+  'buy-gold': 'स्वर्ण / आभूषण क्रय',
+  'stock-market': 'शेयर बाजार व निवेश',
+  'buy-land': 'भूमि / प्लॉट क्रय',
+  'custom': 'विशेष जीवन समस्या समाधान'
 };
 
 function renderActiveGoalsUI() {
-const goalsListEl = document.getElementById('active-goals-list');
-const countEl = document.getElementById('active-goals-count');
-if (!goalsListEl) return;
+  const goalsListEl = document.getElementById('active-goals-list');
+  const countEl = document.getElementById('active-goals-count');
+  if (!goalsListEl) return;
 
-const activeGoals = getActiveGoals();
-if (countEl) countEl.textContent = activeGoals.length;
+  const activeGoals = getActiveGoals();
+  if (countEl) countEl.textContent = activeGoals.length;
 
-const isHi = (typeof currentAppLang !== 'undefined' && currentAppLang === 'hi');
+  const isHi = (typeof currentAppLang !== 'undefined' && currentAppLang === 'hi');
+  const gMap = isHi ? goalLabelsHi : goalLabelsEn;
 
-goalsListEl.innerHTML = activeGoals.map(gKey => {
-const label = isHi ? (goalLabelsHi[gKey] || goalLabels[gKey] || gKey) : (goalLabels[gKey] || gKey);
-return `
+  goalsListEl.innerHTML = activeGoals.map(gKey => {
+    const label = gMap[gKey] || goalLabelsEn[gKey] || goalLabelsHi[gKey] || gKey;
+    return `
 <div style="display:flex; align-items:center; gap:6px; background:rgba(232,200,121,0.1); border:1px solid rgba(232,200,121,0.3); border-radius:16px; padding:6px 12px; font-size:0.78rem; color:var(--gold);">
 <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> ${label}</span>
 <span style="cursor:pointer; opacity:0.7; font-weight:bold; margin-left:4px;" onclick="removeActiveGoal('${gKey}')" title="Remove Goal">×</span>
 </div>
 `;
-}).join('');
+  }).join('');
 }
 
 function openAddGoalModal() {
-const modal = document.getElementById('add-goal-modal');
-const container = document.getElementById('add-goal-options');
-if (!modal || !container) return;
+  const modal = document.getElementById('add-goal-modal');
+  const container = document.getElementById('add-goal-options');
+  if (!modal || !container) return;
 
-const activeGoals = getActiveGoals();
-const allGoals = Object.keys(goalLabels);
+  const activeGoals = getActiveGoals();
+  const isHi = (typeof currentAppLang !== 'undefined' && currentAppLang === 'hi');
+  const gMap = isHi ? goalLabelsHi : goalLabelsEn;
+  const allGoals = Object.keys(gMap);
 
-container.innerHTML = allGoals.map(gKey => {
-const isAdded = activeGoals.includes(gKey);
-const label = goalLabels[gKey];
-return `
+  container.innerHTML = allGoals.map(gKey => {
+    const isAdded = activeGoals.includes(gKey);
+    const label = gMap[gKey] || gKey;
+    return `
 <button class="btn btn-outline" style="display:flex; justify-content:space-between; align-items:center; padding:12px; text-align:left; ${isAdded ? 'opacity:0.5; cursor:default;' : ''}" ${isAdded ? 'disabled' : ''} onclick="addActiveGoal('${gKey}')">
 <span>${label}</span>
-<span style="font-size:0.75rem; font-weight:bold; color:${isAdded ? 'var(--text-muted)' : 'var(--gold)'};">${isAdded ? 'ADDED' : '+ ADD'}</span>
+<span style="font-size:0.75rem; font-weight:bold; color:${isAdded ? 'var(--text-muted)' : 'var(--gold)'};">${isAdded ? (isHi ? 'जोड़ा गया' : 'ADDED') : (isHi ? '+ जोड़ें' : '+ ADD')}</span>
 </button>
 `;
-}).join('');
+  }).join('');
 
-modal.style.display = 'flex';
+  modal.style.display = 'flex';
 }
 
 function closeAddGoalModal() {
