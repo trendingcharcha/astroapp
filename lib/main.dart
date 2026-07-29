@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -66,9 +65,6 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen> {
   late final WebViewController _controller;
   bool _isLoading = true;
 
-  // ─────────────────────────────────────────────────────────────
-  // Notification channel details (shared across all 4 types)
-  // ─────────────────────────────────────────────────────────────
   static const AndroidNotificationDetails _androidDetails =
       AndroidNotificationDetails(
     'cosmovedic_daily_channel',
@@ -92,6 +88,12 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen> {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0xFF0C0922))
+      // ── CRITICAL FIX: Custom User-Agent allows Google OAuth inside WebView ──
+      // Google blocks default WebView User-Agents ('wv'). By providing a standard
+      // mobile Chrome User-Agent, Google OAuth works seamlessly inside the app
+      // without opening an external Chrome browser or losing auth state!
+      ..setUserAgent(
+          'Mozilla/5.0 (Linux; Android 14; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36')
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (String url) {
@@ -103,20 +105,8 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen> {
           onWebResourceError: (WebResourceError error) {
             debugPrint('WebView Error: ${error.description}');
           },
-          // ── FIX 2: Intercept Google OAuth URLs ─────────────────
-          // Google blocks OAuth inside Android WebView. Open in
-          // Chrome Custom Tab (external browser) instead.
+          // Keep all auth navigation inside the app's WebView
           onNavigationRequest: (NavigationRequest request) {
-            final uri = request.url;
-            if (uri.contains('accounts.google.com') ||
-                uri.contains('/auth/v1/authorize') ||
-                uri.contains('supabase.co/auth')) {
-              launchUrl(
-                Uri.parse(uri),
-                mode: LaunchMode.externalApplication,
-              );
-              return NavigationDecision.prevent;
-            }
             return NavigationDecision.navigate;
           },
         ),
@@ -139,15 +129,11 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen> {
     ].request();
   }
 
-  // ─────────────────────────────────────────────────────────────
-  // FIX 5: Handle ALL 4 notification payload types from JS bridge
-  // ─────────────────────────────────────────────────────────────
   void _handleNotificationMessage(String jsonStr) async {
     try {
       final Map<String, dynamic> data = jsonDecode(jsonStr);
       debugPrint('Received Notification Bridge Payload: $data');
 
-      // 1. Fast Prep Alert (1-day prior to upcoming fast)
       if (data.containsKey('fastPrep')) {
         final fast = data['fastPrep'];
         await flutterLocalNotificationsPlugin.show(
@@ -160,7 +146,6 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen> {
         );
       }
 
-      // 2. Morning Daily Task Summary (07:00 AM)
       if (data.containsKey('morning')) {
         final morning = data['morning'];
         await flutterLocalNotificationsPlugin.show(
@@ -173,7 +158,6 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen> {
         );
       }
 
-      // 3. Rahu Kaal 15-Minute Warning
       if (data.containsKey('rahuKaal')) {
         final rahu = data['rahuKaal'];
         await flutterLocalNotificationsPlugin.show(
@@ -186,7 +170,6 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen> {
         );
       }
 
-      // 4. Streak Saver Night Reminder (08:30 PM)
       if (data.containsKey('streakSaver')) {
         final streak = data['streakSaver'];
         await flutterLocalNotificationsPlugin.show(
@@ -203,11 +186,6 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen> {
     }
   }
 
-  // ─────────────────────────────────────────────────────────────
-  // FIX 1: Replace deprecated WillPopScope with PopScope
-  // Correct back-button behaviour: navigate WebView history first,
-  // only exit the app when there is no more history to go back to.
-  // ─────────────────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -217,7 +195,6 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen> {
         if (await _controller.canGoBack()) {
           _controller.goBack();
         } else {
-          // No WebView history left — allow the OS to close the app
           if (context.mounted) {
             SystemNavigator.pop();
           }

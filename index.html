@@ -7025,6 +7025,7 @@ showCustomConfirm("Logout Confirmation", "Are you sure you want to log out of Co
 if (supabaseClient) {
 try { await supabaseClient.auth.signOut(); } catch(e) {}
 }
+if (typeof purgeLocalUserProfileCache === 'function') purgeLocalUserProfileCache();
 localStorage.clear();
 sessionStorage.clear();
 localStorage.setItem('user_authenticated', 'false');
@@ -7094,10 +7095,13 @@ let _hasCloudProfile = false;
 if (userId) {
 try { _hasCloudProfile = await restoreProfileFromCloud(userId); } catch(e) { console.error('Profile restore error:', e); }
 }
-if (_hasCloudProfile || (localStorage.getItem('user_name') && localStorage.getItem('user_dob'))) {
-showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Welcome back! Loading your dashboard...`);
+if (_hasCloudProfile) {
+showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Welcome back! Loading your profile...`);
 openAppDashboard();
 } else {
+// New user with no cloud profile -> purge old local cache & force onboarding
+purgeLocalUserProfileCache();
+if (userId) localStorage.setItem('supabase_user_id', userId);
 showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Welcome! Please complete your profile.`);
 const onboarding = document.getElementById('onboarding-screen');
 const appLayout = document.getElementById('app-layout');
@@ -7748,6 +7752,25 @@ console.log("Successfully synced profile to Supabase cloud database.");
 } catch (err) {
 console.error("Failed to sync profile to cloud:", err);
 }
+}
+
+
+function purgeLocalUserProfileCache() {
+  const profileKeys = [
+    'user_name', 'kundli_name', 'user_gender', 'kundli_gender',
+    'user_dob', 'kundli_date', 'user_tob', 'kundli_time',
+    'user_pob', 'kundli_city', 'user_lat', 'user_lng', 'user_timezone',
+    'user_goal', 'onboarding_path', 'partner_gender', 'property_number',
+    'property_type', 'property_city', 'user_streak', 'user_xp', 'user_level',
+    'user_moon_rashi_idx', 'karma_daily_roadmap_history', 'karma_plan_start_date',
+    'today_mission_date', 'today_quest_vedic_text', 'today_quest_lalkitab_text',
+    'today_quest_vastu_text', 'today_quest_practical_text', 'user_active_goals',
+    'onboarding_custom_issue', 'user_custom_issue', 'supabase_user_id'
+  ];
+  profileKeys.forEach(k => localStorage.removeItem(k));
+  xp = 0;
+  level = 1;
+  streak = 0;
 }
 
 async function restoreProfileFromCloud(userId) {
@@ -12393,36 +12416,49 @@ if (session.user && session.user.email) {
 localStorage.setItem('user_email', session.user.email);
 }
 
+// Account Isolation: Check if a different user logged in
+const lastUserId = localStorage.getItem('supabase_user_id');
+const currentUserId = session.user ? session.user.id : null;
+let isDifferentUser = false;
+if (currentUserId) {
+  if (lastUserId && lastUserId !== currentUserId) {
+    console.log("Different user detected! Purging previous user's local cache...");
+    purgeLocalUserProfileCache();
+    isDifferentUser = true;
+  }
+  localStorage.setItem('supabase_user_id', currentUserId);
+}
+
 const splash = document.getElementById('splash-screen');
 if (splash) splash.style.display = 'none';
 
 const onboardingScreen = document.getElementById('onboarding-screen');
 const appLayout = document.getElementById('app-layout');
-const hasLocalCache = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
+const hasGuestCache = !isDifferentUser && !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
+
 restoreProfileFromCloud(session.user.id).then((restored) => {
-// Sync local guest profile cache to cloud if logged in but no profile exists in cloud DB yet
-if (!restored && hasLocalCache) {
+// Only sync local guest cache if the user was genuinely completing a guest onboarding flow
+if (!restored && hasGuestCache) {
 syncProfileToCloud()
 .then(() => console.log("Successfully synced local guest profile to cloud after login."))
 .catch(err => console.error("Post-login background sync error:", err));
 }
 
 const appVisible = appLayout && (appLayout.style.display === 'block' || appLayout.style.display === 'flex');
-if (!appVisible) {
-if (restored || hasLocalCache) {
-// Profile EXISTS in Supabase DB OR local cache exists → go to dashboard always
-openAppDashboard();
+if (restored) {
+// Profile EXISTS in Supabase DB for THIS user -> restore and open dashboard
+if (!appVisible) openAppDashboard();
+else if (typeof initApp === 'function') initApp();
+} else if (hasGuestCache) {
+// Guest user just authenticated after filling guest info -> open dashboard
+if (!appVisible) openAppDashboard();
 } else {
-// No profile row in DB AND no local cache → genuinely new user → onboarding
-if (onboardingScreen) onboardingScreen.style.display = 'flex';
+// BRAND NEW USER with no cloud profile -> purge stale local cache & show onboarding screen
+purgeLocalUserProfileCache();
+localStorage.setItem('supabase_user_id', currentUserId);
 if (appLayout) appLayout.style.display = 'none';
+if (onboardingScreen) onboardingScreen.style.display = 'flex';
 showOnboardingStep('select-path');
-}
-} else {
-// Logged in from settings: refresh client view to show cloud restored/synced profile
-if (restored && typeof initApp === 'function') {
-initApp();
-}
 }
 }).catch((err) => {
 console.error("Auth listener restore error:", err);
