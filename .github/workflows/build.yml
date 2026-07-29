@@ -1,4 +1,4 @@
-name: Build CosmoVedic Flutter APK & AAB
+name: Build CosmoVedic Flutter APK, AAB & iOS Package
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build APK and AAB
+  build_android:
+    name: Build Android APK and AAB
     runs-on: ubuntu-latest
 
     steps:
@@ -56,4 +56,44 @@ jobs:
         with:
           name: CosmoVedic-AAB-v1.0.1-PlayStore
           path: build/app/outputs/bundle/release/app-release.aab
+          retention-days: 30
+
+  build_ios:
+    name: Build iOS Package (macOS Runner)
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.5'
+          channel: 'stable'
+          cache: true
+
+      - name: Repair iOS Scaffolding in CI
+        run: |
+          flutter config --no-analytics
+          flutter create --platforms=ios .
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Release iOS App (No Codesign for Testing Package)
+        run: flutter build ios --release --no-codesign --no-tree-shake-icons
+
+      - name: Create iOS Payload IPA Package
+        run: |
+          cd build/ios/iphoneos
+          mkdir -p Payload
+          cp -r Runner.app Payload/
+          zip -r CosmoVedic-iOS-v1.0.1.ipa Payload
+
+      - name: Upload iOS Package Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CosmoVedic-iOS-v1.0.1
+          path: build/ios/iphoneos/CosmoVedic-iOS-v1.0.1.ipa
           retention-days: 30
