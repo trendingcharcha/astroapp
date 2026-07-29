@@ -8677,10 +8677,10 @@ function showOnboardingStep(stepNum) {
 
   let target = null;
 
-  if (stepNum === 'login' || stepNum === 'welcome' || stepNum === 'auth-gateway') {
-    // Welcome / Sign In Gateway Card
+  if (stepNum === 'path' || stepNum === 'login' || stepNum === 'welcome' || stepNum === 'auth-gateway' || stepNum === 0) {
+    // Welcome / Sign In Gateway Card (1-Tap Google + Email Auth)
     target = 'onboarding-step-path';
-  } else if (stepNum === 'select-path' || stepNum === 'choose-path' || stepNum === 'goal-path' || stepNum === 'path') {
+  } else if (stepNum === 'select-path' || stepNum === 'choose-path' || stepNum === 'goal-path') {
     // Choose Your Path (Single vs Couple Goal Path)
     target = 'onboarding-step-select-path';
   } else if (stepNum === 'category') {
