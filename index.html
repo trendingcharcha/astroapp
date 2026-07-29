@@ -7718,6 +7718,7 @@ localStorage.setItem('karma_plan_start_date', planStartDate);
 
 const startDateObj = parseYYYYMMDD(planStartDate);
 const currentDayNum = getPlanStartDayOffset();
+const todayObj = new Date();
 
 // Update today's date display
 const todayDateEl = document.getElementById('journey-today-date');
