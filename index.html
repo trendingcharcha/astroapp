@@ -2024,7 +2024,10 @@ Partner / Spouse Details
 <button class="btn btn-outline" style="width: auto; padding: 4px 10px; font-size: 0.72rem; margin: 0;" onclick="navigateRoadmapDay(-1)">◄ Prev</button>
 <div style="text-align: center;">
 <h3 id="roadmap-day-title" style="color: var(--gold); margin: 0; font-size: 1.05rem;">Day 1 of 90</h3>
+<div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 2px; flex-wrap: wrap;">
 <span id="roadmap-day-date" style="font-size: 0.72rem; color: var(--text-muted);">Today's Scheduled Tasks</span>
+<span id="roadmap-today-badge"></span>
+</div>
 </div>
 <button class="btn btn-outline" style="width: auto; padding: 4px 10px; font-size: 0.72rem; margin: 0;" onclick="navigateRoadmapDay(1)">Next ►</button>
 </div>
@@ -5906,6 +5909,20 @@ return formatted;
 // ═══════════════════════════════════════════════════════════════
 let selectedRoadmapDay = 1;
 
+function parseYYYYMMDD(dateStr) {
+if (!dateStr || typeof dateStr !== 'string') return new Date();
+const parts = dateStr.split('-');
+if (parts.length === 3) {
+const y = parseInt(parts[0], 10);
+const m = parseInt(parts[1], 10) - 1;
+const d = parseInt(parts[2], 10);
+if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
+return new Date(y, m, d);
+}
+}
+return new Date(dateStr);
+}
+
 function getPlanStartDayOffset() {
 let planStartDate = localStorage.getItem('karma_plan_start_date');
 if (!planStartDate) {
@@ -5913,12 +5930,11 @@ planStartDate = typeof getFormattedDate === 'function' ? getFormattedDate() : ne
 localStorage.setItem('karma_plan_start_date', planStartDate);
 }
 try {
-const sParts = planStartDate.split('-');
+const sDate = parseYYYYMMDD(planStartDate);
 const tStr = typeof getFormattedDate === 'function' ? getFormattedDate() : new Date().toISOString().split('T')[0];
-const tParts = tStr.split('-');
-const startUtc = Date.UTC(parseInt(sParts[0]), parseInt(sParts[1]) - 1, parseInt(sParts[2]));
-const todayUtc = Date.UTC(parseInt(tParts[0]), parseInt(tParts[1]) - 1, parseInt(tParts[2]));
-const diffDays = Math.floor((todayUtc - startUtc) / 86400000) + 1;
+const tDate = parseYYYYMMDD(tStr);
+const diffTime = tDate.getTime() - sDate.getTime();
+const diffDays = Math.round(diffTime / 86400000) + 1;
 return Math.min(Math.max(diffDays, 1), 90);
 } catch(e) {
 return 1;
@@ -6066,7 +6082,8 @@ const userProf = localStorage.getItem('user_profession') || 'Seeker';
 const userCustomIssue = localStorage.getItem('user_custom_issue') || localStorage.getItem('onboarding_custom_issue') || '';
 
 let planStartDate = localStorage.getItem('karma_plan_start_date') || getFormattedDate();
-let targetDate = new Date(new Date(planStartDate).getTime() + (dayNum - 1) * 86400000);
+const startDateObj = parseYYYYMMDD(planStartDate);
+const targetDate = new Date(startDateObj.getFullYear(), startDateObj.getMonth(), startDateObj.getDate() + (dayNum - 1));
 const daysOfWeekEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const daysOfWeekHi = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
 const dayNameEn = daysOfWeekEn[targetDate.getDay()];
@@ -6364,9 +6381,8 @@ function updateSanatanNotifications() {
 
       // Plan Start & Target Date Calculation
       let planStartDate = localStorage.getItem('karma_plan_start_date') || getFormattedDate();
-      let startDateObj = new Date(planStartDate);
-      if (isNaN(startDateObj.getTime())) startDateObj = new Date();
-      let targetDate = new Date(startDateObj.getTime() + (dayNum - 1) * 86400000);
+      const startDateObj = parseYYYYMMDD(planStartDate);
+      const targetDate = new Date(startDateObj.getFullYear(), startDateObj.getMonth(), startDateObj.getDate() + (dayNum - 1));
 
       // Localized Date Header String
       const dateOptions = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
@@ -6558,16 +6574,21 @@ function updateSanatanNotifications() {
 
 function renderRoadmapDayTasks(dayNum) {
 selectedRoadmapDay = dayNum;
+const currentPlanDay = getPlanStartDayOffset();
+
 // Update Day Title & Date
 const titleEl = document.getElementById('roadmap-day-title');
 const dateEl = document.getElementById('roadmap-day-date');
+const todayBadgeEl = document.getElementById('roadmap-today-badge');
 const phaseEl = document.getElementById('roadmap-phase-label');
 const intensityEl = document.getElementById('roadmap-intensity-label');
 const secTitleEl = document.getElementById('quests-section-title');
 
 const lang = currentAppLang;
 let planStartDate = localStorage.getItem('karma_plan_start_date') || getFormattedDate();
-let targetDate = new Date(new Date(planStartDate).getTime() + (dayNum - 1) * 86400000);
+const startDateObj = parseYYYYMMDD(planStartDate);
+const targetDate = new Date(startDateObj.getFullYear(), startDateObj.getMonth(), startDateObj.getDate() + (dayNum - 1));
+
 let dateString = '';
 if (lang === 'hi') {
 const daysHi = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
@@ -6580,6 +6601,18 @@ dateString = targetDate.toLocaleDateString('en-US', { weekday: 'long', month: 's
 if (titleEl) titleEl.textContent = lang === 'hi' ? `90 में से दिन ${dayNum}` : `Day ${dayNum} of 90`;
 if (dateEl) dateEl.textContent = dateString;
 if (secTitleEl) secTitleEl.textContent = lang === 'hi' ? `दिन ${dayNum} के कार्य` : `Day ${dayNum} Doable Tasks`;
+
+if (todayBadgeEl) {
+if (dayNum === currentPlanDay) {
+todayBadgeEl.innerHTML = `<span style="background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid #2ecc71; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; display: inline-flex; align-items: center; gap: 3px;">● ${lang === 'hi' ? 'आज' : 'TODAY'}</span>`;
+} else {
+todayBadgeEl.innerHTML = `<button onclick="renderRoadmapDayTasks(${currentPlanDay})" class="btn" style="width: auto; padding: 2px 8px; font-size: 0.68rem; background: rgba(232, 200, 121, 0.15); border: 1px solid var(--gold); color: var(--gold); cursor: pointer; border-radius: 12px; font-weight: bold;">🎯 ${lang === 'hi' ? `आज का दिन (${currentPlanDay})` : `GO TO TODAY (DAY ${currentPlanDay})`}</button>`;
+}
+}
+
+// Sync bottom journey badge to current plan day
+const jDayBadge = document.getElementById('journey-day-badge');
+if (jDayBadge) jDayBadge.textContent = lang === 'hi' ? `90 में से दिन ${currentPlanDay}` : `Day ${currentPlanDay} of 90`;
 
 let chantCount = 21;
 let phaseName = "";
@@ -7683,11 +7716,8 @@ planStartDate = getFormattedDate();
 localStorage.setItem('karma_plan_start_date', planStartDate);
 }
 
-const startDateObj = new Date(planStartDate);
-const todayObj = new Date();
-const diffTime = Math.abs(todayObj - startDateObj);
-let currentDayNum = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-if (currentDayNum > 90) currentDayNum = 90;
+const startDateObj = parseYYYYMMDD(planStartDate);
+const currentDayNum = getPlanStartDayOffset();
 
 // Update today's date display
 const todayDateEl = document.getElementById('journey-today-date');
@@ -9532,6 +9562,10 @@ localStorage.setItem('user_goal', goal);
 localStorage.setItem('user_active_goals', JSON.stringify([goal]));
 localStorage.setItem('onboarding_path', onboardingPath || 'single');
 
+if (!localStorage.getItem('karma_plan_start_date')) {
+localStorage.setItem('karma_plan_start_date', getFormattedDate());
+}
+
 // Reset XP and level to fresh starting state on Day 1 onboarding submit
 xp = 0;
 level = 1;
@@ -9949,6 +9983,7 @@ updateQuestCompletionCount();
 }
 
 const currentPlanDay = getPlanStartDayOffset();
+selectedRoadmapDay = currentPlanDay;
 renderRoadmapDayTasks(currentPlanDay);
 
 const qSec = document.getElementById('quests-section');
