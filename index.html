@@ -9810,6 +9810,20 @@ function checkTimelyAutoPurge() {
       }
     } catch(e) {}
 
+    // Re-render UI elements immediately for the new day in user's local timezone
+    try {
+      if (typeof getPlanStartDayOffset === 'function' && typeof renderRoadmapDayTasks === 'function') {
+        const currentPlanDay = getPlanStartDayOffset();
+        renderRoadmapDayTasks(currentPlanDay);
+      }
+      if (typeof renderDedicationGrid === 'function') {
+        renderDedicationGrid();
+      }
+      if (typeof renderPersonalizedRashiHoroscope === 'function') {
+        renderPersonalizedRashiHoroscope();
+      }
+    } catch(e) {}
+
     // Update Sanatan notifications for TODAY
     try {
       if (typeof updateSanatanNotifications === 'function') {
@@ -9826,6 +9840,14 @@ function checkTimelyAutoPurge() {
 
 // Start 60-second background alignment timer for midnight date shifts
 setInterval(checkTimelyAutoPurge, 60000);
+
+// Auto-check date shift whenever app is brought to foreground (visibilitychange / focus)
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    checkTimelyAutoPurge();
+  }
+});
+window.addEventListener('focus', checkTimelyAutoPurge);
 
 // GLOBAL CACHE PURGE ENGINE (Purges old stale cache for all existing & new users)
   const SYSTEM_CACHE_VERSION = 'v2026_07_28_TOTAL_GLOBAL_PURGE_v999';
