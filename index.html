@@ -7581,21 +7581,29 @@ cloudProfileExists = hasLocalProfile;
 }
 
 // If user has active auth session OR cloud profile OR local profile -> Dashboard
-if (isAuthFlag || validBackendUser || cloudProfileExists || hasLocalProfile) {
-if (onboarding) onboarding.style.display = 'none';
-if (appLayout) appLayout.style.display = 'block';
-if (typeof initApp === 'function') initApp();
+const hasProfileData = cloudProfileExists || hasLocalProfile;
+if ((isAuthFlag || validBackendUser) && hasProfileData) {
+  localStorage.setItem('user_authenticated', 'true');
+  if (onboarding) onboarding.style.display = 'none';
+  if (appLayout) appLayout.style.display = 'block';
+  if (typeof initApp === 'function') initApp();
+} else if (isAuthFlag || validBackendUser) {
+  // Brand new Google user -> authenticated! Show Goal Path Selection (NEVER bounce back to login!)
+  localStorage.setItem('user_authenticated', 'true');
+  if (appLayout) appLayout.style.display = 'none';
+  if (onboarding) onboarding.style.display = 'flex';
+  if (typeof showOnboardingStep === 'function') showOnboardingStep('select-path');
 } else {
-// New unauthenticated guest -> Onboarding Auth gateway
-if (appLayout) appLayout.style.display = 'none';
-if (onboarding) onboarding.style.display = 'flex';
-if (typeof showOnboardingStep === 'function') showOnboardingStep('path');
+  // New unauthenticated guest -> Onboarding Auth gateway
+  if (appLayout) appLayout.style.display = 'none';
+  if (onboarding) onboarding.style.display = 'flex';
+  if (typeof showOnboardingStep === 'function') showOnboardingStep('path');
 }
 } catch(err) {
-console.error('[Astro AI] Splash dismissal error:', err);
-if (appLayout) appLayout.style.display = 'none';
-if (onboarding) onboarding.style.display = 'flex';
-if (typeof showOnboardingStep === 'function') showOnboardingStep('path');
+  console.error('[Astro AI] Splash dismissal error:', err);
+  if (appLayout) appLayout.style.display = 'none';
+  if (onboarding) onboarding.style.display = 'flex';
+  if (typeof showOnboardingStep === 'function') showOnboardingStep('path');
 }
 }
 
