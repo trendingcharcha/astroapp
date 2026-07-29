@@ -191,7 +191,7 @@ html[data-lang="hi"] .k-lbl-hi-block { display: block !important; }
 
 /* Premium Cosmic Theme & Advanced UI System */
 :root {
---font-heading: 'Cinzel Decorative', 'Cormorant Garamond', serif;
+--font-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
 --font-body: 'Outfit', 'Plus Jakarta Sans', sans-serif;
 
 --bg-color: #0B091A;
@@ -209,8 +209,8 @@ html[data-lang="hi"] .k-lbl-hi-block { display: block !important; }
 --nebula: #6C8DF6;
 --emerald: #2ECC71;
 --text: #F0EBF9;
---text-muted: #A59EBF;
---text-subtle: #79739A;
+--text-muted: #C0B9DD;
+--text-subtle: #968FBA;
 --box-shadow-card: 0 12px 36px rgba(0,0,0,0.55), inset 0 1px 1px rgba(255,255,255,0.06);
 --btn-shadow: 0 6px 20px rgba(232, 200, 121, 0.22);
 --input-bg: rgba(16, 12, 36, 0.75);
@@ -277,50 +277,51 @@ body.light-theme .phone-shell {
   box-shadow: 0 15px 50px rgba(184, 142, 56, 0.15), 0 0 0 1px rgba(184, 142, 56, 0.25) !important;
 }
 
-/* ALL TEXT WRITING IN LIGHT MODE MUST BE DARK HIGH-CONTRAST COLORS */
+/* ALL CARD & BODY TEXT IN LIGHT MODE MUST BE DARK HIGH-CONTRAST COLORS */
 body.light-theme p,
-body.light-theme span,
+body.light-theme label,
+body.light-theme li,
+body.light-theme td,
+body.light-theme th,
+body.light-theme small,
+body.light-theme input,
+body.light-theme select,
+body.light-theme textarea {
+  color: #16122B;
+}
+
 body.light-theme h1,
 body.light-theme h2,
 body.light-theme h3,
 body.light-theme h4,
 body.light-theme h5,
-body.light-theme h6,
-body.light-theme label,
-body.light-theme li,
-body.light-theme strong,
-body.light-theme b,
-body.light-theme td,
-body.light-theme th,
-body.light-theme small,
-body.light-theme div:not(.btn):not(.btn-primary):not(.btn-gold) {
+body.light-theme h6 {
   color: #16122B;
+  font-weight: 600;
+  text-transform: none !important;
 }
 
-/* OVERRIDE INLINE LIGHT TEXT STYLES IN LIGHT THEME */
-body.light-theme [style*="color: #FFF"],
-body.light-theme [style*="color:#FFF"],
-body.light-theme [style*="color: #fff"],
-body.light-theme [style*="color:#fff"],
-body.light-theme [style*="color: white"],
-body.light-theme [style*="color:white"],
-body.light-theme [style*="color: #E0"],
-body.light-theme [style*="color:#E0"],
-body.light-theme [style*="color: #DF"],
-body.light-theme [style*="color:#DF"],
-body.light-theme [style*="color: #D"],
-body.light-theme [style*="color:#D"],
-body.light-theme [style*="color: #C"],
-body.light-theme [style*="color:#C"],
-body.light-theme [style*="color: #B"],
-body.light-theme [style*="color:#B"],
-body.light-theme [style*="color: #A5"],
-body.light-theme [style*="color:#A5"],
-body.light-theme [style*="color: #79"],
-body.light-theme [style*="color:#79"],
-body.light-theme [style*="color: var(--text)"],
-body.light-theme [style*="color:var(--text)"] {
-  color: #16122B !important;
+/* EXCEPTION: BUTTONS AND COLORED GRADIENTS WITH DARK BACKGROUNDS IN LIGHT THEME KEEP WHITE TEXT */
+body.light-theme .btn,
+body.light-theme .btn-primary,
+body.light-theme .btn-gold,
+body.light-theme button:not(.btn-outline):not(.lang-toggle-btn):not(.theme-toggle-btn):not(.bell-toggle-btn),
+body.light-theme button:not(.btn-outline) *,
+body.light-theme .btn:not(.btn-outline) *,
+body.light-theme [style*="background: linear-gradient"],
+body.light-theme [style*="background:linear-gradient"] {
+  color: #FFFFFF !important;
+}
+
+body.light-theme [style*="background: linear-gradient"] *,
+body.light-theme [style*="background:linear-gradient"] * {
+  color: #FFFFFF !important;
+}
+
+/* Specific button outline in light theme */
+body.light-theme .btn-outline,
+body.light-theme .btn-outline * {
+  color: #8F6B22 !important;
 }
 
 body.light-theme .text-muted,
@@ -333,7 +334,6 @@ body.light-theme [style*="color:var(--text-subtle)"] {
 
 /* Gold, Purple, Blue, Green Text Tones in Light Mode */
 body.light-theme .gold-text,
-body.light-theme .header-title,
 body.light-theme [style*="color: var(--gold)"],
 body.light-theme [style*="color:var(--gold)"],
 body.light-theme [style*="color: #E8C879"],
@@ -346,9 +346,7 @@ body.light-theme [style*="color:#B88E38"] {
 body.light-theme [style*="color: var(--purple)"],
 body.light-theme [style*="color:var(--purple)"],
 body.light-theme [style*="color: #9B86ED"],
-body.light-theme [style*="color:#9B86ED"],
-body.light-theme [style*="color: #c39bd3"],
-body.light-theme [style*="color:#c39bd3"] {
+body.light-theme [style*="color:#9B86ED"] {
   color: #4A358A !important;
 }
 
