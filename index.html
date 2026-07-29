@@ -12373,41 +12373,40 @@ setAppLanguage(lang);
 // HANDLE RETURN FROM GOOGLE OAUTH REDIRECT
 // ═══════════════════════════════════════════════════════════════
 function handleOAuthCallback() {
-const hash = window.location.hash;
-const search = window.location.search;
-const isOAuth = (hash && (hash.includes('access_token=') || hash.includes('type='))) || (search && search.includes('code='));
+  const hash = window.location.hash;
+  const search = window.location.search;
+  const isOAuth = (hash && (hash.includes('access_token=') || hash.includes('type='))) || (search && search.includes('code='));
 
-if (isOAuth) {
-localStorage.setItem('user_authenticated', 'true');
-localStorage.setItem('user_auth_provider', 'google');
-
-if (window.history && window.history.replaceState) {
-window.history.replaceState(null, null, window.location.pathname);
-}
-
-const splash = document.getElementById('splash-screen');
-if (splash) splash.style.display = 'none';
-
-showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Google Sign-In Successful! Restoring profile...`, "gold");
-}
+  if (isOAuth) {
+    localStorage.setItem('user_authenticated', 'true');
+    localStorage.setItem('user_auth_provider', 'google');
+    const splash = document.getElementById('splash-screen');
+    if (splash) splash.style.display = 'none';
+    showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Google Sign-In Successful! Restoring profile...`, "gold");
+  }
 }
 
 // Attach Supabase Auth State Change Listener for Instant OAuth Routing
 let _authListenerFired = false;
 function setupSupabaseAuthListener() {
-if (typeof supabaseClient !== 'undefined' && supabaseClient && supabaseClient.auth) {
-supabaseClient.auth.onAuthStateChange((event, session) => {
-if ((event === 'SIGNED_IN') && session && !_authListenerFired) {
-_authListenerFired = true;
-localStorage.setItem('user_authenticated', 'true');
-localStorage.setItem('user_auth_provider', session.user?.app_metadata?.provider || 'google');
-if (session.user && session.user.email) {
-localStorage.setItem('user_email', session.user.email);
-}
+  if (typeof supabaseClient !== 'undefined' && supabaseClient && supabaseClient.auth) {
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      if ((event === 'SIGNED_IN') && session && !_authListenerFired) {
+        _authListenerFired = true;
+        localStorage.setItem('user_authenticated', 'true');
+        localStorage.setItem('user_auth_provider', session.user?.app_metadata?.provider || 'google');
+        if (session.user && session.user.email) {
+          localStorage.setItem('user_email', session.user.email);
+        }
 
-// Account Isolation: Check if a different user logged in
-const lastUserId = localStorage.getItem('supabase_user_id');
-const currentUserId = session.user ? session.user.id : null;
+        // Clean up OAuth hash/code from URL safely AFTER session is established
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, null, window.location.pathname);
+        }
+
+        // Account Isolation: Check if a different user logged in
+        const lastUserId = localStorage.getItem('supabase_user_id');
+        const currentUserId = session.user ? session.user.id : null;
 let isDifferentUser = false;
 if (currentUserId) {
   if (lastUserId && lastUserId !== currentUserId) {
