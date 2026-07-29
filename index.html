@@ -430,18 +430,20 @@ transition: background-color 0.3s ease, color 0.3s ease;
 
 body {
 display: flex;
-align-items: stretch;
+align-items: center;
 justify-content: center;
 overflow-x: hidden !important;
+background-color: #060412;
 }
 
-/* ─── APP SHELL: full-height, mobile-width only ─────────────────────── */
+/* ─── APP SHELL: full-height, mobile-width frame on desktop ─────────────────────── */
 .phone-shell {
 position: relative;
 width: 100%;
-max-width: 430px;
-flex: 1 1 auto;
-min-height: 0;
+max-width: 450px;
+height: 100vh;
+height: 100dvh;
+margin: 0 auto;
 background-color: var(--bg-color);
 background-image: 
 radial-gradient(circle at 50% -10%, rgba(155, 122, 232, 0.15) 0%, transparent 50%),
@@ -452,7 +454,9 @@ overflow-x: hidden !important;
 display: flex;
 flex-direction: column;
 box-sizing: border-box;
-box-shadow: 0 0 60px rgba(0,0,0,0.85), 0 0 30px rgba(155, 122, 232, 0.12);
+box-shadow: 0 0 60px rgba(0,0,0,0.95), 0 0 30px rgba(232, 200, 121, 0.15);
+border-left: 1px solid rgba(232, 200, 121, 0.18);
+border-right: 1px solid rgba(232, 200, 121, 0.18);
 transition: background-color 0.3s ease;
 }
 
@@ -468,8 +472,11 @@ padding: 0 !important;
 width: 100vw !important;
 max-width: 100vw !important;
 height: 100vh !important;
+height: 100dvh !important;
 border-radius: 0 !important;
 box-shadow: none !important;
+border-left: none !important;
+border-right: none !important;
 }
 }
 
@@ -1337,54 +1344,6 @@ box-shadow: 0 0 10px var(--gold);
 </form>
 </div>
 
-<div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
-<div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
-<span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase;"><span class="k-lbl-en">Free Preview</span><span class="k-lbl-hi" style="display:none;">मुफ़्त पूर्वावलोकन</span></span>
-<div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
-</div>
-
-<!-- Free Guest Preview Button -->
-<button class="btn btn-outline" style="width: 100%; padding: 11px; font-weight: 600; border-color: rgba(232,200,121,0.3); color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px;" onclick="showGuestChoiceScreen()">
-<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-<span class="k-lbl-en">Free Guest Kundli Preview</span><span class="k-lbl-hi" style="display:none;">मुफ़्त गेस्ट कुंडली पूर्वावलोकन</span>
-</button>
-</div>
-
-<!-- ── GUEST CHOICE SCREEN (KUNDLI VS GOAL) ─────────── -->
-<div id="guest-choice-screen" class="auth-card" style="text-align: left; width: 100%; display: none;">
-<div style="margin-bottom: 16px;">
-<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#E8C879" stroke-width="1.8">
-<circle cx="12" cy="12" r="10"/>
-<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-</svg>
-</div>
-<h3 style="color: var(--gold); margin: 0 0 6px 0; font-size: 1.25rem;"><span class="k-lbl-en">Welcome Cosmic Visitor</span><span class="k-lbl-hi" style="display:none;">ब्रह्मांडीय आगंतुक का स्वागत है</span></h3>
-<p style="color: var(--text-muted); font-size: 0.82rem; margin: 0 0 20px 0;"><span class="k-lbl-en">Choose how you wish to explore CosmoVedic today:</span><span class="k-lbl-hi" style="display:none;">चुनें कि आप आज कोस्मोवैदिक को कैसे खोजना चाहते हैं:</span></p>
-<div style="display: flex; flex-direction: column; gap: 14px; width: 100%;">
-<!-- Choice A: Generate Detailed Kundli -->
-<button class="btn btn-outline" style="text-align: left; padding: 16px; display: flex; align-items: center; gap: 14px; border-color: rgba(232,200,121,0.4);" onclick="startGuestKundliFlow()">
-<span style="flex-shrink:0;">
-<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-</span>
-<div>
-<strong style="color: var(--gold); display: block; font-size: 0.95rem; margin-bottom: 2px;"><span class="k-lbl-en">Generate Janma Kundli (Free)</span><span class="k-lbl-hi" style="display:none;">जन्म कुंडली बनाएं (मुफ़्त)</span></strong>
-<span style="font-size: 0.75rem; color: var(--text-muted);"><span class="k-lbl-en">Fill birth details &amp; view your 100% detailed birth chart preview instantly.</span><span class="k-lbl-hi" style="display:none;">जन्म विवरण भरें और तुरंत अपना 100% विस्तृत जन्म कुंडली पूर्वावलोकन देखें।</span></span>
-</div>
-</button>
-
-<!-- Choice B: Set Goal & 90-Day Plan (Requires Auth) -->
-<button class="btn btn-outline" style="text-align: left; padding: 16px; display: flex; align-items: center; gap: 14px; border-color: rgba(46,204,113,0.4);" onclick="promptAuthForGoal()">
-<span style="flex-shrink:0;">
-<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-</span>
-<div>
-<strong style="color: #2ecc71; display: block; font-size: 0.95rem; margin-bottom: 2px;"><span class="k-lbl-en">Set Goal &amp; 90-Day Plan (Sign Up)</span><span class="k-lbl-hi" style="display:none;">लक्ष्य और 90-दिवसीय योजना (साइन अप)</span></strong>
-<span style="font-size: 0.75rem; color: var(--text-muted);"><span class="k-lbl-en">Requires free Sign In / Sign Up to set active goals &amp; save daily task streak.</span><span class="k-lbl-hi" style="display:none;">सक्रिय लक्ष्यों को सेट करने और दैनिक कार्य प्रगति सहेजने के लिए मुफ़्त साइन इन / साइन अप आवश्यक है।</span></span>
-</div>
-</button>
-
-<button class="btn" style="width: auto; padding: 6px 16px; font-size: 0.78rem; margin-top: 8px; align-self: center;" onclick="showOnboardingStep('path')"><span class="k-lbl-en">BACK TO SIGN IN</span><span class="k-lbl-hi" style="display:none;">साइन इन पर वापस जाएं</span></button>
-</div>
 </div>
 <!-- ── STEP A.5: Choose Your Path (Single vs Couple) ── -->
 <div id="onboarding-step-select-path" class="auth-card" style="text-align: left; width: 100%; display: none;">
@@ -1639,16 +1598,9 @@ Partner / Spouse Details
 </div>
 </div>
 
-<!-- 2. AUTH SCREEN -->
 <!-- 2. AUTH SCREEN (SMART AUTH GATEWAY) -->
 <div id="auth-screen" style="display:none;"></div>
 
-<!-- Free Guest Preview Button -->
-<button class="btn btn-outline" style="width: 100%; padding: 11px; font-weight: 600; border-color: rgba(232,200,121,0.3); color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px;" onclick="showGuestChoiceScreen()">
-<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-<span class="k-lbl-en">Free Guest Kundli Preview</span><span class="k-lbl-hi" style="display:none;">मुफ़्त गेस्ट कुंडली पूर्वावलोकन</span>
-</button>
-</div>
 </div>
 
 <!-- 3. MAIN APP LAYOUT -->
@@ -3145,6 +3097,9 @@ H12
 <button class="btn" onclick="closeOverlay()">DISMISS</button>
 </div>
 </div>
+
+</div>
+<!-- End phone-shell -->
 
 <!-- Astrological Scripts -->
 <script>
