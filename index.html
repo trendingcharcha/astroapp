@@ -5904,11 +5904,6 @@ formatted = formatted.substring(5);
 return formatted;
 }
 
-// ═══════════════════════════════════════════════════════════════
-// PROGRESSIVE 90-DAY DAILY ROADMAP ENGINE (SLIGHT PROGRESSION)
-// ═══════════════════════════════════════════════════════════════
-let selectedRoadmapDay = 1;
-
 function parseYYYYMMDD(dateStr) {
 if (!dateStr || typeof dateStr !== 'string') return new Date();
 const parts = dateStr.split('-');
@@ -5940,6 +5935,11 @@ return Math.min(Math.max(diffDays, 1), 90);
 return 1;
 }
 }
+
+// ═══════════════════════════════════════════════════════════════
+// PROGRESSIVE 90-DAY DAILY ROADMAP ENGINE (SLIGHT PROGRESSION)
+// ═══════════════════════════════════════════════════════════════
+let selectedRoadmapDay = getPlanStartDayOffset();
 
 // ═══════════════════════════════════════════════════════════════
 // TAILORED 90-DAY PROGRESSIVE MILESTONE MATRIX (DAYS 1 TO 90)
