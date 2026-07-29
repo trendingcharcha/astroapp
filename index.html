@@ -7369,66 +7369,55 @@ try { initTheme(); } catch(e) {}
  * Clears volatile transient calculation caches, re-syncs state from Storage/Supabase,
  * and re-calculates active dashboard engines without logging the user out or deleting persistent profile data.
  */
-function softPurgeAndRefreshData() {
-  const btn = document.getElementById('refresh-btn');
+function softPurgeAndRefreshData(el) {
+  const btn = el || document.getElementById('refresh-btn') || document.getElementById('dashboard-refresh-btn');
   const icon = btn ? btn.querySelector('.refresh-icon') : null;
   if (icon) {
     icon.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
     icon.style.transform = 'rotate(360deg)';
-    setTimeout(() => { 
-      icon.style.transform = 'rotate(0deg)'; 
-      icon.style.transition = 'none'; 
-    }, 650);
   }
 
-  // 1. Soft purge volatile calculation variables (Never touching persistent user_name, user_dob, etc.)
+  // 1. Purge Service Worker / Browser Cache API Storage if supported
+  if ('caches' in window) {
+    caches.keys().then(names => {
+      names.forEach(name => caches.delete(name));
+    }).catch(e => {});
+  }
+
+  // 2. Clear volatile calculation variables & transient daily cache keys
   window.cachedPlacementsList = null;
   window.cachedLagnaSignNum = null;
 
-  // 2. Re-sync user profile & goal state
+  const transientKeysToPurge = [
+    'today_mission_date', 'today_quest_vedic_text', 'today_quest_lalkitab_text',
+    'today_quest_vastu_text', 'today_quest_practical_text', 'today_astro_prediction_en',
+    'today_astro_prediction_hi', 'daily_sanatan_notif_en', 'daily_sanatan_notif_hi', 'daily_notif_date'
+  ];
+  transientKeysToPurge.forEach(k => {
+    try { localStorage.removeItem(k); } catch(e) {}
+  });
+
+  // 3. Re-sync user profile & goal state from Storage / Supabase
   if (typeof syncProfileStateFromStorage === 'function') {
     try { syncProfileStateFromStorage(); } catch(e) {}
   }
-
-  // 3. Re-calculate Sanatan Muhurat & Panchang notifications
-  if (typeof updateSanatanNotifications === 'function') {
-    try { updateSanatanNotifications(); } catch(e) {}
+  if (typeof fetchProfileFromSupabase === 'function' && localStorage.getItem('user_authenticated') === 'true') {
+    try { fetchProfileFromSupabase(); } catch(e) {}
   }
 
-  // 4. Re-render active dashboard goals
-  if (typeof renderDashboardGoals === 'function') {
-    try { renderDashboardGoals(); } catch(e) {}
-  }
-
-  // 5. If birth details exist, quietly re-run ephemeris chart calculations
-  const dob = localStorage.getItem('user_dob');
-  const tob = localStorage.getItem('user_tob');
-  const pob = localStorage.getItem('user_pob');
-  if (dob && tob && pob && typeof calculateAndRenderKundli === 'function') {
-    try { calculateAndRenderKundli(false); } catch(e) {}
-  }
-
-  // 6. Re-draw active canvas charts
-  if (typeof drawChart === 'function') {
-    try { drawChart(); } catch(e) {}
-  }
-  if (typeof drawLalKitabChart === 'function') {
-    try { drawLalKitabChart(); } catch(e) {}
-  }
-
-  // 7. Update language UI labels
-  if (typeof updateLanguageUI === 'function') {
-    try { updateLanguageUI(); } catch(e) {}
-  }
-
-  // 8. Non-blocking Toast Feedback
+  // 4. Non-blocking Toast Feedback
   const isHi = (typeof currentAppLang !== 'undefined' && currentAppLang === 'hi');
   const msg = isHi 
-    ? `<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M23 4v6h-6'/><path d='M1 20v-6h6'/><path d='M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15'/></svg> डेटा सफलतापूर्वक सिंक एवं रिफ्रेश हुआ!`
-    : `<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M23 4v6h-6'/><path d='M1 20v-6h6'/><path d='M3.51 9a9 9 0 0 0 20.49 15'/></svg> Data Synchronized & Refreshed!`;
+    ? `<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M23 4v6h-6'/><path d='M1 20v-6h6'/><path d='M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15'/></svg> Synchronizing Data, Purging Cache & Reloading...`
+    : `<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M23 4v6h-6'/><path d='M1 20v-6h6'/><path d='M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15'/></svg> Syncing Data, Purging Cache & Reloading Page...`;
   if (typeof showToast === 'function') {
     showToast(msg, 'gold');
   }
+
+  // 5. Trigger Page Reload after smooth toast/animation presentation (400ms)
+  setTimeout(() => {
+    window.location.reload();
+  }, 400);
 }
 
 function handleLogout() {
