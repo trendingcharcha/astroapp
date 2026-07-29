@@ -7007,7 +7007,7 @@ const appLayout = document.getElementById('app-layout');
 const onboarding = document.getElementById('onboarding-screen');
 if (appLayout) appLayout.style.display = 'none';
 if (onboarding) onboarding.style.display = 'flex';
-showOnboardingStep('path');
+showOnboardingStep('welcome');
 });
 }
 
@@ -8669,49 +8669,46 @@ showOnboardingStep(3);
 }
 
 function showOnboardingStep(stepNum) {
-const steps = ['onboarding-step-path','onboarding-step-select-path','onboarding-step-category','onboarding-step-1','onboarding-step-2','guest-choice-screen'];
-steps.forEach(id => {
-const el = document.getElementById(id);
-if (el) el.style.display = 'none';
-});
+  const steps = ['onboarding-step-path','onboarding-step-select-path','onboarding-step-category','onboarding-step-1','onboarding-step-2','guest-choice-screen'];
+  steps.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
 
-let target = null;
+  let target = null;
 
-if (stepNum === 'path') {
-target = 'onboarding-step-path';
-} else if (stepNum === 'select-path') {
-target = 'onboarding-step-select-path';
-} else if (stepNum === 'category') {
-onboardingPath = onboardingPath || 'single';
-buildCategoryGrid(onboardingPath);
-target = 'onboarding-step-category';
-} else if (stepNum === 1) {
-// Goal list screen
-if (!selectedCategoryKey) {
-onboardingPath = onboardingPath || 'single';
-buildCategoryGrid(onboardingPath);
-target = 'onboarding-step-category';
-} else {
-target = 'onboarding-step-1';
-}
-} else if (stepNum === 2) {
-// Birth Details Form screen
-target = 'onboarding-step-2';
-} else if (stepNum === 3) {
-// Legacy alias → also birth details form
-target = 'onboarding-step-2';
-} else if (stepNum === 'form') {
-target = 'onboarding-step-2';
-}
+  if (stepNum === 'login' || stepNum === 'welcome' || stepNum === 'auth-gateway') {
+    // Welcome / Sign In Gateway Card
+    target = 'onboarding-step-path';
+  } else if (stepNum === 'select-path' || stepNum === 'choose-path' || stepNum === 'goal-path' || stepNum === 'path') {
+    // Choose Your Path (Single vs Couple Goal Path)
+    target = 'onboarding-step-select-path';
+  } else if (stepNum === 'category') {
+    onboardingPath = onboardingPath || 'single';
+    buildCategoryGrid(onboardingPath);
+    target = 'onboarding-step-category';
+  } else if (stepNum === 1) {
+    // Goal list screen
+    if (!selectedCategoryKey) {
+      onboardingPath = onboardingPath || 'single';
+      buildCategoryGrid(onboardingPath);
+      target = 'onboarding-step-category';
+    } else {
+      target = 'onboarding-step-1';
+    }
+  } else if (stepNum === 2 || stepNum === 3 || stepNum === 'form') {
+    // Birth Details Form screen
+    target = 'onboarding-step-2';
+  }
 
-if (target) {
-const el = document.getElementById(target);
-if (el) {
-el.style.display = 'block';
-const screen = document.getElementById('onboarding-screen');
-if (screen) screen.scrollTop = 0;
-}
-}
+  if (target) {
+    const el = document.getElementById(target);
+    if (el) {
+      el.style.display = 'block';
+      const screen = document.getElementById('onboarding-screen');
+      if (screen) screen.scrollTop = 0;
+    }
+  }
 }
 
 let onboardingSelectedCity = majorCities[0];
