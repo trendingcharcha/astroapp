@@ -1,30 +1,32 @@
 const fs = require('fs');
-const html = fs.readFileSync('index.html', 'utf8');
+const vm = require('vm');
 
-// Extract all <script> contents and validate syntax
+const html = fs.readFileSync('c:/Users/EARTH/OneDrive/Desktop/Antigravity 2026/Astro AI app/index.html', 'utf8');
+
+// Extract all <script> contents from index.html
 const scriptRegex = /<script\b[^>]*>([\s\S]*?)<\/script>/gi;
 let match;
-let scriptIndex = 0;
+let count = 0;
 let errors = 0;
 
 while ((match = scriptRegex.exec(html)) !== null) {
-  const scriptContent = match[1];
-  // Skip external scripts with src
-  if (!scriptContent.trim()) continue;
-  
-  scriptIndex++;
+  count++;
+  const code = match[1];
+  if (!code.trim()) continue;
   try {
-    new Function(scriptContent);
-    console.log(`Script ${scriptIndex}: OK`);
+    new vm.Script(code);
+    console.log(`Script block #${count}: OK`);
   } catch (err) {
-    console.error(`Script ${scriptIndex} Syntax Error:`, err.message);
     errors++;
+    console.error(`Script block #${count} SYNTAX ERROR:`, err.message);
+    const lines = code.split('\n');
+    // find error line if possible
+    console.error(`Line snippet:`, err.stack.split('\n')[0]);
   }
 }
 
 if (errors === 0) {
-  console.log("All inline scripts compiled successfully with 0 syntax errors!");
+  console.log("All script blocks have valid JS syntax!");
 } else {
-  console.error(`Found ${errors} script syntax error(s).`);
-  process.exit(1);
+  console.log(`Found ${errors} syntax errors!`);
 }

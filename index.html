@@ -7518,10 +7518,16 @@ grid.appendChild(box);
 
 
 // Smooth Transition Splash to Onboarding / Auth Screen
-function dismissSplashScreen() {
+async function dismissSplashScreen() {
 const splash = document.getElementById('splash-screen');
 const onboarding = document.getElementById('onboarding-screen');
 const appLayout = document.getElementById('app-layout');
+
+// Hard safety override: hide splash screen unconditionally
+if (splash) {
+splash.style.opacity = '0';
+setTimeout(() => { if (splash) splash.style.display = 'none'; }, 300);
+}
 
 // Ensure Supabase client is initialized if not yet done
 if (!supabaseClient && typeof loadCloudConfig === 'function') {
@@ -7538,10 +7544,6 @@ if (splash) splash.style.display = 'none';
 return; // Allow handleOAuthCallback to manage screen routing!
 }
 
-if (splash) {
-splash.style.opacity = '0';
-splash.style.display = 'none';
-(async () => {
 try {
 const isAuthFlag = localStorage.getItem('user_authenticated') === 'true';
 const hasLocalProfile = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
@@ -7578,31 +7580,22 @@ if (typeof initApp === 'function') initApp();
 // New unauthenticated guest -> Onboarding Auth gateway
 if (appLayout) appLayout.style.display = 'none';
 if (onboarding) onboarding.style.display = 'flex';
-showOnboardingStep('path');
+if (typeof showOnboardingStep === 'function') showOnboardingStep('path');
 }
 } catch(err) {
 console.error('[Astro AI] Splash dismissal error:', err);
-const hasLocalProfile = !!(localStorage.getItem('user_name') && localStorage.getItem('user_dob'));
-if (hasLocalProfile) {
-if (onboarding) onboarding.style.display = 'none';
-if (appLayout) appLayout.style.display = 'block';
-if (typeof initApp === 'function') initApp();
-} else {
 if (appLayout) appLayout.style.display = 'none';
 if (onboarding) onboarding.style.display = 'flex';
-showOnboardingStep('path');
-}
-}
-}, 600);
+if (typeof showOnboardingStep === 'function') showOnboardingStep('path');
 }
 }
 
 if (document.readyState === 'loading') {
-document.addEventListener('DOMContentLoaded', () => setTimeout(dismissSplashScreen, 1000));
+document.addEventListener('DOMContentLoaded', () => setTimeout(dismissSplashScreen, 500));
 } else {
-setTimeout(dismissSplashScreen, 1000);
+setTimeout(dismissSplashScreen, 500);
 }
-setTimeout(dismissSplashScreen, 2000);
+setTimeout(dismissSplashScreen, 1500);
 
 // Global Supabase client variables
 let supabaseClient = null;
@@ -7833,11 +7826,6 @@ localStorage.setItem('karma_daily_roadmap_history', typeof payload.karma_daily_r
 if (payload.karma_plan_start_date) {
   localStorage.setItem('karma_plan_start_date', payload.karma_plan_start_date);
 } else {
-  // Save current plan start date to cloud profile so existing user's progress is preserved forever
-  const existingStart = localStorage.getItem('karma_plan_start_date') || (typeof getFormattedDate === 'function' ? getFormattedDate() : new Date().toISOString().split('T')[0]);
-  localStorage.setItem('karma_plan_start_date', existingStart);
-} else {
-  // Save current plan start date to cloud profile so existing user's progress is preserved forever
   const existingStart = localStorage.getItem('karma_plan_start_date') || (typeof getFormattedDate === 'function' ? getFormattedDate() : new Date().toISOString().split('T')[0]);
   localStorage.setItem('karma_plan_start_date', existingStart);
 }
