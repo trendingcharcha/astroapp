@@ -7199,11 +7199,12 @@ showOnboardingStep('welcome');
 }
 
 function openAppDashboard() {
-const onboarding = document.getElementById('onboarding-screen');
-const appLayout = document.getElementById('app-layout');
-if (onboarding) onboarding.style.display = 'none';
-if (appLayout) appLayout.style.display = 'block';
-if (typeof initApp === 'function') initApp();
+  localStorage.setItem('user_authenticated', 'true');
+  const onboarding = document.getElementById('onboarding-screen');
+  const appLayout = document.getElementById('app-layout');
+  if (onboarding) onboarding.style.display = 'none';
+  if (appLayout) appLayout.style.display = 'block';
+  if (typeof initApp === 'function') initApp();
 }
 
 async function handleEmailAuth(e, mode) {
@@ -7247,35 +7248,27 @@ if (error) { showToast(error.message || "Sign in failed.", "error"); return; }
 localStorage.setItem('user_authenticated', 'true');
 localStorage.setItem('user_email', email);
 localStorage.setItem('user_auth_provider', 'email');
-// CRITICAL FIX: Always restore profile from cloud first before routing.
-// Do NOT check localStorage here — it was cleared on logout.
-showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Signed In! Restoring your profile...`);
+
 const userId = data.user && data.user.id;
-let _hasCloudProfile = false;
 if (userId) {
-try { _hasCloudProfile = await restoreProfileFromCloud(userId); } catch(e) { console.error('Profile restore error:', e); }
+  localStorage.setItem('supabase_user_id', userId);
+  try {
+    const _hasCloudProfile = await restoreProfileFromCloud(userId);
+    if (!_hasCloudProfile) {
+      syncProfileToCloud().catch(err => console.error("Post-login background profile sync error:", err));
+    }
+  } catch(e) {
+    console.error('Profile restore error:', e);
+  }
 }
-if (_hasCloudProfile) {
-showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Welcome back! Loading your profile...`);
+showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Welcome back! Opening your dashboard...`);
 openAppDashboard();
-} else {
-// New user with no cloud profile -> purge old local cache & force onboarding
-purgeLocalUserProfileCache();
-if (userId) localStorage.setItem('supabase_user_id', userId);
-showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Welcome! Please complete your profile.`);
-const onboarding = document.getElementById('onboarding-screen');
-const appLayout = document.getElementById('app-layout');
-if (appLayout) appLayout.style.display = 'none';
-if (onboarding) onboarding.style.display = 'flex';
-showOnboardingStep('select-path');
-}
 }
 } else {
 // Offline fallback: allow local-only flow
 localStorage.setItem('user_authenticated', 'true');
 localStorage.setItem('user_email', email);
-const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
-if (mode === 'signup' || !hasProfile) {
+if (mode === 'signup') {
 showToast(`<svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707'/></svg> Account created (offline mode)!`);
 showOnboardingStep('select-path');
 } else {
@@ -7339,18 +7332,9 @@ async function signInWithGoogle() {
 }
 
 function completeGoogleAuthLogin() {
-localStorage.setItem('user_auth_provider', 'google');
-localStorage.setItem('user_authenticated', 'true');
-const hasProfile = localStorage.getItem('user_name') && localStorage.getItem('user_dob');
-if (hasProfile) {
-openAppDashboard();
-} else {
-const onboarding = document.getElementById('onboarding-screen');
-const appLayout = document.getElementById('app-layout');
-if (appLayout) appLayout.style.display = 'none';
-if (onboarding) onboarding.style.display = 'flex';
-showOnboardingStep('select-path');
-}
+  localStorage.setItem('user_auth_provider', 'google');
+  localStorage.setItem('user_authenticated', 'true');
+  openAppDashboard();
 }
 
 function getFormattedDate(d = new Date()) {
