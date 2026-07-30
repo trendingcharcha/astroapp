@@ -6754,6 +6754,8 @@ const tasks = extractIndividualDayTasks(dayNum, lang);
 const container = document.getElementById('quests-list-container');
 const roadmapHistory = JSON.parse(localStorage.getItem('karma_daily_roadmap_history') || '{}');
 const dayState = roadmapHistory[dayNum] || [];
+const alternativesHistory = JSON.parse(localStorage.getItem('karma_daily_alternatives_history') || '{}');
+const dayAlts = alternativesHistory[dayNum] || {};
 
 let completedCount = 0;
 let html = '';
@@ -6761,6 +6763,19 @@ let html = '';
 tasks.forEach((t, i) => {
 const isDone = !!dayState[i];
 if (isDone) completedCount++;
+
+let taskTitleToShow = t.title;
+let taskTextToShow = t.text;
+if (dayAlts[i]) {
+  const altVal = dayAlts[i];
+  if (altVal.includes(':')) {
+    const colonIdx = altVal.indexOf(':');
+    taskTitleToShow = altVal.substring(0, colonIdx).trim();
+    taskTextToShow = altVal.substring(colonIdx + 1).trim();
+  } else {
+    taskTextToShow = altVal;
+  }
+}
 
 const bgMap = {
 'vedic': 'rgba(232, 200, 121, 0.15)',
@@ -6776,11 +6791,11 @@ html += `
 <div style="flex: 1;">
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
 <strong style="color: ${t.color}; font-size: 0.9rem; display:inline-flex; align-items:center; gap:6px;">
-${t.icon} <span>${t.title}</span>
+${t.icon} <span>${taskTitleToShow}</span>
 </strong>
 <span style="font-size: 0.75rem; background: ${badgeBg}; color: ${t.color}; padding: 2px 6px; border-radius: 8px; font-weight: bold; flex-shrink: 0;">+${t.xp} XP</span>
 </div>
-<div style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">${t.text}</div>
+<div style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">${taskTextToShow}</div>
 </div>
 </div>
 `;
