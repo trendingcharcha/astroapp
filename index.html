@@ -13759,39 +13759,40 @@ function acceptWizardAlternative(btnBtn, taskIdx) {
   if (!altText) return;
 
   const lang = (typeof currentAppLang !== 'undefined') ? currentAppLang : 'en';
-
-  // DYNAMIC FIX: Target the exact dynamically-generated task card by its ID.
-  // generateDailyQuestCards() assigns ID = task-card-{dayNum}-{taskIdx}
-  // This works for ANY task index (1st, 5th, 7th) on ANY day automatically.
   const todayDay = (typeof getPlanStartDayOffset === 'function') ? getPlanStartDayOffset() : 1;
-  const targetCard = document.getElementById(`task-card-${todayDay}-${taskIdx}`);
 
+  // 1. Persist alternative task text into localStorage (karma_daily_alternatives_history)
+  try {
+    const alts = JSON.parse(localStorage.getItem('karma_daily_alternatives_history') || '{}');
+    if (!alts[todayDay]) alts[todayDay] = {};
+    alts[todayDay][taskIdx] = altText;
+    localStorage.setItem('karma_daily_alternatives_history', JSON.stringify(alts));
+  } catch(e) {}
+
+  // 2. Persist completion into today's roadmap history (karma_daily_roadmap_history)
   let alreadyDone = false;
-  if (targetCard) {
-    // Mark checkbox checked on Home tab (double-reward guard)
-    const cb = targetCard.querySelector('input[type="checkbox"]');
-    if (cb) {
-      alreadyDone = cb.checked;
-      cb.checked = true;
-      targetCard.classList.add('completed');
-    }
-    // Update the task text on the Home tab card with the alternative remedy
-    const textEl = targetCard.querySelector('div[style*="text-muted"], div:last-child');
-    if (textEl) textEl.innerText = altText;
-  }
+  try {
+    const hist = JSON.parse(localStorage.getItem('karma_daily_roadmap_history') || '{}');
+    if (!hist[todayDay]) hist[todayDay] = {};
+    alreadyDone = !!hist[todayDay][taskIdx];
+    hist[todayDay][taskIdx] = true;
+    localStorage.setItem('karma_daily_roadmap_history', JSON.stringify(hist));
+  } catch(e) {}
 
-  // Award +20 XP — double-reward protection: only if not already ticked done
+  // 3. Award +20 XP — double-reward protection: only if not already completed
   if (!alreadyDone && typeof gainXP === 'function') {
     gainXP(20);
   }
 
-  // Persist alternative completion into today's roadmap history in localStorage
-  try {
-    const hist = JSON.parse(localStorage.getItem('karma_daily_roadmap_history') || '{}');
-    if (!hist[todayDay]) hist[todayDay] = {};
-    hist[todayDay][taskIdx] = true;
-    localStorage.setItem('karma_daily_roadmap_history', JSON.stringify(hist));
-  } catch(e) {}
+  // 4. Re-render the roadmap day tasks so the dashboard reflects the alternative task & completion state
+  if (typeof renderRoadmapDayTasks === 'function') {
+    renderRoadmapDayTasks(todayDay);
+  }
+
+  // 5. Sync profile & alternative history to Supabase Cloud
+  if (typeof syncProfileToSupabase === 'function') {
+    syncProfileToSupabase();
+  }
 
   if (btnBtn) {
     btnBtn.disabled = true;
