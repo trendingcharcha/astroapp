@@ -8235,6 +8235,7 @@ user_xp: parseInt(localStorage.getItem('user_xp') || '0') || 0,
 user_level: parseInt(localStorage.getItem('user_level') || '1') || 1,
 user_moon_rashi_idx: localStorage.getItem('user_moon_rashi_idx') || '',
 karma_daily_roadmap_history: localStorage.getItem('karma_daily_roadmap_history') || '{}',
+karma_daily_alternatives_history: localStorage.getItem('karma_daily_alternatives_history') || '{}',
 karma_plan_start_date: localStorage.getItem('karma_plan_start_date') || (typeof getFormattedDate === 'function' ? getFormattedDate() : new Date().toISOString().split('T')[0])
 };
 
@@ -8270,7 +8271,7 @@ function purgeLocalUserProfileCache() {
     'user_pob', 'kundli_city', 'user_lat', 'user_lng', 'user_timezone',
     'user_goal', 'onboarding_path', 'partner_gender', 'property_number',
     'property_type', 'property_city', 'user_streak', 'user_xp', 'user_level',
-    'user_moon_rashi_idx', 'karma_daily_roadmap_history', 'karma_plan_start_date',
+    'user_moon_rashi_idx', 'karma_daily_roadmap_history', 'karma_daily_alternatives_history', 'karma_plan_start_date',
     'today_mission_date', 'today_quest_vedic_text', 'today_quest_lalkitab_text',
     'today_quest_vastu_text', 'today_quest_practical_text', 'user_active_goals',
     'onboarding_custom_issue', 'user_custom_issue', 'supabase_user_id'
@@ -8352,6 +8353,9 @@ if (payload.user_streak) streak = parseInt(payload.user_streak);
 
 if (payload.karma_daily_roadmap_history) {
 localStorage.setItem('karma_daily_roadmap_history', typeof payload.karma_daily_roadmap_history === 'string' ? payload.karma_daily_roadmap_history : JSON.stringify(payload.karma_daily_roadmap_history));
+}
+if (payload.karma_daily_alternatives_history) {
+localStorage.setItem('karma_daily_alternatives_history', typeof payload.karma_daily_alternatives_history === 'string' ? payload.karma_daily_alternatives_history : JSON.stringify(payload.karma_daily_alternatives_history));
 }
 if (payload.karma_plan_start_date) {
   localStorage.setItem('karma_plan_start_date', payload.karma_plan_start_date);
