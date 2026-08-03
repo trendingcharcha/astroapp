@@ -6485,6 +6485,131 @@ if (badge) badge.style.display = 'none';
 }
 }
 
+function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, userName) {
+  const month = targetDate.getMonth();
+  const dayOfWeek = targetDate.getDay();
+  const dayOfMonth = targetDate.getDate();
+
+  const signLordsHi = {0:'मंगल', 1:'शुक्र', 2:'बुध', 3:'चंद्र', 4:'सूर्य', 5:'बुध', 6:'शुक्र', 7:'मंगल', 8:'गुरु', 9:'शनि', 10:'शनि', 11:'गुरु'};
+  const lagnaLordHi = signLordsHi[lagnaSign] || lagnaLord;
+  const lagnaName = signNames[lagnaSign] || 'Aries';
+  const lagnaNameHi = signNamesHi[lagnaSign] || 'मेष';
+
+  let eventTitleEn = "";
+  let eventTitleHi = "";
+  let remedyEn = "";
+  let remedyHi = "";
+  let badgeEn = "Sacred Holy Event";
+  let badgeHi = "पवित्र पर्व ऊर्जा";
+
+  // 1. SHRAVAN MAAS (July - August Window: months 6 & 7)
+  if (month === 6 || month === 7) {
+    if (dayOfWeek === 1) { // Monday - Shravan Somvar
+      eventTitleEn = "🌸 Shravan Somvar Vrat & Mahadev Abhishekam";
+      eventTitleHi = "🌸 श्रावण सोमवार व्रत एवं महादेव अभिषेक";
+      badgeEn = "Shravan Somvar";
+      badgeHi = "श्रावण सोमवार";
+
+      if (lagnaSign === 0 || lagnaSign === 7) { // Aries / Scorpio (Mars ruled)
+        remedyEn = `${userName} (${lagnaName} Ascendant - Mars Ruled): Offer Panchamrit & red flowers to Shivling today to dissolve debt, anger, and Mangal obstacles as per Lal Kitab.`;
+        remedyHi = `${userName} (${lagnaNameHi} लग्न - मंगल स्वामी): लाल किताब अनुसार आज शिवलिंग पर पंचामृत एवं लाल पुष्प अर्पण करें। ऋण व मंगल दोष शांत होंगे।`;
+      } else if (lagnaSign === 1 || lagnaSign === 6) { // Taurus / Libra (Venus ruled)
+        remedyEn = `${userName} (${lagnaName} Ascendant - Venus Ruled): Offer unboiled cow's milk & honey on Shivling today for matrimonial harmony, wealth, and Venus peace.`;
+        remedyHi = `${userName} (${lagnaNameHi} लग्न - शुक्र स्वामी): आज शिवलिंग पर कच्चा दूध व शहद अर्पित करें। वैवाहिक सुख व लक्ष्मी कृपा प्राप्त होगी।`;
+      } else if (lagnaSign === 2 || lagnaSign === 5) { // Gemini / Virgo (Mercury ruled)
+        remedyEn = `${userName} (${lagnaName} Ascendant - Mercury Ruled): Offer 108 Belpatra with Chandan paste on Shivling today for rapid career intellect and business success.`;
+        remedyHi = `${userName} (${lagnaNameHi} लग्न - बुध स्वामी): आज शिवलिंग पर चंदन लगाकर 108 बेलपत्र अर्पित करें। बुद्धि, व्यापार व करियर में वृद्धि होगी।`;
+      } else if (lagnaSign === 3) { // Cancer (Moon ruled)
+        remedyEn = `${userName} (${lagnaName} Ascendant - Moon Ruled): Perform pure Gangajal & milk Abhishekam today to calm mind, elevate intuition, and erase mental stress.`;
+        remedyHi = `${userName} (${lagnaNameHi} लग्न - चंद्र स्वामी): आज शिवलिंग पर गंगाजल व दूध से अभिषेक करें। मानसिक शांति व चंद्र कृपा मिलेगी।`;
+      } else if (lagnaSign === 4) { // Leo (Sun ruled)
+        remedyEn = `${userName} (${lagnaName} Ascendant - Sun Ruled): Offer Bhasma & water with 11 Akshat (unbroken rice) grains for authority, status, and health vitality.`;
+        remedyHi = `${userName} (${lagnaNameHi} लग्न - सूर्य स्वामी): आज शिवलिंग पर जल, भस्म एवं 11 अक्षत अर्पित करें। पद-प्रतिष्ठा व सूर्य ऊर्जा मजबूत होगी।`;
+      } else if (lagnaSign === 8 || lagnaSign === 11) { // Sagittarius / Pisces (Jupiter ruled)
+        remedyEn = `${userName} (${lagnaName} Ascendant - Jupiter Ruled): Offer saffron-mixed water & yellow flowers to Shivling for spiritual wisdom and financial expansion.`;
+        remedyHi = `${userName} (${lagnaNameHi} लग्न - गुरु स्वामी): आज शिवलिंग पर केसर मिश्रित जल व पीले पुष्प अर्पित करें। ज्ञान, भाग्य व धन वृद्धि होगी।`;
+      } else { // Capricorn / Aquarius (Saturn ruled)
+        remedyEn = `${userName} (${lagnaName} Ascendant - Saturn Ruled): Offer black sesame seeds & Gangajal to Shivling today to neutralize Shani Sade Sati/Dhaiya & karmic burdens.`;
+        remedyHi = `${userName} (${lagnaNameHi} लग्न - शनि स्वामी): आज शिवलिंग पर काले तिल व गंगाजल चढ़ाएं। शनि ढैय्या व कर्म बाधाएं समाप्त होंगी।`;
+      }
+    } else if (dayOfWeek === 2) { // Tuesday - Mangalagauri Vrat
+      eventTitleEn = "🌺 Shravan Mangalagauri Vrat & Gauri Puja";
+      eventTitleHi = "🌺 श्रावण मंगलागौरी व्रत एवं गौरी पूजन";
+      badgeEn = "Mangalagauri Vrat";
+      badgeHi = "मंगलागौरी व्रत";
+      remedyEn = `${userName} (${lagnaName} Ascendant): Offer 16 red flowers or kumkum to Goddess Parvati today for marital bliss, progeny blessings, and Mangal peace.`;
+      remedyHi = `${userName} (${lagnaNameHi} लग्न): आज मां पार्वती को 16 लाल पुष्प या कुमकुम अर्पित करें। वैवाहिक सौहार्द व मंगल शांति प्राप्त होगी।`;
+    } else { // General Shravan Holy Days
+      eventTitleEn = "✨ Holy Shravan Maas & Shiva Alignment";
+      eventTitleHi = "✨ पवित्र श्रावण मास व शिव संरेखण";
+      badgeEn = "Shravan Month";
+      badgeHi = "श्रावण मास";
+      remedyEn = `${userName} (${lagnaName} Ascendant): Recite 'Om Namah Shivaya' 108 times daily facing East and maintain Sattvic diet during Shravan Maas.`;
+      remedyHi = `${userName} (${lagnaNameHi} लग्न): श्रावण मास में रोज पूर्व दिशा की ओर बैठकर 108 बार 'ॐ नमः शिवाय' का जाप करें व सात्विक आहार लें।`;
+    }
+  } 
+  // 2. BHADRAPADA (August - September: Ganesh Chaturthi & Janmashtami)
+  else if (month === 8) {
+    if (dayOfMonth >= 1 && dayOfMonth <= 10) {
+      eventTitleEn = "🐘 Ganesh Chaturthi & Vighnaharta Healing";
+      eventTitleHi = "🐘 गणेश चतुर्थी एवं विघ्नहर्ता पूजन";
+      badgeEn = "Ganesh Chaturthi";
+      badgeHi = "गणेश उत्सव";
+      remedyEn = `${userName} (${lagnaName} Ascendant): Offer 21 Durva grass blades & Modak to Lord Ganesha today. Lal Kitab remedy for Ketu/Mercury obstacle removal.`;
+      remedyHi = `${userName} (${lagnaNameHi} लग्न): आज भगवान गणेश को 21 दूर्वा एवं मोदक अर्पित करें। लाल किताब अनुसार केतु व बुध बाधाएं नष्ट होंगी।`;
+    } else {
+      eventTitleEn = "🪶 Shri Krishna Janmashtami & Bal Gopal Blessing";
+      eventTitleHi = "🪶 श्रीकृष्ण जन्माष्टमी एवं बाल गोपाल आशीर्वाद";
+      badgeEn = "Janmashtami";
+      badgeHi = "जन्माष्टमी";
+      remedyEn = `${userName} (${lagnaName} Ascendant): Offer Tulsi leaf & Makhan-Mishri to Lord Krishna at midnight for Santan Gopal blessings and mind peace.`;
+      remedyHi = `${userName} (${lagnaNameHi} लग्न): आज माखन-मिश्री व तुलसी दल भगवान कृष्ण को अर्पित करें। संतान व मानसिक सुख की प्राप्ति होगी।`;
+    }
+  }
+  // 3. ASHWIN (September - October: Sharad Navratri & Durga Puja)
+  else if (month === 9) {
+    eventTitleEn = "🔱 Sharad Navratri & Durga Shakti Aradhana";
+    eventTitleHi = "🔱 शरद नवरात्रि एवं शक्ति आराधना";
+    badgeEn = "Navratri";
+    badgeHi = "नवरात्रि";
+    remedyEn = `${userName} (${lagnaName} Ascendant): Light a pure Desi Ghee Akhand lamp for Maa Durga and chant Argala Stotram to eliminate Rahu & enemy obstacles.`;
+    remedyHi = `${userName} (${lagnaNameHi} लग्न): आज मां दुर्गा के समक्ष शुद्ध देसी घी का दीपक जलाएं व अर्गला स्तोत्र पढ़ें। राहु व शत्रु बाधाएं दूर होंगी।`;
+  }
+  // 4. KARTIK (October - November: Deepavali & Dhanteras)
+  else if (month === 10) {
+    eventTitleEn = "🪔 Shubh Deepavali & Maha Lakshmi Kripa";
+    eventTitleHi = "🪔 शुभ दीपावली एवं महालक्ष्मी कृपा";
+    badgeEn = "Deepavali";
+    badgeHi = "दीपावली";
+    remedyEn = `${userName} (${lagnaName} Ascendant): Light 11 mustard oil lamps at North-East & South-East corners. Lal Kitab remedy for Venus wealth expansion.`;
+    remedyHi = `${userName} (${lagnaNameHi} लग्न): आज ईशान व आग्नेय कोण में 11 दीपक जलाएं। लाल किताब अनुसार शुक्र धन वृद्धि व लक्ष्मी कृपा प्राप्त होगी।`;
+  }
+  // 5. PHALGUNA (February - March: Maha Shivratri)
+  else if (month === 1) {
+    eventTitleEn = "🌙 Maha Shivratri & Parvati-Shiva Vivah";
+    eventTitleHi = "🌙 महाशिवरात्रि एवं शिव-पार्वती विवाह";
+    badgeEn = "Maha Shivratri";
+    badgeHi = "महाशिवरात्रि";
+    remedyEn = `${userName} (${lagnaName} Ascendant): Perform 4-Prahar Jal Abhishekam & Belpatra offering for planetary peace, health vitality, and karma clearance.`;
+    remedyHi = `${userName} (${lagnaNameHi} लग्न): महाशिवरात्रि पर 4 प्रहर जल व बेलपत्र अर्पित करें। स्वास्थ्य, ग्रह शांति व कर्म दोष मुक्ति मिलेगी।`;
+  }
+  // 6. DEFAULT HOLY VEDIC ALIGNMENT
+  else {
+    eventTitleEn = "☀️ Daily Sanatan Planetary & Vedic Alignment";
+    eventTitleHi = "☀️ दैनिक सनातन ग्रह व वैदिक संरेखण";
+    badgeEn = "Sanatan Alignment";
+    badgeHi = "सनातन संरेखण";
+    remedyEn = `${userName} (${lagnaName} Ascendant - ${lagnaLord} Ruled): Offer Surya Arghya at sunrise and recite your Lagna Mantra 'Om' for daily strength.`;
+    remedyHi = `${userName} (${lagnaNameHi} लग्न - ${lagnaLordHi} स्वामी): सूर्योदय पर सूर्य देव को अर्घ्य दें और अपने लग्न मंत्र का जाप कर ऊर्जा बढ़ाएं।`;
+  }
+
+  return {
+    title: isHi ? eventTitleHi : eventTitleEn,
+    badge: isHi ? badgeHi : badgeEn,
+    remedy: isHi ? remedyHi : remedyEn
+  };
+}
+
 function updateSanatanNotifications() {
       const container = document.getElementById('notification-alerts-list');
       if (!container) return;
@@ -6531,6 +6656,9 @@ function updateSanatanNotifications() {
       const isPurnimaAmavasya = (dayNum % 15 === 0 || dayNum % 15 === 14);
       const daysLeftToEkadashi = (11 - (dayNum % 15) + 15) % 15;
 
+      // Extract Holy Festival & Kundli-Aligned Remedy
+      const holyEventData = getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, userName);
+
       let alertsHTML = `
         <!-- Live Calendar & Roadmap Day Header -->
         <div style="background: rgba(232, 200, 121, 0.08); border: 1px dashed rgba(232, 200, 121, 0.3); padding: 8px 12px; border-radius: 8px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center;">
@@ -6540,6 +6668,17 @@ function updateSanatanNotifications() {
           <span style="font-size: 0.7rem; background: var(--gold); color: #0C0922; font-weight: bold; padding: 2px 8px; border-radius: 10px;">
             ${isHi ? `दिन ${dayNum}` : `Day ${dayNum}`}
           </span>
+        </div>
+
+        <!-- Holy Festival & Kundli-Aligned Remedy Alert -->
+        <div style="background: rgba(232, 200, 121, 0.12); border-left: 3px solid var(--gold); border: 1px solid rgba(232, 200, 121, 0.3); padding: 10px 12px; border-radius: 8px; margin-bottom: 6px;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--gold); font-weight: bold; margin-bottom: 4px;">
+            <span>${holyEventData.title}</span>
+            <span style="background: var(--gold); color:#0C0922; padding:1px 6px; border-radius:4px; font-size:0.68rem; font-weight:bold;">${holyEventData.badge}</span>
+          </div>
+          <p style="margin: 0; font-size: 0.8rem; color: #fff; line-height: 1.5;">
+            ${holyEventData.remedy}
+          </p>
         </div>
       `;
 
