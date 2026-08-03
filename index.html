@@ -2071,15 +2071,18 @@ Partner / Spouse Details
   <div style="position: absolute; top: -40px; right: -40px; width: 120px; height: 120px; background: radial-gradient(circle, rgba(232, 200, 121, 0.25) 0%, transparent 70%); pointer-events: none;"></div>
   
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <span class="animated-icon-glow" style="display: flex; align-items: center; justify-content: center; background: rgba(232, 200, 121, 0.15); padding: 6px; border-radius: 50%; border: 1px solid var(--gold);">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span class="animated-icon-pulse" style="display: flex; align-items: center; justify-content: center; background: rgba(232, 200, 121, 0.15); padding: 7px; border-radius: 50%; border: 1.5px solid var(--gold); flex-shrink: 0; box-shadow: 0 0 10px rgba(232, 200, 121, 0.25);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4" fill="rgba(232,200,121,0.3)"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
       </span>
       <div>
         <span style="font-size: 0.72rem; color: var(--gold); text-transform: uppercase; font-weight: 700; letter-spacing: 1px;" id="dash-fest-month-tag">
           <span class="k-lbl-en">Ongoing Holy Festival</span><span class="k-lbl-hi" style="display:none;">वर्तमान पवित्र पर्व</span>
         </span>
-        <h4 style="margin: 1px 0 0 0; color: #FFFFFF; font-size: 1.02rem; font-weight: bold;" id="dash-fest-title">
+        <h4 style="margin: 2px 0 0 0; color: #FFFFFF; font-size: 1.02rem; font-weight: bold;" id="dash-fest-title">
           Loading Festival...
         </h4>
       </div>
@@ -6533,8 +6536,8 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
   // 1. SHRAVAN MAAS (July - August Window: months 6 & 7)
   if (month === 6 || month === 7) {
     if (dayOfWeek === 1) { // Monday - Shravan Somvar
-      eventTitleEn = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='10'/><path d='M12 6v6l4 2'/></svg> Shravan Somvar Vrat & Mahadev Abhishekam";
-      eventTitleHi = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='10'/><path d='M12 6v6l4 2'/></svg> श्रावण सोमवार व्रत एवं महादेव अभिषेक";
+      eventTitleEn = "Shravan Somvar Vrat & Mahadev Abhishekam";
+      eventTitleHi = "श्रावण सोमवार व्रत एवं महादेव अभिषेक";
       badgeEn = "Shravan Somvar";
       badgeHi = "श्रावण सोमवार";
 
@@ -6561,15 +6564,15 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
         remedyHi = `${userName} (${lagnaNameHi} लग्न - शनि स्वामी): आज शिवलिंग पर काले तिल व गंगाजल चढ़ाएं। शनि ढैय्या व कर्म बाधाएं समाप्त होंगे।`;
       }
     } else if (dayOfWeek === 2) { // Tuesday - Mangalagauri Vrat
-      eventTitleEn = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg> Shravan Mangalagauri Vrat & Gauri Puja";
-      eventTitleHi = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg> श्रावण मंगलागौरी व्रत एवं गौरी पूजन";
+      eventTitleEn = "Shravan Mangalagauri Vrat & Gauri Puja";
+      eventTitleHi = "श्रावण मंगलागौरी व्रत एवं गौरी पूजन";
       badgeEn = "Mangalagauri Vrat";
       badgeHi = "मंगलागौरी व्रत";
       remedyEn = `${userName} (${lagnaName} Ascendant): Offer 16 red flowers or kumkum to Goddess Parvati today for marital bliss, progeny blessings, and Mangal peace.`;
       remedyHi = `${userName} (${lagnaNameHi} लग्न): आज मां पार्वती को 16 लाल पुष्प या कुमकुम अर्पित करें। वैवाहिक सौहार्द व मंगल शांति प्राप्त होगी।`;
     } else { // General Shravan Holy Days
-      eventTitleEn = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='10'/><path d='M12 2v20M2 12h20'/></svg> Holy Shravan Maas & Shiva Alignment";
-      eventTitleHi = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='10'/><path d='M12 2v20M2 12h20'/></svg> पवित्र श्रावण मास व शिव संरेखण";
+      eventTitleEn = "Holy Shravan Maas & Shiva Alignment";
+      eventTitleHi = "पवित्र श्रावण मास व शिव संरेखण";
       badgeEn = "Shravan Month";
       badgeHi = "श्रावण मास";
       remedyEn = `${userName} (${lagnaName} Ascendant): Recite 'Om Namah Shivaya' 108 times daily facing East and maintain Sattvic diet during Shravan Maas.`;
@@ -6579,15 +6582,15 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
   // 2. BHADRAPADA (August - September: Ganesh Chaturthi & Janmashtami)
   else if (month === 8) {
     if (dayOfMonth >= 1 && dayOfMonth <= 10) {
-      eventTitleEn = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg> Ganesh Chaturthi & Vighnaharta Healing";
-      eventTitleHi = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg> गणेश चतुर्थी एवं विघ्नहर्ता पूजन";
+      eventTitleEn = "Ganesh Chaturthi & Vighnaharta Healing";
+      eventTitleHi = "गणेश चतुर्थी एवं विघ्नहर्ता पूजन";
       badgeEn = "Ganesh Chaturthi";
       badgeHi = "गणेश उत्सव";
       remedyEn = `${userName} (${lagnaName} Ascendant): Offer 21 Durva grass blades & Modak to Lord Ganesha today. Lal Kitab remedy for Ketu/Mercury obstacle removal.`;
       remedyHi = `${userName} (${lagnaNameHi} लग्न): आज भगवान गणेश को 21 दूर्वा एवं मोदक अर्पित करें। लाल किताब अनुसार केतु व बुध बाधाएं नष्ट होंगी।`;
     } else {
-      eventTitleEn = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg> Shri Krishna Janmashtami & Bal Gopal Blessing";
-      eventTitleHi = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg> श्रीकृष्ण जन्माष्टमी एवं बाल गोपाल आशीर्वाद";
+      eventTitleEn = "Shri Krishna Janmashtami & Bal Gopal Blessing";
+      eventTitleHi = "श्रीकृष्ण जन्माष्टमी एवं बाल गोपाल आशीर्वाद";
       badgeEn = "Janmashtami";
       badgeHi = "जन्माष्टमी";
       remedyEn = `${userName} (${lagnaName} Ascendant): Offer Tulsi leaf & Makhan-Mishri to Lord Krishna at midnight for Santan Gopal blessings and mind peace.`;
@@ -6596,8 +6599,8 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
   }
   // 3. ASHWIN (September - October: Sharad Navratri & Durga Puja)
   else if (month === 9) {
-    eventTitleEn = "<svg class='animated-icon-spin' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg> Sharad Navratri & Durga Shakti Aradhana";
-    eventTitleHi = "<svg class='animated-icon-spin' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg> शरद नवरात्रि एवं शक्ति आराधना";
+    eventTitleEn = "Sharad Navratri & Durga Shakti Aradhana";
+    eventTitleHi = "शरद नवरात्रि एवं शक्ति आराधना";
     badgeEn = "Navratri";
     badgeHi = "नवरात्रि";
     remedyEn = `${userName} (${lagnaName} Ascendant): Light a pure Desi Ghee Akhand lamp for Maa Durga and chant Argala Stotram to eliminate Rahu & enemy obstacles.`;
@@ -6605,8 +6608,8 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
   }
   // 4. KARTIK (October - November: Deepavali & Dhanteras)
   else if (month === 10) {
-    eventTitleEn = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M12 2v20M2 12h20'/></svg> Shubh Deepavali & Maha Lakshmi Kripa";
-    eventTitleHi = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M12 2v20M2 12h20'/></svg> शुभ दीपावली एवं महालक्ष्मी कृपा";
+    eventTitleEn = "Shubh Deepavali & Maha Lakshmi Kripa";
+    eventTitleHi = "शुभ दीपावली एवं महालक्ष्मी कृपा";
     badgeEn = "Deepavali";
     badgeHi = "दीपावली";
     remedyEn = `${userName} (${lagnaName} Ascendant): Light 11 mustard oil lamps at North-East & South-East corners. Lal Kitab remedy for Venus wealth expansion.`;
@@ -6614,8 +6617,8 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
   }
   // 5. PHALGUNA (February - March: Maha Shivratri)
   else if (month === 1) {
-    eventTitleEn = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/></svg> Maha Shivratri & Parvati-Shiva Vivah";
-    eventTitleHi = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/></svg> महाशिवरात्रि एवं शिव-पार्वती विवाह";
+    eventTitleEn = "Maha Shivratri & Parvati-Shiva Vivah";
+    eventTitleHi = "महाशिवरात्रि एवं शिव-पार्वती विवाह";
     badgeEn = "Maha Shivratri";
     badgeHi = "महाशिवरात्रि";
     remedyEn = `${userName} (${lagnaName} Ascendant): Perform 4-Prahar Jal Abhishekam & Belpatra offering for planetary peace, health vitality, and karma clearance.`;
@@ -6623,8 +6626,8 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
   }
   // 6. DEFAULT HOLY VEDIC ALIGNMENT
   else {
-    eventTitleEn = "<svg class='animated-icon-spin' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='5'/><path d='M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42'/></svg> Daily Sanatan Planetary & Vedic Alignment";
-    eventTitleHi = "<svg class='animated-icon-spin' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='5'/><path d='M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42'/></svg> दैनिक सनातन ग्रह व वैदिक संरेखण";
+    eventTitleEn = "Daily Sanatan Planetary & Vedic Alignment";
+    eventTitleHi = "दैनिक सनातन ग्रह व वैदिक संरेखण";
     badgeEn = "Sanatan Alignment";
     badgeHi = "सनातन संरेखण";
     remedyEn = `${userName} (${lagnaName} Ascendant - ${lagnaLord} Ruled): Offer Surya Arghya at sunrise and recite your Lagna Mantra 'Om' for daily strength.`;
