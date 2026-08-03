@@ -7901,7 +7901,33 @@ const t = levelTitles[lang] || levelTitles['en'];
 return t[lvl] || (lang === 'hi' ? `आध्यात्मिक मार्गदर्शक स्तर ${lvl}` : `Spiritual Guide Lvl ${lvl}`);
 }
 
+function calculateDynamicStreak() {
+  try {
+    const roadmapHistory = JSON.parse(localStorage.getItem('karma_daily_roadmap_history') || '{}');
+    const todayDay = (typeof getPlanStartDayOffset === 'function') ? getPlanStartDayOffset() : 1;
+    let currentStreak = 0;
+
+    for (let d = todayDay; d >= 1; d--) {
+      const dayData = roadmapHistory[d] || {};
+      const hasCompletedTask = Object.values(dayData).some(v => v === true);
+      if (hasCompletedTask) {
+        currentStreak++;
+      } else {
+        if (d === todayDay) continue;
+        break;
+      }
+    }
+
+    if (currentStreak > streak) {
+      streak = currentStreak;
+      localStorage.setItem('user_streak', streak);
+    }
+  } catch(e) {}
+  return streak;
+}
+
 function updateGamificationHeader() {
+calculateDynamicStreak();
 const xpNeeded = 100;
 const progressPercent = Math.min((xp / xpNeeded) * 100, 100);
 const lang = currentAppLang;
@@ -7912,7 +7938,7 @@ levelEl.innerText = lang === 'hi' ? `स्तर ${level} - ${lvlTitle}` : `Lev
 }
 const streakEl = document.getElementById('user-streak-text');
 if (streakEl) {
-streakEl.innerText = lang === 'hi' ? `${streak} दिन` : `${streak} Day${streak === 1 ? '' : 's'}`;
+streakEl.innerText = lang === 'hi' ? `${streak} दिन स्ट्रीक` : `${streak} Day Streak`;
 }
 const xpEl = document.getElementById('user-xp-detail');
 if (xpEl) {
