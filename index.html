@@ -6138,6 +6138,7 @@ renderRoadmapDayTasks(selectedRoadmapDay);
 }
 
 function extractIndividualDayTasks(dayNum, lang) {
+const isHi = (lang === 'hi');
 const activeGoals = (typeof getActiveGoals === 'function') ? getActiveGoals() : ['job'];
 const primaryGoal = activeGoals[0] || 'job';
 const normGoal = normalizeGoalKey(primaryGoal);
