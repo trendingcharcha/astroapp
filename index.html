@@ -6206,8 +6206,65 @@ let chantCount = 21;
 if (dayNum > 10 && dayNum <= 20) chantCount = 54;
 else if (dayNum > 20) chantCount = 108;
 
-const isHi = lang === 'hi';
 const tasks = [];
+
+// 0. SPIRITUAL COACH DYNAMIC DAY-BY-DAY ASSIGNMENT (PERSONALIZED FOR USER GOAL & DETAILS)
+const coachUserName = localStorage.getItem('user_name') || 'Seeker';
+const coachUserProf = localStorage.getItem('user_profession') || 'Professional';
+const coachIssueNoteEn = userCustomIssue ? ` with focus on "${userCustomIssue}"` : '';
+const coachIssueNoteHi = userCustomIssue ? ` और "${userCustomIssue}" पर विशेष ध्यान` : '';
+
+let coachTaskTitleEn = `Spiritual Coach Assignment: ${dayNameEn} Custom Alignment`;
+let coachTaskTitleHi = `आध्यात्मिक कोच असाइनमेंट: ${dayNameHi} अनुकूलन`;
+let coachTaskTextEn = "";
+let coachTaskTextHi = "";
+
+if (dayNameEn === "Monday") {
+  coachTaskTitleEn = `Spiritual Coach Assignment: Sawan Somwar Shiva Jal Abhishekam & Financial Alignment`;
+  coachTaskTitleHi = `आध्यात्मिक कोच असाइनमेंट: सावन सोमवार शिव जल अभिषेक एवं वित्तीय संरेखण`;
+  coachTaskTextEn = `Your Karma Coach prescribes 108x "Om Namah Shivaya" chanting & raw milk/water Arghya to Lord Shiva today for ${coachUserName} (${coachUserProf}). This calms Moon energy, relieves financial stress, and accelerates your ${normGoal} goal${coachIssueNoteEn}.`;
+  coachTaskTextHi = `आपके कर्म कोच द्वारा आज ${coachUserName} (${coachUserProf}) के लिए 108 बार "ॐ नमः शिवाय" जाप और शिव जी को कच्चे दूध व जल का अर्घ्य देने का निर्देश है। इससे चंद्र ऊर्जा शांत होती है और वित्तीय बाधाएं दूर होती हैं${coachIssueNoteHi}।`;
+} else if (dayNameEn === "Tuesday") {
+  coachTaskTitleEn = `Spiritual Coach Assignment: Tuesday Hanuman Chalisa & Courage Booster`;
+  coachTaskTitleHi = `आध्यात्मिक कोच असाइनमेंट: मंगलवार हनुमान चालीसा एवं साहस वृद्धि`;
+  coachTaskTextEn = `Your Karma Coach prescribes reciting Hanuman Chalisa & offering red flowers to Lord Hanuman today for ${coachUserName}. Dissolves Mars obstacles in your ${normGoal} path${coachIssueNoteEn}.`;
+  coachTaskTextHi = `आपके कर्म कोच द्वारा ${coachUserName} के लिए आज हनुमान चालीसा का पाठ और लाल पुष्प अर्पित करने का निर्देश है। यह आपके ${normGoal} मार्ग के मंगल दोष दूर करता है${coachIssueNoteHi}।`;
+} else if (dayNameEn === "Wednesday") {
+  coachTaskTitleEn = `Spiritual Coach Assignment: Wednesday Mercury Green Fodder & Business Intellect`;
+  coachTaskTitleHi = `आध्यात्मिक कोच असाइनमेंट: बुधवार बुद्धिमत्ता एवं हरा चारा दान`;
+  coachTaskTextEn = `Your Karma Coach assigns feeding green spinach/fodder to cows or green mung to birds for ${coachUserName} (${coachUserProf}). Enhances Mercury intellect and strategic growth for ${normGoal}${coachIssueNoteEn}.`;
+  coachTaskTextHi = `आपके कर्म कोच द्वारा ${coachUserName} (${coachUserProf}) के लिए आज गायों को पालक/हरा चारा या पक्षियों को मूँग दाना अर्पित करने का निर्देश है। इससे बुध ग्रह मजबूत होता है${coachIssueNoteHi}।`;
+} else if (dayNameEn === "Thursday") {
+  coachTaskTitleEn = `Spiritual Coach Assignment: Thursday Sattvic Turmeric & Jupiter Abundance`;
+  coachTaskTitleHi = `आध्यात्मिक कोच असाइनमेंट: गुरुवार हल्दी अर्पण एवं गुरु कृपा`;
+  coachTaskTextEn = `Your Karma Coach assigns offering a pinch of turmeric in water to rising Sun or Peepal tree for ${coachUserName}. Activates Jupiter's expansion for ${normGoal} wealth${coachIssueNoteEn}.`;
+  coachTaskTextHi = `आपके कर्म कोच द्वारा ${coachUserName} के लिए आज पानी में हल्दी मिलाकर सूर्य देव को अर्घ्य देने का निर्देश है। यह गुरु ग्रह का आशीर्वाद और सुख-समृद्धि प्रदान करता है${coachIssueNoteHi}।`;
+} else if (dayNameEn === "Friday") {
+  coachTaskTitleEn = `Spiritual Coach Assignment: Friday Venus Harmony & White Sweets Blessing`;
+  coachTaskTitleHi = `आध्यात्मिक कोच असाइनमेंट: शुक्रवार शुक्र सौहार्द एवं मिष्ठान अर्पण`;
+  coachTaskTextEn = `Your Karma Coach assigns wearing clean white attire and offering white sweets/milk to needy individuals for ${coachUserName}. Harmonizes Venus energy for prosperity in ${normGoal}${coachIssueNoteEn}.`;
+  coachTaskTextHi = `आपके कर्म कोच द्वारा ${coachUserName} के लिए आज सफेद वस्त्र धारण करने और जरूरतमंदों को दूध/सफेद मिठाई का दान करने का निर्देश है। यह शुक्र ग्रह को जाग्रत करता है${coachIssueNoteHi}।`;
+} else if (dayNameEn === "Saturday") {
+  coachTaskTitleEn = `Spiritual Coach Assignment: Saturday Saturn Peepal Oil Lamp & Karmic Release`;
+  coachTaskTitleHi = `आध्यात्मिक कोच असाइनमेंट: शनिवार शनि पीपल तेल दीपक एवं कर्म बाधा निवारण`;
+  coachTaskTextEn = `Your Karma Coach assigns lighting a mustard oil lamp under a Peepal tree or donating black sesame seeds for ${coachUserName}. Pacifies Saturn friction and clears delays in ${normGoal}${coachIssueNoteEn}.`;
+  coachTaskTextHi = `आपके कर्म कोच द्वारा ${coachUserName} के लिए आज पीपल के नीचे सरसों के तेल का दीपक जलाने और शनि कृपा प्राप्त करने का निर्देश है। यह कर्म विलंब को दूर करता है${coachIssueNoteHi}।`;
+} else {
+  coachTaskTitleEn = `Spiritual Coach Assignment: Sunday Surya Copper Arghya & Vitality`;
+  coachTaskTitleHi = `आध्यात्मिक कोच असाइनमेंट: रविवार तांबे के लोटे से सूर्य अर्घ्य`;
+  coachTaskTextEn = `Your Karma Coach assigns offering Arghya from a copper vessel to rising Sun with Aditya Hridaya Stotra for ${coachUserName} (${coachUserProf}). Elevates Solar authority for ${normGoal}${coachIssueNoteEn}.`;
+  coachTaskTextHi = `आपके कर्म कोच द्वारा ${coachUserName} (${coachUserProf}) के लिए आज तांबे के लोटे से उगते सूर्य को अर्घ्य देने का निर्देश है। यह सूर्य की तेजस ऊर्जा और नेतृत्व क्षमता को बढ़ाता है${coachIssueNoteHi}।`;
+}
+
+tasks.push({
+  category: 'vedic',
+  title: isHi ? coachTaskTitleHi : coachTaskTitleEn,
+  timeWindow: 'Coach Priority Window',
+  text: isHi ? coachTaskTextHi : coachTaskTextEn,
+  xp: 25,
+  color: 'var(--gold)',
+  icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10a9.94 9.94 0 0 1-5-1.34L2 22l1.34-5A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2z"/><path d="M12 8v4l3 3"/></svg>'
+});
 
 // 1. VEDIC TASKS
       const customNoteEn = userCustomIssue ? ` for focus on "${userCustomIssue}"` : '';
