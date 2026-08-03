@@ -2441,10 +2441,14 @@ Janma Kundli / जन्म कुंडली
 </div>
 
 
-<div class="chart-container" style="margin-bottom:12px; position:relative;">
-<div id="chart-badge-title" style="position:absolute; top:10px; left:12px; background:rgba(12,9,34,0.85); border:1px solid var(--gold); border-radius:20px; padding:3px 10px; font-size:0.72rem; color:var(--gold); font-weight:bold; backdrop-filter:blur(4px); z-index:5;">
+<!-- DYNAMIC CHART TITLE BADGE (Centered Above Kundli Chart Box) -->
+<div style="display: flex; justify-content: center; margin-bottom: 10px;">
+<div id="chart-badge-title" style="background: rgba(232, 200, 121, 0.12); border: 1.5px solid var(--gold); border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; color: var(--gold); font-weight: bold; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
 D1 - Birth Chart (Lagna)
 </div>
+</div>
+
+<div class="chart-container" style="margin-bottom:12px; position:relative;">
 <canvas id="chartCanvas" width="400" height="400" onclick="handleCanvasChartClick(event)" style="cursor:pointer; border-radius:14px;"></canvas>
 </div>
 
