@@ -2070,6 +2070,39 @@ Partner / Spouse Details
 </div>
 </div>
 
+<!-- DYNAMIC CURRENT MONTH HOLY FESTIVAL CARD -->
+<div id="dashboard-holy-festival-card" class="card" style="border: 1.5px solid rgba(232, 200, 121, 0.45); background: linear-gradient(135deg, rgba(28, 21, 58, 0.95), rgba(12, 9, 34, 0.98)); margin-bottom: 20px; text-align: left; position: relative; overflow: hidden; border-radius: 16px; box-shadow: 0 8px 25px rgba(232, 200, 121, 0.12);">
+  <div style="position: absolute; top: -40px; right: -40px; width: 120px; height: 120px; background: radial-gradient(circle, rgba(232, 200, 121, 0.25) 0%, transparent 70%); pointer-events: none;"></div>
+  
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span class="animated-icon-glow" style="display: flex; align-items: center; justify-content: center; background: rgba(232, 200, 121, 0.15); padding: 6px; border-radius: 50%; border: 1px solid var(--gold);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </span>
+      <div>
+        <span style="font-size: 0.72rem; color: var(--gold); text-transform: uppercase; font-weight: 700; letter-spacing: 1px;" id="dash-fest-month-tag">
+          <span class="k-lbl-en">Ongoing Holy Festival</span><span class="k-lbl-hi" style="display:none;">वर्तमान पवित्र पर्व</span>
+        </span>
+        <h4 style="margin: 1px 0 0 0; color: #FFFFFF; font-size: 1.02rem; font-weight: bold;" id="dash-fest-title">
+          Loading Festival...
+        </h4>
+      </div>
+    </div>
+    <span style="background: linear-gradient(135deg, var(--gold), #d4af37); color: #0C0922; font-size: 0.68rem; font-weight: bold; padding: 3px 9px; border-radius: 12px;" id="dash-fest-badge">
+      Active Today
+    </span>
+  </div>
+  
+  <div style="background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--gold); padding: 10px 12px; border-radius: 8px; margin-top: 8px;">
+    <span style="font-size: 0.72rem; color: var(--gold); font-weight: bold; display: block; margin-bottom: 3px;" id="dash-fest-kundli-tag">
+      <span class="k-lbl-en">Kundli & Lal Kitab Aligned Remedy</span><span class="k-lbl-hi" style="display:none;">कुंडली एवं लाल किताब संरेखित उपाय</span>
+    </span>
+    <p style="margin: 0; font-size: 0.82rem; color: #E0DFEC; line-height: 1.5;" id="dash-fest-remedy-text">
+      Loading personalized festival remedy...
+    </p>
+  </div>
+</div>
+
 <!-- Multi-Goal Management Card -->
 <div id="active-goals-card" class="card" style="border: 1px solid rgba(232, 200, 121, 0.25); margin-bottom: 20px; background: rgba(20, 16, 44, 0.85); text-align: left;">
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
@@ -2234,22 +2267,17 @@ Partner / Spouse Details
 </div>
 </div>
 
-<!-- 3-COL NUMEROLOGY STATS -->
-<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px;">
-<div style="background: rgba(232, 200, 121, 0.08); border: 1px solid rgba(232, 200, 121, 0.25); padding: 10px; border-radius: 12px; text-align: center;">
+<!-- 2-COL NUMEROLOGY STATS -->
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px;">
+<div style="background: rgba(232, 200, 121, 0.08); border: 1px solid rgba(232, 200, 121, 0.25); padding: 12px; border-radius: 12px; text-align: center;">
 <span style="font-size: 0.7rem; color: var(--gold); text-transform: uppercase; font-weight: 700; display: block;"><span class="k-lbl-en">Mulank (Birth)</span><span class="k-lbl-hi" style="display:none;">मूलांक (जन्म)</span></span>
-<strong style="font-size: 1.35rem; color: #FFFFFF; display: block; margin: 2px 0;" id="num-mulank-val">-</strong>
-<span style="font-size: 0.68rem; color: var(--text-muted);" id="num-mulank-planet">-</span>
+<strong style="font-size: 1.4rem; color: #FFFFFF; display: block; margin: 2px 0;" id="num-mulank-val">-</strong>
+<span style="font-size: 0.7rem; color: var(--text-muted);" id="num-mulank-planet">-</span>
 </div>
-<div style="background: rgba(142, 111, 214, 0.12); border: 1px solid rgba(142, 111, 214, 0.3); padding: 10px; border-radius: 12px; text-align: center;">
+<div style="background: rgba(142, 111, 214, 0.12); border: 1px solid rgba(142, 111, 214, 0.3); padding: 12px; border-radius: 12px; text-align: center;">
 <span style="font-size: 0.7rem; color: var(--purple); text-transform: uppercase; font-weight: 700; display: block;"><span class="k-lbl-en">Bhagyank (Destiny)</span><span class="k-lbl-hi" style="display:none;">भाग्यांक (भाग्य)</span></span>
-<strong style="font-size: 1.35rem; color: #FFFFFF; display: block; margin: 2px 0;" id="num-bhagyank-val">-</strong>
-<span style="font-size: 0.68rem; color: var(--text-muted);" id="num-bhagyank-planet">-</span>
-</div>
-<div style="background: rgba(93, 173, 226, 0.1); border: 1px solid rgba(93, 173, 226, 0.3); padding: 10px; border-radius: 12px; text-align: center;">
-<span style="font-size: 0.7rem; color: #5dade2; text-transform: uppercase; font-weight: 700; display: block;"><span class="k-lbl-en">Name Vibration</span><span class="k-lbl-hi" style="display:none;">नाम योग</span></span>
-<strong style="font-size: 1.35rem; color: #FFFFFF; display: block; margin: 2px 0;" id="num-name-val">-</strong>
-<span style="font-size: 0.68rem; color: var(--text-muted);" id="num-name-planet">-</span>
+<strong style="font-size: 1.4rem; color: #FFFFFF; display: block; margin: 2px 0;" id="num-bhagyank-val">-</strong>
+<span style="font-size: 0.7rem; color: var(--text-muted);" id="num-bhagyank-planet">-</span>
 </div>
 </div>
 
@@ -6610,7 +6638,33 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
   };
 }
 
+function updateDashboardHolyFestivalCard() {
+  const titleEl = document.getElementById('dash-fest-title');
+  const badgeEl = document.getElementById('dash-fest-badge');
+  const remedyEl = document.getElementById('dash-fest-remedy-text');
+  if (!titleEl || !badgeEl || !remedyEl) return;
+
+  const isHi = currentAppLang === 'hi';
+  const userName = localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || 'Seeker';
+  const lagnaSign = (typeof cachedLagnaSignNum !== 'undefined') ? cachedLagnaSignNum : 0;
+  const lagnaLord = signLords[lagnaSign] || 'Sun';
+  const dayNum = (typeof selectedRoadmapDay !== 'undefined') ? selectedRoadmapDay : 1;
+
+  let planStartDate = localStorage.getItem('karma_plan_start_date') || getFormattedDate();
+  const startDateObj = parseYYYYMMDD(planStartDate);
+  const targetDate = new Date(startDateObj.getFullYear(), startDateObj.getMonth(), startDateObj.getDate() + (dayNum - 1));
+
+  const data = getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, userName);
+  titleEl.innerHTML = data.title;
+  badgeEl.innerText = data.badge;
+  remedyEl.innerHTML = data.remedy;
+}
+
 function updateSanatanNotifications() {
+      if (typeof updateDashboardHolyFestivalCard === 'function') {
+        updateDashboardHolyFestivalCard();
+      }
+
       const container = document.getElementById('notification-alerts-list');
       if (!container) return;
 
