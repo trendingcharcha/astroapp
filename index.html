@@ -5394,103 +5394,71 @@ if (hasPartner) {
 if (lang === 'hi') {
 if (babyNum === "1") {
 actions = [
-`स्वयं: एक स्वस्थ       eventTitleEn = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='10'/><path d='M12 6v6l4 2'/></svg> Shravan Somvar Vrat & Mahadev Abhishekam";
-      eventTitleHi = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='10'/><path d='M12 6v6l4 2'/></svg> श्रावण सोमवार व्रत एवं महादेव अभिषेक";
-      badgeEn = "Shravan Somvar";
-      badgeHi = "श्रावण सोमवार";
-
-      if (lagnaSign === 0 || lagnaSign === 7) { // Aries / Scorpio (Mars ruled)
-        remedyEn = `${userName} (${lagnaName} Ascendant - Mars Ruled): Offer Panchamrit & red flowers to Shivling today to dissolve debt, anger, and Mangal obstacles as per Lal Kitab.`;
-        remedyHi = `${userName} (${lagnaNameHi} लग्न - मंगल स्वामी): लाल किताब अनुसार आज शिवलिंग पर पंचामृत एवं लाल पुष्प अर्पण करें। ऋण व मंगल दोष शांत होंगे।`;
-      } else if (lagnaSign === 1 || lagnaSign === 6) { // Taurus / Libra (Venus ruled)
-        remedyEn = `${userName} (${lagnaName} Ascendant - Venus Ruled): Offer unboiled cow's milk & honey on Shivling today for matrimonial harmony, wealth, and Venus peace.`;
-        remedyHi = `${userName} (${lagnaNameHi} लग्न - शुक्र स्वामी): आज शिवलिंग पर कच्चा दूध व शहद अर्पित करें। वैवाहिक सुख व लक्ष्मी कृपा प्राप्त होगी।`;
-      } else if (lagnaSign === 2 || lagnaSign === 5) { // Gemini / Virgo (Mercury ruled)
-        remedyEn = `${userName} (${lagnaName} Ascendant - Mercury Ruled): Offer 108 Belpatra with Chandan paste on Shivling today for rapid career intellect and business success.`;
-        remedyHi = `${userName} (${lagnaNameHi} लग्न - बुध स्वामी): आज शिवलिंग पर चंदन लगाकर 108 बेलपत्र अर्पित करें। बुद्धि, व्यापार व करियर में वृद्धि होगी।`;
-      } else if (lagnaSign === 3) { // Cancer (Moon ruled)
-        remedyEn = `${userName} (${lagnaName} Ascendant - Moon Ruled): Perform pure Gangajal & milk Abhishekam today to calm mind, elevate intuition, and erase mental stress.`;
-        remedyHi = `${userName} (${lagnaNameHi} लग्न - चंद्र स्वामी): आज शिवलिंग पर गंगाजल व दूध से अभिषेक करें। मानसिक शांति व चंद्र कृपा मिलेगी।`;
-      } else if (lagnaSign === 4) { // Leo (Sun ruled)
-        remedyEn = `${userName} (${lagnaName} Ascendant - Sun Ruled): Offer Bhasma & water with 11 Akshat (unbroken rice) grains for authority, status, and health vitality.`;
-        remedyHi = `${userName} (${lagnaNameHi} लग्न - सूर्य स्वामी): आज शिवलिंग पर जल, भस्म एवं 11 अक्षत अर्पित करें। पद-प्रतिष्ठा व सूर्य ऊर्जा मजबूत होगी।`;
-      } else if (lagnaSign === 8 || lagnaSign === 11) { // Sagittarius / Pisces (Jupiter ruled)
-        remedyEn = `${userName} (${lagnaName} Ascendant - Jupiter Ruled): Offer saffron-mixed water & yellow flowers to Shivling for spiritual wisdom and financial expansion.`;
-        remedyHi = `${userName} (${lagnaNameHi} लग्न - गुरु स्वामी): आज शिवलिंग पर केसर मिश्रित जल व पीले पुष्प अर्पित करें। ज्ञान, भाग्य व धन वृद्धि होगी।`;
-      } else { // Capricorn / Aquarius (Saturn ruled)
-        remedyEn = `${userName} (${lagnaName} Ascendant - Saturn Ruled): Offer black sesame seeds & Gangajal to Shivling today to neutralize Shani Sade Sati/Dhaiya & karmic burdens.`;
-        remedyHi = `${userName} (${lagnaNameHi} लग्न - शनि स्वामी): आज शिवलिंग पर काले तिल व गंगाजल चढ़ाएं। शनि ढैय्या व कर्म बाधाएं समाप्त होंगी।`;
-      }
-    } else if (dayOfWeek === 2) { // Tuesday - Mangalagauri Vrat
-      eventTitleEn = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg> Shravan Mangalagauri Vrat & Gauri Puja";
-      eventTitleHi = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg> श्रावण मंगलागौरी व्रत एवं गौरी पूजन";
-      badgeEn = "Mangalagauri Vrat";
-      badgeHi = "मंगलागौरी व्रत";
-      remedyEn = `${userName} (${lagnaName} Ascendant): Offer 16 red flowers or kumkum to Goddess Parvati today for marital bliss, progeny blessings, and Mangal peace.`;
-      remedyHi = `${userName} (${lagnaNameHi} लग्न): आज मां पार्वती को 16 लाल पुष्प या कुमकुम अर्पित करें। वैवाहिक सौहार्द व मंगल शांति प्राप्त होगी।`;
-    } else { // General Shravan Holy Days
-      eventTitleEn = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='10'/><path d='M12 2v20M2 12h20'/></svg> Holy Shravan Maas & Shiva Alignment";
-      eventTitleHi = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='10'/><path d='M12 2v20M2 12h20'/></svg> पवित्र श्रावण मास व शिव संरेखण";
-      badgeEn = "Shravan Month";
-      badgeHi = "श्रावण मास";
-      remedyEn = `${userName} (${lagnaName} Ascendant): Recite 'Om Namah Shivaya' 108 times daily facing East and maintain Sattvic diet during Shravan Maas.`;
-      remedyHi = `${userName} (${lagnaNameHi} लग्न): श्रावण मास में रोज पूर्व दिशा की ओर बैठकर 108 बार 'ॐ नमः शिवाय' का जाप करें व सात्विक आहार लें।`;
-    }
-  } 
-  // 2. BHADRAPADA (August - September: Ganesh Chaturthi & Janmashtami)
-  else if (month === 8) {
-    if (dayOfMonth >= 1 && dayOfMonth <= 10) {
-      eventTitleEn = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg> Ganesh Chaturthi & Vighnaharta Healing";
-      eventTitleHi = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg> गणेश चतुर्थी एवं विघ्नहर्ता पूजन";
-      badgeEn = "Ganesh Chaturthi";
-      badgeHi = "गणेश उत्सव";
-      remedyEn = `${userName} (${lagnaName} Ascendant): Offer 21 Durva grass blades & Modak to Lord Ganesha today. Lal Kitab remedy for Ketu/Mercury obstacle removal.`;
-      remedyHi = `${userName} (${lagnaNameHi} लग्न): आज भगवान गणेश को 21 दूर्वा एवं मोदक अर्पित करें। लाल किताब अनुसार केतु व बुध बाधाएं नष्ट होंगी।`;
-    } else {
-      eventTitleEn = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg> Shri Krishna Janmashtami & Bal Gopal Blessing";
-      eventTitleHi = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg> श्रीकृष्ण जन्माष्टमी एवं बाल गोपाल आशीर्वाद";
-      badgeEn = "Janmashtami";
-      badgeHi = "जन्माष्टमी";
-      remedyEn = `${userName} (${lagnaName} Ascendant): Offer Tulsi leaf & Makhan-Mishri to Lord Krishna at midnight for Santan Gopal blessings and mind peace.`;
-      remedyHi = `${userName} (${lagnaNameHi} लग्न): आज माखन-मिश्री व तुलसी दल भगवान कृष्ण को अर्पित करें। संतान व मानसिक सुख की प्राप्ति होगी।`;
-    }
-  }
-  // 3. ASHWIN (September - October: Sharad Navratri & Durga Puja)
-  else if (month === 9) {
-    eventTitleEn = "<svg class='animated-icon-spin' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg> Sharad Navratri & Durga Shakti Aradhana";
-    eventTitleHi = "<svg class='animated-icon-spin' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg> शरद नवरात्रि एवं शक्ति आराधना";
-    badgeEn = "Navratri";
-    badgeHi = "नवरात्रि";
-    remedyEn = `${userName} (${lagnaName} Ascendant): Light a pure Desi Ghee Akhand lamp for Maa Durga and chant Argala Stotram to eliminate Rahu & enemy obstacles.`;
-    remedyHi = `${userName} (${lagnaNameHi} लग्न): आज मां दुर्गा के समक्ष शुद्ध देसी घी का दीपक जलाएं व अर्गला स्तोत्र पढ़ें। राहु व शत्रु बाधाएं दूर होंगी।`;
-  }
-  // 4. KARTIK (October - November: Deepavali & Dhanteras)
-  else if (month === 10) {
-    eventTitleEn = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M12 2v20M2 12h20'/></svg> Shubh Deepavali & Maha Lakshmi Kripa";
-    eventTitleHi = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M12 2v20M2 12h20'/></svg> शुभ दीपावली एवं महालक्ष्मी कृपा";
-    badgeEn = "Deepavali";
-    badgeHi = "दीपावली";
-    remedyEn = `${userName} (${lagnaName} Ascendant): Light 11 mustard oil lamps at North-East & South-East corners. Lal Kitab remedy for Venus wealth expansion.`;
-    remedyHi = `${userName} (${lagnaNameHi} लग्न): आज ईशान व आग्नेय कोण में 11 दीपक जलाएं। लाल किताब अनुसार शुक्र धन वृद्धि व लक्ष्मी कृपा प्राप्त होगी।`;
-  }
-  // 5. PHALGUNA (February - March: Maha Shivratri)
-  else if (month === 1) {
-    eventTitleEn = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/></svg> Maha Shivratri & Parvati-Shiva Vivah";
-    eventTitleHi = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/></svg> महाशिवरात्रि एवं शिव-पार्वती विवाह";
-    badgeEn = "Maha Shivratri";
-    badgeHi = "महाशिवरात्रि";
-    remedyEn = `${userName} (${lagnaName} Ascendant): Perform 4-Prahar Jal Abhishekam & Belpatra offering for planetary peace, health vitality, and karma clearance.`;
-    remedyHi = `${userName} (${lagnaNameHi} लग्न): महाशिवरात्रि पर 4 प्रहर जल व बेलपत्र अर्पित करें। स्वास्थ्य, ग्रह शांति व कर्म दोष मुक्ति मिलेगी।`;
-  }
-  // 6. DEFAULT HOLY VEDIC ALIGNMENT
-  else {
-    eventTitleEn = "<svg class='animated-icon-spin' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='5'/><path d='M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42'/></svg> Daily Sanatan Planetary & Vedic Alignment";
-    eventTitleHi = "<svg class='animated-icon-spin' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='5'/><path d='M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42'/></svg> दैनिक सनातन ग्रह व वैदिक संरेखण";
-    badgeEn = "Sanatan Alignment";
-    badgeHi = "सनातन संरेखण";
-    remedyEn = `${userName} (${lagnaName} Ascendant - ${lagnaLord} Ruled): Offer Surya Arghya at sunrise and recite your Lagna Mantra 'Om' for daily strength.`;
-    remedyHi = `${userName} (${lagnaNameHi} लग्न - ${lagnaLordHi} स्वामी): सूर्योदय पर सूर्य देव को अर्घ्य दें और अपने लग्न मंत्र का जाप कर ऊर्जा बढ़ाएं।`;
-  }ान सत्र करें।`,
+`स्वयं: एक स्वस्थ प्रसवपूर्व आहार बनाए रखें और आज ही अपने दैनिक विटामिन सेवन को दर्ज करें।`,
+`साथी (${partnerName}): अपने जीवनसाथी के लिए शारीरिक तनाव को कम करने के लिए घरेलू कार्यों में सहायता करें।`,
+`संयुक्त कदम: रिश्ते की ऊर्जा को संरेखित करने के लिए आप और ${partnerName} दोनों मिलकर 15 मिनट ध्यान करें।`,
+`संयुक्त योजना: इस महीने दौरा करने के लिए 3 स्थानीय स्वास्थ्य क्लीनिकों या मातृत्व केंद्रों को शॉर्टलिस्ट करें।`
+];
+} else if (babyNum === "2") {
+actions = [
+`स्वयं: स्वास्थ्य मेट्रिक्स और प्रसव के बाद की रिकवरी के संकेतों को ट्रैक करने के लिए 15 मिनट का समय लें।`,
+`साथी (${partnerName}): अपने जीवनसाथी को आराम देने के लिए अपने पहले बच्चे (उम्र: ${firstBabyAge} वर्ष) की देखभाल में 30 मिनट का समय बिताएं।`,
+`संयुक्त कदम: ${partnerName} के साथ चर्चा करें कि पहले बच्चे को नए भाई या बहन के आगमन के लिए मानसिक रूप से कैसे तैयार किया जाए।`,
+`संयुक्त योजना: निरीक्षण करें कि पहले बच्चे के कौन से सामान (जैसे पालना, खिलौने, कपड़े) दोबारा काम आ सकते हैं।`
+];
+} else if (babyNum === "3") {
+actions = [
+`स्वयं: आराम करने, हल्के खिंचाव का अभ्यास करने और आज पोषण मेट्रिक्स लॉग करने के लिए 20 मिनट लें।`,
+`साथी (${partnerName}): आज अपने पहले दो बच्चों (उम्र: ${firstBabyAge} और ${secondBabyAge}) की दैनिक दिनचर्या और पढ़ाई की जिम्मेदारी संभालें।`,
+`संयुक्त कदम: पांच सदस्यों के परिवार के लिए आवश्यक वित्तीय समायोजन का खाका तैयार करने के लिए ${partnerName} के साथ 20 मिनट बैठें।`,
+`संयुक्त योजना: तीन बच्चों को समायोजित करने के लिए शयनकक्ष के पुनर्गठन या अंतरिक्ष वितरण पर चर्चा करें।`
+];
+}
+} else {
+if (babyNum === "1") {
+actions = [
+`Self: Maintain a healthy prenatal diet and log your daily vitamin intake today.`,
+`Partner (${partnerName}): Assist in organizing domestic tasks to minimize physical strain for your spouse.`,
+`Joint Action: Both you and ${partnerName} spend 15 minutes doing light meditation together to align relationship energies.`,
+`Joint Planning: Shortlist 3 local healthcare clinics or maternity centers to visit together this month.`
+];
+} else if (babyNum === "2") {
+actions = [
+`Self: Spend 15 minutes tracking health metrics and post-pregnancy recovery signs today.`,
+`Partner (${partnerName}): Spend 30 minutes playing with or caring for your first child (age: ${firstBabyAge}) to give your spouse some personal rest.`,
+`Joint Action: Spend 15 minutes talking with ${partnerName} on how to prepare your first child emotionally for a sibling.`,
+`Joint Planning: Inspect which baby gear (stroller, crib, clothes) from your first child is reusable.`
+];
+} else if (babyNum === "3") {
+actions = [
+`Self: Take 20 minutes to rest, practice light stretching, and log nutrition metrics today.`,
+`Partner (${partnerName}): Take charge of organizing the daily schedules and study routines of your first two children (ages: ${firstBabyAge} & ${secondBabyAge}) today.`,
+`Joint Action: Sit with ${partnerName} for 20 minutes to map out the financial adjustments required for a family of five.`,
+`Joint Planning: Discuss bedroom reorganization or space distribution to accommodate three children.`
+];
+}
+}
+} else {
+if (lang === 'hi') {
+if (babyNum === "1") {
+actions = [
+`आज प्रसवपूर्व स्वास्थ्य, फोलिक एसिड और आयरन से भरपूर एक पौष्टिक मेनू की योजना बनाएं।`,
+`अपने स्थानीय शहर क्षेत्र में उच्च श्रेणी के स्त्री रोग विशेषज्ञों या मातृत्व विशेषज्ञों की सूची बनाएं।`,
+`तनाव के स्तर को कम करने के लिए हल्के श्वास व्यायाम (प्राणायाम) करने में 20 मिनट का समय बिताएं।`,
+`प्रजनन काल और स्वास्थ्य संकेतकों को ट्रैक करने के लिए दैनिक स्वास्थ्य कैलेंडर बनाए रखें।`
+];
+} else if (babyNum === "2") {
+actions = [
+`पहली गर्भावस्था के बाद से स्वास्थ्य संकेतकों की समीक्षा के लिए बाल रोग विशेषज्ञ से परामर्श करें (पहला बच्चा ${firstBabyAge} वर्ष का है)।`,
+`पहले बच्चे के पुनः उपयोग किए जा सकने वाले शिशु सामानों की एक चेकलिस्ट बनाएं।`,
+`कई बच्चों के पालन-पोषण और समय प्रबंधन के तरीकों को पढ़ने के लिए 20 मिनट का समय दें।`,
+`प्रसवपूर्व स्वास्थ्य मार्करों का आकलन करने के लिए एक नियमित स्वास्थ्य जांच का समय निर्धारित करें।`
+];
+} else if (babyNum === "3") {
+actions = [
+`तीन बच्चों (मौजूदा उम्र: ${firstBabyAge} और ${secondBabyAge}) के खर्चों की व्यवस्था के लिए अपनी पारिवारिक बजट बहीखाते की समीक्षा करें।`,
+`सभी तीन बच्चों के लिए कमरों या जगह के वितरण पर चर्चा करने के लिए 30 मिनट का समय निकालें।`,
+`एक बड़े परिवार के लिए मानसिक सहनशक्ति विकसित करने के लिए 15 मिनट का ध्यान सत्र करें।`,
 `मातृ स्वास्थ्य संकेतकों की समीक्षा के लिए एक प्राथमिक स्वास्थ्य परामर्श शेड्यूल करें।`
 ];
 }
@@ -6537,8 +6505,8 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
   // 1. SHRAVAN MAAS (July - August Window: months 6 & 7)
   if (month === 6 || month === 7) {
     if (dayOfWeek === 1) { // Monday - Shravan Somvar
-      eventTitleEn = "🌸 Shravan Somvar Vrat & Mahadev Abhishekam";
-      eventTitleHi = "🌸 श्रावण सोमवार व्रत एवं महादेव अभिषेक";
+      eventTitleEn = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='10'/><path d='M12 6v6l4 2'/></svg> Shravan Somvar Vrat & Mahadev Abhishekam";
+      eventTitleHi = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='10'/><path d='M12 6v6l4 2'/></svg> श्रावण सोमवार व्रत एवं महादेव अभिषेक";
       badgeEn = "Shravan Somvar";
       badgeHi = "श्रावण सोमवार";
 
@@ -6562,18 +6530,18 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
         remedyHi = `${userName} (${lagnaNameHi} लग्न - गुरु स्वामी): आज शिवलिंग पर केसर मिश्रित जल व पीले पुष्प अर्पित करें। ज्ञान, भाग्य व धन वृद्धि होगी।`;
       } else { // Capricorn / Aquarius (Saturn ruled)
         remedyEn = `${userName} (${lagnaName} Ascendant - Saturn Ruled): Offer black sesame seeds & Gangajal to Shivling today to neutralize Shani Sade Sati/Dhaiya & karmic burdens.`;
-        remedyHi = `${userName} (${lagnaNameHi} लग्न - शनि स्वामी): आज शिवलिंग पर काले तिल व गंगाजल चढ़ाएं। शनि ढैय्या व कर्म बाधाएं समाप्त होंगी।`;
+        remedyHi = `${userName} (${lagnaNameHi} लग्न - शनि स्वामी): आज शिवलिंग पर काले तिल व गंगाजल चढ़ाएं। शनि ढैय्या व कर्म बाधाएं समाप्त होंगे।`;
       }
     } else if (dayOfWeek === 2) { // Tuesday - Mangalagauri Vrat
-      eventTitleEn = "🌺 Shravan Mangalagauri Vrat & Gauri Puja";
-      eventTitleHi = "🌺 श्रावण मंगलागौरी व्रत एवं गौरी पूजन";
+      eventTitleEn = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg> Shravan Mangalagauri Vrat & Gauri Puja";
+      eventTitleHi = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg> श्रावण मंगलागौरी व्रत एवं गौरी पूजन";
       badgeEn = "Mangalagauri Vrat";
       badgeHi = "मंगलागौरी व्रत";
       remedyEn = `${userName} (${lagnaName} Ascendant): Offer 16 red flowers or kumkum to Goddess Parvati today for marital bliss, progeny blessings, and Mangal peace.`;
       remedyHi = `${userName} (${lagnaNameHi} लग्न): आज मां पार्वती को 16 लाल पुष्प या कुमकुम अर्पित करें। वैवाहिक सौहार्द व मंगल शांति प्राप्त होगी।`;
     } else { // General Shravan Holy Days
-      eventTitleEn = "✨ Holy Shravan Maas & Shiva Alignment";
-      eventTitleHi = "✨ पवित्र श्रावण मास व शिव संरेखण";
+      eventTitleEn = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='10'/><path d='M12 2v20M2 12h20'/></svg> Holy Shravan Maas & Shiva Alignment";
+      eventTitleHi = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='10'/><path d='M12 2v20M2 12h20'/></svg> पवित्र श्रावण मास व शिव संरेखण";
       badgeEn = "Shravan Month";
       badgeHi = "श्रावण मास";
       remedyEn = `${userName} (${lagnaName} Ascendant): Recite 'Om Namah Shivaya' 108 times daily facing East and maintain Sattvic diet during Shravan Maas.`;
@@ -6583,15 +6551,15 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
   // 2. BHADRAPADA (August - September: Ganesh Chaturthi & Janmashtami)
   else if (month === 8) {
     if (dayOfMonth >= 1 && dayOfMonth <= 10) {
-      eventTitleEn = "🐘 Ganesh Chaturthi & Vighnaharta Healing";
-      eventTitleHi = "🐘 गणेश चतुर्थी एवं विघ्नहर्ता पूजन";
+      eventTitleEn = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg> Ganesh Chaturthi & Vighnaharta Healing";
+      eventTitleHi = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg> गणेश चतुर्थी एवं विघ्नहर्ता पूजन";
       badgeEn = "Ganesh Chaturthi";
       badgeHi = "गणेश उत्सव";
       remedyEn = `${userName} (${lagnaName} Ascendant): Offer 21 Durva grass blades & Modak to Lord Ganesha today. Lal Kitab remedy for Ketu/Mercury obstacle removal.`;
       remedyHi = `${userName} (${lagnaNameHi} लग्न): आज भगवान गणेश को 21 दूर्वा एवं मोदक अर्पित करें। लाल किताब अनुसार केतु व बुध बाधाएं नष्ट होंगी।`;
     } else {
-      eventTitleEn = "🪶 Shri Krishna Janmashtami & Bal Gopal Blessing";
-      eventTitleHi = "🪶 श्रीकृष्ण जन्माष्टमी एवं बाल गोपाल आशीर्वाद";
+      eventTitleEn = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg> Shri Krishna Janmashtami & Bal Gopal Blessing";
+      eventTitleHi = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg> श्रीकृष्ण जन्माष्टमी एवं बाल गोपाल आशीर्वाद";
       badgeEn = "Janmashtami";
       badgeHi = "जन्माष्टमी";
       remedyEn = `${userName} (${lagnaName} Ascendant): Offer Tulsi leaf & Makhan-Mishri to Lord Krishna at midnight for Santan Gopal blessings and mind peace.`;
@@ -6600,8 +6568,8 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
   }
   // 3. ASHWIN (September - October: Sharad Navratri & Durga Puja)
   else if (month === 9) {
-    eventTitleEn = "🔱 Sharad Navratri & Durga Shakti Aradhana";
-    eventTitleHi = "🔱 शरद नवरात्रि एवं शक्ति आराधना";
+    eventTitleEn = "<svg class='animated-icon-spin' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg> Sharad Navratri & Durga Shakti Aradhana";
+    eventTitleHi = "<svg class='animated-icon-spin' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg> शरद नवरात्रि एवं शक्ति आराधना";
     badgeEn = "Navratri";
     badgeHi = "नवरात्रि";
     remedyEn = `${userName} (${lagnaName} Ascendant): Light a pure Desi Ghee Akhand lamp for Maa Durga and chant Argala Stotram to eliminate Rahu & enemy obstacles.`;
@@ -6609,8 +6577,8 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
   }
   // 4. KARTIK (October - November: Deepavali & Dhanteras)
   else if (month === 10) {
-    eventTitleEn = "🪔 Shubh Deepavali & Maha Lakshmi Kripa";
-    eventTitleHi = "🪔 शुभ दीपावली एवं महालक्ष्मी कृपा";
+    eventTitleEn = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M12 2v20M2 12h20'/></svg> Shubh Deepavali & Maha Lakshmi Kripa";
+    eventTitleHi = "<svg class='animated-icon-glow' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M12 2v20M2 12h20'/></svg> शुभ दीपावली एवं महालक्ष्मी कृपा";
     badgeEn = "Deepavali";
     badgeHi = "दीपावली";
     remedyEn = `${userName} (${lagnaName} Ascendant): Light 11 mustard oil lamps at North-East & South-East corners. Lal Kitab remedy for Venus wealth expansion.`;
@@ -6618,8 +6586,8 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
   }
   // 5. PHALGUNA (February - March: Maha Shivratri)
   else if (month === 1) {
-    eventTitleEn = "🌙 Maha Shivratri & Parvati-Shiva Vivah";
-    eventTitleHi = "🌙 महाशिवरात्रि एवं शिव-पार्वती विवाह";
+    eventTitleEn = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/></svg> Maha Shivratri & Parvati-Shiva Vivah";
+    eventTitleHi = "<svg class='animated-icon-pulse' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><path d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/></svg> महाशिवरात्रि एवं शिव-पार्वती विवाह";
     badgeEn = "Maha Shivratri";
     badgeHi = "महाशिवरात्रि";
     remedyEn = `${userName} (${lagnaName} Ascendant): Perform 4-Prahar Jal Abhishekam & Belpatra offering for planetary peace, health vitality, and karma clearance.`;
@@ -6627,8 +6595,8 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
   }
   // 6. DEFAULT HOLY VEDIC ALIGNMENT
   else {
-    eventTitleEn = "☀️ Daily Sanatan Planetary & Vedic Alignment";
-    eventTitleHi = "☀️ दैनिक सनातन ग्रह व वैदिक संरेखण";
+    eventTitleEn = "<svg class='animated-icon-spin' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='5'/><path d='M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42'/></svg> Daily Sanatan Planetary & Vedic Alignment";
+    eventTitleHi = "<svg class='animated-icon-spin' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:-2px; margin-right:4px;'><circle cx='12' cy='12' r='5'/><path d='M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42'/></svg> दैनिक सनातन ग्रह व वैदिक संरेखण";
     badgeEn = "Sanatan Alignment";
     badgeHi = "सनातन संरेखण";
     remedyEn = `${userName} (${lagnaName} Ascendant - ${lagnaLord} Ruled): Offer Surya Arghya at sunrise and recite your Lagna Mantra 'Om' for daily strength.`;
@@ -13638,11 +13606,10 @@ function startWizardStep1() {
     ? `नमस्ते <strong>${userName}</strong>! आज आपके उपायों में मैं कैसे सहायता कर सकता हूँ?<br><br><strong>Q1: आज आपका कार्य पूरा न होने का क्या कारण है?</strong><br><span style="font-size: 0.75rem; color: var(--gold);">(नीचे से 1 विकल्प चुनें)</span>`
     : `Namaste <strong>${userName}</strong>! How can I assist your remedies today?<br><br><strong>Q1: What is the issue preventing you from completing your task today?</strong><br><span style="font-size: 0.75rem; color: var(--gold);">(Select 1 option below)</span>`;
 
-  const badgeStyle = "background:var(--purple); color:#fff; border-radius:50%; width:18px; height:18px; display:inline-flex; align-items:center; justify-content:center; margin-right:8px; font-size:0.7rem; font-weight:bold;";
-  const btn1 = lang === 'hi' ? `<span class="animated-icon-pulse" style="${badgeStyle}">1</span> मैंने आज का विशेष कार्य छोड़ दिया` : `<span class="animated-icon-pulse" style="${badgeStyle}">1</span> I skipped today's selective task`;
-  const btn2 = lang === 'hi' ? `<span class="animated-icon-pulse" style="${badgeStyle}">2</span> मैं आज विशेष कार्य करने में असमर्थ हूँ` : `<span class="animated-icon-pulse" style="${badgeStyle}">2</span> I am unable to perform the selective task today`;
-  const btn3 = lang === 'hi' ? `<span class="animated-icon-pulse" style="${badgeStyle}">3</span> मैं जल्दी में था/थी और सुबह का कार्य भूल गया/गई` : `<span class="animated-icon-pulse" style="${badgeStyle}">3</span> I was in a hurry and forgot my morning tasks`;
-  const btn4 = lang === 'hi' ? `<span class="animated-icon-pulse" style="${badgeStyle}">4</span> मेरे पास आवश्यक सामग्री उपलब्ध नहीं है` : `<span class="animated-icon-pulse" style="${badgeStyle}">4</span> I do not have the required task items`;
+  const btn1 = lang === 'hi' ? "1️⃣ मैंने आज का विशेष कार्य छोड़ दिया" : "1️⃣ I skipped today's selective task";
+  const btn2 = lang === 'hi' ? "2️⃣ मैं आज विशेष कार्य करने में असमर्थ हूँ" : "2️⃣ I am unable to perform the selective task today";
+  const btn3 = lang === 'hi' ? "3️⃣ मैं जल्दी में था/थी और सुबह का कार्य भूल गया/गई" : "3️⃣ I was in a hurry and forgot my morning tasks";
+  const btn4 = lang === 'hi' ? "4️⃣ मेरे पास आवश्यक सामग्री उपलब्ध नहीं है" : "4️⃣ I do not have the required task items";
 
   const q1HTML = `${greeting}
   <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; text-align: left;">
@@ -13659,17 +13626,17 @@ function handleWizardQ1(btn, index) {
   const lang = (typeof currentAppLang !== 'undefined') ? currentAppLang : 'en';
   const optionsEn = [
     "",
-    "I skipped today's selective task",
-    "I am unable to perform the selective task today",
-    "I was in a hurry and forgot my morning tasks",
-    "I do not have the required task items"
+    "1️⃣ I skipped today's selective task",
+    "2️⃣ I am unable to perform the selective task today",
+    "3️⃣ I was in a hurry and forgot my morning tasks",
+    "4️⃣ I do not have the required task items"
   ];
   const optionsHi = [
     "",
-    "मैंने आज का विशेष कार्य छोड़ दिया",
-    "मैं आज विशेष कार्य करने में असमर्थ हूँ",
-    "मैं जल्दी में था/थी और सुबह का कार्य भूल गया/गई",
-    "मेरे पास आवश्यक सामग्री उपलब्ध नहीं है"
+    "1️⃣ मैंने आज का विशेष कार्य छोड़ दिया",
+    "2️⃣ मैं आज विशेष कार्य करने में असमर्थ हूँ",
+    "3️⃣ मैं जल्दी में था/थी और सुबह का कार्य भूल गया/गई",
+    "4️⃣ मेरे पास आवश्यक सामग्री उपलब्ध नहीं है"
   ];
   
   const issueText = lang === 'hi' ? optionsHi[index] : optionsEn[index];
