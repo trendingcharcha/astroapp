@@ -2192,25 +2192,66 @@ Partner / Spouse Details
 </div>
 </div>
 
-<div class="card">
-<h4 style="color: var(--gold); margin-bottom: 12px;"><span class="k-lbl-en">Today's Panchang</span><span class="k-lbl-hi" style="display:none;">आज का पंचांग</span></h4>
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.9rem;">
+<!-- TODAY'S VEDIC PANCHANG & UDAYA TITHI CARD -->
+<div class="card" id="panchang-card" style="border: 1px solid rgba(232, 200, 121, 0.4); background: linear-gradient(135deg, rgba(20, 16, 44, 0.95), rgba(42, 36, 78, 0.8)); margin-top: 20px; border-radius: 16px; position: relative; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.35);">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(232, 200, 121, 0.15); padding-bottom: 8px;">
+<h4 style="color: var(--gold); margin: 0; display: flex; align-items: center; gap: 8px; font-size: 1.05rem;">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+<span><span class="k-lbl-en">Today's Vedic Panchang & Udaya Tithi</span><span class="k-lbl-hi" style="display:none;">आज का वैदिक पंचांग एवं उदया तिथि</span></span>
+</h4>
+<span id="p-udaya-badge" style="background: rgba(232, 200, 121, 0.15); border: 1px solid var(--gold); color: var(--gold); padding: 2px 8px; border-radius: 10px; font-size: 0.68rem; font-weight: bold;">
+Surya Udaya Aligned
+</span>
+</div>
+
+<!-- 4 Primary Panchang Parameters -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.88rem; margin-bottom: 12px;">
+<div style="background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 8px; border-left: 2.5px solid var(--gold);">
+<p style="color: var(--text-muted); font-size: 0.72rem; margin: 0 0 2px 0;"><span class="k-lbl-en">Udaya Tithi (Ruling)</span><span class="k-lbl-hi" style="display:none;">उदया तिथि (मान्य)</span></p>
+<strong id="p-tithi" style="color: #fff; font-size: 0.92rem;">Prathama</strong>
+</div>
+<div style="background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 8px; border-left: 2.5px solid #8e44ad;">
+<p style="color: var(--text-muted); font-size: 0.72rem; margin: 0 0 2px 0;"><span class="k-lbl-en">Nakshatra</span><span class="k-lbl-hi" style="display:none;">नक्षत्र</span></p>
+<strong id="p-nakshatra" style="color: #fff; font-size: 0.92rem;">Ashwini</strong>
+</div>
+<div style="background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 8px; border-left: 2.5px solid #3498db;">
+<p style="color: var(--text-muted); font-size: 0.72rem; margin: 0 0 2px 0;"><span class="k-lbl-en">Yoga</span><span class="k-lbl-hi" style="display:none;">योग</span></p>
+<strong id="p-yoga" style="color: #fff; font-size: 0.92rem;">Vishkumbha</strong>
+</div>
+<div style="background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 8px; border-left: 2.5px solid #2ecc71;">
+<p style="color: var(--text-muted); font-size: 0.72rem; margin: 0 0 2px 0;"><span class="k-lbl-en">Solar Day (Vara)</span><span class="k-lbl-hi" style="display:none;">वार (दिन)</span></p>
+<strong id="p-vara" style="color: #fff; font-size: 0.92rem;">Monday</strong>
+</div>
+</div>
+
+<!-- Astronomical Solar & Muhurat Timings for User's City -->
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; background: rgba(0,0,0,0.25); padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); margin-bottom: 10px; font-size: 0.74rem;">
 <div>
-<p style="color: var(--text-muted); font-size: 0.8rem;"><span class="k-lbl-en">Tithi</span><span class="k-lbl-hi" style="display:none;">तिथि</span></p>
-<strong id="p-tithi">Prathama</strong>
+<span style="color: var(--gold);"><span class="k-lbl-en">Surya Udaya (Sunrise):</span><span class="k-lbl-hi" style="display:none;">सूर्योदय:</span></span>
+<strong id="p-sunrise-val" style="display: block; color: #fff; margin-top: 1px;">-</strong>
 </div>
 <div>
-<p style="color: var(--text-muted); font-size: 0.8rem;"><span class="k-lbl-en">Nakshatra</span><span class="k-lbl-hi" style="display:none;">नक्षत्र</span></p>
-<strong id="p-nakshatra">Ashwini</strong>
+<span style="color: #ff6b6b;"><span class="k-lbl-en">Surya Ast (Sunset):</span><span class="k-lbl-hi" style="display:none;">सूर्यास्त:</span></span>
+<strong id="p-sunset-val" style="display: block; color: #fff; margin-top: 1px;">-</strong>
 </div>
 <div>
-<p style="color: var(--text-muted); font-size: 0.8rem;"><span class="k-lbl-en">Yoga</span><span class="k-lbl-hi" style="display:none;">योग</span></p>
-<strong id="p-yoga">Vishkumbha</strong>
+<span style="color: #5dade2;"><span class="k-lbl-en">Brahma Muhurat:</span><span class="k-lbl-hi" style="display:none;">ब्रह्म मुहूर्त:</span></span>
+<strong id="p-brahma-val" style="display: block; color: #fff; margin-top: 1px;">-</strong>
 </div>
 <div>
-<p style="color: var(--text-muted); font-size: 0.8rem;"><span class="k-lbl-en">Day (Vara)</span><span class="k-lbl-hi" style="display:none;">दिन (वार)</span></p>
-<strong id="p-vara">Monday</strong>
+<span style="color: #2ecc71;"><span class="k-lbl-en">Abhijit Muhurat:</span><span class="k-lbl-hi" style="display:none;">अभिजीत मुहूर्त:</span></span>
+<strong id="p-abhijit-val" style="display: block; color: #fff; margin-top: 1px;">-</strong>
 </div>
+</div>
+
+<!-- Vedic Vrat & Vedha Purity Guidance Box -->
+<div id="p-vrat-guidance-box" style="background: rgba(232, 200, 121, 0.07); border: 1px dashed rgba(232, 200, 121, 0.35); padding: 8px 10px; border-radius: 8px; font-size: 0.76rem; line-height: 1.4; color: #E0DFEC;">
+<strong style="color: var(--gold); display: block; margin-bottom: 2px;" id="p-vrat-rule-title">
+<span class="k-lbl-en">Vedic Vrat & Udaya Tithi Rule:</span><span class="k-lbl-hi" style="display:none;">वैदिक व्रत एवं उदया तिथि नियम:</span>
+</strong>
+<span id="p-vrat-rule-text">
+Fast is observed on the solar day where the Tithi is active at sunrise (Udaya Tithi) with pre-dawn Arunodaya purity.
+</span>
 </div>
 </div>
 
@@ -7028,14 +7069,72 @@ countEl.innerText = `${completedCount} / ${tasks.length} Complete`;
 // ═══════════════════════════════════════════════════════════════
 let currentAppLang = localStorage.getItem('app_language') || 'en';
 
+function calculateSolarTimings(dateObj, lat, lng, tz) {
+  const d = dateObj || new Date();
+  const latitude = (typeof lat === 'number') ? lat : (parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139);
+  const longitude = (typeof lng === 'number') ? lng : (parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090);
+  const timezone = (typeof tz === 'number') ? tz : (parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5);
+
+  const startOfYear = new Date(d.getFullYear(), 0, 0);
+  const dayOfYear = Math.floor((d - startOfYear) / (1000 * 60 * 60 * 24));
+  const gamma = (2 * Math.PI / 365) * (dayOfYear - 1 + (12 - 12) / 24);
+  const eqtime = 229.18 * (0.000075 + 0.001868 * Math.cos(gamma) - 0.032077 * Math.sin(gamma) - 0.014615 * Math.cos(2 * gamma) - 0.040849 * Math.sin(2 * gamma));
+  const decl = 0.006918 - 0.399912 * Math.cos(gamma) + 0.070257 * Math.sin(gamma) - 0.006758 * Math.cos(2 * gamma) + 0.000907 * Math.sin(2 * gamma) - 0.002697 * Math.cos(3 * gamma) + 0.00148 * Math.sin(3 * gamma);
+
+  const latRad = latitude * Math.PI / 180;
+  const cosZenith = Math.cos(90.833 * Math.PI / 180);
+  const cosHA = (cosZenith - (Math.sin(latRad) * Math.sin(decl))) / (Math.cos(latRad) * Math.cos(decl));
+
+  let haDeg = 90;
+  if (cosHA >= 1) haDeg = 0;
+  else if (cosHA <= -1) haDeg = 180;
+  else haDeg = Math.acos(cosHA) * 180 / Math.PI;
+
+  const sunriseMinutesUTC = 720 - 4 * longitude - eqtime - haDeg * 4;
+  const sunsetMinutesUTC = 720 - 4 * longitude - eqtime + haDeg * 4;
+
+  const sunriseLocalMins = (sunriseMinutesUTC + timezone * 60 + 1440) % 1440;
+  const sunsetLocalMins = (sunsetMinutesUTC + timezone * 60 + 1440) % 1440;
+
+  const formatMins = (mins) => {
+    const h24 = Math.floor(mins / 60);
+    const m = Math.floor(mins % 60);
+    const period = h24 >= 12 ? 'PM' : 'AM';
+    const h12 = h24 % 12 || 12;
+    return `${String(h12).padStart(2, '0')}:${String(m).padStart(2, '0')} ${period}`;
+  };
+
+  const brahmaStartMins = (sunriseLocalMins - 96 + 1440) % 1440;
+  const brahmaEndMins = (sunriseLocalMins - 48 + 1440) % 1440;
+  const localNoonMins = (sunriseLocalMins + sunsetLocalMins) / 2;
+  const abhijitStartMins = (localNoonMins - 24 + 1440) % 1440;
+  const abhijitEndMins = (localNoonMins + 24 + 1440) % 1440;
+
+  return {
+    sunriseStr: formatMins(sunriseLocalMins),
+    sunsetStr: formatMins(sunsetLocalMins),
+    sunriseMins: sunriseLocalMins,
+    sunsetMins: sunsetLocalMins,
+    brahmaMuhurat: `${formatMins(brahmaStartMins)} - ${formatMins(brahmaEndMins)}`,
+    abhijitMuhurat: `${formatMins(abhijitStartMins)} - ${formatMins(abhijitEndMins)}`
+  };
+}
+
 function updatePanchangCard(lang) {
   const targetLang = lang || (typeof currentAppLang !== 'undefined' ? currentAppLang : 'en');
+  const isHi = targetLang === 'hi';
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
   const day = now.getDate();
-  const hour = now.getHours();
-  const min = now.getMinutes();
+
+  const userLat = parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139;
+  const userLng = parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090;
+  const userTz = parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5;
+
+  const solar = calculateSolarTimings(now, userLat, userLng, userTz);
+  const sunriseHour = Math.floor(solar.sunriseMins / 60);
+  const sunriseMin = Math.floor(solar.sunriseMins % 60);
 
   const tithiListEn = ["Shukla Pratipada", "Shukla Dwitiya", "Shukla Tritiya", "Shukla Chaturthi", "Shukla Panchami", "Shukla Shasthi", "Shukla Saptami", "Shukla Ashtami", "Shukla Navami", "Shukla Dashami", "Shukla Ekadashi", "Shukla Dwadashi", "Shukla Trayodashi", "Shukla Chaturdashi", "Purnima", "Krishna Pratipada", "Krishna Dwitiya", "Krishna Tritiya", "Krishna Chaturthi", "Krishna Panchami", "Krishna Shasthi", "Krishna Saptami", "Krishna Ashtami", "Krishna Navami", "Krishna Dashami", "Krishna Ekadashi", "Krishna Dwadashi", "Krishna Trayodashi", "Krishna Chaturdashi", "Amavasya"];
   const tithiListHi = ["शुक्ल प्रतिपदा", "शुक्ल द्वितीया", "शुक्ल तृतीया", "शुक्ल चतुर्थी", "शुक्ल पंचमी", "शुक्ल षष्ठी", "शुक्ल सप्तमी", "शुक्ल अष्टमी", "शुक्ल नवमी", "शुक्ल दशमी", "शुक्ल एकादशी", "शुक्ल द्वादशी", "शुक्ल त्रयोदशी", "शुक्ल चतुर्दशी", "पूर्णिमा", "कृष्ण प्रतिपदा", "कृष्ण द्वितीया", "कृष्ण तृतीया", "कृष्ण चतुर्थी", "कृष्ण पंचमी", "कृष्ण षष्ठी", "कृष्ण सप्तमी", "कृष्ण अष्टमी", "कृष्ण नवमी", "कृष्ण दशमी", "कृष्ण एकादशी", "कृष्ण द्वादशी", "कृष्ण त्रयोदशी", "कृष्ण चतुर्दशी", "अमावस्या"];
@@ -7049,7 +7148,7 @@ function updatePanchangCard(lang) {
   let tithiIdx = 0, nakIdx = 0, yogaIdx = 0;
   if (typeof getJulianDay === 'function' && typeof getPlanetLongitude === 'function') {
     try {
-      const jd = getJulianDay(year, month, day, hour, min, 5.5);
+      const jd = getJulianDay(year, month, day, sunriseHour, sunriseMin, userTz);
       const ayanamsa = getLahiriAyanamsa(jd);
       const sunLon = (getPlanetLongitude("Sun", jd) - ayanamsa + 360) % 360;
       const moonLon = (getPlanetLongitude("Moon", jd) - ayanamsa + 360) % 360;
@@ -7075,10 +7174,50 @@ function updatePanchangCard(lang) {
   const yogaEl = document.getElementById('p-yoga');
   const varaEl = document.getElementById('p-vara');
 
-  if (tithiEl) tithiEl.innerText = targetLang === 'hi' ? tithiListHi[tithiIdx] : tithiListEn[tithiIdx];
-  if (nakEl) nakEl.innerText = targetLang === 'hi' ? nakshatraListHi[nakIdx] : nakshatraListEn[nakIdx];
-  if (yogaEl) yogaEl.innerText = targetLang === 'hi' ? yogaListHi[yogaIdx] : yogaListEn[yogaIdx];
-  if (varaEl) varaEl.innerText = targetLang === 'hi' ? varaListHi[now.getDay()] : varaListEn[now.getDay()];
+  if (tithiEl) tithiEl.innerText = isHi ? tithiListHi[tithiIdx] : tithiListEn[tithiIdx];
+  if (nakEl) nakEl.innerText = isHi ? nakshatraListHi[nakIdx] : nakshatraListEn[nakIdx];
+  if (yogaEl) yogaEl.innerText = isHi ? yogaListHi[yogaIdx] : yogaListEn[yogaIdx];
+  if (varaEl) varaEl.innerText = isHi ? varaListHi[now.getDay()] : varaListEn[now.getDay()];
+
+  const sunriseEl = document.getElementById('p-sunrise-val');
+  const sunsetEl = document.getElementById('p-sunset-val');
+  const brahmaEl = document.getElementById('p-brahma-val');
+  const abhijitEl = document.getElementById('p-abhijit-val');
+  const vratTextEl = document.getElementById('p-vrat-rule-text');
+
+  if (sunriseEl) sunriseEl.innerText = solar.sunriseStr;
+  if (sunsetEl) sunsetEl.innerText = solar.sunsetStr;
+  if (brahmaEl) brahmaEl.innerText = solar.brahmaMuhurat;
+  if (abhijitEl) abhijitEl.innerText = solar.abhijitMuhurat;
+
+  if (vratTextEl) {
+    const isEkadashi = (tithiIdx === 10 || tithiIdx === 25);
+    const isPradosh = (tithiIdx === 12 || tithiIdx === 27);
+    const isPurnima = (tithiIdx === 14);
+    const isAmavasya = (tithiIdx === 29);
+
+    if (isEkadashi) {
+      vratTextEl.innerHTML = isHi
+        ? `<strong>आज पवित्र एकादशी व्रत:</strong> उदया तिथि सूर्योदय (${solar.sunriseStr}) से मान्य है। अन्न त्याग कर केवल जल/दूध/फल लें। व्रत का पारण कल सूर्योदय (${solar.sunriseStr}) के बाद हरि वासर समाप्त होने पर करें।`
+        : `<strong>Today Sacred Ekadashi Vrat:</strong> Udaya Tithi is active at sunrise (${solar.sunriseStr}). Refrain from grains; consume only water/milk/fruits. Parana (fast breaking) tomorrow after sunrise (${solar.sunriseStr}) post-Hari Vasara.`;
+    } else if (isPradosh) {
+      vratTextEl.innerHTML = isHi
+        ? `<strong>आज प्रदोष व्रत:</strong> त्रयोदशी संध्या पूजन प्रदोष काल (सूर्यास्त ${solar.sunsetStr} से 2.4 घंटे तक) में शिव साधना एवं दीपदान के साथ करें।`
+        : `<strong>Today Pradosh Vrat:</strong> Trayodashi evening worship during Pradosh Kaal (from sunset ${solar.sunsetStr} for 2.4 hours) with pure ghee lamp for Lord Shiva.`;
+    } else if (isPurnima) {
+      vratTextEl.innerHTML = isHi
+        ? `<strong>आज सत्यनारायण पूर्णिमा:</strong> चंद्रोदय समय अर्घ्य दें और सत्यनारायण कथा व पितृ तर्पण संपन्न करें।`
+        : `<strong>Today Satyanarayan Purnima:</strong> Offer Arghya at Moonrise, perform Satyanarayan Puja, and practice sacred charity.`;
+    } else if (isAmavasya) {
+      vratTextEl.innerHTML = isHi
+        ? `<strong>आज अमावस्या तर्पण:</strong> पितरों के निमित्त सूर्योदय (${solar.sunriseStr}) पर तर्पण करें व सात्विक अन्न दान करें।`
+        : `<strong>Today Amavasya Tarpan:</strong> Offer ancestral reflection at sunrise (${solar.sunriseStr}) and distribute food to the needy.`;
+    } else {
+      vratTextEl.innerHTML = isHi
+        ? `सनातन पंचांग अनुसार सभी धार्मिक व्रत स्थानीय सूर्योदय (${solar.sunriseStr}) पर उपस्थित उदया तिथि एवं अरुणोदय शुद्धि से ही निर्धारित होते हैं।`
+        : `As per Vedic Panchang, all sacred fasts are determined by the sovereign Udaya Tithi at local sunrise (${solar.sunriseStr}) with pre-dawn Arunodaya purity.`;
+    }
+  }
 }
 
 let _isSettingAppLang = false;
