@@ -6425,39 +6425,79 @@ xp: 30,
 color: '#2ecc71',
 icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
 });
-// 5. EVENT-ALIGNED VEDIC FASTING & HABIT DISCIPLINE (Only for true events!)
-      if (dayNum % 15 === 11) {
+// 5. EVENT-ALIGNED VEDIC FASTING & HABIT DISCIPLINE (Astronomical Sunrise Udaya Tithi)
+      let isEkadashiToday = false;
+      let isEkadashiTomorrow = false;
+      let isPradoshToday = false;
+
+      if (typeof calculateSolarTimings === 'function' && typeof getJulianDay === 'function' && typeof getPlanetLongitude === 'function') {
+        try {
+          const userLat = parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139;
+          const userLng = parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090;
+          const userTz = parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5;
+
+          const solarToday = calculateSolarTimings(targetDate, userLat, userLng, userTz);
+          const sHourToday = Math.floor(solarToday.sunriseMins / 60);
+          const sMinToday = Math.floor(solarToday.sunriseMins % 60);
+          const jdToday = getJulianDay(targetDate.getFullYear(), targetDate.getMonth() + 1, targetDate.getDate(), sHourToday, sMinToday, userTz);
+          const ayanamsaToday = getLahiriAyanamsa(jdToday);
+          const sunLonToday = (getPlanetLongitude("Sun", jdToday) - ayanamsaToday + 360) % 360;
+          const moonLonToday = (getPlanetLongitude("Moon", jdToday) - ayanamsaToday + 360) % 360;
+          const diffToday = (moonLonToday - sunLonToday + 360) % 360;
+          const tithiAtSunrise = Math.floor(diffToday / 12) % 30;
+
+          const tomDate = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate() + 1);
+          const solarTom = calculateSolarTimings(tomDate, userLat, userLng, userTz);
+          const sHourTom = Math.floor(solarTom.sunriseMins / 60);
+          const sMinTom = Math.floor(solarTom.sunriseMins % 60);
+          const jdTom = getJulianDay(tomDate.getFullYear(), tomDate.getMonth() + 1, tomDate.getDate(), sHourTom, sMinTom, userTz);
+          const ayanamsaTom = getLahiriAyanamsa(jdTom);
+          const sunLonTom = (getPlanetLongitude("Sun", jdTom) - ayanamsaTom + 360) % 360;
+          const moonLonTom = (getPlanetLongitude("Moon", jdTom) - ayanamsaTom + 360) % 360;
+          const diffTom = (moonLonTom - sunLonTom + 360) % 360;
+          const tithiAtSunriseTom = Math.floor(diffTom / 12) % 30;
+
+          isEkadashiToday = (tithiAtSunrise === 10 || tithiAtSunrise === 25);
+          isEkadashiTomorrow = (!isEkadashiToday && (tithiAtSunriseTom === 10 || tithiAtSunriseTom === 25));
+          isPradoshToday = (tithiAtSunrise === 12 || tithiAtSunrise === 27);
+        } catch(e) {
+          isEkadashiToday = false;
+          isEkadashiTomorrow = false;
+        }
+      }
+
+      if (isEkadashiToday) {
         tasks.push({
           category: 'vedic',
-          title: isHi ? 'पवित्र एकादशी पूर्ण व्रत (11वीं तिथि)' : 'Sacred Ekadashi Full Vrat Fast (11th Tithi)',
+          title: isHi ? 'पवित्र एकादशी पूर्ण व्रत (उदया तिथि)' : 'Sacred Ekadashi Full Vrat Fast (Udaya Tithi)',
           timeWindow: 'Full Day Fast',
           text: isHi
-            ? 'आज मुख्य एकादशी व्रत है। अन्न का पूर्ण त्याग करें; केवल जल, दूध या ताजे फलों का सेवन करें ताकि आपके कर्म दोष भस्म हों और लक्ष्य सिद्धि प्राप्त हो।'
-            : 'Observe full Ekadashi Vrat fast today (11th lunar day). Refrain from grains; consume only water, milk, or fruits to burn karmic debt aligned with your goals.',
+            ? 'आज सूर्योदय कालीन उदया तिथि अनुसार मुख्य एकादशी व्रत है। अन्न का पूर्ण त्याग करें; केवल जल, दूध या ताजे फलों का सेवन करें ताकि कर्म दोष भस्म हों।'
+            : 'Observe full Ekadashi Vrat fast today (Sovereign Udaya Tithi at local sunrise). Refrain from grains; consume only water, milk, or fruits to burn karmic debt.',
           xp: 30,
           color: 'var(--gold)',
           icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>'
         });
-      } else if (dayNum % 15 === 10) {
+      } else if (isEkadashiTomorrow) {
         tasks.push({
           category: 'vedic',
           title: isHi ? 'एकादशी व्रत पूर्व तैयारी (1-दिन पूर्व 11:00 AM अलर्ट)' : 'Ekadashi Fast Preparation (1-Day Prior 11:00 AM Alert)',
           timeWindow: '11:00 AM Alert',
           text: isHi
-            ? 'कल एकादशी व्रत है। आज सुबह 11:00 बजे से हल्का सात्विक भोजन लें और सूर्यास्त के बाद भारी अन्न से बचें ताकि आपका शरीर और मन कल के व्रत के लिए शुद्ध रहे।'
-            : 'Tomorrow is sacred Ekadashi Fast. Starting today at 11:00 AM, eat light sattvic food and avoid heavy grains after sunset to prepare your body & mind for tomorrow\'s fast.',
+            ? 'कल सूर्योदय पर पवित्र एकादशी व्रत प्रारंभ होगा। आज सुबह 11:00 बजे से हल्का सात्विक भोजन लें और सूर्यास्त के बाद भारी अन्न से बचें ताकि आपका शरीर और मन कल के व्रत के लिए शुद्ध रहे।'
+            : 'Tomorrow at local sunrise is sacred Ekadashi Fast. Starting today at 11:00 AM, eat light sattvic food and avoid heavy grains after sunset to prepare your body & mind for tomorrow\'s fast.',
           xp: 20,
           color: '#5dade2',
           icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polygon points="12 6 12 12 16 14"/></svg>'
         });
-      } else if (dayNum % 15 === 13) {
+      } else if (isPradoshToday) {
         tasks.push({
           category: 'vedic',
           title: isHi ? 'प्रदोष व्रत संध्या शिव साधना' : 'Pradosh Vrat Evening Shiva Sadhana',
           timeWindow: '06:30 PM - 07:30 PM',
           text: isHi
-            ? 'आज प्रदोष व्रत की पावन तिथि है। संध्या समय (06:30 PM - 07:30 PM) भगवान शिव के समक्ष शुद्ध घी का दीपक जलाएं और "ॐ नमः शिवाय" का जाप करें।'
-            : 'Today is sacred Pradosh Vrat tithi. Light a pure ghee lamp for Lord Shiva in the evening (06:30 PM - 07:30 PM) and chant "Om Namah Shivaya" for planetary peace.',
+            ? 'आज प्रदोष व्रत की पावन तिथि है। संध्या समय (प्रदोष काल) भगवान शिव के समक्ष शुद्ध घी का दीपक जलाएं और "ॐ नमः शिवाय" का जाप करें।'
+            : 'Today is sacred Pradosh Vrat tithi. Light a pure ghee lamp for Lord Shiva in the evening Pradosh Kaal and chant "Om Namah Shivaya" for planetary peace.',
           xp: 20,
           color: '#8e44ad',
           icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M7 4v6a5 5 0 0 0 10 0V4M7 4L4 7M17 4l3 3M12 2l-3 3M12 2l3 3"/></svg>'
@@ -6748,11 +6788,57 @@ function updateSanatanNotifications() {
       ];
       const rk = rahuKaalMap[targetDate.getDay()];
 
-      const isEkadashiToday = (dayNum % 15 === 11);
-      const isEkadashiTomorrow = (dayNum % 15 === 10);
-      const isPradoshToday = (dayNum % 15 === 13);
-      const isPurnimaAmavasya = (dayNum % 15 === 0 || dayNum % 15 === 14);
-      const daysLeftToEkadashi = (11 - (dayNum % 15) + 15) % 15;
+      let isEkadashiToday = false;
+      let isEkadashiTomorrow = false;
+      let isPradoshToday = false;
+      let isPurnimaAmavasya = false;
+      let daysLeftToEkadashi = 0;
+
+      if (typeof calculateSolarTimings === 'function' && typeof getJulianDay === 'function' && typeof getPlanetLongitude === 'function') {
+        try {
+          const userLat = parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139;
+          const userLng = parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090;
+          const userTz = parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5;
+
+          const solarToday = calculateSolarTimings(targetDate, userLat, userLng, userTz);
+          const sHourToday = Math.floor(solarToday.sunriseMins / 60);
+          const sMinToday = Math.floor(solarToday.sunriseMins % 60);
+          const jdToday = getJulianDay(targetDate.getFullYear(), targetDate.getMonth() + 1, targetDate.getDate(), sHourToday, sMinToday, userTz);
+          const ayanamsaToday = getLahiriAyanamsa(jdToday);
+          const sunLonToday = (getPlanetLongitude("Sun", jdToday) - ayanamsaToday + 360) % 360;
+          const moonLonToday = (getPlanetLongitude("Moon", jdToday) - ayanamsaToday + 360) % 360;
+          const diffToday = (moonLonToday - sunLonToday + 360) % 360;
+          const tithiAtSunrise = Math.floor(diffToday / 12) % 30;
+
+          const tomDate = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate() + 1);
+          const solarTom = calculateSolarTimings(tomDate, userLat, userLng, userTz);
+          const sHourTom = Math.floor(solarTom.sunriseMins / 60);
+          const sMinTom = Math.floor(solarTom.sunriseMins % 60);
+          const jdTom = getJulianDay(tomDate.getFullYear(), tomDate.getMonth() + 1, tomDate.getDate(), sHourTom, sMinTom, userTz);
+          const ayanamsaTom = getLahiriAyanamsa(jdTom);
+          const sunLonTom = (getPlanetLongitude("Sun", jdTom) - ayanamsaTom + 360) % 360;
+          const moonLonTom = (getPlanetLongitude("Moon", jdTom) - ayanamsaTom + 360) % 360;
+          const diffTom = (moonLonTom - sunLonTom + 360) % 360;
+          const tithiAtSunriseTom = Math.floor(diffTom / 12) % 30;
+
+          isEkadashiToday = (tithiAtSunrise === 10 || tithiAtSunrise === 25);
+          isEkadashiTomorrow = (!isEkadashiToday && (tithiAtSunriseTom === 10 || tithiAtSunriseTom === 25));
+          isPradoshToday = (tithiAtSunrise === 12 || tithiAtSunrise === 27);
+          isPurnimaAmavasya = (tithiAtSunrise === 14 || tithiAtSunrise === 29);
+
+          if (tithiAtSunrise < 10) {
+            daysLeftToEkadashi = 10 - tithiAtSunrise;
+          } else if (tithiAtSunrise < 25) {
+            daysLeftToEkadashi = 25 - tithiAtSunrise;
+          } else {
+            daysLeftToEkadashi = (30 - tithiAtSunrise) + 10;
+          }
+        } catch(e) {
+          isEkadashiToday = false;
+          isEkadashiTomorrow = true;
+          daysLeftToEkadashi = 1;
+        }
+      }
 
       // Extract Holy Festival & Kundli-Aligned Remedy
       const holyEventData = getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, userName);
@@ -6815,18 +6901,18 @@ function updateSanatanNotifications() {
         </div>
       `;
 
-      // 2. Ekadashi & Festive Fasting Customization (Day-Wise)
+      // 2. Ekadashi & Festive Fasting Customization (Astronomical Sunrise Udaya Tithi)
       if (isEkadashiToday) {
         alertsHTML += `
           <div style="background: rgba(232, 200, 121, 0.15); border-left: 3px solid var(--gold); padding: 10px 12px; border-radius: 8px;">
             <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--gold); font-weight: bold; margin-bottom: 4px;">
-              <span>${isHi ? 'आज पवित्र एकादशी व्रत (11वीं तिथि)' : 'Today Sacred Ekadashi Fast (11th Tithi)'}</span>
+              <span>${isHi ? 'आज पवित्र एकादशी पूर्ण व्रत (उदया तिथि)' : 'Today Sacred Ekadashi Full Vrat (Udaya Tithi)'}</span>
               <span style="background: var(--gold); color:#0C0922; padding:1px 6px; border-radius:4px; font-size:0.68rem;">${isHi ? 'आज सक्रिय' : 'Active Today'}</span>
             </div>
             <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
               ${isHi
-                ? 'आज एकादशी व्रत है। केवल जल, फल या सात्विक आहार लें। अपने कर्म दोषों को भस्म करने एवं आर्थिक बाधाएं दूर करने हेतु विष्णु सहस्रनाम या स्वामी ग्रह मंत्र का जाप करें।'
-                : 'Today is sacred Ekadashi Fast. Consume only water, fruits, or milk. Chant Vishnu Sahasranama & your ruling planet mantra to dissolve financial & karmic blockages.'}
+                ? 'आज सूर्योदय कालीन उदया तिथि अनुसार मुख्य एकादशी व्रत है। अन्न का पूर्ण त्याग करें; केवल जल, दूध या ताजे फलों का सेवन करें ताकि कर्म दोष भस्म हों।'
+                : 'Today is sacred Ekadashi Fast (Sovereign Udaya Tithi at local sunrise). Consume only water, fruits, or milk. Chant Vishnu Sahasranama & ruling planet mantra.'}
             </p>
           </div>
         `;
@@ -6839,8 +6925,8 @@ function updateSanatanNotifications() {
             </div>
             <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
               ${isHi
-                ? 'कल पवित्र एकादशी व्रत है। आज सुबह 11:00 बजे से हल्का सात्विक भोजन लें और सूर्यास्त के बाद भारी अन्न से बचें ताकि आपका शरीर और मन कल के व्रत हेतु शुद्ध रहे।'
-                : 'Tomorrow is sacred Ekadashi Fast. Starting today at 11:00 AM, consume light sattvic food and avoid heavy grains after sunset to prepare your body & mind.'}
+                ? 'कल सूर्योदय पर पवित्र एकादशी व्रत प्रारंभ होगा। आज सुबह 11:00 बजे से हल्का सात्विक भोजन लें और सूर्यास्त के बाद भारी अन्न से बचें ताकि शरीर व मन शुद्ध रहे।'
+                : 'Tomorrow at local sunrise is sacred Ekadashi Fast. Starting today at 11:00 AM, consume light sattvic food and avoid heavy grains after sunset.'}
             </p>
           </div>
         `;
