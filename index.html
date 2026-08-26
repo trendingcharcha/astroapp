@@ -132,7 +132,7 @@ const textCol = type === 'error' ? '#ff6b6b' : 'var(--gold)';
 toast.style.cssText = 'background:' + bgCol + ';border:1px solid ' + borderCol + ';color:' + textCol + ';padding:10px 18px;border-radius:25px;font-size:0.82rem;font-weight:600;backdrop-filter:blur(12px);box-shadow:0 8px 25px rgba(0,0,0,0.5);opacity:0;transform:translateY(10px);transition:all 0.3s ease;pointer-events:none;text-align:center;max-width:320px;word-break:break-word;margin:4px auto;';
 toast.innerHTML = msg;
 container.appendChild(toast);
-requestAnimationFrame(function() { toast.style.opacity = '1'; toast.style.transform = 'translateY(0)'; });
+if (typeof requestAnimationFrame === 'function') { requestAnimationFrame(function() { toast.style.opacity = '1'; toast.style.transform = 'translateY(0)'; }); } else { toast.style.opacity = '1'; toast.style.transform = 'translateY(0)'; }
 setTimeout(function() {
 toast.style.opacity = '0'; toast.style.transform = 'translateY(-10px)';
 setTimeout(function() { if (toast.parentNode) toast.remove(); }, 350);
@@ -4125,7 +4125,9 @@ babyDetailsText = `planning for your third baby (your first child is ${firstBaby
 }
 
 let city = coachSelectedCity;
-if (coachSelectedCity.name !== cityName) {
+if (typeof cityCoordinates === 'object' && cityCoordinates[cityName]) {
+  city = cityCoordinates[cityName];
+} else if (coachSelectedCity.name !== cityName) {
 const controller = new AbortController();
 const timeoutId = setTimeout(() => controller.abort(), 2500);
 try {
@@ -4618,1046 +4620,14 @@ const vastuSuggestionsHi = {
 
 // Aggregate predictions and remedies for all active goals
 function compileMultiGoalMissionData(lang) {
-const lordDetails = lang === 'hi' ? (vedicMantrasHi[rulingLord] || vedicMantrasHi["Sun"]) : (vedicMantrasEn[rulingLord] || vedicMantrasEn["Sun"]);
+const isHi = lang === 'hi';
+const lordDetails = isHi ? (vedicMantrasHi[rulingLord] || vedicMantrasHi["Sun"]) : (vedicMantrasEn[rulingLord] || vedicMantrasEn["Sun"]);
 let vListHTML;
 
-// Vedic Tasks
-if (!hasPartner) {
-const goalVedicContextEn = {
-job: `Perform Surya Namaskaar (12 rounds) before sunrise to activate career and authority vibrations.`,
-debt: `Recite the Shiva Panchakshari mantra "Om Namah Shivaya" 108 times before meals to dissolve financial anxieties.`,
-marriage: `Recite the Katyayani mantra "Om Katyayanyai Namah" 108 times on a Friday morning to attract your destined partner.`,
-baby: `Both partners should recite the Santan Gopal mantra "Om Devaki Sut Govind..." 108 times together each morning.`,
-business: `Perform Ganesh puja on Wednesdays and light incense (dhoop) at your business entrance.`,
-property: `Recite the Bhoomi Sukta prayer (from Atharvaveda) before property visits. Also chant "Om Bhaumaya Namah" 11 times for Mars blessings on property.`,
-health: `Perform Surya Namaskar (sun salutation) at sunrise and drink copper vessel water in the morning for vitality.`,
-custom: `Perform an evening puja with incense and a ghee lamp, focusing your intention on resolving: "${issueText}".`
-};
-const goalVedicContextHi = {
-job: `करियर और अधिकार के स्पंदनों को सक्रिय करने के लिए सूर्योदय से पहले सूर्य नमस्कार (12 चक्र) करें।`,
-debt: `वित्तीय चिंताओं को दूर करने के लिए भोजन से पहले 108 बार शिव पंचाक्षरी मंत्र "ॐ नमः शिवाय" का जाप करें।`,
-marriage: `अपने भाग्यशाली जीवनसाथी को आकर्षित करने के लिए शुक्रवार की सुबह कात्यायनी मंत्र "ॐ कात्यायन्यै नमः" का 108 बार जाप करें।`,
-baby: `संतान सुख के लिए दोनों साथी मिलकर प्रत्येक सुबह 108 बार संतान गोपाल मंत्र "ॐ देवकी सुत गोविंद..." का जाप करें।`,
-business: `बुधवार को गणेश पूजा करें और अपने व्यावसायिक प्रवेश द्वार पर धूप जलाएं।`,
-property: `संपत्ति के दौरों से पहले भूमि सूक्त प्रार्थना (अथर्ववेद से) का पाठ करें। संपत्ति पर मंगल के आशीर्वाद के लिए "ॐ भौमाय नमः" का 11 बार जाप करें।`,
-health: `सूर्योदय के समय सूर्य नमस्कार करें और जीवन शक्ति के लिए सुबह तांबे के बर्तन का पानी पिएं।`,
-custom: `शाम को धूप और घी के दीये के साथ पूजा करें, अपने ध्यान को इस समस्या के समाधान पर केंद्रित करें: "${issueText}"।`
-};
-
-const contextMap = lang === 'hi' ? goalVedicContextHi : goalVedicContextEn;
-const rituals = [];
-activeGoalsList.forEach(g => {
-let normG = g;
-if (g === 'marriage-single' || g === 'marriage-couple') normG = 'marriage';
-if (g === 'property-single' || g === 'property-couple') normG = 'property';
-const contextKey = ['property-single','property-couple'].includes(g) ? 'property' : ['marriage-single','marriage-couple'].includes(g) ? 'marriage' : (normG in contextMap ? normG : 'custom');
-const ritual = contextMap[contextKey] || contextMap.custom;
-const label = (lang === 'hi' ? (goalLabelsHi[g] || goalLabelsEn[g] || g) : (goalLabelsEn[g] || g));
-rituals.push(`<strong>${label}:</strong> ${ritual}`);
-});
-const ritualsHTML = rituals.map(r => `<div style="margin-top: 4px; padding-left: 10px; border-left: 2px solid var(--gold);">${r}</div>`).join('');
-
-if (lang === 'hi') {
-vListHTML = `
-<li style="margin-bottom: 10px;"><strong>शासक ग्रह मंत्र:</strong> प्रत्येक सुबह पूर्व की ओर मुंह करके 108 बार <strong>"${lordDetails.mantra}"</strong> का लगातार 40 दिनों तक जाप करें।</li>
-<li style="margin-bottom: 10px;"><strong>पवित्र पाठ:</strong> ${lordDetails.text}</li>
-<li style="margin-bottom: 10px;"><strong>लक्ष्य अनुष्ठान:</strong> ${ritualsHTML}</li>
-<li><strong>एकादशी व्रत:</strong> अपने लक्ष्यों से जुड़े कर्मों को संरेखित करने के लिए प्रति माह कम से कम एक एकादशी का व्रत रखें, जिसमें केवल फल या पानी का सेवन करें।</li>
-`;
-} else {
-vListHTML = `
-<li style="margin-bottom: 10px;"><strong>Ruling Planet Mantra:</strong> Chant <strong>"${lordDetails.mantra}"</strong> exactly 108 times each morning facing East for 40 consecutive days.</li>
-<li style="margin-bottom: 10px;"><strong>Sacred Text:</strong> ${lordDetails.text}</li>
-<li style="margin-bottom: 10px;"><strong>Goal Ritual(s):</strong> ${ritualsHTML}</li>
-<li><strong>Ekadashi Fast:</strong> Observe at least one Ekadashi (11th lunar day) fast per month, drinking only fruit or water, to burn karmic debt aligned with your goals.</li>
-`;
-}
-} else {
-const partnerLordDetails = lang === 'hi' ? (vedicMantrasHi[partnerRulingLord] || vedicMantrasHi["Sun"]) : (vedicMantrasEn[partnerRulingLord] || vedicMantrasEn["Sun"]);
-const coupleGoalRitualsEn = {
-marriage: `Both partners should recite the Vivah Sukta verses from the Rigveda together each morning and offer flowers to Lord Vishnu on Thursdays.`,
-baby: `Both partners should recite the Santan Gopal mantra "Om Devaki Sut Govind..." 108 times together each morning.`,
-property: `Both partners should offer water, a flower, and a pinch of turmeric to a rising sun, and chant "Om Bhaumaya Namah" 11 times together before any property visits.`,
-debt: `Both partners should recite the Shiva Panchakshari mantra together 108 times on Monday mornings while holding water in cupped hands.`,
-custom: `Both partners should perform evening puja together with ghee lamp, flowers, and focused collective intention on resolving the shared challenge.`
-};
-const coupleGoalRitualsHi = {
-marriage: `दोनों साथी प्रत्येक सुबह मिलकर ऋग्वेद के विवाह सूक्त श्लोकों का पाठ करें और गुरुवार को भगवान विष्णु को फूल अर्पित करें।`,
-baby: `दोनों साथी प्रत्येक सुबह मिलकर संतान गोपाल मंत्र "ॐ देवकी सुत गोविंद..." का 108 बार जाप करें।`,
-property: `दोनों साथी किसी भी संपत्ति के दौरे से पहले उगते सूर्य को जल, फूल और एक चुटकी हल्दी अर्पित करें, और मिलकर 11 बार "ॐ भौमाय नमः" का जाप करें।`,
-debt: `दोनों साथी सोमवार की सुबह हाथों में जल लेकर मिलकर 108 बार शिव पंचाक्षरी मंत्र का जाप करें।`,
-custom: `दोनों साथी शाम को मिलकर घी के दीपक, फूलों और सामूहिक ध्यान के साथ साझा चुनौती को हल करने के लिए पूजा करें।`
-};
-
-const coupleMap = lang === 'hi' ? coupleGoalRitualsHi : coupleGoalRitualsEn;
-const coupleRituals = [];
-activeGoalsList.forEach(g => {
-let normG = g;
-if (g === 'marriage-single' || g === 'marriage-couple') normG = 'marriage';
-if (g === 'property-single' || g === 'property-couple') normG = 'property';
-const coupleContextKey = normG in coupleMap ? normG : 'custom';
-const ritual = coupleMap[coupleContextKey];
-const label = (lang === 'hi' ? (goalLabelsHi[g] || goalLabelsEn[g] || g) : (goalLabelsEn[g] || g));
-coupleRituals.push(`<strong>${label}:</strong> ${ritual}`);
-});
-const coupleRitualsHTML = coupleRituals.map(r => `<div style="margin-top: 4px; padding-left: 10px; border-left: 2px solid var(--gold);">${r}</div>`).join('');
-
-if (lang === 'hi') {
-vListHTML = `
-<li style="margin-bottom: 10px;"><strong>${name} का मंत्र:</strong> प्रत्येक सुबह 108 बार <strong>"${lordDetails.mantra}"</strong> का जाप करें (आपके लग्न के स्वामी: ${rulingLord})।</li>
-<li style="margin-bottom: 10px;"><strong>${partnerName || 'साथी'} का मंत्र:</strong> प्रत्येक सुबह 108 बार <strong>"${partnerLordDetails.mantra}"</strong> का जाप करें (उनके लग्न के स्वामी: ${partnerRulingLord})।</li>
-<li style="margin-bottom: 10px;"><strong>युगल लक्ष्य अनुष्ठान:</strong> ${coupleRitualsHTML}</li>
-<li style="margin-bottom: 10px;"><strong>साझा पवित्र पाठ:</strong> अपने साझा लक्ष्यों के लिए ईश्वरीय सहायता प्राप्त करने के लिए प्रत्येक शाम एक साथ गुरु स्तोत्र या शिव पुराण का पाठ करें।</li>
-<li><strong>एकादशी व्रत:</strong> सामूहिक कर्म ऊर्जा को संरेखित करने के लिए इस महीने कम से कम एक बार दोनों मिलकर एकादशी व्रत का पालन करें।</li>
-`;
-} else {
-vListHTML = `
-<li style="margin-bottom: 10px;"><strong>${name}'s Mantra:</strong> Chant <strong>"${lordDetails.mantra}"</strong> 108 times each morning (ruler of your Lagna: ${rulingLord}).</li>
-<li style="margin-bottom: 10px;"><strong>${partnerName || 'Partner'}'s Mantra:</strong> Chant <strong>"${partnerLordDetails.mantra}"</strong> 108 times each morning (ruler of their Lagna: ${partnerRulingLord}).</li>
-<li style="margin-bottom: 10px;"><strong>Couple Goal Ritual(s):</strong> ${coupleRitualsHTML}</li>
-<li style="margin-bottom: 10px;"><strong>Shared Sacred Text:</strong> Read the Guru Stotra or Shiva Purana together each evening to invite divine support for your shared goals.</li>
-<li><strong>Ekadashi Fast:</strong> Both observe Ekadashi fast together at least once this month to align collective karmic energies.</li>
-`;
-}
-}
-
-// Lal Kitab Remedies
-const remMap = lang === 'hi' ? lalkitabRemediesHi : lalkitabRemediesEn;
-let allRemedies = [];
-const itemsPerGoal = activeGoalsList.length === 1 ? 6 : (activeGoalsList.length === 2 ? 3 : 2);
-
-activeGoalsList.forEach(g => {
-let rKey = g;
-if (g === 'marriage-single' || g === 'marriage-couple') rKey = 'marriage';
-if (g === 'property-single' || g === 'property-couple') rKey = 'property';
-if (g === 'custom') rKey = "custom_" + customCategory;
-let goalRemedies = remMap[rKey] || remMap["job"];
-if (goalRemedies) {
-let customized = [...goalRemedies];
-if (hasPartner) {
-let normG = g;
-if (g === 'marriage-single' || g === 'marriage-couple') normG = 'marriage';
-if (g === 'property-single' || g === 'property-couple') normG = 'property';
-if (lang === 'hi') {
-if (normG === 'baby' || customCategory === 'pregnancy') {
-customized[1] = `संतान आशीर्वाद को मजबूत करने के लिए आप और ${partnerName || 'आपके साथी'} दोनों को मिलकर बरगद के पेड़ की जड़ में दूध या मीठा पानी चढ़ाना चाहिए और माथे पर गीली मिट्टी का तिलक लगाना चाहिए।`;
-} else if (normG === 'property' || customCategory === 'property') {
-customized[1] = `सामूहिक मंगल/भूमि ऊर्जा का आह्वान करने के लिए आप और ${partnerName || 'आपके साथी'} दोनों को मिलकर उगते सूर्य को एक चम्मच शहद मिला हुआ जल अर्पित करना चाहिए।`;
-} else if (normG === 'marriage') {
-customized[1] = `सामंजस्यपूर्ण विवाह तरंगों के लिए आप और ${partnerName || 'आपके साथी'} दोनों को मिलकर गुरुवार की शाम विष्णु मंदिर में घी का दीपक जलाना चाहिए।`;
-} else {
-customized[1] = `शुक्र/चंद्र अनुकूलता को मजबूत करने के लिए आप और ${partnerName || 'आपके साथी'} दोनों को मिलकर सोमवार की सुबह सफेद गाय को भोजन कराना चाहिए या चावल और दूध का दान करना चाहिए।`;
-}
-} else {
-if (normG === 'baby' || customCategory === 'pregnancy') {
-customized[1] = `Both you and ${partnerName || 'your partner'} should offer milk or sweet water to a banyan tree root together and apply the wet soil tilak on your foreheads to strengthen progeny blessings.`;
-} else if (normG === 'property' || customCategory === 'property') {
-customized[1] = `Both you and ${partnerName || 'your partner'} should offer fresh water mixed with a small spoon of honey to the rising Sun together to invoke collective Mars/land energy.`;
-} else if (normG === 'marriage') {
-customized[1] = `Both you and ${partnerName || 'your partner'} should light a ghee lamp at a Vishnu temple together on Thursday evenings for harmonious marital vibrations.`;
-} else {
-customized[1] = `Both you and ${partnerName || 'your partner'} should feed a white cow or donate rice and milk on Monday mornings to strengthen Venus/Moon compatibilities.`;
-}
-}
-}
-const sliced = customized.slice(0, itemsPerGoal);
-sliced.forEach(rem => {
-if (!allRemedies.includes(rem)) {
-allRemedies.push(rem);
-}
-});
-}
-});
-
-if (allRemedies.length === 0) {
-allRemedies = [...(remMap["job"] || [])];
-}
-
-const lListHTML = allRemedies.slice(0, 8).map((r, i) =>
-`<li style="margin-bottom: 10px;"><strong>${lang === 'hi' ? 'उपाय' : 'Remedy'} ${i+1}:</strong> ${r}</li>`
-).join('');
-
-// Vastu Suggestions
-const vastuMap = lang === 'hi' ? vastuSuggestionsHi : vastuSuggestionsEn;
-const vastuDirectives = [];
-
-activeGoalsList.forEach(g => {
-let normG = g;
-if (g === 'marriage-single' || g === 'marriage-couple') normG = 'marriage';
-if (g === 'property-single' || g === 'property-couple') normG = 'property';
-let vastuGoal = normG;
-if (normG === 'custom') {
-vastuGoal = "custom_" + customCategory;
-}
-let vastuText = vastuMap[vastuGoal] || vastuMap["job"];
-if (normG === 'baby' && hasPartner) {
-if (lang === 'hi') {
-if (babyNum === "1") {
-vastuText = `सुनिश्चित करें कि आपका साझा बिस्तर दक्षिण-पश्चिम दिशा में रखा गया है। अपने बेडरूम में गहरे रंगों का उपयोग करने से बचें; गर्भावस्था के अनुकूल तरंगों के लिए हल्के क्रीम, गुलाबी या हल्के पीले रंगों को प्राथमिकता दें। उत्तर-पूर्व कोने को साफ रखें।`;
-} else if (babyNum === "2") {
-vastuText = `सुनिश्चित करें कि आपके घर का उत्तर-पूर्व क्षेत्र साफ है। शांत वातावरण बनाए रखने के लिए अपने पहले बच्चे के खिलौनों को अपने सोने के बेडरूम से दूर रखें। बेडरूम के पूर्व क्षेत्र में ताजे सफेद फूल रखें।`;
-} else if (babyNum === "3") {
-vastuText = `घर में बढ़ती हुई संतान ऊर्जा को आमंत्रित करने के लिए अपने रहने वाले क्षेत्र के पूर्वी हिस्से में एक स्वस्थ हरा पौधा या पारिवारिक चित्र लगाएं। बच्चों के कमरे में पूर्व या उत्तर की ओर खिड़कियां रखें।`;
-}
-} else {
-if (babyNum === "1") {
-vastuText = `Ensure your shared bed is placed in the South-West direction. Avoid using aggressive colors (like red or dark blue) in your bedroom; prefer warm cream, pastel pink, or light yellow tones to support pregnancy vibrations. Keep North-East zone clean and fresh.`;
-} else if (babyNum === "2") {
-vastuText = `Ensure the North-East zone of your home is clean. Keep your first child's toys away from your bedroom to maintain tranquil pregnancy vibes. Place fresh white flowers in the East zone of your bedroom.`;
-} else if (babyNum === "3") {
-vastuText = `Place a healthy green plant or a family portrait in the East zone of your shared living space to invite growing domestic progeny energies. Ensure the children's room has East or North-facing windows.`;
-}
-}
-} else if (normG === 'property' && hasPartner) {
-if (lang === 'hi') {
-vastuText = `आप दोनों को संभावित ${propertyType} पर एक साथ जाना चाहिए और मूल्यांकन करना चाहिए: मुख्य द्वार की दिशा (पूर्व/उत्तर को प्राथमिकता दें), उत्तर-पूर्व क्षेत्र (खुला/हल्का होना चाहिए), रसोई (दक्षिण-पूर्व में होनी चाहिए)। उत्तर-पूर्व में शौचालय या बैठने/सोने के क्षेत्र के ऊपर कंक्रीट बीम वाली संपत्तियों से बचें।`;
-} else {
-vastuText = `Both of you should visit the prospective ${propertyType} together and assess: main door direction (prefer East/North), North-East zone (should be open/light), kitchen (should be in South-East). Avoid properties with toilets in North-East or beams over the main sitting/sleeping area.`;
-}
-} else if (normG === 'marriage' && hasPartner) {
-if (lang === 'hi') {
-vastuText = `सुनिश्चित करें कि आपके बेडरूम का दक्षिण-पश्चिम (संबंध क्षेत्र) साफ है, वहां रोज़ क्वार्ट्ज क्रिस्टल का गोला है, और बिस्तर को सीधे प्रतिबिंबित करने वाले कोई दर्पण नहीं हैं। टूटे सजावटी सामान हटा दें।`;
-} else {
-vastuText = `Ensure the South-West (relationship zone) of your shared bedroom is clean, has a rose quartz sphere, and contains no mirrors directly reflecting the bed. Remove any broken decor items.`;
-}
-} else if (hasPartner && customCategory === "pregnancy") {
-if (lang === 'hi') {
-vastuText = `सुनिश्चित करें कि आपका साझा बिस्तर दक्षिण-पश्चिम दिशा में रखा गया है। अपने बेडरूम में गहरे रंगों का उपयोग करने से बचें; हल्के क्रीम, गुलाबी या हल्के पीले रंगों को प्राथमिकता दें।`;
-} else {
-vastuText = `Ensure your shared bed is placed in the South-West direction. Avoid using aggressive colors in your bedroom; prefer warm cream, pastel pink, or light yellow tones.`;
-}
-}
-
-const label = (lang === 'hi' ? (goalLabelsHi[g] || goalLabelsEn[g] || g) : (goalLabelsEn[g] || g));
-vastuDirectives.push(`<strong>${label}:</strong> ${vastuText}`);
-});
-
-const vastuDirectivesHTML = vastuDirectives.map(d => `<div style="margin-top: 4px; padding-left: 10px; border-left: 2px solid var(--gold);">${d}</div>`).join('');
-
-const vVastuHTML = `
-<li style="margin-bottom: 10px;"><strong>${lang === 'hi' ? 'वास्तु निर्देश' : 'Vastu Directive(s)'}:</strong> ${vastuDirectivesHTML}</li>
-<li><strong>${lang === 'hi' ? 'व्यक्तिगत दिशा संरेखण' : 'Personalized Direction Alignment'}:</strong> ${(() => { const _dmapEn={'Sun':'East','Moon':'North-West','Mars':'South','Mercury':'North','Jupiter':'North-East','Venus':'South-East','Saturn':'West'}; const _dmapHi={'Sun':'पूर्व','Moon':'उत्तर-पश्चिम','Mars':'दक्षिण','Mercury':'उत्तर','Jupiter':'उत्तर-पूर्व','Venus':'दक्षिण-पूर्व','Saturn':'पश्चिम'}; const _sla=['Mars','Venus','Mercury','Moon','Sun','Mercury','Venus','Mars','Jupiter','Saturn','Saturn','Jupiter']; const _li=(typeof cachedLagnaSignNum!=='undefined'&&cachedLagnaSignNum!==null)?cachedLagnaSignNum:-1; const _ll=(_li>=0)?(_sla[_li]||'Mercury'):'Mercury'; const _lhi={'Sun':'सूर्य','Moon':'चन्द्र','Mars':'मंगल','Mercury':'बुध','Jupiter':'गुरु','Venus':'शुक्र','Saturn':'शनि'}; const _dir=lang==='hi'?(_dmapHi[_ll]||'उत्तर-पूर्व'):(_dmapEn[_ll]||'North-East'); return lang==='hi'?`आपके लग्न स्वामी (${_lhi[_ll]||_ll}) के अनुसार ${_dir} दिशा की ओर मुंह करके काम करें। यही आपकी शक्ति दिशा है।`:`Based on your Ascendant Lord (${_ll}), face ${_dir} while working or meditating. This is your personal power direction.`; })()}</li>
-`;
-
-// Practical Tasks
-const practicalMap = lang === 'hi' ? practicalActionsHi : practicalActions;
-let allActions = [];
-const actionsPerGoal = activeGoalsList.length === 1 ? 4 : 2;
-
-activeGoalsList.forEach(g => {
-let normG = g;
-if (g === 'marriage-single' || g === 'marriage-couple') normG = 'marriage';
-if (g === 'property-single' || g === 'property-couple') normG = 'property';
-let actionsGoal = normG;
-if (normG === 'custom') {
-actionsGoal = "custom_" + customCategory;
-}
-let goalActions = [...(practicalMap[actionsGoal] || practicalMap["job"])];
-goalActions = goalActions.filter(a => a !== undefined);
-
-
-if (g === 'baby') {
-if (hasPartner) {
-if (lang === 'hi') {
-if (babyNum === "1") {
-goalActions = [
-`स्वयं: एक स्वस्थ प्रसवपूर्व आहार बनाए रखें और आज ही अपने दैनिक विटामिन सेवन को दर्ज करें।`,
-`साथी (${partnerName}): अपने जीवनसाथी के लिए शारीरिक तनाव को कम करने के लिए household tasks में सहायता करें।`,
-`संयुक्त कदम: रिश्ते की ऊर्जा को संरेखित करने के लिए आप और ${partnerName} दोनों मिलकर 15 मिनट ध्यान करें।`,
-`संयुक्त योजना: इस महीने दौरा करने के लिए 3 local health clinics या मातृत्व केंद्रों को शॉर्टलिस्ट करें।`
-];
-} else if (babyNum === "2") {
-goalActions = [
-`स्वयं: health metrics और post-pregnancy recovery के संकेतों को ट्रैक करने के लिए 15 मिनट लें।`,
-`साथी (${partnerName}): अपने पहले बच्चे (उम्र: ${firstBabyAge} वर्ष) की देखभाल में 30 मिनट का समय बिताएं।`,
-`संयुक्त कदम: ${partnerName} के साथ चर्चा करें कि पहले बच्चे को नए भाई या बहन के आगमन के लिए मानसिक रूप से कैसे तैयार किया जाए।`,
-`संयुक्त योजना: निरीक्षण करें कि पहले बच्चे के कौन से सामान दोबारा काम आ सकते।`
-];
-} else if (babyNum === "3") {
-goalActions = [
-`स्वयं: आराम करने, हल्के खिंचाव का अभ्यास करने और आज पोषण मेट्रिक्स लॉग करने के लिए 20 मिनट लें।`,
-`साथी (${partnerName}): आज अपने पहले दो बच्चों (उम्र: ${firstBabyAge} और ${secondBabyAge}) की दैनिक दिनचर्या और पढ़ाई की जिम्मेदारी संभालें।`,
-`संयुक्त कदम: पांच सदस्यों के परिवार के लिए आवश्यक वित्तीय समायोजन का खाका तैयार करने के लिए ${partnerName} के साथ 20 मिनट बैठें।`,
-`संयुक्त योजना: तीन बच्चों को समायोजित करने के लिए शयनकक्ष के पुनर्गठन या अंतरिक्ष वितरण पर चर्चा करें।`
-];
-}
-} else {
-if (babyNum === "1") {
-goalActions = [
-`Self: Maintain a healthy prenatal diet and log your daily vitamin intake today.`,
-`Partner (${partnerName}): Assist with household tasks to minimize physical stress for your partner.`,
-`Joint Action: Spend 15 minutes meditating together with ${partnerName} to align relationship energy.`,
-`Joint Planning: Shortlist 3 local health clinics or maternity centers to visit this month.`
-];
-} else if (babyNum === "2") {
-goalActions = [
-`Self: Take 15 minutes to track health metrics and post-pregnancy recovery signs.`,
-`Partner (${partnerName}): Spend 30 minutes helping care for your first child (age: ${firstBabyAge} years).`,
-`Joint Action: Discuss with ${partnerName} how to mentally prepare the first child for the arrival of the new sibling.`,
-`Joint Planning: Check which baby essentials and gear from the first child can be reused.`
-];
-} else if (babyNum === "3") {
-goalActions = [
-`Self: Spend 20 minutes relaxing, practicing light stretches, and logging nutrition metrics.`,
-`Partner (${partnerName}): Take responsibility for the daily routine and studies of your first two children (ages: ${firstBabyAge} & ${secondBabyAge}) today.`,
-`Joint Action: Sit down with ${partnerName} for 20 minutes to draft the necessary financial adjustments for a family of five.`,
-`Joint Planning: Discuss bedroom reorganization or space distribution to accommodate three children.`
-];
-}
-}
-} else {
-if (lang === 'hi') {
-if (babyNum === "1") {
-goalActions = [
-`आज प्रसवपूर्व स्वास्थ्य, फोलिक एसिड और आयरन से भरपूर एक पौष्टिक मेनू की योजना बनाएं।`,
-`अपने स्थानीय शहर क्षेत्र में उच्च श्रेणी के स्त्री रोग विशेषज्ञों या मातृत्व विशेषज्ञों की सूची बनाएं।`,
-`तनाव के स्तर को कम करने के लिए हल्के श्वास व्यायाम (प्राणायाम) करने में 20 मिनट का समय बिताएं।`,
-`प्रजनन काल और स्वास्थ्य संकेतकों को ट्रैक करने के लिए दैनिक स्वास्थ्य कैलेंडर बनाए रखें।`
-];
-} else if (babyNum === "2") {
-goalActions = [
-`पहली गर्भावस्था के बाद से स्वास्थ्य संकेतकों की समीक्षा के लिए बाल रोग विशेषज्ञ से परामर्श करें (पहला बच्चा ${firstBabyAge} वर्ष का है)।`,
-`पहले बच्चे के पुनः उपयोग किए जा सकने वाले शिशु सामानों की एक चेकलिस्ट बनाएं।`,
-`कई बच्चों के पालन-पोषण और समय प्रबंधन के तरीकों को पढ़ने के लिए 20 मिनट का समय दें।`,
-`प्रसवपूर्व स्वास्थ्य मार्करों का आकलन करने के लिए एक नियमित स्वास्थ्य जांच का समय निर्धारित करें।`
-];
-} else if (babyNum === "3") {
-goalActions = [
-`तीन बच्चों (मौजूदा उम्र: ${firstBabyAge} और ${secondBabyAge}) के खर्चों की व्यवस्था के लिए अपनी पारिवारिक बजट बहीखाते की समीक्षा करें।`,
-`सभी तीन बच्चों के लिए कमरों या जगह के वितरण पर चर्चा करने के लिए 30 मिनट का समय निकालें।`,
-`एक बड़े परिवार के लिए मानसिक सहनशक्ति विकसित करने के लिए 15 मिनट का ध्यान सत्र करें।`,
-`मातृ स्वास्थ्य संकेतकों की समीक्षा के लिए एक प्राथमिक स्वास्थ्य परामर्श शेड्यूल करें।`
-];
-}
-} else {
-if (babyNum === "1") {
-goalActions = [
-`Plan a nutritious prenatal menu rich in folate, iron, and greens today.`,
-`Research and list high-rated gynecologists or birthing specialists in your city area.`,
-`Spend 20 minutes practicing deep breathing exercises (Pranayama) to stabilize cortisol levels.`,
-`Maintain a daily fertility and health tracking log to monitor cycles and wellness markers.`
-];
-} else if (babyNum === "2") {
-goalActions = [
-`Consult with a pediatrician or doctor to review health markers since your first pregnancy (first child is ${firstBabyAge} years old).`,
-`Create a checklist of baby essentials and gear you can reuse from your first child.`,
-`Dedicate 20 minutes to read about managing parenting schedules and routines with multiple children.`,
-`Schedule a routine health check-up to assess prenatal compatibility and health markers.`
-];
-} else if (babyNum === "3") {
-goalActions = [
-`Review your monthly family budget ledger to account for the expenses of raising three children (existing ages: ${firstBabyAge} & ${secondBabyAge}).`,
-`Set aside 30 minutes to discuss space/room distribution for all three children.`,
-`Practice a 15-minute mindfulness session to cultivate mental resilience for a larger family.`,
-`Schedule a primary healthcare consultation to review maternal health pointers.`
-];
-}
-}
-}
-} else if (hasPartner) {
-if (lang === 'hi') {
-if (customCategory === "pregnancy") {
-goalActions = [
-`स्वयं (महिला साथी): अपने शारीरिक स्वास्थ्य संकेतकों को ट्रैक करें, गर्भावस्था डायरी बनाए रखें, और विटामिन लें।`,
-`साथी (${partnerName}): साथी की शारीरिक थकान को कम करने के लिए एक भारी घरेलू काम खुद संभालें।`,
-`संयुक्त कदम: तनाव के स्तर को संतुलित करने के लिए शाम को मिलकर 15 मिनट श्वास व्यायाम (अनुलोम विलोम) करें।`,
-`संयुक्त योजना: उन प्रश्नों की एक साझा सूची तैयार करें जिन्हें आप अगले सप्ताह की जांच के दौरान डॉक्टर से पूछना चाहते हैं।`
-];
-} else if (customCategory === "property") {
-goalActions = [
-`स्वयं: अपने बजट से मेल खाने वाली संपत्तियों के लिए ऑनलाइन लिस्टिंग खोजें और 3 विकल्पों को शॉर्टलिस्ट करें।`,
-`साथी (${partnerName}): वित्तीय बजट, बचत या गृह ऋण प्रलेखन विकल्पों की समीक्षा करने में 15 मिनट का समय दें।`,
-`संयुक्त कदम: शॉर्टलिस्ट किए गए विकल्पों को एक साथ देखने में 20 मिनट का समय बिताएं और स्थान प्राथमिकताओं को संरेखित करें।`,
-`संयुक्त योजना: इस सप्ताहांत एक साथ भौतिक संपत्ति का निरीक्षण करने के लिए एक संयुक्त साइट विजिट शेड्यूल करें।`
-];
-} else {
-goalActions = [
-`स्वयं: आज 15 मिनट का समय निकालकर एक संबंध चिंता या लक्ष्य लिखें जिसे आप ${partnerName} के साथ साझा करना चाहते हैं।`,
-`साथी (${partnerName}): उनसे कहें कि सक्रिय रूप से सुनने में 15 मिनट बिताएं बिना कोई अवांछित सलाह दिए।`,
-`संयुक्त कदम: आप और ${partnerName} दोनों मिलकर 20 मिनट बाहर टहलें या साझा योजना पर चर्चा करते हुए चाय साझा करें।`,
-`ऊर्जावान संरेखण: साथी के ग्रहों के स्पंदनों को सामंजस्य में लाने के लिए आज मनभावन हल्के रंग (जैसे क्रीम या पीला) पहनें।`
-];
-}
-} else {
-if (customCategory === "pregnancy") {
-goalActions = [
-`Self (Female Partner): Track your physical health indicators, keep a pregnancy diary, and take prenatal vitamins.`,
-`Partner (${partnerName}): Take over one heavy household chore (like carrying groceries or deep cleaning) to minimize physical fatigue for your partner.`,
-`Joint Action: Spend 15 minutes in the evening doing light breathing exercises (Anulom Vilom) together to harmonize stress levels.`,
-`Joint Planning: Draft a shared list of questions you want to ask your gynecologist or consultant during next week's check-up.`
-];
-} else if (customCategory === "property") {
-goalActions = [
-`Self: Spend 15 minutes searching online listings for properties matching your target criteria and shortlist 3 choices.`,
-`Partner (${partnerName}): Spend 15 minutes reviewing the financial budget, savings, or loan documentation options.`,
-`Joint Action: Spend 20 minutes looking at the shortlisted options together and align on your location priorities.`,
-`Joint Action: Schedule a joint site visit or broker call to inspect a physical property together this weekend.`
-];
-} else {
-goalActions = [
-`Self: Take 15 minutes today to write down a relationship concern or goal you want to discuss with ${partnerName}.`,
-`Partner (${partnerName}): Ask them to spend 15 minutes listening actively to your daily experiences without offering unsolicited advice.`,
-`Joint Action: Both you and ${partnerName} should spend 20 minutes walking together outdoors or sharing a relaxing tea while discussing a shared domestic plan.`,
-`Energetic Sync: Wear pleasing light colors today (like cream, pastel pink, or light yellow) to harmonize both partners' planetary vibrations.`
-];
-}
-}
-}
-
-const sliced = goalActions.slice(0, actionsPerGoal);
-sliced.forEach(act => {
-if (!allActions.includes(act)) {
-allActions.push(act);
-}
-});
-});
-
-
-if (allActions.length === 0) {
-allActions = [...(practicalMap["job"] || [])];
-}
-
-const pListHTML = allActions.slice(0, 6).map((a, i) =>
-`<li><strong>${lang === 'hi' ? 'कदम' : 'Action Step'} ${i+1}:</strong> ${a}</li>`
-).join('');
-
-// Astro predictions text
-let predictionHTML;
-if (lang === 'hi') {
-predictionHTML = `
-<p style="margin: 0 0 10px 0;"><strong>ज्योतिषीय लग्न (Lagna):</strong> <span style="color: var(--gold);">${lagnaNameHi} (${lagnaName})</span> | <strong>शासक ग्रह:</strong> <span style="color: #5dade2;">${rulingLord}</span></p>
- <p style="margin: 0 0 8px 0; font-size: 0.85rem; color: var(--text-muted);"><strong>जन्म तिथि:</strong> ${date || 'अज्ञात'} &nbsp;|&nbsp; <strong>जन्म स्थान:</strong> ${cityName || 'अज्ञात'}</p>
-<p style="margin: 0 0 10px 0;">आपकी कुंडली बताती है कि आपके लग्न स्वामी <strong>${rulingLord}</strong> वर्तमान में आपके 90-दिवसीय कर्म चक्र की ओर मजबूत ऊर्जा किरणें संचारित कर रहे हैं। समर्पित अनुशासन के साथ, आपका व्यक्तिगत ऊर्जा संरेखण आगामी 90 दिनों में चरम प्रकटीकरण शक्ति तक पहुंच जाएगा।</p>
-<div style="background: rgba(232, 200, 121, 0.06); padding: 12px; border-radius: 8px; border-left: 3px solid var(--gold); margin-top: 10px;">
-<strong style="color: var(--gold); display: block; margin-bottom: 4px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> सक्रिय लक्ष्यों का ज्योतिषीय पूर्वानुमान:</strong>
-<ul style="margin: 4px 0 0 18px; padding: 0;">
-${activeGoalsList.map(g => {
-const gLabel = goalLabelsHi[g] || goalLabelsEn[g] || g;
-return `<li style="margin-bottom: 4px;"><strong>${gLabel}:</strong> ${rulingLord} के स्थान के तहत अत्यधिक अनुकूल ग्रह समर्थन पाया गया। त्वरित सफलता के लिए नीचे दिए गए उपायों का पालन करें।</li>`;
-}).join('')}
-</ul>
-</div>
-`;
-} else {
-predictionHTML = `
-<p style="margin: 0 0 10px 0;"><strong>Astrological Ascendant (Lagna):</strong> <span style="color: var(--gold);">${lagnaName} (${lagnaNameHi})</span> | <strong>Ruling Planet:</strong> <span style="color: #5dade2;">${rulingLord}</span></p>
- <p style="margin: 0 0 8px 0; font-size: 0.85rem; color: var(--text-muted);"><strong>Date of Birth:</strong> ${date || 'Unknown'} &nbsp;|&nbsp; <strong>Place of Birth:</strong> ${cityName || 'Unknown'}</p>
-<p style="margin: 0 0 10px 0;">Your horoscope indicates that your Lagna Lord <strong>${rulingLord}</strong> is currently transmitting strong activating rays towards your 90-day karmic cycle. With dedicated discipline, your personal energy alignment will reach peak manifestation power over the upcoming 90 days.</p>
-<div style="background: rgba(232, 200, 121, 0.06); padding: 12px; border-radius: 8px; border-left: 3px solid var(--gold); margin-top: 10px;">
-<strong style="color: var(--gold); display: block; margin-bottom: 4px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Active Goals Astrological Forecast:</strong>
-<ul style="margin: 4px 0 0 18px; padding: 0;">
-${activeGoalsList.map(g => {
-const gLabel = goalLabelsEn[g] || g;
-return `<li style="margin-bottom: 4px;"><strong>${gLabel}:</strong> Highly favorable planetary support detected under ${rulingLord}'s placement. Follow the remedies below for accelerated success.</li>`;
-}).join('')}
-</ul>
-</div>
-`;
-}
-
-// Mission Type
-const goalTitleMapEn = {
-'job': 'Career Mission',
-'debt': 'Wealth Clearing Mission',
-'marriage': 'Marriage Prediction Mission',
-'baby': 'Baby Planning Mission',
-'business': 'Business Growth Mission',
-'property': 'Dream Home Mission',
-'health': 'Health & Healing Mission',
-'custom': 'Life Resolution Mission'
-};
-const goalTitleMapHi = {
-'job': 'करियर मिशन',
-'debt': 'धन शुद्धि मिशन',
-'marriage': 'विवाह भविष्यवाणी मिशन',
-'baby': 'संतान योजना मिशन',
-'business': 'व्यापार विकास मिशन',
-'property': 'सपनों का घर मिशन',
-'health': 'स्वास्थ्य और उपचार मिशन',
-'custom': 'जीवन समाधान मिशन'
-};
-
-const missionTypes = [];
-activeGoalsList.forEach(g => {
-let normG = g;
-if (g === 'marriage-single' || g === 'marriage-couple') normG = 'marriage';
-if (g === 'property-single' || g === 'property-couple') normG = 'property';
-const type = lang === 'hi' ? (goalTitleMapHi[normG] || 'दैनिक एस्ट्रो मिशन') : (goalTitleMapEn[normG] || 'Daily Astro Mission');
-if (!missionTypes.includes(type)) {
-missionTypes.push(type);
-}
-});
-const combinedMissionType = missionTypes.join(' & ');
-
-let titleText = hasPartner
-? (lang === 'hi' ? `${name} और ${partnerName || 'साथी'} का ${combinedMissionType}` : `${name} & ${partnerName || 'Partner'}'s ${combinedMissionType}`)
-: (lang === 'hi' ? `${name} का ${combinedMissionType}` : `${name}'s ${combinedMissionType}`);
-
-return {
-vListHTML,
-lListHTML,
-vVastuHTML,
-pListHTML,
-predictionHTML,
-titleText
-};
-}
-
-// Helper function to build predictions for a specific language
-function compileMissionData(lang) {
-const lordDetails = lang === 'hi' ? (vedicMantrasHi[rulingLord] || vedicMantrasHi["Sun"]) : (vedicMantrasEn[rulingLord] || vedicMantrasEn["Sun"]);
-let vListHTML;
-
-// Vedic Tasks
-if (!hasPartner) {
-const goalVedicContextEn = {
-job: `Perform Surya Namaskaar (12 rounds) before sunrise to activate career and authority vibrations.`,
-debt: `Recite the Shiva Panchakshari mantra "Om Namah Shivaya" 108 times before meals to dissolve financial anxieties.`,
-marriage: `Recite the Katyayani mantra "Om Katyayanyai Namah" 108 times on a Friday morning to attract your destined partner.`,
-baby: `Both partners should recite the Santan Gopal mantra "Om Devaki Sut Govind..." 108 times together each morning.`,
-business: `Perform Ganesh puja on Wednesdays and light incense (dhoop) at your business entrance.`,
-property: `Recite the Bhoomi Sukta prayer (from Atharvaveda) before property visits. Also chant "Om Bhaumaya Namah" 11 times for Mars blessings on property.`,
-health: `Perform Surya Namaskar (sun salutation) at sunrise and drink copper vessel water in the morning for vitality.`,
-custom: `Perform an evening puja with incense and a ghee lamp, focusing your intention on resolving: "${issueText}".`
-};
-const goalVedicContextHi = {
-job: `करियर और अधिकार के स्पंदनों को सक्रिय करने के लिए सूर्योदय से पहले सूर्य नमस्कार (12 चक्र) करें।`,
-debt: `वित्तीय चिंताओं को दूर करने के लिए भोजन से पहले 108 बार शिव पंचाक्षरी मंत्र "ॐ नमः शिवाय" का जाप करें।`,
-marriage: `अपने भाग्यशाली जीवनसाथी को आकर्षित करने के लिए शुक्रवार की सुबह कात्यायनी मंत्र "ॐ कात्यायन्यै नमः" का 108 बार जाप करें।`,
-baby: `संतान सुख के लिए दोनों साथी मिलकर प्रत्येक सुबह 108 बार संतान गोपाल मंत्र "ॐ देवकी सुत गोविंद..." का जाप करें।`,
-business: `बुधवार को गणेश पूजा करें और अपने व्यावसायिक प्रवेश द्वार पर धूप जलाएं।`,
-property: `संपत्ति के दौरों से पहले भूमि सूक्त प्रार्थना (अथर्ववेद से) का पाठ करें। संपत्ति पर मंगल के आशीर्वाद के लिए "ॐ भौमाय नमः" का 11 बार जाप करें।`,
-health: `सूर्योदय के समय सूर्य नमस्कार करें और जीवन शक्ति के लिए सुबह तांबे के बर्तन का पानी पिएं।`,
-custom: `शाम को धूप और घी के दीये के साथ पूजा करें, अपने ध्यान को इस समस्या के समाधान पर केंद्रित करें: "${issueText}"।`
-};
-
-const contextMap = lang === 'hi' ? goalVedicContextHi : goalVedicContextEn;
-const contextKey = ['property-single','property-couple'].includes(goal) ? 'property' : ['marriage-single','marriage-couple'].includes(goal) ? 'marriage' : (normalizedGoal in contextMap ? normalizedGoal : 'custom');
-if (lang === 'hi') {
-vListHTML = `
-<li style="margin-bottom: 10px;"><strong>शासक ग्रह मंत्र:</strong> प्रत्येक सुबह पूर्व की ओर मुंह करके 108 बार <strong>"${lordDetails.mantra}"</strong> का लगातार 40 दिनों तक जाप करें।</li>
-<li style="margin-bottom: 10px;"><strong>पवित्र पाठ:</strong> ${lordDetails.text}</li>
-<li style="margin-bottom: 10px;"><strong>लक्ष्य अनुष्ठान:</strong> ${contextMap[contextKey] || contextMap.custom}</li>
-<li><strong>एकादशी व्रत:</strong> अपने लक्ष्य से जुड़े कर्मों को संरेखित करने के लिए प्रति माह कम से कम एक एकादशी का व्रत रखें, जिसमें केवल फल या पानी का सेवन करें।</li>
-`;
-} else {
-vListHTML = `
-<li style="margin-bottom: 10px;"><strong>Ruling Planet Mantra:</strong> Chant <strong>"${lordDetails.mantra}"</strong> exactly 108 times each morning facing East for 40 consecutive days.</li>
-<li style="margin-bottom: 10px;"><strong>Sacred Text:</strong> ${lordDetails.text}</li>
-<li style="margin-bottom: 10px;"><strong>Goal Ritual:</strong> ${contextMap[contextKey] || contextMap.custom}</li>
-<li><strong>Ekadashi Fast:</strong> Observe at least one Ekadashi (11th lunar day) fast per month, drinking only fruit or water, to burn karmic debt aligned with your goal.</li>
-`;
-}
-} else {
-const partnerLordDetails = lang === 'hi' ? (vedicMantrasHi[partnerRulingLord] || vedicMantrasHi["Sun"]) : (vedicMantrasEn[partnerRulingLord] || vedicMantrasEn["Sun"]);
-const coupleGoalRitualsEn = {
-marriage: `Both partners should recite the Vivah Sukta verses from the Rigveda together each morning and offer flowers to Lord Vishnu on Thursdays.`,
-baby: `Both partners should recite the Santan Gopal mantra "Om Devaki Sut Govind..." 108 times together each morning.`,
-property: `Both partners should offer water, a flower, and a pinch of turmeric to a rising sun, and chant "Om Bhaumaya Namah" 11 times together before any property visits.`,
-debt: `Both partners should recite the Shiva Panchakshari mantra together 108 times on Monday mornings while holding water in cupped hands.`,
-custom: `Both partners should perform evening puja together with ghee lamp, flowers, and focused collective intention on resolving the shared challenge.`
-};
-const coupleGoalRitualsHi = {
-marriage: `दोनों साथी प्रत्येक सुबह मिलकर ऋग्वेद के विवाह सूक्त श्लोकों का पाठ करें और गुरुवार को भगवान विष्णु को फूल अर्पित करें।`,
-baby: `दोनों साथी प्रत्येक सुबह मिलकर संतान गोपाल मंत्र "ॐ देवकी सुत गोविंद..." का 108 बार जाप करें।`,
-property: `दोनों साथी किसी भी संपत्ति के दौरे से पहले उगते सूर्य को जल, फूल और एक चुटकी हल्दी अर्पित करें, और मिलकर 11 बार "ॐ भौमाय नमः" का जाप करें।`,
-debt: `दोनों साथी सोमवार की सुबह हाथों में जल लेकर मिलकर 108 बार शिव पंचाक्षरी मंत्र का जाप करें।`,
-custom: `दोनों साथी शाम को मिलकर घी के दीपक, फूलों और सामूहिक ध्यान के साथ साझा चुनौती को हल करने के लिए पूजा करें।`
-};
-
-const coupleMap = lang === 'hi' ? coupleGoalRitualsHi : coupleGoalRitualsEn;
-const coupleContextKey = normalizedGoal in coupleMap ? normalizedGoal : 'custom';
-
-if (lang === 'hi') {
-vListHTML = `
-<li style="margin-bottom: 10px;"><strong>${name} का मंत्र:</strong> प्रत्येक सुबह 108 बार <strong>"${lordDetails.mantra}"</strong> का जाप करें (आपके लग्न के स्वामी: ${rulingLord})।</li>
-<li style="margin-bottom: 10px;"><strong>${partnerName || 'साथी'} का मंत्र:</strong> प्रत्येक सुबह 108 बार <strong>"${partnerLordDetails.mantra}"</strong> का जाप करें (उनके लग्न के स्वामी: ${partnerRulingLord})।</li>
-<li style="margin-bottom: 10px;"><strong>युगल लक्ष्य अनुष्ठान:</strong> ${coupleMap[coupleContextKey]}</li>
-<li style="margin-bottom: 10px;"><strong>साझा पवित्र पाठ:</strong> अपने साझा लक्ष्य के लिए ईश्वरीय सहायता प्राप्त करने के लिए प्रत्येक शाम एक साथ गुरु स्तोत्र या शिव पुराण का पाठ करें।</li>
-<li><strong>एकादशी व्रत:</strong> सामूहिक कर्म ऊर्जा को संरेखित करने के लिए इस महीने कम से कम एक बार दोनों मिलकर एकादशी व्रत का पालन करें।</li>
-`;
-} else {
-vListHTML = `
-<li style="margin-bottom: 10px;"><strong>${name}'s Mantra:</strong> Chant <strong>"${lordDetails.mantra}"</strong> 108 times each morning (ruler of your Lagna: ${rulingLord}).</li>
-<li style="margin-bottom: 10px;"><strong>${partnerName || 'Partner'}'s Mantra:</strong> Chant <strong>"${partnerLordDetails.mantra}"</strong> 108 times each morning (ruler of their Lagna: ${partnerRulingLord}).</li>
-<li style="margin-bottom: 10px;"><strong>Couple Goal Ritual:</strong> ${coupleMap[coupleContextKey]}</li>
-<li style="margin-bottom: 10px;"><strong>Shared Sacred Text:</strong> Read the Guru Stotra or Shiva Purana together each evening to invite divine support for your shared goal.</li>
-<li><strong>Ekadashi Fast:</strong> Both observe Ekadashi fast together at least once this month to align collective karmic energies.</li>
-`;
-}
-}
-
-// Lal Kitab Remedies
-const remMap = lang === 'hi' ? lalkitabRemediesHi : lalkitabRemediesEn;
-let rKey = goal;
-if (goal === 'marriage-single' || goal === 'marriage-couple') rKey = 'marriage';
-if (goal === 'property-single' || goal === 'property-couple') rKey = 'property';
-if (goal === 'custom') rKey = "custom_" + customCategory;
-let remedies = [...(remMap[rKey] || remMap["job"])];
-if (hasPartner) {
-if (lang === 'hi') {
-if (normalizedGoal === 'baby' || customCategory === 'pregnancy') {
-remedies[1] = `संतान आशीर्वाद को मजबूत करने के लिए आप और ${partnerName || 'आपके साथी'} दोनों को मिलकर बरगद के पेड़ की जड़ में दूध या मीठा पानी चढ़ाना चाहिए और माथे पर गीली मिट्टी का तिलक लगाना चाहिए।`;
-} else if (normalizedGoal === 'property' || customCategory === 'property') {
-remedies[1] = `सामूहिक मंगल/भूमि ऊर्जा का आह्वान करने के लिए आप और ${partnerName || 'आपके साथी'} दोनों को मिलकर उगते सूर्य को एक चम्मच शहद मिला हुआ जल अर्पित करना चाहिए।`;
-} else if (normalizedGoal === 'marriage') {
-remedies[1] = `सामंजस्यपूर्ण विवाह तरंगों के लिए आप और ${partnerName || 'आपके साथी'} दोनों को मिलकर गुरुवार की शाम विष्णु मंदिर में घी का दीपक जलाना चाहिए।`;
-} else {
-remedies[1] = `शुक्र/चंद्र अनुकूलता को मजबूत करने के लिए आप और ${partnerName || 'आपके साथी'} दोनों को मिलकर सोमवार की सुबह सफेद गाय को भोजन कराना चाहिए या चावल और दूध का दान करना चाहिए।`;
-}
-} else {
-if (normalizedGoal === 'baby' || customCategory === 'pregnancy') {
-remedies[1] = `Both you and ${partnerName || 'your partner'} should offer milk or sweet water to a banyan tree root together and apply the wet soil tilak on your foreheads to strengthen progeny blessings.`;
-} else if (normalizedGoal === 'property' || customCategory === 'property') {
-remedies[1] = `Both you and ${partnerName || 'your partner'} should offer fresh water mixed with a small spoon of honey to the rising Sun together to invoke collective Mars/land energy.`;
-} else if (normalizedGoal === 'marriage') {
-remedies[1] = `Both you and ${partnerName || 'your partner'} should light a ghee lamp at a Vishnu temple together on Thursday evenings for harmonious marital vibrations.`;
-} else {
-remedies[1] = `Both you and ${partnerName || 'your partner'} should feed a white cow or donate rice and milk on Monday mornings to strengthen Venus/Moon compatibilities.`;
-}
-}
-}
-const lListHTML = remedies.slice(0, 6).map((r, i) =>
-`<li style="margin-bottom: 10px;"><strong>${lang === 'hi' ? 'उपाय' : 'Remedy'} ${i+1}:</strong> ${r}</li>`
-).join('');
-
-// Vastu Suggestions
-const vastuMap = lang === 'hi' ? vastuSuggestionsHi : vastuSuggestionsEn;
-let vastuGoal = normalizedGoal;
-if (normalizedGoal === 'custom') {
-vastuGoal = "custom_" + customCategory;
-}
-let vastuText = vastuMap[vastuGoal] || vastuMap["job"];
-if (normalizedGoal === 'baby') {
-if (hasPartner) {
-if (lang === 'hi') {
-if (babyNum === "1") {
-vastuText = `सुनिश्चित करें कि आपका साझा बिस्तर दक्षिण-पश्चिम दिशा में रखा गया है। अपने बेडरूम में गहरे रंगों का उपयोग करने से बचें; गर्भावस्था के अनुकूल तरंगों के लिए हल्के क्रीम, गुलाबी या हल्के पीले रंगों को प्राथमिकता दें। उत्तर-पूर्व कोने को साफ रखें।`;
-} else if (babyNum === "2") {
-vastuText = `सुनिश्चित करें कि आपके घर का उत्तर-पूर्व क्षेत्र साफ है। शांत वातावरण बनाए रखने के लिए अपने पहले बच्चे के खिलौनों को अपने सोने के बेडरूम से दूर रखें। बेडरूम के पूर्व क्षेत्र में ताजे सफेद फूल रखें।`;
-} else if (babyNum === "3") {
-vastuText = `घर में बढ़ती हुई संतान ऊर्जा को आमंत्रित करने के लिए अपने रहने वाले क्षेत्र के पूर्वी हिस्से में एक स्वस्थ हरा पौधा या पारिवारिक चित्र लगाएं। बच्चों के कमरे में पूर्व या उत्तर की ओर खिड़कियां रखें।`;
-}
-} else {
-if (babyNum === "1") {
-vastuText = `Ensure your shared bed is placed in the South-West direction. Avoid using aggressive colors (like red or dark blue) in your bedroom; prefer warm cream, pastel pink, or light yellow tones to support pregnancy vibrations. Keep North-East zone clean and fresh.`;
-} else if (babyNum === "2") {
-vastuText = `Ensure the North-East zone of your home is clean. Keep your first child's toys away from your bedroom to maintain tranquil pregnancy vibes. Place fresh white flowers in the East zone of your bedroom.`;
-} else if (babyNum === "3") {
-vastuText = `Place a healthy green plant or a family portrait in the East zone of your shared living space to invite growing domestic progeny energies. Ensure the children's room has East or North-facing windows.`;
-}
-}
-}
-} else if (normalizedGoal === 'property') {
-if (hasPartner) {
-if (lang === 'hi') {
-vastuText = `आप दोनों को संभावित ${propertyType} पर एक साथ जाना चाहिए और मूल्यांकन करना चाहिए: मुख्य द्वार की दिशा (पूर्व/उत्तर को प्राथमिकता दें), उत्तर-पूर्व क्षेत्र (खुला/हल्का होना चाहिए), रसोई (दक्षिण-पूर्व में होनी चाहिए)। उत्तर-पूर्व में शौचालय या बैठने/सोने के क्षेत्र के ऊपर कंक्रीट बीम वाली संपत्तियों से बचें।`;
-} else {
-vastuText = `Both of you should visit the prospective ${propertyType} together and assess: main door direction (prefer East/North), North-East zone (should be open/light), kitchen (should be in South-East). Avoid properties with toilets in North-East or beams over the main sitting/sleeping area.`;
-}
-}
-} else if (normalizedGoal === 'marriage') {
-if (hasPartner) {
-if (lang === 'hi') {
-vastuText = `सुनिश्चित करें कि आपके बेडरूम का दक्षिण-पश्चिम (संबंध क्षेत्र) साफ है, वहां रोज़ क्वार्ट्ज क्रिस्टल का गोला है, और बिस्तर को सीधे प्रतिबिंबित करने वाले कोई दर्पण नहीं हैं। टूटे सजावटी सामान हटा दें।`;
-} else {
-vastuText = `Ensure the South-West (relationship zone) of your shared bedroom is clean, has a rose quartz sphere, and contains no mirrors directly reflecting the bed. Remove any broken decor items.`;
-}
-} else {
-if (lang === 'hi') {
-vastuText = `अपने बेडरूम के दक्षिण-पश्चिम कोने में गुलाबी या गोल्डन लवबर्ड्स की मूर्ति रखें। दक्षिण-पश्चिम में कचरा या कबाड़ रखने से बचें। हर शुक्रवार की शाम गुलाब या चमेली की धूप जलाएं।`;
-} else {
-vastuText = `Place a pair of pink or gold lovebirds figurine in the South-West corner of your bedroom. Avoid clutter in the South-West. Light rose or jasmine incense every Friday evening.`;
-}
-}
-} else if (hasPartner) {
-if (lang === 'hi') {
-if (customCategory === "pregnancy") {
-vastuText = `सुनिश्चित करें कि आपका साझा बिस्तर दक्षिण-पश्चिम दिशा में रखा गया है। अपने बेडरूम में गहरे रंगों का उपयोग करने से बचें; हल्के क्रीम, गुलाबी या हल्के पीले रंगों को प्राथमिकता दें।`;
-} else if (customCategory === "property") {
-vastuText = `सुनिश्चित करें कि आपके रहने वाले स्थान का उत्तर-पूर्व क्षेत्र हल्का और साफ रखा गया है। अपने लिविंग रूम के पूर्व दिशा में एक हरे-भरे जंगल की तस्वीर लगाएं।`;
-} else {
-vastuText = `सुनिश्चित करें कि आपके साझा बेडरूम का दक्षिण-पश्चिम (रिश्ता और स्थिरता क्षेत्र) साफ है, वहां रोज़ क्वार्ट्ज का गोला है, और बिस्तर के सामने कोई दर्पण नहीं है।`;
-}
-}
-}
-const vVastuHTML = `<li>${vastuText}</li>`;
-
-// Practical Actions
-const practicalActions = {
-"job": [
-`Open job boards (Naukri, LinkedIn, or specialized portals) and apply to at least 3 relevant roles matching your profile as a ${profession}.`,
-`Rewrite your resume headline to explicitly emphasize your key technical competencies as a ${profession}.`,
-`Identify 5 recruitment managers in the ${profession} domain on LinkedIn and send tailored connection requests.`,
-`Spend 45 minutes upskilling - learn a trending tool or concept required for advanced ${profession} roles.`,
-`Record your daily progress: list 3 applications sent today and track response timelines.`,
-`Ask one senior colleague, mentor, or professional contact for a candid review of your resume or interview performance.`
-],
-"debt": [
-`List all your active debts in a spreadsheet, ordering them by interest rate - focus extra payments on highest-interest debt first (Avalanche method).`,
-`Review your ${profession} work expenses and cancel one non-essential subscription or service today.`,
-`Contact one creditor or bank representative to negotiate a lower interest rate, consolidated plan, or fee waiver.`,
-`Set aside a small emergency buffer (Rs. 500-1000) before any discretionary spending today.`,
-`Set up an automatic monthly SIP (Systematic Investment Plan) of any amount to a debt repayment fund.`,
-`Calculate your total debt-to-income ratio and write out a 3-month debt clearance milestones list.`
-],
-"marriage": [
-isSingleMarriage ?
-`Take 15 minutes to journal your ideal partner qualities compatible with your lifestyle as a ${profession}.` :
-`Take 15 minutes to write down one quality you appreciate most about your partner and share it with them today.`,
-isSingleMarriage ?
-`Participate in a community club, hobby class, or professional networking event to meet people organically.` :
-`Plan one small shared activity or date this week that you both enjoy equally.`,
-isSingleMarriage ?
-`Consult with a trusted family elder or astrologer about favorable marriage muhurtas (auspicious timings) for your horoscope.` :
-`Have an honest 15-minute conversation with your partner about your shared vision for the next 12 months.`,
-isSingleMarriage ?
-`Reach out to 2 prospective matches on matrimonial or social platforms with a personalized and respectful message.` :
-`Perform one shared routine task (like cooking or organizing space) together to strengthen cooperative vibrations.`,
-isSingleMarriage ?
-`Refine your personal online matrimonial profiles with fresh, professional portraits and updated descriptions.` :
-`Set aside 10 minutes to discuss mutual financial allocations or joint asset targets for this quarter.`,
-isSingleMarriage ?
-`Spend 20 minutes updating your personal budget ledger to prepare for upcoming life goals.` :
-`Apologize or resolve one minor outstanding conflict with your partner with complete empathy.`
-],
-"custom_job": [
-`Update your professional profile headline, emphasizing skills as a ${profession}.`,
-`Identify 3 target companies and apply to their openings today.`,
-`Connect with 3 managers or peers in your field on LinkedIn.`,
-`Spend 30 minutes upgrading your skills on current tools.`
-],
-"custom_money": [
-`List all active monthly subscriptions and cancel at least one non-essential service today.`,
-`Create a detailed weekly expense tracker to review cash flow limits.`,
-`Put a fixed, small amount of savings into a separate bank account today.`,
-`Contact a financial advisor or creditor to discuss interest options.`
-],
-"custom_marriage": [
-`Write down three qualities you seek or appreciate in a long-term partner.`,
-`Plan a small, warm connection gesture or communication step today.`,
-`Clean the South-West relationship zone of your room to remove heavy clutter.`,
-`Speak with a family elder or partner about relationship plans.`
-],
-"custom_education": [
-`Define a specific study goal for today and study for at least 2 hours in focused 30-minute blocks (Pomodoro technique).`,
-`Write a concise summary of the most complex topic you studied today in your own words.`,
-`Practice solving 3 sample questions or test exercises related to your target subject to test your grasp.`,
-`Organize your study table, clear all non-essential items, and keep only current reference books to boost focus.`
-],
-"custom_health": [
-`Drink at least 3 liters of water today and record your consumption to flush bodily toxins.`,
-`Spend 25 minutes doing simple stretching or walking outdoors to release physical and mental stress.`,
-`Research or schedule an appointment with a professional specialist regarding your health concern: "${issueText}".`,
-`Write down a daily menu focusing on clean, unprocessed, high-fiber food for the next 7 days.`
-],
-"custom_visa": [
-`Log in to the official immigration portal and review the checklist status of your issue: "${issueText}".`,
-`Double-check all submission files to ensure stamps, signatures, and dates are valid.`,
-`Read or post on an immigration forum/community to check recent processing times for similar travel cases.`,
-`Prepare all travel documents in a secure folder, and update your personal travel budget spreadsheet.`
-],
-"custom_legal": [
-`Draft a concise status update email to your legal consultant/lawyer regarding: "${issueText}".`,
-`Organize all evidentiary documents and correspondence chronologically in a digital folder today.`,
-`List 3 key potential compromise points or resolution outcomes for this dispute to discuss next.`,
-`Spend 20 minutes reviewing current laws or similar case precedents online to stay informed.`
-],
-"custom_mental": [
-`Dedicate 10 minutes to deep breathing exercises (Pranayama) or mindfulness meditation to calm your mind today.`,
-`Write down 3 items you are deeply grateful for in a journal to shift focus from: "${issueText}".`,
-`Reach out and talk to a supportive friend, family member, or professional counselor to express your feelings.`,
-`Disconnect from social media and electronic screens for at least 2 hours before going to sleep tonight.`
-],
-"custom_property": [
-`Open property finder apps or portals and shortlist at least 3 homes/plots matching your budget today.`,
-`Write down a detailed checklist of your absolute requirements (e.g. location, distance to work, room count).`,
-`Contact at least 2 real estate brokers or property listings owners to schedule site visits for this week.`,
-`Review your bank balance or calculate mortgage/home loan affordability limits on your banking dashboard.`
-],
-"custom_pregnancy": [
-`Prepare a nutritious diet chart rich in folic acid, iron, and green vegetables, and track your meals today.`,
-`Research and shortlist highly rated gynecologists or maternity hospitals in your local city area.`,
-`Spend 20 minutes doing light breathing exercises (Pranayama) or mindfulness yoga to reduce bodily cortisol.`,
-`Create a daily health tracking diary to log your fertility, body temperature, or prenatal vitamin intakes.`
-],
-"custom_general": [
-`Write down a clear list of 3 specific actions you can take today to address the issue: "${issueText}".`,
-`Execute the most immediate or simplest action from your list today to gain momentum.`,
-`Dedicate 30 minutes to search online or read books for solutions from experts who solved the issue: "${issueText}".`,
-`Create a tracking file or note to record daily improvements and actions related to this goal.`
-]
-};
-
-const practicalActionsHi = {
-"job": [
-`नौकरी बोर्ड (Naukri, LinkedIn आदि) खोलें और ${profession} के रूप में अपनी प्रोफाइल से मेल खाने वाली कम से कम 3 भूमिकाओं के लिए आवेदन करें।`,
-`${profession} के रूप में अपनी प्रमुख तकनीकी दक्षताओं पर जोर देने के लिए अपनी रिज्यूम हेडलाइन को अपडेट करें।`,
-`LinkedIn पर ${profession} क्षेत्र के 5 भर्ती प्रबंधकों की पहचान करें और संबंध अनुरोध भेजें।`,
-`45 मिनट कौशल विकास में लगाएं - ${profession} भूमिकाओं के लिए आवश्यक एक नया टूल या अवधारणा सीखें।`,
-`अपनी दैनिक प्रगति रिकॉर्ड करें: आज भेजे गए 3 आवेदनों की सूची बनाएं और प्रतिक्रिया समय ट्रैक करें।`,
-`अपने रिज्यूम या इंटरव्यू प्रदर्शन की निष्पक्ष समीक्षा के लिए किसी वरिष्ठ सहयोगी या संपर्क से पूछें।`
-],
-"debt": [
-`अपने बहीखाते में सभी ऋणों को ब्याज दर के अनुसार सूचीबद्ध करें - सबसे अधिक ब्याज वाले ऋण के भुगतान पर ध्यान दें (हिमस्खलन विधि)।`,
-`${profession} के रूप में अपने कार्य खर्चों की समीक्षा करें और आज एक गैर-आवश्यक सदस्यता या सेवा को रद्द करें।`,
-`कम ब्याज दर या समेकित योजना पर बातचीत करने के लिए एक लेनदार या बैंक प्रतिनिधि से संपर्क करें।`,
-`आज किसी भी अतिरिक्त खर्च से पहले एक छोटा आपातकालीन बफर (रु. 500-1000) अलग रखें।`,
-`ऋण भुगतान कोष के लिए किसी भी राशि का स्वचालित मासिक सिप (SIP) स्थापित करें।`,
-`अपनी आय-से-ऋण अनुपात की गणना करें और 3-महीने की ऋण निकासी मील के पत्थर की सूची लिखें।`
-],
-"marriage": [
-isSingleMarriage ?
-`${profession} के रूप में अपनी जीवनशैली के अनुकूल आदर्श साथी के गुणों को लिखने के लिए 15 मिनट का समय लें।` :
-`अपने साथी के बारे में एक गुण लिखने के लिए 15 मिनट का समय लें जिसे आप सबसे अधिक पसंद करते हैं और आज उनके साथ साझा करें।`,
-isSingleMarriage ?
-`लोगों से मिलने के लिए किसी सामुदायिक क्लब, हॉबी क्लास या पेशेवर नेटवर्किंग कार्यक्रम में भाग लें।` :
-`इस सप्ताह एक छोटी साझा गतिविधि या डेट की योजना बनाएं जिसका आप दोनों समान रूप से आनंद लें।`,
-isSingleMarriage ?
-`अपनी कुंडली के लिए अनुकूल विवाह मुहूर्त (शुभ समय) के बारे में किसी भरोसेमंद परिवार के बुजुर्ग या ज्योतिषी से सलाह लें।` :
-`अगले 12 महीनों के लिए अपने साझा दृष्टिकोण के बारे में अपने साथी के साथ 15 मिनट की ईमानदार बातचीत करें।`,
-isSingleMarriage ?
-`एक व्यक्तिगत और सम्मानजनक संदेश के साथ वैवाहिक या सामाजिक मंचों पर 2 संभावित मैचों से संपर्क करें।` :
-`सहयोगात्मक स्पंदनों को मजबूत करने के लिए एक साथ मिलकर एक नियमित घरेलू कार्य (जैसे खाना बनाना या जगह व्यवस्थित करना) करें।`,
-isSingleMarriage ?
-`ताजा पेशेवर चित्रों और अद्यतन विवरणों के साथ अपने व्यक्तिगत वैवाहिक प्रोफाइल को परिष्कृत करें।` :
-`इस तिमाही के लिए आपसी वित्तीय आवंटन या संयुक्त संपत्ति लक्ष्यों पर चर्चा करने के लिए 10 मिनट का समय निकालें।`,
-isSingleMarriage ?
-`आगामी जीवन लक्ष्यों की तैयारी के लिए अपने व्यक्तिगत बजट बहीखाते को अपडेट करने में 20 मिनट का समय लगाएं।` :
-`पूर्ण सहानुभूति के साथ अपने साथी के साथ किसी भी छोटे विवाद या गलतफहमी को तुरंत हल करें।`
-],
-"custom_job": [
-`${profession} के रूप में कौशल पर जोर देते हुए अपने पेशेवर प्रोफाइल को अपडेट करें।`,
-`3 लक्षित कंपनियों की पहचान करें और आज ही उनके यहां आवेदन करें।`,
-`LinkedIn पर अपने क्षेत्र के 3 प्रबंधकों या साथियों से जुड़ें।`,
-`कौशल उन्नयन के लिए वर्तमान टूल्स सीखने में 30 मिनट का समय लगाएं।`
-],
-"custom_money": [
-`सक्रिय मासिक सदस्यताओं की सूची बनाएं और आज ही कम से कम एक गैर-आवश्यक सेवा रद्द करें।`,
-`नकदी प्रवाह सीमा की समीक्षा के लिए एक विस्तृत साप्ताहिक व्यय ट्रैकर बनाएं।`,
-`बचत की एक निश्चित, छोटी राशि आज ही एक अलग बैंक खाते में रखें।`,
-`ब्याज विकल्पों पर चर्चा करने के लिए एक वित्तीय सलाहकार या लेनदार से संपर्क करें।`
-],
-"custom_marriage": [
-`दीर्घकालिक साथी में जो तीन गुण आप चाहते हैं या पसंद करते हैं उन्हें लिखें।`,
-`आज ही एक छोटे, मधुर संबंध हाव-भाव या संचार कदम की योजना बनाएं।`,
-`कबाड़ हटाने के लिए अपने बेडरूम के दक्षिण-पश्चिम संबंध क्षेत्र को साफ करें।`,
-`पारिवारिक बुजुर्ग या साथी से संबंध योजनाओं के बारे में बात करें।`
-],
-"custom_education": [
-`आज के लिए एक विशिष्ट अध्ययन लक्ष्य परिभाषित करें और केंद्रित 30-मिनट के ब्लॉकों (पोमोडोरो तकनीक) में कम से कम 2 घंटे अध्ययन करें।`,
-`आज आपके द्वारा अध्ययन किए गए सबसे जटिल विषय का अपने शब्दों में एक संक्षिप्त सारांश लिखें।`,
-`अपनी पकड़ का परीक्षण करने के लिए अपने लक्षित विषय से संबंधित 3 नमूना प्रश्नों या परीक्षण अभ्यासों को हल करने का अभ्यास करें।`,
-`अपने अध्ययन की मेज को व्यवस्थित करें, सभी गैर-आवश्यक वस्तुओं को हटा दें और ध्यान बढ़ाने के लिए केवल संदर्भ पुस्तकें रखें।`
-],
-"custom_health": [
-`शरीर के विषाक्त पदार्थों को बाहर निकालने के लिए आज कम से कम 3 लीटर पानी पिएं और अपना सेवन रिकॉर्ड करें।`,
-`शारीरिक और मानसिक तनाव को दूर करने के लिए बाहर साधारण स्ट्रेचिंग या टहलने में 25 मिनट का समय बिताएं।`,
-`अपनी स्वास्थ्य संबंधी चिंता के संबंध में किसी पेशेवर विशेषज्ञ से संपर्क करें या अपॉइंटमेंट लें: "${issueText}"।`,
-`अगले 7 दिनों के लिए स्वच्छ, असंसाधित, उच्च फाइबर वाले भोजन पर ध्यान केंद्रित करते हुए एक दैनिक मेनू लिखें।`
-],
-"custom_visa": [
-`आधिकारिक आव्रजन पोर्टल पर लॉग इन करें और अपनी समस्या की स्थिति की समीक्षा करें: "${issueText}"।`,
-`यह सुनिश्चित करने के लिए सभी सबमिशन फाइलों की दोबारा जांच करें कि स्टैम्प, हस्ताक्षर और तारीखें मान्य हैं।`,
-`समान यात्रा मामलों के प्रसंस्करण समय की जांच करने के लिए आव्रजन मंच/समुदाय पर पढ़ें या पोस्ट करें।`,
-`सभी यात्रा दस्तावेजों को एक सुरक्षित फ़ोल्डर में तैयार रखें और अपने व्यक्तिगत यात्रा बजट स्प्रेडशीट को अपडेट करें।`,
-],
-"custom_legal": [
-`अपनी कानूनी विवाद समस्या के बारे में अपने कानूनी सलाहकार/वकील को एक संक्षिप्त स्थिति अपडेट ईमेल का मसौदा तैयार करें: "${issueText}"।`,
-`सभी साक्ष्य दस्तावेजों और पत्राचार को आज ही एक डिजिटल फ़ोल्डर में क्रमानुसार व्यवस्थित करें।`,
-`चर्चा करने के लिए इस विवाद के 3 प्रमुख संभावित समाधान बिंदुओं या परिणामों की सूची बनाएं।`,
-`सूचित रहने के लिए ऑनलाइन समान अदालती मामलों के निर्णयों या कानूनों की समीक्षा करने में 20 मिनट का समय लगाएं।`
-],
-"custom_mental": [
-`अपने मन को शांत करने के लिए आज 10 मिनट गहरी सांस लेने के व्यायाम (प्राणायाम) या ध्यान को समर्पित करें।`,
-`इस समस्या से ध्यान हटाने के लिए एक डायरी में 3 चीजें लिखें जिनके लिए आप आभारी हैं: "${issueText}"।`,
-`अपनी भावनाओं को व्यक्त करने के लिए एक सहायक मित्र, परिवार के सदस्य या पेशेवर परामर्शदाता से बात करें।`,
-`आज रात सोने से कम से कम 2 घंटे पहले सोशल मीडिया और इलेक्ट्रॉनिक स्क्रीन से दूरी बना लें।`
-],
-"custom_property": [
-`ऑनलाइन संपत्ति खोजने वाले ऐप्स खोलें और आज ही अपने बजट से मेल खाने वाले कम से कम 3 घरों/प्लॉटों को शॉर्टलिस्ट करें।`,
-`अपनी पूर्ण आवश्यकताओं (जैसे स्थान, काम से दूरी, कमरों की संख्या) की एक विस्तृत सूची लिखें।`,
-`इस सप्ताह साइट विजिट के लिए कम से कम 2 रियल एस्टेट ब्रोकर्स या संपत्ति मालिकों से संपर्क करें।`,
-`अपने बैंक बैलेंस की समीक्षा करें या होम लोन की सामर्थ्य सीमा की गणना करें।`
-],
-"custom_pregnancy": [
-`फोलिक एसिड, आयरन और हरी सब्जियों से भरपूर एक पौष्टिक आहार चार्ट तैयार करें और आज ही अपने भोजन को ट्रैक करें।`,
-`अपने स्थानीय शहर क्षेत्र में उच्च श्रेणी के स्त्री रोग विशेषज्ञों या मातृत्व अस्पतालों की सूची बनाएं।`,
-`शारीरिक तनाव के स्तर को कम करने के लिए हल्के श्वास व्यायाम (प्राणायाम) या माइंडफुलनेस योग करने में 20 मिनट का समय बिताएं।`,
-`अपनी प्रजनन क्षमता या विटामिन सेवन को लॉग करने के लिए एक दैनिक स्वास्थ्य ट्रैकिंग डायरी बनाएं।`
-],
-"custom_general": [
-`इस समस्या के समाधान के लिए आज आप जो 3 विशिष्ट कदम उठा सकते हैं, उनकी एक स्पष्ट सूची लिखें: "${issueText}"।`,
-`गति प्राप्त करने के लिए आज ही अपनी सूची में से सबसे सरल कदम उठाएं।`,
-`इस समस्या का समाधान करने वाले विशेषज्ञों के सुझावों को पढ़ने या ऑनलाइन खोजने के लिए 30 मिनट का समय दें: "${issueText}"।`,
-`इस लक्ष्य से जुड़े दैनिक सुधारों और कार्यों को रिकॉर्ड करने के लिए एक ट्रैकिंग नोट बनाएं।`
-]
-};
-
-const practicalMap = lang === 'hi' ? practicalActionsHi : practicalActions;
-let actionsGoal = normalizedGoal;
-if (normalizedGoal === 'custom') {
-actionsGoal = "custom_" + customCategory;
-}
-let actions = [...(practicalMap[actionsGoal] || practicalMap["job"])];
-actions = actions.filter(a => a !== undefined);
-
-if (goal === 'baby') {
-if (hasPartner) {
-if (lang === 'hi') {
-if (babyNum === "1") {
-actions = [
-`स्वयं: एक स्वस्थ प्रसवपूर्व आहार बनाए रखें और आज ही अपने दैनिक विटामिन सेवन को दर्ज करें।`,
-`साथी (${partnerName}): अपने जीवनसाथी के लिए शारीरिक तनाव को कम करने के लिए घरेलू कार्यों में सहायता करें।`,
-`संयुक्त कदम: रिश्ते की ऊर्जा को संरेखित करने के लिए आप और ${partnerName} दोनों मिलकर 15 मिनट ध्यान करें।`,
-`संयुक्त योजना: इस महीने दौरा करने के लिए 3 स्थानीय स्वास्थ्य क्लीनिकों या मातृत्व केंद्रों को शॉर्टलिस्ट करें।`
-];
-} else if (babyNum === "2") {
-actions = [
-`स्वयं: स्वास्थ्य मेट्रिक्स और प्रसव के बाद की रिकवरी के संकेतों को ट्रैक करने के लिए 15 मिनट का समय लें।`,
-`साथी (${partnerName}): अपने जीवनसाथी को आराम देने के लिए अपने पहले बच्चे (उम्र: ${firstBabyAge} वर्ष) की देखभाल में 30 मिनट का समय बिताएं।`,
-`संयुक्त कदम: ${partnerName} के साथ चर्चा करें कि पहले बच्चे को नए भाई या बहन के आगमन के लिए मानसिक रूप से कैसे तैयार किया जाए।`,
-`संयुक्त योजना: निरीक्षण करें कि पहले बच्चे के कौन से सामान (जैसे पालना, खिलौने, कपड़े) दोबारा काम आ सकते हैं।`
-];
-} else if (babyNum === "3") {
-actions = [
-`स्वयं: आराम करने, हल्के खिंचाव का अभ्यास करने और आज पोषण मेट्रिक्स लॉग करने के लिए 20 मिनट लें।`,
-`साथी (${partnerName}): आज अपने पहले दो बच्चों (उम्र: ${firstBabyAge} और ${secondBabyAge}) की दैनिक दिनचर्या और पढ़ाई की जिम्मेदारी संभालें।`,
-`संयुक्त कदम: पांच सदस्यों के परिवार के लिए आवश्यक वित्तीय समायोजन का खाका तैयार करने के लिए ${partnerName} के साथ 20 मिनट बैठें।`,
-`संयुक्त योजना: तीन बच्चों को समायोजित करने के लिए शयनकक्ष के पुनर्गठन या अंतरिक्ष वितरण पर चर्चा करें।`
-];
-}
-} else {
-if (babyNum === "1") {
-actions = [
-`Self: Maintain a healthy prenatal diet and log your daily vitamin intake today.`,
-`Partner (${partnerName}): Assist in organizing domestic tasks to minimize physical strain for your spouse.`,
-`Joint Action: Both you and ${partnerName} spend 15 minutes doing light meditation together to align relationship energies.`,
-`Joint Planning: Shortlist 3 local healthcare clinics or maternity centers to visit together this month.`
-];
-} else if (babyNum === "2") {
-actions = [
-`Self: Spend 15 minutes tracking health metrics and post-pregnancy recovery signs today.`,
-`Partner (${partnerName}): Spend 30 minutes playing with or caring for your first child (age: ${firstBabyAge}) to give your spouse some personal rest.`,
-`Joint Action: Spend 15 minutes talking with ${partnerName} on how to prepare your first child emotionally for a sibling.`,
-`Joint Planning: Inspect which baby gear (stroller, crib, clothes) from your first child is reusable.`
-];
-} else if (babyNum === "3") {
-actions = [
-`Self: Take 20 minutes to rest, practice light stretching, and log nutrition metrics today.`,
-`Partner (${partnerName}): Take charge of organizing the daily schedules and study routines of your first two children (ages: ${firstBabyAge} & ${secondBabyAge}) today.`,
-`Joint Action: Sit with ${partnerName} for 20 minutes to map out the financial adjustments required for a family of five.`,
-`Joint Planning: Discuss bedroom reorganization or space distribution to accommodate three children.`
-];
-}
-}
-} else {
-if (lang === 'hi') {
-if (babyNum === "1") {
-actions = [
-`आज प्रसवपूर्व स्वास्थ्य, फोलिक एसिड और आयरन से भरपूर एक पौष्टिक मेनू की योजना बनाएं।`,
-`अपने स्थानीय शहर क्षेत्र में उच्च श्रेणी के स्त्री रोग विशेषज्ञों या मातृत्व विशेषज्ञों की सूची बनाएं।`,
-`तनाव के स्तर को कम करने के लिए हल्के श्वास व्यायाम (प्राणायाम) करने में 20 मिनट का समय बिताएं।`,
-`प्रजनन काल और स्वास्थ्य संकेतकों को ट्रैक करने के लिए दैनिक स्वास्थ्य कैलेंडर बनाए रखें।`
-];
-} else if (babyNum === "2") {
-actions = [
-`पहली गर्भावस्था के बाद से स्वास्थ्य संकेतकों की समीक्षा के लिए बाल रोग विशेषज्ञ से परामर्श करें (पहला बच्चा ${firstBabyAge} वर्ष का है)।`,
-`पहले बच्चे के पुनः उपयोग किए जा सकने वाले शिशु सामानों की एक चेकलिस्ट बनाएं।`,
-`कई बच्चों के पालन-पोषण और समय प्रबंधन के तरीकों को पढ़ने के लिए 20 मिनट का समय दें।`,
-`प्रसवपूर्व स्वास्थ्य मार्करों का आकलन करने के लिए एक नियमित स्वास्थ्य जांच का समय निर्धारित करें।`
-];
-} else if (babyNum === "3") {
-actions = [
-`तीन बच्चों (मौजूदा उम्र: ${firstBabyAge} और ${secondBabyAge}) के खर्चों की व्यवस्था के लिए अपनी पारिवारिक बजट बहीखाते की समीक्षा करें।`,
-`सभी तीन बच्चों के लिए कमरों या जगह के वितरण पर चर्चा करने के लिए 30 मिनट का समय निकालें।`,
-`एक बड़े परिवार के लिए मानसिक सहनशक्ति विकसित करने के लिए 15 मिनट का ध्यान सत्र करें।`,
-`मातृ स्वास्थ्य संकेतकों की समीक्षा के लिए एक प्राथमिक स्वास्थ्य परामर्श शेड्यूल करें।`
-];
-}
-} else {
-if (babyNum === "1") {
-actions = [
-`Plan a nutrient-rich menu focusing on prenatal health, folic acid, and iron today.`,
-`Research and shortlist highly-rated gynecologists or prenatal specialists in your local city area.`,
-`Spend 20 minutes doing light breathing exercises (Pranayama) to reduce body stress levels.`,
-`Start keeping a daily health calendar to track cycle indicators and fertility windows.`
-];
-} else if (babyNum === "2") {
-actions = [
-`Consult with a pediatrician or doctor to review health markers since your first pregnancy (first child is ${firstBabyAge} years old).`,
-`Create a checklist of baby essentials and gear you can reuse from your first child.`,
-`Dedicate 20 minutes to read about managing parenting schedules and routines with multiple children.`,
-`Schedule a routine health check-up to assess prenatal compatibility and health markers.`
-];
-} else if (babyNum === "3") {
-actions = [
-`Review your monthly family budget ledger to account for the expenses of raising three children (existing ages: ${firstBabyAge} & ${secondBabyAge}).`,
-`Set aside 30 minutes to discuss space/room distribution for all three children.`,
-`Practice a 15-minute mindfulness session to cultivate mental resilience for a larger family.`,
-`Schedule a primary healthcare consultation to review maternal health pointers.`
-];
-}
-}
-}
-} else if (hasPartner) {
-if (lang === 'hi') {
-if (customCategory === "pregnancy") {
-actions = [
-`स्वयं (महिला साथी): अपने शारीरिक स्वास्थ्य संकेतकों को ट्रैक करें, गर्भावस्था डायरी बनाए रखें, और विटामिन लें।`,
-`साथी (${partnerName}): साथी की शारीरिक थकान को कम करने के लिए एक भारी घरेलू काम (जैसे राशन लाना या गहरी सफाई) खुद संभालें।`,
-`संयुक्त कदम: तनाव के स्तर को संतुलित करने के लिए शाम को मिलकर 15 मिनट श्वास व्यायाम (अनुलोम विलोम) करें।`,
-`संयुक्त योजना: उन प्रश्नों की एक साझा सूची तैयार करें जिन्हें आप अगले सप्ताह की जांच के दौरान डॉक्टर से पूछना चाहते हैं।`
-];
-} else if (customCategory === "property") {
-actions = [
-`स्वयं: अपने बजट से मेल खाने वाली संपत्तियों के लिए ऑनलाइन लिस्टिंग खोजें और 3 विकल्पों को शॉर्टलिस्ट करें।`,
-`साथी (${partnerName}): वित्तीय बजट, बचत या गृह ऋण प्रलेखन विकल्पों की समीक्षा करने में 15 मिनट का समय दें।`,
-`संयुक्त कदम: शॉर्टलिस्ट किए गए विकल्पों को एक साथ देखने में 20 मिनट का समय बिताएं और स्थान प्राथमिकताओं को संरेखित करें।`,
-`संयुक्त योजना: इस सप्ताहांत एक साथ भौतिक संपत्ति का निरीक्षण करने के लिए एक संयुक्त साइट विजिट शेड्यूल करें।`
-];
-} else {
-actions = [
-`स्वयं: आज 15 मिनट का समय निकालकर एक संबंध चिंता या लक्ष्य लिखें जिसे आप ${partnerName} के साथ साझा करना चाहते हैं।`,
-`साथी (${partnerName}): उनसे कहें कि बिना किसी अनचाही सलाह दिए आपके दैनिक अनुभवों को सक्रिय रूप से सुनने में 15 मिनट बिताएं।`,
-`संयुक्त कदम: आप और ${partnerName} दोनों मिलकर 20 मिनट बाहर टहलें या साझा योजना पर चर्चा करते हुए चाय साझा करें।`,
-`ऊर्जावान संरेखण: साथी के ग्रहों के स्पंदनों को सामंजस्य में लाने के लिए आज मनभावन हल्के रंग (जैसे क्रीम या पीला) पहनें।`
-];
-}
-} else {
-if (customCategory === "pregnancy") {
-actions = [
-`Self (Female Partner): Track your physical health indicators, keep a pregnancy diary, and take prenatal vitamins.`,
-`Partner (${partnerName}): Take over one heavy household chore (like carrying groceries or deep cleaning) to minimize physical fatigue for your partner.`,
-`Joint Action: Spend 15 minutes in the evening doing light breathing exercises (Anulom Vilom) together to harmonize stress levels.`,
-`Joint Planning: Draft a shared list of questions you want to ask your gynecologist or consultant during next week's check-up.`
-];
-} else if (customCategory === "property") {
-actions = [
-`Self: Spend 15 minutes searching online listings for properties matching your target criteria and shortlist 3 choices.`,
-`Partner (${partnerName}): Spend 15 minutes reviewing the financial budget, savings, or loan documentation options.`,
-`Joint Action: Spend 20 minutes looking at the shortlisted options together and align on your location priorities.`,
-`Joint Action: Schedule a joint site visit or broker call to inspect a physical property together this weekend.`
-];
-} else {
-actions = [
-`Self: Take 15 minutes today to write down a relationship concern or goal you want to discuss with ${partnerName}.`,
-`Partner (${partnerName}): Ask them to spend 15 minutes listening actively to your daily experiences without offering unsolicited advice.`,
-`Joint Action: Both you and ${partnerName} should spend 20 minutes walking together outdoors or sharing a relaxing tea while discussing a shared domestic plan.`,
-`Energetic Sync: Wear pleasing light colors today (like cream, pastel pink, or light yellow) to harmonize both partners' planetary vibrations.`
-];
-}
-}
-}
-
-const pListHTML = actions.slice(0, 6).map((a, i) =>
-`<li style="margin-bottom: 10px;"><strong>${lang === 'hi' ? 'कदम' : 'Action Step'} ${i+1}:</strong> ${a}</li>`
-).join('');
-
-// Astro predictions text
-function getGoalAstrologicalForecast(g, lang) {
+// ── AUTHENTIC VEDIC ASTROLOGICAL GOAL FORECAST ENGINE ──
+function getGoalAstrologicalForecast(g, targetLang) {
   const normG = ['marriage-single','marriage-couple'].includes(g) ? 'marriage' : ['property-single','property-couple'].includes(g) ? 'property' : g;
-  const isH = (lang === 'hi');
+  const isH = (targetLang === 'hi');
 
   let lordName = rulingLord;
   let detailEn = '';
@@ -5669,7 +4639,7 @@ function getGoalAstrologicalForecast(g, lang) {
     const significator = (normG === 'job') ? 'Sun & Saturn' : 'Mercury & Venus';
     const p10 = coachPlacements.find(p => p.name === lordName);
     const p10House = p10 ? (((p10.sign - lagnaSignNum + 12) % 12) + 1) : 10;
-    detailEn = `Your 10th House (${signNames[tenthSign]}) of professional karma is ruled by <strong>${lordName}</strong> (placed in House ${p10House}). Supported by Karaka ${significator} and your current Mahadasha of <strong>${userDasha.planet}</strong>, disciplined execution unlocks leadership authority.`;
+    detailEn = `Your 10th House (${signNames[tenthSign]}) of professional karma is governed by <strong>${lordName}</strong> (positioned in House ${p10House}). Supported by Karaka ${significator} and current ${userDasha.planet} Mahadasha, structured execution will unlock leadership elevation.`;
     detailHi = `आपके कर्म भाव (10वां भाव: ${signNamesHi[tenthSign]}) के स्वामी <strong>${signLordsHi[tenthSign]}</strong> (${p10House}वें भाव में) हैं। कारक ${normG === 'job' ? 'सूर्य व शनि' : 'बुध व शुक्र'} और आपकी वर्तमान <strong>${userDasha.planet}</strong> महादशा के प्रभाव से लक्ष्य केंद्रित कार्य करने पर सफलता निश्चित है।`;
   } else if (normG === 'marriage' || normG === 'love') {
     const seventhSign = (lagnaSignNum + 6) % 12;
@@ -5702,18 +4672,228 @@ function getGoalAstrologicalForecast(g, lang) {
     detailEn = `Your vitality rests with Lagna Lord <strong>${rulingLord}</strong> and immunity is governed by 6th Lord <strong>${sixthLord}</strong>. Solar sunrise alignment and copper-infused water strengthen physical resilience.`;
     detailHi = `आपकी शारीरिक ऊर्जा लग्नेश <strong>${signLordsHi[lagnaSignNum]}</strong> और रोग निवारण 6वें भाव के स्वामी <strong>${signLordsHi[sixthSign]}</strong> पर निर्भर है। प्रातः सूर्योपासना व तांबे का जल आपके स्वास्थ्य को सुदृढ़ करेगा।`;
   } else {
-    detailEn = `Your intention is channeled through Lagna Lord <strong>${rulingLord}</strong> and Moon in <strong>${signNames[userMoonSignIdx]}</strong> (${userMoonNak.name} Nakshatra), supported by your current <strong>${userDasha.planet}</strong> Dasha.`;
-    detailHi = `आपका संकल्प लग्नेश <strong>${signLordsHi[lagnaSignNum]}</strong> और <strong>${signNamesHi[userMoonSignIdx]}</strong> राशि (${userMoonNak.name} नक्षत्र) से संचालित है, जिसे वर्तमान <strong>${userDasha.planet}</strong> महादशा का समर्थन प्राप्त है।`;
+    detailEn = `Your intention is channeled through Lagna Lord <strong>${rulingLord}</strong> and Moon in <strong>${signNames[userMoonSignIdx]}</strong> (${(userMoonNak.n || userMoonNak.name || 'Rohini')} Nakshatra), supported by your current <strong>${userDasha.planet}</strong> Mahadasha.`;
+    detailHi = `आपका संकल्प लग्नेश <strong>${signLordsHi[lagnaSignNum]}</strong> और <strong>${signNamesHi[userMoonSignIdx]}</strong> राशि (${(userMoonNak.h || userMoonNak.n || 'रोहिणी')} नक्षत्र) से संचालित है, जिसे वर्तमान <strong>${userDasha.planet}</strong> महादशा का समर्थन प्राप्त है।`;
   }
 
   return isH ? detailHi : detailEn;
 }
 
+// Vedic Tasks
+if (!hasPartner) {
+const goalVedicContextEn = {
+job: `Perform Surya Namaskaar (12 rounds) before sunrise to activate career and authority vibrations.`,
+debt: `Recite the Shiva Panchakshari mantra "Om Namah Shivaya" 108 times before meals to dissolve financial anxieties.`,
+marriage: `Recite the Katyayani mantra "Om Katyayanyai Namah" 108 times on a Friday morning to attract your destined partner.`,
+baby: `Both partners should recite the Santan Gopal mantra "Om Devaki Sut Govind..." 108 times together each morning.`,
+business: `Perform Ganesh puja on Wednesdays and light incense (dhoop) at your business entrance.`,
+property: `Recite the Bhoomi Sukta prayer (from Atharvaveda) before property visits. Also chant "Om Bhaumaya Namah" 11 times for Mars blessings on property.`,
+health: `Perform Surya Namaskar (sun salutation) at sunrise and drink copper vessel water in the morning for vitality.`,
+custom: `Perform an evening puja with incense and a ghee lamp, focusing your intention on resolving: "${issueText}".`
+};
+const goalVedicContextHi = {
+job: `करियर और अधिकार के स्पंदनों को सक्रिय करने के लिए सूर्योदय से पहले सूर्य नमस्कार (12 चक्र) करें।`,
+debt: `वित्तीय चिंताओं को दूर करने के लिए भोजन से पहले 108 बार शिव पंचाक्षरी मंत्र "ॐ नमः शिवाय" का जाप करें।`,
+marriage: `अपने भाग्यशाली जीवनसाथी को आकर्षित करने के लिए शुक्रवार की सुबह कात्यायनी मंत्र "ॐ कात्यायन्यै नमः" का 108 बार जाप करें।`,
+baby: `संतान सुख के लिए दोनों साथी मिलकर प्रत्येक सुबह 108 बार संतान गोपाल मंत्र "ॐ देवकी सुत गोविंद..." का जाप करें।`,
+business: `बुधवार को गणेश पूजा करें और अपने व्यावसायिक प्रवेश द्वार पर धूप जलाएं।`,
+property: `संपत्ति के दौरों से पहले भूमि सूक्त प्रार्थना (अथर्ववेद से) का पाठ करें। संपत्ति पर मंगल के आशीर्वाद के लिए "ॐ भौमाय नमः" का 11 बार जाप करें।`,
+health: `सूर्योदय के समय सूर्य नमस्कार करें और जीवन शक्ति के लिए सुबह तांबे के बर्तन का पानी पिएं।`,
+custom: `शाम को धूप और घी के दीये के साथ पूजा करें, अपने ध्यान को इस समस्या के समाधान पर केंद्रित करें: "${issueText}"।`
+};
+
+const contextMap = isHi ? goalVedicContextHi : goalVedicContextEn;
+const rituals = [];
+activeGoalsList.forEach(g => {
+let normG = g;
+if (g === 'marriage-single' || g === 'marriage-couple') normG = 'marriage';
+if (g === 'property-single' || g === 'property-couple') normG = 'property';
+const contextKey = ['property-single','property-couple'].includes(g) ? 'property' : ['marriage-single','marriage-couple'].includes(g) ? 'marriage' : (normG in contextMap ? normG : 'custom');
+const ritual = contextMap[contextKey] || contextMap.custom;
+const label = (isHi ? (goalLabelsHi[g] || goalLabelsEn[g] || g) : (goalLabelsEn[g] || g));
+rituals.push(`<strong>${label}:</strong> ${ritual}`);
+});
+const ritualsHTML = rituals.map(r => `<div style="margin-top: 4px; padding-left: 10px; border-left: 2px solid var(--gold);">${r}</div>`).join('');
+
+if (isHi) {
+vListHTML = `
+<li style="margin-bottom: 10px;"><strong>शासक ग्रह मंत्र:</strong> प्रत्येक सुबह पूर्व की ओर मुंह करके 108 बार <strong>"${lordDetails.mantra}"</strong> का लगातार 40 दिनों तक जाप करें।</li>
+<li style="margin-bottom: 10px;"><strong>पवित्र पाठ:</strong> ${lordDetails.text}</li>
+<li style="margin-bottom: 10px;"><strong>लक्ष्य अनुष्ठान:</strong> ${ritualsHTML}</li>
+<li><strong>एकादशी व्रत:</strong> अपने लक्ष्यों से जुड़े कर्मों को संरेखित करने के लिए प्रति माह कम से कम एक एकादशी का व्रत रखें, जिसमें केवल फल या पानी का सेवन करें।</li>
+`;
+} else {
+vListHTML = `
+<li style="margin-bottom: 10px;"><strong>Ruling Planet Mantra:</strong> Chant <strong>"${lordDetails.mantra}"</strong> exactly 108 times each morning facing East for 40 consecutive days.</li>
+<li style="margin-bottom: 10px;"><strong>Sacred Text:</strong> ${lordDetails.text}</li>
+<li style="margin-bottom: 10px;"><strong>Goal Ritual(s):</strong> ${ritualsHTML}</li>
+<li><strong>Ekadashi Fast:</strong> Observe at least one Ekadashi (11th lunar day) fast per month, drinking only fruit or water, to burn karmic debt aligned with your goals.</li>
+`;
+}
+} else {
+const partnerLordDetails = isHi ? (vedicMantrasHi[partnerRulingLord] || vedicMantrasHi["Sun"]) : (vedicMantrasEn[partnerRulingLord] || vedicMantrasEn["Sun"]);
+const coupleGoalRitualsEn = {
+marriage: `Both partners should recite the Vivah Sukta verses from the Rigveda together each morning and offer flowers to Lord Vishnu on Thursdays.`,
+baby: `Both partners should recite the Santan Gopal mantra "Om Devaki Sut Govind..." 108 times together each morning.`,
+property: `Both partners should offer water, a flower, and a pinch of turmeric to a rising sun, and chant "Om Bhaumaya Namah" 11 times together before any property visits.`,
+debt: `Both partners should recite the Shiva Panchakshari mantra together 108 times on Monday mornings while holding water in cupped hands.`,
+custom: `Both partners should perform evening puja together with ghee lamp, flowers, and focused collective intention on resolving the shared challenge.`
+};
+const coupleGoalRitualsHi = {
+marriage: `दोनों साथी प्रत्येक सुबह मिलकर ऋग्वेद के विवाह सूक्त श्लोकों का पाठ करें और गुरुवार को भगवान विष्णु को फूल अर्पित करें।`,
+baby: `दोनों साथी प्रत्येक सुबह मिलकर संतान गोपाल मंत्र "ॐ देवकी सुत गोविंद..." का 108 बार जाप करें।`,
+property: `दोनों साथी किसी भी संपत्ति के दौरे से पहले उगते सूर्य को जल, फूल और एक चुटकी हल्दी अर्पित करें, और मिलकर 11 बार "ॐ भौमाय नमः" का जाप करें।`,
+debt: `दोनों साथी सोमवार की सुबह हाथों में जल लेकर मिलकर 108 बार शिव पंचाक्षरी मंत्र का जाप करें।`,
+custom: `दोनों साथी शाम को मिलकर घी के दीपक, फूलों और सामूहिक ध्यान के साथ साझा चुनौती को हल करने के लिए पूजा करें।`
+};
+
+const coupleMap = isHi ? coupleGoalRitualsHi : coupleGoalRitualsEn;
+const coupleRituals = [];
+activeGoalsList.forEach(g => {
+let normG = g;
+if (g === 'marriage-single' || g === 'marriage-couple') normG = 'marriage';
+if (g === 'property-single' || g === 'property-couple') normG = 'property';
+const coupleContextKey = normG in coupleMap ? normG : 'custom';
+const ritual = coupleMap[coupleContextKey];
+const label = (isHi ? (goalLabelsHi[g] || goalLabelsEn[g] || g) : (goalLabelsEn[g] || g));
+coupleRituals.push(`<strong>${label}:</strong> ${ritual}`);
+});
+const coupleRitualsHTML = coupleRituals.map(r => `<div style="margin-top: 4px; padding-left: 10px; border-left: 2px solid var(--gold);">${r}</div>`).join('');
+
+if (isHi) {
+vListHTML = `
+<li style="margin-bottom: 10px;"><strong>${name} का मंत्र:</strong> प्रत्येक सुबह 108 बार <strong>"${lordDetails.mantra}"</strong> का जाप करें (आपके लग्न के स्वामी: ${rulingLord})।</li>
+<li style="margin-bottom: 10px;"><strong>${partnerName || 'साथी'} का मंत्र:</strong> प्रत्येक सुबह 108 बार <strong>"${partnerLordDetails.mantra}"</strong> का जाप करें (उनके लग्न के स्वामी: ${partnerRulingLord})।</li>
+<li style="margin-bottom: 10px;"><strong>युगल लक्ष्य अनुष्ठान:</strong> ${coupleRitualsHTML}</li>
+<li style="margin-bottom: 10px;"><strong>साझा पवित्र पाठ:</strong> अपने साझा लक्ष्यों के लिए ईश्वरीय सहायता प्राप्त करने के लिए प्रत्येक शाम एक साथ गुरु स्तोत्र या शिव पुराण का पाठ करें।</li>
+<li><strong>एकादशी व्रत:</strong> सामूहिक कर्म ऊर्जा को संरेखित करने के लिए इस महीने कम से कम एक बार दोनों मिलकर एकादशी व्रत का पालन करें।</li>
+`;
+} else {
+vListHTML = `
+<li style="margin-bottom: 10px;"><strong>${name}'s Mantra:</strong> Chant <strong>"${lordDetails.mantra}"</strong> 108 times each morning (ruler of your Lagna: ${rulingLord}).</li>
+<li style="margin-bottom: 10px;"><strong>${partnerName || 'Partner'}'s Mantra:</strong> Chant <strong>"${partnerLordDetails.mantra}"</strong> 108 times each morning (ruler of their Lagna: ${partnerRulingLord}).</li>
+<li style="margin-bottom: 10px;"><strong>Couple Goal Ritual(s):</strong> ${coupleRitualsHTML}</li>
+<li style="margin-bottom: 10px;"><strong>Shared Sacred Text:</strong> Read the Guru Stotra or Shiva Purana together each evening to invite divine support for your shared goals.</li>
+<li><strong>Ekadashi Fast:</strong> Both observe Ekadashi fast together at least once this month to align collective karmic energies.</li>
+`;
+}
+}
+
+// ── DYNAMIC KUNDLI-DRIVEN LAL KITAB UPAYAS ──
+const marsPl = coachPlacements.find(p => p.name === 'Mars');
+const marsHouse = marsPl ? (((marsPl.sign - lagnaSignNum + 12) % 12) + 1) : 1;
+const isMangalBad = [1, 4, 7, 8, 12].includes(marsHouse);
+
+const mercPl = coachPlacements.find(p => p.name === 'Mercury');
+const mercHouse = mercPl ? (((mercPl.sign - lagnaSignNum + 12) % 12) + 1) : 1;
+const isBudhManda = [3, 8, 9, 12].includes(mercHouse);
+
+const dynamicUpayasEn = [
+  isMangalBad
+    ? `Mangal Bad Pacification (Mars in House ${marsHouse}): Keep a solid silver ball or square piece of pure silver in your pocket/safe to calm emotional & marital friction.`
+    : `Mangal Nek Activation (Mars in House ${marsHouse}): Support siblings, maintain physical vigor, and feed sweet rotis to stray dogs on Tuesdays.`,
+  isBudhManda
+    ? `Budh Manda Pacification (Mercury in House ${mercHouse}): Feed whole green moong or spinach to cows on Wednesdays and clean teeth with alum water.`
+    : `Budh Nek Enhancement (Mercury in House ${mercHouse}): Chant Vishnu Sahasranama on Wednesdays and keep a green plant in your workspace.`,
+  `Lagna Lord ${rulingLord} Alignment: Offer water from a copper vessel to the rising Sun and avoid dark clothing during key negotiations.`
+];
+
+const dynamicUpayasHi = [
+  isMangalBad
+    ? `मंगल बद शांति (मंगल ${marsHouse}वें भाव में): अपने बटुए या तिजोरी में ठोस चांदी की गोली या चौकोर टुकड़ा रखें ताकि उग्रता व तनाव शांत हो।`
+    : `मंगल नेक संवर्धन (मंगल ${marsHouse}वें भाव में): भाइयों का सहयोग करें, शारीरिक ऊर्जा बनाए रखें और मंगलवार को कुत्तों को मीठी रोटी खिलाएं।`,
+  isBudhManda
+    ? `बुध मंदा शांति (बुध ${mercHouse}वें भाव में): बुधवार को गायों को साबुत हरी मूंग या पालक खिलाएं और फिटकरी से दांत साफ रखें।`
+    : `बुध नेक संवर्धन (बुध ${mercHouse}वें भाव में): बुधवार को विष्णु सहस्रनाम का पाठ करें और अपने कार्यस्थल पर हरा पौधा रखें।`,
+  `लग्नेश ${signLordsHi[lagnaSignNum] || rulingLord} संरेखण: प्रातः तांबे के पात्र से सूर्य को जल अर्पित करें और महत्वपूर्ण कार्यों के दौरान गहरे काले वस्त्रों से बचें।`
+];
+
+const remMap = isHi ? lalkitabRemediesHi : lalkitabRemediesEn;
+let allRemedies = isHi ? [...dynamicUpayasHi] : [...dynamicUpayasEn];
+
+activeGoalsList.forEach(g => {
+  let rKey = g;
+  if (g === 'marriage-single' || g === 'marriage-couple') rKey = 'marriage';
+  if (g === 'property-single' || g === 'property-couple') rKey = 'property';
+  if (g === 'custom') rKey = "custom_" + customCategory;
+  let goalRemedies = remMap[rKey] || remMap["job"];
+  if (goalRemedies && goalRemedies.length > 0) {
+    allRemedies.push(goalRemedies[0]);
+    if (goalRemedies.length > 1) allRemedies.push(goalRemedies[1]);
+  }
+});
+
+const lListHTML = allRemedies.slice(0, 6).map(r => `<li style="margin-bottom: 8px;">${r}</li>`).join('');
+
+// ── DYNAMIC KUNDLI-DRIVEN VASTU ALIGNMENT ──
+const elementsMap = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3];
+const elIdx = elementsMap[lagnaSignNum];
+const elementNamesEn = ["Fire (Agnitattva)", "Earth (Prithvitattva)", "Air (Vayutattva)", "Water (Jalatattva)"];
+const elementNamesHi = ["अग्नि तत्व", "पृथ्वी तत्व", "वायु तत्व", "जल तत्व"];
+const powerDirMapEn = { 'Sun': 'East', 'Moon': 'North-West', 'Mars': 'South', 'Mercury': 'North', 'Jupiter': 'North-East', 'Venus': 'South-East', 'Saturn': 'West' };
+const powerDirMapHi = { 'Sun': 'पूर्व', 'Moon': 'उत्तर-पश्चिम', 'Mars': 'दक्षिण', 'Mercury': 'उत्तर', 'Jupiter': 'उत्तर-पूर्व', 'Venus': 'दक्षिण-पूर्व', 'Saturn': 'पश्चिम' };
+const pDirEn = powerDirMapEn[rulingLord] || 'East';
+const pDirHi = powerDirMapHi[rulingLord] || 'पूर्व';
+
+let vVastuHTML;
+if (isHi) {
+  const goalVastuEntries = activeGoalsList.map(g => {
+    let vKey = g;
+    if (g === 'marriage-single' || g === 'marriage-couple') vKey = 'marriage';
+    if (g === 'property-single' || g === 'property-couple') vKey = 'property';
+    if (g === 'custom') vKey = "custom_" + customCategory;
+    const vText = vastuSuggestionsHi[vKey] || vastuSuggestionsHi.job;
+    const gLabel = goalLabelsHi[g] || g;
+    return `<strong>${gLabel}:</strong> ${vText}`;
+  });
+  vVastuHTML = `
+  <li style="margin-bottom: 8px;"><strong>लग्न तत्व संरेखण (${elementNamesHi[elIdx]}):</strong> आपकी कुंडली ${lagnaNameHi} लग्न (${elementNamesHi[elIdx]}) से संचालित है। अपने घर के केंद्र (ब्रह्मस्थान) को हल्का व अवरोध-मुक्त रखें।</li>
+  <li style="margin-bottom: 8px;"><strong>व्यक्तिगत महादिशा (${pDirHi}):</strong> आपके लग्न स्वामी ${signLordsHi[lagnaSignNum] || rulingLord} की मुख्य ऊर्जा दिशा ${pDirHi} है। महत्वपूर्ण कार्य व ध्यान करते समय ${pDirHi} की ओर मुख करें।</li>
+  ${goalVastuEntries.map(e => `<li style="margin-bottom: 8px;">${e}</li>`).join('')}
+  `;
+} else {
+  const goalVastuEntries = activeGoalsList.map(g => {
+    let vKey = g;
+    if (g === 'marriage-single' || g === 'marriage-couple') vKey = 'marriage';
+    if (g === 'property-single' || g === 'property-couple') vKey = 'property';
+    if (g === 'custom') vKey = "custom_" + customCategory;
+    const vText = vastuSuggestionsEn[vKey] || vastuSuggestionsEn.job;
+    const gLabel = goalLabelsEn[g] || g;
+    return `<strong>${gLabel}:</strong> ${vText}`;
+  });
+  vVastuHTML = `
+  <li style="margin-bottom: 8px;"><strong>Ascendant Element (${elementNamesEn[elIdx]}):</strong> Your ${lagnaName} Lagna vibrates with ${elementNamesEn[elIdx]}. Maintain spacious openness at the center of your space (Brahmasthan).</li>
+  <li style="margin-bottom: 8px;"><strong>Personal Power Direction (${pDirEn}):</strong> Your Lagna Lord (${rulingLord}) governs the ${pDirEn} vector. Face ${pDirEn} during key professional work and meditations.</li>
+  ${goalVastuEntries.map(e => `<li style="margin-bottom: 8px;">${e}</li>`).join('')}
+  `;
+}
+
+// ── DYNAMIC PRACTICAL ACTIONS ──
+const practicalMap = isHi ? practicalActionsHi : practicalActions;
+let allActions = [];
+const actionsPerGoal = activeGoalsList.length === 1 ? 6 : (activeGoalsList.length === 2 ? 3 : 2);
+
+activeGoalsList.forEach(g => {
+let normG = g;
+if (g === 'marriage-single' || g === 'marriage-couple') normG = 'marriage';
+if (g === 'property-single' || g === 'property-couple') normG = 'property';
+let actionsGoal = normG;
+if (normG === 'custom') actionsGoal = "custom_" + customCategory;
+let goalActions = [...(practicalMap[actionsGoal] || practicalMap["job"])];
+const sliced = goalActions.slice(0, actionsPerGoal);
+sliced.forEach(act => { if (!allActions.includes(act)) allActions.push(act); });
+});
+
+if (allActions.length === 0) allActions = [...(practicalMap["job"] || [])];
+const pListHTML = allActions.slice(0, 6).map((a, i) => `<li><strong>${isHi ? 'कदम' : 'Action Step'} ${i+1}:</strong> ${a}</li>`).join('');
+
+// ── DYNAMIC ASTRO PREDICTIONS HTML ──
 let predictionHTML;
-if (lang === 'hi') {
+if (isHi) {
 predictionHTML = `
-<p style="margin: 0 0 10px 0;"><strong>ज्योतिषीय लग्न (Lagna):</strong> <span style="color: var(--gold);">${lagnaNameHi} (${lagnaName})</span> | <strong>शासक ग्रह:</strong> <span style="color: #5dade2;">${rulingLord}</span> | <strong>चंद्र राशि:</strong> <span style="color: #2ecc71;">${signNamesHi[userMoonSignIdx]} (${userMoonNak.name} नक्षत्र)</span></p>
-<p style="margin: 0 0 10px 0;">आपकी कुंडली के अनुसार, आप वर्तमान में <strong>${userDasha.planet}</strong> महादशा के प्रभाव में हैं। आपके लग्न स्वामी <strong>${rulingLord}</strong> और चंद्र स्थिति आपके 90-दिवसीय कर्म चक्र को दिशा प्रदान कर रहे हैं। नीचे दिए गए सटीक ग्रह संरेखण का पालन करें:</p>
+<p style="margin: 0 0 10px 0;"><strong>ज्योतिषीय लग्न (Lagna):</strong> <span style="color: var(--gold);">${lagnaNameHi} (${lagnaName})</span> | <strong>शासक ग्रह:</strong> <span style="color: #5dade2;">${rulingLord}</span> | <strong>चंद्र राशि:</strong> <span style="color: #2ecc71;">${signNamesHi[userMoonSignIdx]} (${(userMoonNak.h || userMoonNak.n || 'रोहिणी')} नक्षत्र)</span></p>
+<p style="margin: 0 0 8px 0; font-size: 0.85rem; color: var(--text-muted);"><strong>जन्म विवरण:</strong> ${date || 'अज्ञात'} | ${time || '12:00'} | ${cityName || 'New Delhi'}</p>
+<p style="margin: 0 0 10px 0;">आपकी जन्म कुंडली के अनुसार, आप वर्तमान में <strong>${userDasha.planet}</strong> महादशा के प्रभाव में हैं। आपके लग्न स्वामी <strong>${rulingLord}</strong> और चंद्र स्थिति आपके 90-दिवसीय कर्म चक्र को संरेखित कर रहे हैं। नीचे दिए गए सटीक ग्रह विश्लेषण का पालन करें:</p>
 <div style="background: rgba(232, 200, 121, 0.06); padding: 12px; border-radius: 8px; border-left: 3px solid var(--gold); margin-top: 10px;">
 <strong style="color: var(--gold); display: block; margin-bottom: 6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> सक्रिय लक्ष्यों का प्रामाणिक ज्योतिषीय विश्लेषण:</strong>
 <ul style="margin: 4px 0 0 18px; padding: 0;">
@@ -5726,7 +4906,8 @@ return `<li style="margin-bottom: 8px;"><strong>${gLabel}:</strong> ${getGoalAst
 `;
 } else {
 predictionHTML = `
-<p style="margin: 0 0 10px 0;"><strong>Astrological Ascendant (Lagna):</strong> <span style="color: var(--gold);">${lagnaName} (${lagnaNameHi})</span> | <strong>Ruling Planet:</strong> <span style="color: #5dade2;">${rulingLord}</span> | <strong>Moon Sign:</strong> <span style="color: #2ecc71;">${signNames[userMoonSignIdx]} (${userMoonNak.name} Nakshatra)</span></p>
+<p style="margin: 0 0 10px 0;"><strong>Astrological Ascendant (Lagna):</strong> <span style="color: var(--gold);">${lagnaName} (${lagnaNameHi})</span> | <strong>Ruling Planet:</strong> <span style="color: #5dade2;">${rulingLord}</span> | <strong>Moon Sign:</strong> <span style="color: #2ecc71;">${signNames[userMoonSignIdx]} (${(userMoonNak.n || userMoonNak.name || 'Rohini')} Nakshatra)</span></p>
+<p style="margin: 0 0 8px 0; font-size: 0.85rem; color: var(--text-muted);"><strong>Birth Details:</strong> ${date || 'Unknown'} | ${time || '12:00'} | ${cityName || 'New Delhi'}</p>
 <p style="margin: 0 0 10px 0;">According to your Vedic birth chart, you are currently operating under the <strong>${userDasha.planet}</strong> Mahadasha cycle. Your Ascendant Lord <strong>${rulingLord}</strong> and Moon placements are actively transmitting vital energy into your 90-day karma roadmap:</p>
 <div style="background: rgba(232, 200, 121, 0.06); padding: 12px; border-radius: 8px; border-left: 3px solid var(--gold); margin-top: 10px;">
 <strong style="color: var(--gold); display: block; margin-bottom: 6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Active Goals Vedic Astrological Analysis:</strong>
@@ -5740,11 +4921,11 @@ return `<li style="margin-bottom: 8px;"><strong>${gLabel}:</strong> ${getGoalAst
 `;
 }
 
-// Mission Type
+// Mission Titles
 const goalTitleMapEn = {
 'job': 'Career Mission',
 'debt': 'Wealth Clearing Mission',
-'marriage': isSingleMarriage ? 'Marriage Prediction Mission' : 'Relationship Harmony Mission',
+'marriage': 'Marriage Prediction Mission',
 'baby': 'Baby Planning Mission',
 'business': 'Business Growth Mission',
 'property': 'Dream Home Mission',
@@ -5754,17 +4935,27 @@ const goalTitleMapEn = {
 const goalTitleMapHi = {
 'job': 'करियर मिशन',
 'debt': 'धन शुद्धि मिशन',
-'marriage': isSingleMarriage ? 'विवाह भविष्यवाणी मिशन' : 'रिश्ता सामंजस्य मिशन',
+'marriage': 'विवाह भविष्यवाणी मिशन',
 'baby': 'संतान योजना मिशन',
 'business': 'व्यापार विकास मिशन',
 'property': 'सपनों का घर मिशन',
 'health': 'स्वास्थ्य और उपचार मिशन',
 'custom': 'जीवन समाधान मिशन'
 };
-const missionType = lang === 'hi' ? (goalTitleMapHi[normalizedGoal] || 'दैनिक एस्ट्रो मिशन') : (goalTitleMapEn[normalizedGoal] || 'Daily Astro Mission');
+
+const missionTypes = [];
+activeGoalsList.forEach(g => {
+let normG = g;
+if (g === 'marriage-single' || g === 'marriage-couple') normG = 'marriage';
+if (g === 'property-single' || g === 'property-couple') normG = 'property';
+const type = isHi ? (goalTitleMapHi[normG] || 'दैनिक एस्ट्रो मिशन') : (goalTitleMapEn[normG] || 'Daily Astro Mission');
+if (!missionTypes.includes(type)) missionTypes.push(type);
+});
+const combinedMissionType = missionTypes.join(' & ');
+
 let titleText = hasPartner
-? (lang === 'hi' ? `${name} और ${partnerName || 'साथी'} का ${missionType}` : `${name} & ${partnerName || 'Partner'}'s ${missionType}`)
-: (lang === 'hi' ? `${name} का ${missionType}` : `${name}'s ${missionType}`);
+? (isHi ? `${name} और ${partnerName || 'साथी'} का ${combinedMissionType}` : `${name} & ${partnerName || 'Partner'}'s ${combinedMissionType}`)
+: (isHi ? `${name} का ${combinedMissionType}` : `${name}'s ${combinedMissionType}`);
 
 return {
 vListHTML,
@@ -5776,7 +4967,6 @@ titleText
 };
 }
 
-// Compile both languages using multi-goal aggregator!
 const missionEn = compileMultiGoalMissionData('en');
 const missionHi = compileMultiGoalMissionData('hi');
 
@@ -6190,103 +5380,186 @@ return 'custom';
 }
 
 function get90DayPracticalTask(dayNum, primaryGoal, langParam) {
-const lang = langParam || (typeof currentAppLang !== 'undefined' ? currentAppLang : 'en');
-const goalStr = normalizeGoalKey(primaryGoal);
-const isJob = goalStr === 'job' || goalStr === 'business';
-const isDebt = goalStr === 'debt';
-const isProperty = goalStr === 'property';
-const isLove = goalStr === 'marriage' || goalStr === 'baby';
-const isHealth = goalStr === 'health';
+  const targetLang = langParam || (typeof currentAppLang !== 'undefined' ? currentAppLang : 'en');
+  const isHi = targetLang === 'hi';
+  const goal = (primaryGoal || 'job').toLowerCase();
+  const isJob = goal.includes('job') || goal.includes('career');
+  const isDebt = goal.includes('debt') || goal.includes('savings');
+  const isMarriage = goal.includes('marriage') || goal.includes('love');
+  const isBaby = goal.includes('baby');
+  const isBusiness = goal.includes('business');
+  const isProperty = goal.includes('property');
+  const isHealth = goal.includes('health');
 
-if (lang === 'hi') {
-if (dayNum === 1) {
-return isJob ? "दिन 1 कार्य: अपनी शीर्ष 3 लक्षित करियर भूमिकाओं को लिखें और अपना मूल रेज़्यूमे हेडलाइन अपडेट करें।" :
-isDebt ? "दिन 1 कार्य: अपने बही-खाते में वर्तमान ऋण, ब्याज दरें और न्यूनतम मासिक देनदारियों को सूचीबद्ध करें।" :
-isProperty ? "दिन 1 कार्य: अपना लक्षित संपत्ति/वाहन बजट, स्थान प्राथमिकताएं और पसंदीदा संपत्ति प्रकार तय करें।" :
-isHealth ? "दिन 1 कार्य: अपने स्वास्थ्य और फिटनेस लक्ष्यों, लक्षित वजन या जीवन शैली में सुधारों को लिखें।" :
-"दिन 1 कार्य: अपने मुख्य संबंध मूल्यों और जीवन साथी से प्रमुख अपेक्षाओं को लिखें।";
-} else if (dayNum === 2) {
-return isJob ? "दिन 2 कार्य: जॉब पोर्टल्स (नौकरी/लिंक्डइन) पर खोजें और अपने कौशल से मेल खाने वाले 5 आदर्श पदों को शॉर्टलिस्ट करें।" :
-isDebt ? "दिन 2 कार्य: जल्दी भुगतान के लिए अपनी उच्चतम ब्याज दर वाले ऋण की पहचान करें।" :
-isProperty ? "दिन 2 कार्य: ऑनलाइन संपत्ति/वाहन सूचियों की खोज करें और बजट के भीतर 3 विकल्पों को शॉर्टलिस्ट करें।" :
-isHealth ? "दिन 2 कार्य: अपने वर्तमान आहार सेवन, नींद चक्र को दर्ज करें और समाप्त करने के लिए 3 बुरी आदतों की पहचान करें।" :
-"दिन 2 कार्य: अपनी सामाजिक या वैवाहिक प्रोफ़ाइल को स्पष्ट, वास्तविक विवरण के साथ अपडेट करें।";
-} else if (dayNum === 3) {
-return isJob ? "दिन 3 कार्य: अपनी शीर्ष लक्षित भूमिका के लिए अपना रेज़्यूमे सारांश और प्रमुख तकनीकी कौशल तैयार करें।" :
-isDebt ? "दिन 3 कार्य: ब्याज दर कम करने या ऋण पुनर्गठन के बारे में पूछताछ करने के लिए अपने बैंक या लेनदार को कॉल करें।" :
-isProperty ? "दिन 3 कार्य: शॉर्टलिस्ट की गई संपत्तियों के बारे में पूछताछ करने के लिए एक सत्यापित रियल एस्टेट डीलर / सलाहकार से संपर्क करें।" :
-isHealth ? "दिन 3 कार्य: सप्ताह के लिए एक स्वच्छ, संतुलित भोजन चार्ट की योजना बनाएं और 30 मिनट की दैनिक शारीरिक गतिविधि के लिए रिमाइंडर सेट करें।" :
-"दिन 3 कार्य: एक गर्मजोशी भरे संदेश के साथ 2 संभावित मैचों से संपर्क शुरू करें या जवाब दें।";
-} else if (dayNum === 4) {
-return "दिन 4 कार्य: सकारात्मक प्रगति ऊर्जा का स्वागत करने के लिए अपने उत्तर-पूर्व कार्यस्थल कोने (वास्तु) को साफ और संरेखित करें।";
-} else if (dayNum === 5) {
-return "दिन 5 कार्य: पेशेवर कौशल वृद्धि या वित्तीय बजट बही की समीक्षा के लिए 20 मिनट समर्पित करें।";
-} else if (dayNum === 6) {
-return "दिन 6 कार्य: अगले सप्ताह के मील के पत्थर के लिए आवश्यक दस्तावेज़, प्रमाण पत्र या वित्तीय विवरण तैयार करें।";
-} else if (dayNum === 7) {
-return "दिन 7 (मील का पत्थर 1): चरण 1 सप्ताह 1 की उपलब्धियों की समीक्षा करें और अपनी प्रारंभिक निरंतरता का जश्न मनाएं!";
-} else if (dayNum <= 14) {
-return `दिन ${dayNum} कार्य: सक्रिय आउटरीच चरण - 2 लक्षित आवेदन जमा करें या 1 प्रमुख वित्तीय पूछताछ करें।`;
-} else if (dayNum <= 21) {
-return `दिन ${dayNum} कार्य: फॉलो-अप चरण - प्रतिक्रियाओं की समीक्षा करें, प्रारंभिक चर्चाएं निर्धारित करें और रणनीति को परिष्कृत करें।`;
-} else if (dayNum <= 30) {
-return `दिन ${dayNum} कार्य: चरण 1 सुदृढ़ीकरण - प्रारंभिक बातचीत को अंतिम रूप दें और चरण 2 संरेखण के लिए तैयार रहें।`;
-} else if (dayNum <= 45) {
-return `दिन ${dayNum} (चरण 2 कार्य): शुभ अभिजीत मुहूर्त के दौरान महत्वपूर्ण साक्षात्कारों में भाग लें या साइट का दौरा करें।`;
-} else if (dayNum <= 60) {
-return `दिन ${dayNum} (चरण 2 गति): शर्तों पर बातचीत करें, समझौते के कागजी काम को अंतिम रूप दें, या मूल ऋण का भुगतान करें।`;
-} else if (dayNum <= 75) {
-return `दिन ${dayNum} (चरण 3 प्रकटीकरण): अंतिम प्रस्ताव पत्र प्राप्त करें, संपत्ति के दस्तावेज़ पर हस्ताक्षर करें, या बड़ा ऋण चुकाएं!`;
-} else if (dayNum < 90) {
-return `दिन ${dayNum} (चरण 3 एकीकरण): स्थायी सफलता के लिए दीर्घकालिक वित्तीय और जीवन प्रबंधन प्रणाली स्थापित करें।`;
-} else {
-return `दिन 90 (कर्म विजय!): पूर्ण 90-दिवसीय लक्ष्य उपलब्धि और कृतज्ञता उत्सव! <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>`;
-}
-} else {
-if (dayNum === 1) {
-return isJob ? "Day 1 Action Step: Write down your top 3 target career roles and update your basic resume headline." :
-isDebt ? "Day 1 Action Step: List all current debts, interest rates, and minimum monthly obligations in your ledger." :
-isProperty ? "Day 1 Action Step: Define your target property/asset budget, location preferences, and preferred asset type." :
-isHealth ? "Day 1 Action Step: Write down your health and fitness goals, target weight, or lifestyle improvements." :
-"Day 1 Action Step: Write down your core relationship values and key expectations for a life partner.";
-} else if (dayNum === 2) {
-return isJob ? "Day 2 Action Step: Search job portals (Naukri/LinkedIn) and shortlist 5 ideal postings matching your skills." :
-isDebt ? "Day 2 Action Step: Identify your highest interest rate debt to prioritize for early payoff." :
-isProperty ? "Day 2 Action Step: Search online property/vehicle listings and shortlist 3 choices within budget." :
-isHealth ? "Day 2 Action Step: Log your current dietary intake, sleep cycle, and identify 3 bad habits to eliminate." :
-"Day 2 Action Step: Update your social or matrimonial profile with clear, genuine details.";
-} else if (dayNum === 3) {
-return isJob ? "Day 3 Action Step: Tailor your resume summary and key technical competencies for your top target role." :
-isDebt ? "Day 3 Action Step: Call your bank or creditor to inquire about interest rate reduction or loan restructuring." :
-isProperty ? "Day 3 Action Step: Contact a verified real estate dealer / advisor to inquire about shortlisted properties." :
-isHealth ? "Day 3 Action Step: Plan a clean, balanced meal chart for the week and set a reminder for 30 minutes of daily physical activity." :
-"Day 3 Action Step: Initiate outreach or respond to 2 potential matches with a warm, engaging message.";
-} else if (dayNum === 4) {
-return "Day 4 Action Step: Clean & align your North-East workspace corner (Vastu) to welcome positive progress energy.";
-} else if (dayNum === 5) {
-return "Day 5 Action Step: Dedicate 20 minutes to professional skill enhancement or financial budget ledger review.";
-} else if (dayNum === 6) {
-return "Day 6 Action Step: Prepare documents, certificates, or financial statements required for next week's milestone.";
-} else if (dayNum === 7) {
-return "Day 7 (Milestone 1): Review Phase 1 Week 1 achievements and celebrate your initial consistency!";
-} else if (dayNum <= 14) {
-return `Day ${dayNum} Action Step: Active Outreach Phase - Submit 2 targeted applications or make 1 key financial query.`;
-} else if (dayNum <= 21) {
-return `Day ${dayNum} Action Step: Follow-up Phase - Review responses, schedule initial discussions, & refine strategy.`;
-} else if (dayNum <= 30) {
-return `Day ${dayNum} Action Step: Phase 1 Consolidation - Finalize preliminary negotiations & prepare for Phase 2 alignment.`;
-} else if (dayNum <= 45) {
-return `Day ${dayNum} (Phase 2 Action): Attend key interviews or conduct site visits during auspicious Abhijit Muhurat.`;
-} else if (dayNum <= 60) {
-return `Day ${dayNum} (Phase 2 Momentum): Negotiate terms, finalize agreement paperwork, or make principal debt payments.`;
-} else if (dayNum <= 75) {
-return `Day ${dayNum} (Phase 3 Manifestation): Receive final offer letter, sign property deed, or clear major debt fraction!`;
-} else if (dayNum < 90) {
-return `Day ${dayNum} (Phase 3 Integration): Establish long-term financial & life management systems for lasting success.`;
-} else {
-return `Day 90 (KARMIC TRIUMPH!): Full 90-Day Goal Accomplishment & Gratitude Celebration! <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='var(--gold)' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>`;
-}
-}
+  const userProf = localStorage.getItem('user_profession') || (isHi ? 'पेशेवर' : 'Professional');
+
+  if (isHi) {
+    // ── HINDI ROADMAP ──
+    if (dayNum === 1) {
+      if (isJob) return `दिन 1 कार्य: ${userProf} के रूप में अपनी शीर्ष 3 लक्षित भूमिकाएं लिखें और अपना रेज़्यूमे हेडिंग अपडेट करें।`;
+      if (isDebt) return `दिन 1 कार्य: अपनी सभी सक्रिय देनदारियों, ब्याज दरों और मासिक भुगतानों की सूची बहीखाते में दर्ज करें।`;
+      if (isMarriage) return `दिन 1 कार्य: अपने मुख्य वैवाहिक मूल्यों और जीवन साथी से प्रमुख अपेक्षाओं को एक डायरी में लिखें।`;
+      if (isBaby) return `दिन 1 कार्य: प्रसवपूर्व स्वास्थ्य, आवश्यक पोषण और जीवनशैली में सुधारों की एक योजना बनाएं।`;
+      if (isBusiness) return `दिन 1 कार्य: अपने वर्तमान व्यापार मॉडल, राजस्व लक्ष्यों और मुख्य ग्राहक वर्ग का ऑडिट करें।`;
+      if (isProperty) return `दिन 1 कार्य: अपना लक्षित संपत्ति/वाहन बजट, स्थान प्राथमिकताएं और पसंदीदा संपत्ति प्रकार तय करें।`;
+      if (isHealth) return `दिन 1 कार्य: अपने स्वास्थ्य, लक्षित वजन और 3 हानिकारक आदतों को समाप्त करने का संकल्प लिखें।`;
+      return `दिन 1 कार्य: अपने प्राथमिक संकल्प को स्पष्ट शब्दों में लिखें और 3 प्रारंभिक कदम तय करें।`;
+    }
+    if (dayNum === 2) {
+      if (isJob) return `दिन 2 कार्य: जॉब पोर्टल्स पर ${userProf} डोमेन में 5 आदर्श पदों को शॉर्टलिस्ट करें।`;
+      if (isDebt) return `दिन 2 कार्य: जल्दी भुगतान के लिए अपने उच्चतम ब्याज दर वाले ऋण (Avalanche Method) की पहचान करें।`;
+      if (isMarriage) return `दिन 2 कार्य: अपनी सामाजिक या वैवाहिक प्रोफ़ाइल को स्पष्ट, वास्तविक विवरण और सकारात्मक ऊर्जा के साथ अपडेट करें।`;
+      if (isBaby) return `दिन 2 कार्य: स्थानीय क्षेत्र में उच्च श्रेणी के स्त्री रोग विशेषज्ञों व मातृत्व क्लीनिकों की सूची बनाएं।`;
+      if (isBusiness) return `दिन 2 कार्य: 3 प्रतिस्पर्धी व्यवसायों का विश्लेषण करें और अपनी विशिष्ट सेवा या उत्पाद क्षमता पहचानें।`;
+      if (isProperty) return `दिन 2 कार्य: ऑनलाइन संपत्ति सूचियों की खोज करें और बजट के भीतर 3 विकल्पों को शॉर्टलिस्ट करें।`;
+      if (isHealth) return `दिन 2 कार्य: अपने आहार और नींद चक्र को दर्ज करें; कैफीन या चीनी की मात्रा 50% कम करें।`;
+      return `दिन 2 कार्य: अपने लक्ष्य के मुख्य अवरोधों की पहचान करें और समाधान योजना बनाएं।`;
+    }
+    if (dayNum === 3) {
+      if (isJob) return `दिन 3 कार्य: शीर्ष लक्षित भूमिका के लिए अपना रेज़्यूमे सारांश और मुख्य तकनीकी कौशल तैयार करें।`;
+      if (isDebt) return `दिन 3 कार्य: ब्याज दर कम करने या ऋण पुनर्गठन के बारे में बैंक प्रतिनिधि से संपर्क करें।`;
+      if (isMarriage) return `दिन 3 कार्य: 2 संभावित रिश्तों या परिजनों से खुले और सम्मानजनक संवाद की शुरुआत करें।`;
+      if (isBaby) return `दिन 3 कार्य: दैनिक स्वास्थ्य और पोषण ट्रैकर शुरू करें; तनाव कम करने हेतु 20 मिनट प्राणायाम करें।`;
+      if (isBusiness) return `दिन 3 कार्य: अपनी मूल्य निर्धारण रणनीति और लाभ मार्जिन की विस्तृत समीक्षा करें।`;
+      if (isProperty) return `दिन 3 कार्य: शॉर्टलिस्ट की गई संपत्तियों की कानूनी स्थिति जांचने हेतु अधिकृत सलाहकार से परामर्श करें।`;
+      if (isHealth) return `दिन 3 कार्य: सप्ताह के लिए सात्विक भोजन चार्ट बनाएं और 30 मिनट दैनिक शारीरिक गतिविधि निर्धारित करें।`;
+      return `दिन 3 कार्य: अपने कार्यक्षेत्र को स्वच्छ व वास्तु अनुसार पूर्व या उत्तर की ओर व्यवस्थित करें।`;
+    }
+    if (dayNum <= 10) {
+      if (isJob) return `दिन ${dayNum} (शिलान्यास): ${userProf} नेटवर्क में 3 वरिष्ठ पेशेवरों से लिंक्डइन पर जुड़ें।`;
+      if (isDebt) return `दिन ${dayNum} (शिलान्यास): एक अनावश्यक दैनिक खर्च को समाप्त कर उस बचत को ऋण खाते में जमा करें।`;
+      if (isMarriage) return `दिन ${dayNum} (शिलान्यास): अपनी व्यक्तिगत दिनचर्या में भावनात्मक संतुलन व आत्म-प्रेम का अभ्यास करें।`;
+      if (isBaby) return `दिन ${dayNum} (शिलान्यास): शुद्ध प्राकृतिक जल, फल व सात्विक आहार के नियम का पालन करें।`;
+      if (isBusiness) return `दिन ${dayNum} (शिलान्यास): मौजूदा 3 ग्राहकों से फीडबैक लें और सेवा की गुणवत्ता सुधारें।`;
+      if (isProperty) return `दिन ${dayNum} (शिलान्यास): बैंक लोन पात्रता व आवश्यक दस्तावेजों की फाइल तैयार करें।`;
+      if (isHealth) return `दिन ${dayNum} (शिलान्यास): सुबह 6:30 से पहले 20 मिनट तेज सैर और सूर्य नमस्कार करें।`;
+      return `दिन ${dayNum} (शिलान्यास): अपने लक्ष्य के प्रति दैनिक 20 मिनट केंद्रित अभ्यास जारी रखें।`;
+    }
+    if (dayNum <= 20) {
+      if (isJob) return `दिन ${dayNum} (ऊर्जा संचय): ${userProf} कौशल का 45 मिनट अभ्यास करें और 2 नए आवेदन भेजें।`;
+      if (isDebt) return `दिन ${dayNum} (ऊर्जा संचय): अपने वित्तीय खाते में एक अतिरिक्त आपातकालीन बफर निधि अलग रखें।`;
+      if (isMarriage) return `दिन ${dayNum} (ऊर्जा संचय): संभावित साथी के साथ भविष्य के जीवन लक्ष्यों पर सार्थक बातचीत करें।`;
+      if (isBaby) return `दिन ${dayNum} (ऊर्जा संचय): दोनों साथी मिलकर 15 मिनट शांति व सकारात्मक ध्यान करें।`;
+      if (isBusiness) return `दिन ${dayNum} (ऊर्जा संचय): डिजिटल मार्केटिंग या सीधे ग्राहक संपर्क द्वारा 5 नई लीड्स उत्पन्न करें।`;
+      if (isProperty) return `दिन ${dayNum} (ऊर्जा संचय): 2 शॉर्टलिस्ट की गई संपत्तियों का प्रत्यक्ष स्थल निरीक्षण करें।`;
+      if (isHealth) return `दिन ${dayNum} (ऊर्जा संचय): पानी का सेवन 3 लीटर तक बढ़ाएं और सूर्यास्त के बाद भारी भोजन त्यागें।`;
+      return `दिन ${dayNum} (ऊर्जा संचय): अनुशासन के साथ अपने कार्यों की प्रगति रिपोर्ट दर्ज करें।`;
+    }
+    if (dayNum <= 30) {
+      if (isJob) return `दिन ${dayNum} (प्रथम चरण सिद्धि): साक्षात्कारों के संभावित तकनीकी प्रश्नों के मॉक अभ्यास में भाग लें।`;
+      if (isDebt) return `दिन ${dayNum} (प्रथम चरण सिद्धि): महीने के अंत में ऋण का पहला मूलधन हिस्सा सफलतापूर्वक चुकाएं।`;
+      if (isMarriage) return `दिन ${dayNum} (प्रथम चरण सिद्धि): पारिवारिक स्तर पर प्राथमिक सहमति व कुंडली अनुकूलता पर चर्चा करें।`;
+      if (isBaby) return `दिन ${dayNum} (प्रथम चरण सिद्धि): चिकित्सा परीक्षणों की समीक्षा करें और तनावमुक्त जीवनशैली अपनाएं।`;
+      if (isBusiness) return `दिन ${dayNum} (प्रथम चरण सिद्धि): इस माह के राजस्व की समीक्षा करें और 1 नया अनुबंध अंतिम रूप दें।`;
+      if (isProperty) return `दिन ${dayNum} (प्रथम चरण सिद्धि): संपत्ति मूल्य पर बातचीत करें और कानूनी जांच रिपोर्ट प्राप्त करें।`;
+      if (isHealth) return `दिन ${dayNum} (प्रथम चरण सिद्धि): 30 दिनों में शारीरिक स्फूर्ति व वजन में आए सुधार का उत्सव मनाएं।`;
+      return `दिन ${dayNum} (प्रथम चरण सिद्धि): 30 दिन की निरंतरता का उत्सव मनाएं और चरण 2 के लिए तैयार हों।`;
+    }
+    if (dayNum <= 60) {
+      if (isJob) return `दिन ${dayNum} (चरण 2 कर्म संरेखण): शुभ अभिजीत मुहूर्त में वरिष्ठ साक्षात्कारों में भाग लें या वेतन बातचीत करें।`;
+      if (isDebt) return `दिन ${dayNum} (चरण 2 कर्म संरेखण): द्वितीय ऋण खाते का 30% हिस्सा चुकता कर वित्तीय भार कम करें।`;
+      if (isMarriage) return `दिन ${dayNum} (चरण 2 कर्म संरेखण): दोनों परिवारों के बीच सौहार्दपूर्ण बैठक या शुभ सगाई की योजना बनाएं।`;
+      if (isBaby) return `दिन ${dayNum} (चरण 2 कर्म संरेखण): नियमित प्रसवपूर्व चिकित्सा परामर्श व सकारात्मक वातावरण बनाए रखें।`;
+      if (isBusiness) return `दिन ${dayNum} (चरण 2 कर्म संरेखण): नए उत्पादों/सेवाओं का विस्तार करें और परिचालन लाभ 20% बढ़ाएं।`;
+      if (isProperty) return `दिन ${dayNum} (चरण 2 कर्म संरेखण): बयाना राशि तय करें और बिक्री अनुबंध के मसौदे की समीक्षा करें।`;
+      if (isHealth) return `दिन ${dayNum} (चरण 2 कर्म संरेखण): उन्नत शारीरिक शक्ति व मानसिक शांति के लिए योग साधना जारी रखें।`;
+      return `दिन ${dayNum} (चरण 2 कर्म संरेखण): अपने प्राथमिक लक्ष्य के मुख्य मील के पत्थर हासिल करें।`;
+    }
+    if (dayNum < 90) {
+      if (isJob) return `दिन ${dayNum} (चरण 3 प्रकटीकरण): अंतिम नियुक्ति पत्र प्राप्त करें और नई प्रतिष्ठित भूमिका में कदम रखें! 🌟`;
+      if (isDebt) return `दिन ${dayNum} (चरण 3 प्रकटीकरण): लक्षित ऋण को पूरी तरह समाप्त कर वित्तीय स्वतंत्रता प्राप्त करें! 🌟`;
+      if (isMarriage) return `दिन ${dayNum} (चरण 3 प्रकटीकरण): विवाह तिथि का शुभ मुहूर्त तय करें और वैवाहिक जीवन की तैयारी पूरी करें! 🌟`;
+      if (isBaby) return `दिन ${dayNum} (चरण 3 प्रकटीकरण): स्वस्थ संतान आशीर्वाद की दिशा में संपूर्ण मातृत्व तैयारी सुनिश्चित करें! 🌟`;
+      if (isBusiness) return `दिन ${dayNum} (चरण 3 प्रकटीकरण): नए व्यवसायिक रिकॉर्ड बनाएं और दीर्घकालिक स्थिरता हासिल करें! 🌟`;
+      if (isProperty) return `दिन ${dayNum} (चरण 3 प्रकटीकरण): संपत्ति की रजिस्ट्री पर हस्ताक्षर करें और अपने सपनों के घर की चाबी प्राप्त करें! 🌟`;
+      if (isHealth) return `दिन ${dayNum} (चरण 3 प्रकटीकरण): आदर्श स्वास्थ्य, ऊर्जा और पूर्ण मानसिक शांति का आनंद लें! 🌟`;
+      return `दिन ${dayNum} (चरण 3 प्रकटीकरण): अपने 90-दिवसीय लक्ष्य की पूर्ण सिद्धि की ओर अग्रसर हों।`;
+    }
+    return `दिन 90 (कर्म विजय!): पूर्ण 90-दिवसीय लक्ष्य उपलब्धि और कृतज्ञता उत्सव! 🌟`;
+  } else {
+    // ── ENGLISH ROADMAP ──
+    if (dayNum === 1) {
+      if (isJob) return `Day 1 Action Step: Write down your top 3 target ${userProf} roles and update your resume headline.`;
+      if (isDebt) return `Day 1 Action Step: List all active debts, interest rates, and minimum monthly obligations in your ledger.`;
+      if (isMarriage) return `Day 1 Action Step: Write down your core relationship values and key expectations for a life partner.`;
+      if (isBaby) return `Day 1 Action Step: Plan a nutrient-rich prenatal wellness chart and review health foundations.`;
+      if (isBusiness) return `Day 1 Action Step: Audit your current business revenue model, active clients, and monthly operating costs.`;
+      if (isProperty) return `Day 1 Action Step: Define your target property budget, preferred micro-locations, and asset type.`;
+      if (isHealth) return `Day 1 Action Step: Log your baseline health markers, target weight, and identify 3 habits to eliminate.`;
+      return `Day 1 Action Step: Define your primary life goal with measurable 90-day targets.`;
+    }
+    if (dayNum === 2) {
+      if (isJob) return `Day 2 Action Step: Search job portals (LinkedIn/Naukri) and shortlist 5 ideal postings in the ${userProf} domain.`;
+      if (isDebt) return `Day 2 Action Step: Identify your highest interest rate debt to prioritize early payoff (Avalanche method).`;
+      if (isMarriage) return `Day 2 Action Step: Update your social or matrimonial profile with clear, genuine, and positive energy.`;
+      if (isBaby) return `Day 2 Action Step: Shortlist 3 reputable prenatal specialists or maternity wellness clinics in your area.`;
+      if (isBusiness) return `Day 2 Action Step: Conduct a competitor analysis to pinpoint your unique value proposition in the market.`;
+      if (isProperty) return `Day 2 Action Step: Search online listings and shortlist 3 property options within budget parameters.`;
+      if (isHealth) return `Day 2 Action Step: Log your nutrition and sleep cycle; cut refined sugar and excess caffeine by 50%.`;
+      return `Day 2 Action Step: Identify primary execution hurdles and draft proactive counter-measures.`;
+    }
+    if (dayNum === 3) {
+      if (isJob) return `Day 3 Action Step: Tailor your resume summary and technical competencies for your top target ${userProf} role.`;
+      if (isDebt) return `Day 3 Action Step: Contact your bank or creditor to inquire about interest rate reductions or restructuring.`;
+      if (isMarriage) return `Day 3 Action Step: Initiate open, respectful outreach with 2 potential matches or family intermediaries.`;
+      if (isBaby) return `Day 3 Action Step: Begin a daily health tracker and practice 20 minutes of stress-reducing Pranayama.`;
+      if (isBusiness) return `Day 3 Action Step: Review your pricing structures and profit margins across your core offerings.`;
+      if (isProperty) return `Day 3 Action Step: Consult a verified real estate legal advisor to check title verification requirements.`;
+      if (isHealth) return `Day 3 Action Step: Plan a clean, balanced meal chart for the week and set a 30-minute daily exercise reminder.`;
+      return `Day 3 Action Step: Align your workspace facing East or North for enhanced focus and productivity.`;
+    }
+    if (dayNum <= 10) {
+      if (isJob) return `Day ${dayNum} (Foundation): Connect with 3 senior ${userProf} leaders on LinkedIn and submit 1 tailored application.`;
+      if (isDebt) return `Day ${dayNum} (Foundation): Eliminate one non-essential discretionary expense and transfer savings to debt principal.`;
+      if (isMarriage) return `Day ${dayNum} (Foundation): Practice emotional mindfulness and cultivate mutual empathy in conversations.`;
+      if (isBaby) return `Day ${dayNum} (Foundation): Follow clean, organic dietary routines and drink pure copper-infused water.`;
+      if (isBusiness) return `Day ${dayNum} (Foundation): Reach out to 3 existing clients for testimonial feedback and service enhancement.`;
+      if (isProperty) return `Day ${dayNum} (Foundation): Organize pre-approval loan paperwork and bank statements into a central folder.`;
+      if (isHealth) return `Day ${dayNum} (Foundation): Complete 20 minutes of morning brisk walking and Surya Namaskar before 7:00 AM.`;
+      return `Day ${dayNum} (Foundation): Dedicate 20 minutes to disciplined daily progress toward your goal.`;
+    }
+    if (dayNum <= 20) {
+      if (isJob) return `Day ${dayNum} (Building Energy): Dedicate 45 minutes to high-demand ${userProf} skills and follow up on 2 applications.`;
+      if (isDebt) return `Day ${dayNum} (Building Energy): Build a dedicated emergency cash buffer while maintaining scheduled debt payments.`;
+      if (isMarriage) return `Day ${dayNum} (Building Energy): Have meaningful discussions with prospective matches about shared long-term life plans.`;
+      if (isBaby) return `Day ${dayNum} (Building Energy): Practice 15 minutes of partner meditation and restful mindfulness together.`;
+      if (isBusiness) return `Day ${dayNum} (Building Energy): Generate 5 new qualified leads via targeted digital outreach or client referrals.`;
+      if (isProperty) return `Day ${dayNum} (Building Energy): Conduct physical site visits to 2 shortlisted properties during daylight hours.`;
+      if (isHealth) return `Day ${dayNum} (Building Energy): Increase daily hydration to 3 liters and eliminate heavy dinners after sunset.`;
+      return `Day ${dayNum} (Building Energy): Maintain daily progress tracking and refine execution strategies.`;
+    }
+    if (dayNum <= 30) {
+      if (isJob) return `Day ${dayNum} (Phase 1 Mastery): Conduct mock interview drills on technical ${userProf} challenges and system design.`;
+      if (isDebt) return `Day ${dayNum} (Phase 1 Mastery): Successfully pay off the first principal milestone on your prioritized debt.`;
+      if (isMarriage) return `Day ${dayNum} (Phase 1 Mastery): Confirm foundational alignment with prospective match and family elders.`;
+      if (isBaby) return `Day ${dayNum} (Phase 1 Mastery): Review medical consultations and establish serene, stress-free daily routines.`;
+      if (isBusiness) return `Day ${dayNum} (Phase 1 Mastery): Review monthly revenue milestones and close 1 key customer deal.`;
+      if (isProperty) return `Day ${dayNum} (Phase 1 Mastery): Negotiate final price brackets and verify municipal approvals.`;
+      if (isHealth) return `Day ${dayNum} (Phase 1 Mastery): Celebrate 30 days of consistent vitality gains and visible stamina improvement.`;
+      return `Day ${dayNum} (Phase 1 Mastery): Celebrate 30 days of karmic consistency and prepare for Phase 2.`;
+    }
+    if (dayNum <= 60) {
+      if (isJob) return `Day ${dayNum} (Phase 2 Alignment): Attend pivotal rounds of interviews or negotiate compensation during Abhijit Muhurat.`;
+      if (isDebt) return `Day ${dayNum} (Phase 2 Alignment): Clear 30% of secondary liabilities and consolidate payment structures.`;
+      if (isMarriage) return `Day ${dayNum} (Phase 2 Alignment): Finalize auspicious engagement arrangements and mutual matrimonial commitments.`;
+      if (isBaby) return `Day ${dayNum} (Phase 2 Alignment): Maintain regular prenatal checkups and nourish a harmonious domestic environment.`;
+      if (isBusiness) return `Day ${dayNum} (Phase 2 Alignment): Scale product/service delivery and optimize operational margins by 20%.`;
+      if (isProperty) return `Day ${dayNum} (Phase 2 Alignment): Finalize token agreement and complete formal bank loan disbursement approval.`;
+      if (isHealth) return `Day ${dayNum} (Phase 2 Alignment): Achieve peak functional fitness, ideal stamina, and sustained inner tranquility.`;
+      return `Day ${dayNum} (Phase 2 Alignment): Secure critical milestones toward your 90-day breakthrough.`;
+    }
+    if (dayNum < 90) {
+      if (isJob) return `Day ${dayNum} (Phase 3 Manifestation): Receive your formal appointment letter and step into your distinguished new role! 🌟`;
+      if (isDebt) return `Day ${dayNum} (Phase 3 Manifestation): Completely eliminate target debt balance and secure long-term financial sovereignty! 🌟`;
+      if (isMarriage) return `Day ${dayNum} (Phase 3 Manifestation): Seal your sacred matrimonial union under auspicious Vedic planetary alignments! 🌟`;
+      if (isBaby) return `Day ${dayNum} (Phase 3 Manifestation): Welcome divine progeny blessings with optimal health, peace, and joyful gratitude! 🌟`;
+      if (isBusiness) return `Day ${dayNum} (Phase 3 Manifestation): Establish new peak commercial records and secure multi-year business growth! 🌟`;
+      if (isProperty) return `Day ${dayNum} (Phase 3 Manifestation): Sign the property registry deed and receive the keys to your dream home! 🌟`;
+      if (isHealth) return `Day ${dayNum} (Phase 3 Manifestation): Embody permanent vitality, optimal fitness, and luminous mental clarity! 🌟`;
+      return `Day ${dayNum} (Phase 3 Manifestation): Manifest the full fruition of your 90-day karmic dedication.`;
+    }
+    return `Day 90 (KARMIC TRIUMPH!): Full 90-Day Goal Accomplishment & Gratitude Celebration! 🌟`;
+  }
 }
 
 function navigateRoadmapDay(delta) {
@@ -6371,48 +5644,41 @@ if (normGoal === 'job' || normGoal === 'business') {
   goalPlanetHi = signLordsHi[pSign];
 }
 
-let coachTaskTitleEn = `Coach Kundli Alignment: ${uLagnaLord} & ${goalPlanet} Focus (${dayNameEn})`;
-let coachTaskTitleHi = `कोच कुंडली अनुकूलन: ${uLagnaLordHi} व ${goalPlanetHi} संरेखण (${dayNameHi})`;
-let coachTaskTextEn = `Your Karma Coach prescribes channeling your ${uLagnaName} Lagna Lord (${uLagnaLord}) and goal significator ${goalPlanet} today for ${coachUserName} (${coachUserProf}). Dedicate 20 minutes to mindful action and mantra focus towards your ${normGoal} goal${coachIssueNoteEn}.`;
-let coachTaskTextHi = `आपके कर्म कोच द्वारा आज ${coachUserName} (${coachUserProf}) के लिए ${uLagnaNameHi} लग्न स्वामी (${uLagnaLordHi}) व लक्ष्य स्वामी ${goalPlanetHi} की ऊर्जा को जाग्रत करने का निर्देश है। अपने ${normGoal} लक्ष्य के लिए 20 मिनट समर्पित प्रयास करें${coachIssueNoteHi}।`;
+// Authentic Kundli-Coach Task Synthesizing User's Lagna Lord, Goal Lord, Profession, and Day Energy
+let coachTaskTitleEn = `Coach Kundli Alignment: ${uLagnaLord} (Lagna) & ${goalPlanet} (${normGoal}) Focus`;
+let coachTaskTitleHi = `कोच कुंडली अनुकूलन: ${uLagnaLordHi} (लग्नेश) व ${goalPlanetHi} (${normGoal}) संरेखण`;
 
-if (dayNameEn === "Monday") {
-  coachTaskTitleEn = `Coach Kundli Alignment: Moon Mental Peace & Somwar Shiva Alignment`;
-  coachTaskTitleHi = `कोच कुंडली अनुकूलन: चंद्र मानसिक शांति एवं सोमवार शिव संरेखण`;
-  coachTaskTextEn = `For ${coachUserName} (${uLagnaName} Lagna): Perform 108x "Om Namah Shivaya" chanting & offer raw milk/water on Shivling today. Calms emotional turbulence, pacifies Moon energy, and activates your ${normGoal} path${coachIssueNoteEn}.`;
-  coachTaskTextHi = ` ${coachUserName} (${uLagnaNameHi} लग्न) के लिए: आज 108 बार "ॐ नमः शिवाय" का जाप करें और शिवलिंग पर कच्चा दूध/जल अर्पित करें। मानसिक शांति व ${normGoal} में प्रगति मिलेगी${coachIssueNoteHi}।`;
-} else if (dayNameEn === "Tuesday") {
-  coachTaskTitleEn = `Coach Kundli Alignment: Tuesday Mars Courage & Hanuman Protection`;
-  coachTaskTitleHi = `कोच कुंडली अनुकूलन: मंगलवार मंगल ऊर्जा एवं हनुमान रक्षा`;
-  coachTaskTextEn = `For ${coachUserName} (${uLagnaName} Lagna): Recite Hanuman Chalisa and offer red flowers to Lord Hanuman. Enhances vitality and eliminates obstacles blocking your ${normGoal} manifestation${coachIssueNoteEn}.`;
-  coachTaskTextHi = ` ${coachUserName} (${uLagnaNameHi} लग्न) के लिए: आज हनुमान चालीसा का पाठ करें और लाल पुष्प अर्पित करें। मंगल बाधाएं शांत होंगी और ${normGoal} मार्ग प्रशस्त होगा${coachIssueNoteHi}।`;
-} else if (dayNameEn === "Wednesday") {
-  coachTaskTitleEn = `Coach Kundli Alignment: Wednesday Mercury Intellect & Business Strategy`;
-  coachTaskTitleHi = `कोच कुंडली अनुकूलन: बुधवार बुध प्रज्ञा एवं व्यापार रणनीति`;
-  coachTaskTextEn = `For ${coachUserName} (${coachUserProf}): Feed green fodder/spinach to cows or birds. Sharpens Mercury intellect, communication, and commercial clarity for ${normGoal}${coachIssueNoteEn}.`;
-  coachTaskTextHi = ` ${coachUserName} (${coachUserProf}) के लिए: आज गायों को हरा चारा या पक्षियों को मूँग दाना अर्पित करें। बुध प्रज्ञा व ${normGoal} रणनीति में वृद्धि होगी${coachIssueNoteHi}।`;
-} else if (dayNameEn === "Thursday") {
-  coachTaskTitleEn = `Coach Kundli Alignment: Thursday Jupiter Expansion & Wisdom`;
-  coachTaskTitleHi = `कोच कुंडली अनुकूलन: गुरुवार देवगुरु बृहस्पति कृपा एवं प्रज्ञा`;
-  coachTaskTextEn = `For ${coachUserName}: Offer a pinch of turmeric in water to rising Sun or temple. Activates Jupiter's expansive wealth blessings for ${normGoal}${coachIssueNoteEn}.`;
-  coachTaskTextHi = ` ${coachUserName} के लिए: आज जल में एक चुटकी हल्दी मिलाकर सूर्य देव को अर्घ्य दें। देवगुरु बृहस्पति की कृपा से ${normGoal} में समृद्धि मिलेगी${coachIssueNoteHi}।`;
-} else if (dayNameEn === "Friday") {
-  coachTaskTitleEn = `Coach Kundli Alignment: Friday Venus Harmony & Prosperity`;
-  coachTaskTitleHi = `कोच कुंडली अनुकूलन: शुक्रवार शुक्र सौहार्द एवं श्री समृद्धि`;
-  coachTaskTextEn = `For ${coachUserName}: Wear clean white or pastel attire and offer white sweets to needy individuals. Strengthens Venus harmony and creative abundance in ${normGoal}${coachIssueNoteEn}.`;
-  coachTaskTextHi = ` ${coachUserName} के लिए: आज स्वच्छ हल्के/सफेद वस्त्र पहनें और सफेद मिठाई या दूध का दान करें। शुक्र ऊर्जा से ${normGoal} में आकर्षण व सफलता बढ़ेगी${coachIssueNoteHi}।`;
-} else if (dayNameEn === "Saturday") {
-  coachTaskTitleEn = `Coach Kundli Alignment: Saturday Saturn Karma Clearance`;
-  coachTaskTitleHi = `कोच कुंडली अनुकूलन: शनिवार शनि कर्म शुद्धि`;
-  coachTaskTextEn = `For ${coachUserName}: Light a mustard oil lamp under a Peepal tree or donate black sesame seeds. Dissolves karmic delays and grounds stability in ${normGoal}${coachIssueNoteEn}.`;
-  coachTaskTextHi = ` ${coachUserName} के लिए: आज पीपल वृक्ष के नीचे सरसों के तेल का दीपक जलाएं या काले तिल का दान करें। कर्म बाधाएं शांत होंगी और ${normGoal} में स्थिरता आएगी${coachIssueNoteHi}।`;
-} else {
-  coachTaskTitleEn = `Coach Kundli Alignment: Sunday Surya Tejas & Leadership Vitality`;
-  coachTaskTitleHi = `कोच कुंडली अनुकूलन: रविवार सूर्य तेजस एवं नेतृत्व ओज`;
-  coachTaskTextEn = `For ${coachUserName} (${coachUserProf}): Offer water from a copper vessel to the rising Sun with Gayatri Mantra. Boosts solar willpower and social authority in ${normGoal}${coachIssueNoteEn}.`;
-  coachTaskTextHi = ` ${coachUserName} (${coachUserProf}) के लिए: आज तांबे के पात्र से उगते सूर्य को गायत्री मंत्र सहित जल अर्पित करें। आत्मविश्वास और ${normGoal} में अधिकार बढ़ेगा${coachIssueNoteHi}।`;
-}
+const goalActionDescEn = {
+  'job': `focus on ${coachUserProf} career milestones, updating technical deliverables, and strategic execution`,
+  'business': `review client acquisition strategies, commercial contracts, and key partnerships for business expansion`,
+  'marriage': `nurture mutual understanding, open heart-to-heart communication, and emotional harmony`,
+  'love': `practice emotional clarity, open expression, and receptive partner connection`,
+  'debt': `audit monthly financial ledgers, negotiate credit terms, and strictly avoid discretionary impulsive expenditure`,
+  'savings': `review systematic savings allocations, emergency reserve deposits, and prudent investment hedges`,
+  'baby': `maintain calm sattvic wellness, peaceful partner harmony, and gentle mindfulness routines`,
+  'property': `verify legal documentation, inspect asset location parameters, and assess loan structures`,
+  'health': `prioritize physical vitality, clean hydration, and disciplined morning solar alignment`,
+  'custom': `dedicate focused mindful effort towards resolving "${userCustomIssue || normGoal}"`
+};
 
+const goalActionDescHi = {
+  'job': `${coachUserProf} के रूप में करियर लक्ष्यों, तकनीकी पोर्टफोलियो व कार्यस्थल पर अधिकार संवर्धन पर ध्यान केंद्रित करें`,
+  'business': `व्यावसायिक विस्तार, नए ग्राहक संपर्कों व रणनीतिक साझेदारी की समीक्षा पर समय दें`,
+  'marriage': `पारस्परिक विश्वास, भावनात्मक समझ व मधुर संवाद को प्राथमिकता दें`,
+  'love': `भावनात्मक स्पष्टता, वास्तविक अभिव्यक्ति व साझेदारी में सद्भाव बनाए रखें`,
+  'debt': `मासिक बजट बही की समीक्षा करें, अतिरिक्त ऋण पुनर्भुगतान की योजना बनाएं व व्यर्थ खर्चों से बचें`,
+  'savings': `नियमित बचत व आकस्मिक निधि में वृद्धि पर ध्यान दें`,
+  'baby': `शांत सात्विक दिनचर्या, शारीरिक विश्राम व मन की शांति बनाए रखें`,
+  'property': `संपत्ति दस्तावेजों के सत्यापन, बजट सीमा व शुभ समय में स्थल निरीक्षण की योजना बनाएं`,
+  'health': `शारीरिक ऊर्जा, संतुलित आहार व प्रातः सूर्य अर्घ्य द्वारा जीवनी शक्ति मजबूत करें`,
+  'custom': `"${userCustomIssue || normGoal}" के समाधान हेतु समर्पित व अनुशासित प्रयास करें`
+};
+
+const gDescEn = goalActionDescEn[normGoal] || goalActionDescEn['custom'];
+const gDescHi = goalActionDescHi[normGoal] || goalActionDescHi['custom'];
+
+let coachTaskTextEn = `For ${coachUserName} (${uLagnaName} Lagna, ${coachUserProf}): On this ${dayNameEn}, your Karma Coach prescribes channeling your Lagna Lord (${uLagnaLord}) and goal significator (${goalPlanet}). Dedicate 20 minutes to ${gDescEn}${coachIssueNoteEn}.`;
+let coachTaskTextHi = `${coachUserName} (${uLagnaNameHi} लग्न, ${coachUserProf}) के लिए: आज ${dayNameHi} को आपके कर्म कोच लग्नेश (${uLagnaLordHi}) व लक्ष्य स्वामी (${goalPlanetHi}) की ऊर्जा को जाग्रत करने का निर्देश देते हैं। आज 20 मिनट ${gDescHi}${coachIssueNoteHi}।`;
 tasks.push({
   category: 'vedic',
   title: isHi ? coachTaskTitleHi : coachTaskTitleEn,
@@ -10600,7 +9866,10 @@ document.getElementById('auth-screen').style.display = 'flex';
 // App Initialization (100% Dynamic Engine for New and Existing Users)
 async function initApp() {
   // 1. Automatic Engine Migration for Existing Users
-  const CURRENT_DYNAMIC_ENGINE_VERSION = '2026.08.26_dynamic_v2';
+  const CURRENT_DYNAMIC_ENGINE_VERSION = '2026.08.26_dynamic_v3';
+  const currentDob = localStorage.getItem('user_dob') || localStorage.getItem('kundli_date') || '';
+  const currentTob = localStorage.getItem('user_tob') || localStorage.getItem('kundli_time') || '';
+  const birthProfileKey = currentDob + '_' + currentTob;
   const installedEngineVersion = localStorage.getItem('astro_engine_calc_version');
   const hasExistingProfile = !!(localStorage.getItem('user_dob') || localStorage.getItem('kundli_date'));
 
@@ -10627,7 +9896,8 @@ async function initApp() {
   }
 
   // 2. Ensure Authentic Kundli is computed into memory for existing user
-  if (hasExistingProfile && (!cachedPlacementsList || cachedPlacementsList.length === 0)) {
+  if (hasExistingProfile && (!cachedPlacementsList || cachedPlacementsList.length === 0 || cachedBirthDateStr !== birthProfileKey)) {
+    cachedBirthDateStr = birthProfileKey;
     try {
       if (typeof autoFillKundliFromOnboarding === 'function') {
         await autoFillKundliFromOnboarding();
@@ -12616,6 +11886,9 @@ sidLon: sidLon
 });
 currentPlacements = planetsList;
 const placementsList = planetsList; // alias for compatibility
+cachedPlacementsList = planetsList;
+cachedLagnaSignNum = lagnaSignNum;
+localStorage.setItem('kundli_lagna_sign', lagnaSignNum);
 
 // Moon details & Dasha
 const moonPl = placementsList.find(p => p.name === 'Moon');
