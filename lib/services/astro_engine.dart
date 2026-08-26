@@ -132,4 +132,93 @@ class AstroEngine {
     if (geoLonDeg < 0) geoLonDeg += 360;
     return geoLonDeg;
   }
+
+  static const List<String> signLords = [
+    "Mars", "Venus", "Mercury", "Moon", "Sun", "Mercury",
+    "Venus", "Mars", "Jupiter", "Saturn", "Saturn", "Jupiter"
+  ];
+
+  static const List<String> nakshatras = [
+    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
+    "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
+    "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha",
+    "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
+    "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
+  ];
+
+  /// Comprehensive calculation of user's Vedic Kundali
+  static Map<String, dynamic> calculateFullKundli({
+    required int year,
+    required int month,
+    required int day,
+    required int hour,
+    required int min,
+    double tz = 5.5,
+    double lat = 28.6139,
+    double lng = 77.2090,
+    String goal = 'job',
+  }) {
+    final jd = getJulianDay(year, month, day, hour, min, tz);
+    final ayanamsa = getLahiriAyanamsa(jd);
+    final t = (jd - 2451545.0) / 36525.0;
+    final obliquity = 23.439291 - 0.013004167 * t;
+    final lst = getLocalSiderealTime(jd, lng);
+    final tropicalAsc = getAscendant(lst, lat, obliquity);
+    final siderealAsc = (tropicalAsc - ayanamsa + 360) % 360;
+    final lagnaSignNum = (siderealAsc / 30.0).floor();
+    final lagnaLord = signLords[lagnaSignNum];
+
+    final Map<String, Map<String, dynamic>> planetPlacements = {};
+    final planetNames = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Rahu", "Ketu"];
+    
+    for (final pName in planetNames) {
+      final tropLon = getPlanetLongitude(pName, jd);
+      final sidLon = (tropLon - ayanamsa + 360) % 360;
+      final signNum = (sidLon / 30.0).floor();
+      final houseNum = ((signNum - lagnaSignNum + 12) % 12) + 1;
+      planetPlacements[pName] = {
+        'sign': signNum,
+        'signName': signNames[signNum],
+        'house': houseNum,
+        'degree': sidLon % 30.0,
+        'sidLon': sidLon,
+      };
+    }
+
+    final moonLon = planetPlacements["Moon"]!['sidLon'] as double;
+    final moonNakIdx = (moonLon / (360.0 / 27.0)).floor() % 27;
+    final moonSignNum = planetPlacements["Moon"]!['sign'] as int;
+
+    // Determine specific goal ruling planet
+    String goalLord = lagnaLord;
+    if (goal == 'job' || goal == 'business') {
+      final tenthSign = (lagnaSignNum + 9) % 12;
+      goalLord = signLords[tenthSign];
+    } else if (goal == 'marriage' || goal == 'love') {
+      final seventhSign = (lagnaSignNum + 6) % 12;
+      goalLord = signLords[seventhSign];
+    } else if (goal == 'debt') {
+      final secondSign = (lagnaSignNum + 1) % 12;
+      goalLord = signLords[secondSign];
+    } else if (goal == 'baby') {
+      final fifthSign = (lagnaSignNum + 4) % 12;
+      goalLord = signLords[fifthSign];
+    } else if (goal == 'property') {
+      final fourthSign = (lagnaSignNum + 3) % 12;
+      goalLord = signLords[fourthSign];
+    } else if (goal == 'health') {
+      goalLord = lagnaLord;
+    }
+
+    return {
+      'lagnaSignNum': lagnaSignNum,
+      'lagnaName': signNames[lagnaSignNum],
+      'rulingLord': lagnaLord,
+      'moonSignNum': moonSignNum,
+      'moonSignName': signNames[moonSignNum],
+      'moonNakshatra': nakshatras[moonNakIdx],
+      'goalLord': goalLord,
+      'placements': planetPlacements,
+    };
+  }
 }

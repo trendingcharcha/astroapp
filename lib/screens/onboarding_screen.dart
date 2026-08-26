@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/supabase_service.dart';
 import '../services/hive_service.dart';
+import '../services/astro_engine.dart';
 import 'home_dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -136,6 +137,38 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     };
 
     try {
+      // Compute authentic Vedic Kundli for user
+      int y = 1995, m = 1, d = 1, h = 12, min = 0;
+      try {
+        final dParts = _dobController.text.split(RegExp(r'[-/]'));
+        if (dParts.length >= 3) {
+          if (dParts[0].length == 4) {
+            y = int.parse(dParts[0]); m = int.parse(dParts[1]); d = int.parse(dParts[2]);
+          } else {
+            y = int.parse(dParts[2]); m = int.parse(dParts[1]); d = int.parse(dParts[0]);
+          }
+        }
+        final tParts = _tobController.text.split(':');
+        if (tParts.length >= 2) {
+          h = int.parse(tParts[0]); min = int.parse(tParts[1]);
+        }
+      } catch (_) {}
+
+      final kundli = AstroEngine.calculateFullKundli(
+        year: y,
+        month: m,
+        day: d,
+        hour: h,
+        min: min,
+        goal: _goal,
+      );
+
+      profileData['lagna_name'] = kundli['lagnaName'];
+      profileData['ruling_lord'] = kundli['rulingLord'];
+      profileData['moon_sign_name'] = kundli['moonSignName'];
+      profileData['moon_nakshatra'] = kundli['moonNakshatra'];
+      profileData['goal_lord'] = kundli['goalLord'];
+
       // 1. Cache profile details in local Hive storage
       await HiveService.saveProfile(profileData);
 

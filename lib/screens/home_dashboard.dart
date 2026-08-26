@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/supabase_service.dart';
 import '../services/ai_service.dart';
 import '../services/hive_service.dart';
+import '../services/astro_engine.dart';
 import 'login_screen.dart';
 import 'onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -83,18 +84,13 @@ class _HomeDashboardState extends State<HomeDashboard> {
 
     // 2. Load Streaks & Dedication Grid
     final prefs = await SharedPreferences.getInstance();
-    _streak = prefs.getInt('user_streak') ?? 3;
+    _streak = prefs.getInt('user_streak') ?? 1;
     final gridSaved = prefs.getStringList('dedication_grid');
     if (gridSaved != null) {
       _dedicationGrid = gridSaved.map((v) => v == 'true').toList();
     } else {
-      // Fake some historical data for visual beauty
-      _dedicationGrid = [
-        true, true, false, true, true, true, false,
-        true, true, true, true, false, true, true,
-        false, false, false, false, false, false, false,
-        false, false, false, false, false, false, false,
-      ];
+      // Initialize authentic grid representing user's active streak progression
+      _dedicationGrid = List.generate(90, (index) => index < _streak);
     }
 
     // 3. Load or generate quests
@@ -108,7 +104,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
       return;
     }
 
-    // Generate fresh tasks based on profile goal
+    // Generate fresh tasks based on profile Kundali and goal
     await _generateNewDailyQuests();
   }
 
@@ -117,7 +113,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
     
     setState(() {
       _isLoading = true;
-      _aiSuggestion = "Syncing with stars...";
+      _aiSuggestion = "Calculating geocentric planetary placements for your Kundali...";
     });
 
     final goal = _profile!['goal'] ?? 'job';
@@ -125,14 +121,54 @@ class _HomeDashboardState extends State<HomeDashboard> {
     final customIssue = _profile!['custom_issue'] ?? '';
     final path = _profile!['onboarding_path'] ?? 'single';
     final partnerName = _profile!['partner_name'] ?? '';
+    final dob = _profile!['dob'] ?? '1995-01-01';
+    final tob = _profile!['tob'] ?? '12:00';
 
-    // Generate AI task breakdown
+    // Parse birth date and time
+    int y = 1995, m = 1, d = 1, h = 12, min = 0;
+    try {
+      final dParts = dob.split(RegExp(r'[-/]'));
+      if (dParts.length >= 3) {
+        if (dParts[0].length == 4) {
+          y = int.parse(dParts[0]);
+          m = int.parse(dParts[1]);
+          d = int.parse(dParts[2]);
+        } else {
+          y = int.parse(dParts[2]);
+          m = int.parse(dParts[1]);
+          d = int.parse(dParts[0]);
+        }
+      }
+      final tParts = tob.split(':');
+      if (tParts.length >= 2) {
+        h = int.parse(tParts[0]);
+        min = int.parse(tParts[1]);
+      }
+    } catch (_) {}
+
+    // Calculate user's authentic Vedic Kundli
+    final kundli = AstroEngine.calculateFullKundli(
+      year: y,
+      month: m,
+      day: d,
+      hour: h,
+      min: min,
+      goal: goal,
+    );
+
+    // Generate AI task breakdown using real Kundli alignments
     final aiResponse = await AIService.generateDailyTask(
       goal: goal,
       profession: profession,
       customIssue: customIssue,
       path: path,
       partnerName: partnerName,
+      lagnaName: kundli['lagnaName'],
+      rulingLord: kundli['rulingLord'],
+      moonSignName: kundli['moonSignName'],
+      moonNakshatra: kundli['moonNakshatra'],
+      goalLord: kundli['goalLord'],
+      placements: kundli['placements'],
     );
 
     // Split AI response into 4 distinct quests
@@ -145,18 +181,21 @@ class _HomeDashboardState extends State<HomeDashboard> {
       newTasks.add(KarmaTask(title: "Vastu Quest", description: lines[2].replaceAll(RegExp(r'^(🏡|)\s*Vastu:\s*'), ''), karmaPoints: 15));
       newTasks.add(KarmaTask(title: "Action Quest", description: lines[3].replaceAll(RegExp(r'^(💼|)\s*Action:\s*'), ''), karmaPoints: 30));
     } else {
-      // Fallback
+      // Dynamic fallback derived directly from calculated Kundli
+      final gLord = kundli['goalLord'] ?? 'Sun';
+      final lLord = kundli['rulingLord'] ?? 'Mars';
+      final lagna = kundli['lagnaName'] ?? 'Aries';
       newTasks.addAll([
-        KarmaTask(title: "Vedic Quest", description: "Chant matching mantra 108 times.", karmaPoints: 20),
-        KarmaTask(title: "Lal Kitab Quest", description: "Feed grains to birds or offer water to Sun.", karmaPoints: 15),
-        KarmaTask(title: "Vastu Quest", description: "Clean your North-East work zone.", karmaPoints: 15),
-        KarmaTask(title: "Action Quest", description: "Dedicate 30 mins to active skill building.", karmaPoints: 30),
+        KarmaTask(title: "Vedic Quest", description: "Chant matching mantra for your $gLord to energize your $goal goals.", karmaPoints: 20),
+        KarmaTask(title: "Lal Kitab Quest", description: "Perform morning water Arghya to Sun from a copper vessel for $lagna Lagna protection.", karmaPoints: 15),
+        KarmaTask(title: "Vastu Quest", description: "Align your workspace facing North-East to harmonize your ruling $lLord vibrations.", karmaPoints: 15),
+        KarmaTask(title: "Action Quest", description: "Dedicate 45 mins to actionable skill progress for your $profession role today.", karmaPoints: 30),
       ]);
     }
 
     setState(() {
       _tasks = newTasks;
-      _aiSuggestion = "Planet alignments verified for today! Complete your daily karma quests to level up.";
+      _aiSuggestion = "Aligned with your ${kundli['lagnaName']} Lagna & ${kundli['goalLord']} energy! Complete your daily karma quests to level up.";
       _isLoading = false;
     });
 
