@@ -8726,6 +8726,43 @@ rashiDateLabel.textContent = now.toLocaleDateString('en-US', { weekday: 'long', 
 if (rashiLuckyNum) rashiLuckyNum.innerText = lucky.n;
 }
 
+function generateEnglishPrediction(rashiIdx, weekdayIdx, planet, theme) {
+const rashiNames = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+const rashi = rashiNames[rashiIdx];
+const intros = [
+`Today's transit of ${planet} transmits vital dynamic energy directly into your ${rashi} sign.`,
+`Planetary alignment of ${planet} initiates auspicious karmic clarity and renewed focus for ${rashi}.`,
+`Under ${planet}'s celestial rays, your ${rashi} solar and lunar vectors experience elevated vitality.`,
+`The cosmic motion of ${planet} creates an auspicious balance between your efforts and destiny today.`,
+`Favorable transit geometry of ${planet} supports meaningful breakthroughs and strategic progress.`,
+`Active planetary stimulation from ${planet} enhances your inner confidence and executive capability.`,
+`Harmonious resonance with your ruling lord and ${planet} unlocks auspicious pathways for growth.`
+];
+const bodies = [
+`Demonstrate purposeful leadership in your profession; teamwork and proactive communication bring success.`,
+`Exercise conscious discernment in financial and resource decisions; favor disciplined long-term plans.`,
+`Long-pending initiatives gain positive momentum; an inspiring growth opportunity is within your reach.`,
+`Maintain calm clarity in speech and negotiations; your authentic expression will leave a lasting impact.`,
+`Channel energy into structured learning and skill mastery; guidance from mentors proves highly valuable.`,
+`Domestic harmony and mutual understanding flourish; meaningful connection with loved ones uplifts the spirit.`,
+`Vitality and physical endurance remain strong; mindfulness and balanced nourishment optimize mental clarity.`
+];
+const conclusions = [
+`Align with sunrise mantras for enhanced focus. May your day be blessed with auspicious clarity.`,
+`Patience and consistent execution are your greatest strengths today. Trust your inner discipline.`,
+`Communicate with conviction and grace; the cosmic currents are supporting your forward path.`,
+`Cultivate gratitude and grounded focus to naturally attract favorable karmic outcomes.`,
+`Channel your creative energy into purposeful action to achieve steady milestones.`,
+`Extend generosity and support to those around you; it expands positive spiritual resonance.`,
+`Maintain structured discipline at your workspace for lasting, compounding benefits.`
+];
+
+const intro = intros[weekdayIdx % intros.length];
+const body = bodies[(weekdayIdx + rashiIdx) % bodies.length];
+const conclusion = conclusions[(weekdayIdx * 2 + rashiIdx) % conclusions.length];
+return `${intro} ${body} ${conclusion}`;
+}
+
 function generateHindiPrediction(rashiIdx, weekdayIdx, planet, theme) {
 const rashiNames = ["मेष", "वृषभ", "मिथुन", "कर्क", "सिंह", "कन्या", "तुला", "वृश्चिक", "धनु", "मकर", "कुंभ", "मीन"];
 const rashi = rashiNames[rashiIdx];
@@ -9866,7 +9903,7 @@ document.getElementById('auth-screen').style.display = 'flex';
 // App Initialization (100% Dynamic Engine for New and Existing Users)
 async function initApp() {
   // 1. Automatic Engine Migration for Existing Users
-  const CURRENT_DYNAMIC_ENGINE_VERSION = '2026.08.26_dynamic_v3';
+  const CURRENT_DYNAMIC_ENGINE_VERSION = '2026.09.01_dynamic_v4';
   const currentDob = localStorage.getItem('user_dob') || localStorage.getItem('kundli_date') || '';
   const currentTob = localStorage.getItem('user_tob') || localStorage.getItem('kundli_time') || '';
   const birthProfileKey = currentDob + '_' + currentTob;
@@ -10207,7 +10244,7 @@ function showHoroscope(sign) {
     if (isHi) {
       descEl.innerHTML = `<strong>दैनिक ग्रह गोचर:</strong> ${signNamesHi[signIdx]} राशि (स्वामी: ${signLordHi}) पर आज <strong>${planetNamesHi[todayPlanet] || todayPlanet}</strong> का विशेष प्रभाव है। ${generateHindiPrediction(signIdx, now.getDay(), todayPlanet, todayTheme)}`;
     } else {
-      descEl.innerHTML = `<strong>Daily Planetary Transit:</strong> Governed by <strong>${signLord}</strong>, ${sign} experiences dynamic cosmic currents under today's <strong>${todayPlanet}</strong> influence. Focus on ${todayTheme.toLowerCase()} while maintaining discipline in personal endeavors.`;
+      descEl.innerHTML = `<strong>Daily Planetary Transit:</strong> Governed by <strong>${signLord}</strong>, ${sign} experiences dynamic cosmic currents under today's <strong>${todayPlanet}</strong> influence. ${generateEnglishPrediction(signIdx, now.getDay(), todayPlanet, todayTheme)}`;
     }
   }
   const overlay = document.getElementById('horoscope-overlay');
