@@ -2775,17 +2775,46 @@ H12
 <div id="k-career-pills" style="display:flex; flex-wrap:wrap; gap:6px;"></div>
 </div>
 
-<!-- JOB VS BUSINESS PATH INDICATOR -->
-<div style="background:rgba(12,9,34,0.6); border:1px solid rgba(93,173,226,0.2); border-radius:12px; padding:12px; margin-bottom:14px;">
-<div style="display:flex; justify-content:space-between; font-size:0.78rem; margin-bottom:6px; font-weight:bold;">
-<span style="color:#5dade2; display:inline-flex; align-items:center; gap:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="22" x2="9" y2="16"/><line x1="15" y1="22" x2="15" y2="16"/><line x1="9" y1="16" x2="15" y2="16"/><path d="M8 6h2M8 10h2M14 6h2M14 10h2"/></svg><span class="k-lbl-en">Corporate / Job</span><span class="k-lbl-hi" style="display:none;">नौकरी / सेवा</span></span>
-<span style="color:var(--gold); display:inline-flex; align-items:center; gap:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.25-2.5 3.5-2.5 3.5s2.25-1 3.5-2.5M12 5l-8 8V9l4-4M19 12l-8 8h4l4-4"/><path d="M12 15c2.5-2.5 5.5-2 7.5-4s1.5-5-2-7.5-5.5-1.5-7.5 2-2.5 5-2 7.5z"/></svg><span class="k-lbl-en">Entrepreneurship / Business</span><span class="k-lbl-hi" style="display:none;">व्यापार / उद्यम</span></span>
+<!-- JOB VS BUSINESS STRATEGIC DECISION ENGINE -->
+<div style="background:rgba(12,9,34,0.6); border:1px solid rgba(93,173,226,0.25); border-radius:12px; padding:14px; margin-bottom:14px;">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+<strong style="color:var(--gold); font-size:0.85rem; display:flex; align-items:center; gap:6px;">
+<svg class="animated-icon-glow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+<span class="k-lbl-en">Should You Focus on Job or Business?</span>
+<span class="k-lbl-hi" style="display:none;">नौकरी या व्यवसाय — आपकी कुंडली का सटीक निर्णय</span>
+</strong>
 </div>
-<div style="height:10px; background:rgba(255,255,255,0.08); border-radius:5px; overflow:hidden; display:flex;">
-<div id="k-job-bar" style="height:100%; width:65%; background:#5dade2; transition:width 0.8s ease;"></div>
-<div id="k-biz-bar" style="height:100%; width:35%; background:var(--gold); transition:width 0.8s ease;"></div>
+
+<!-- VERDICT BADGE -->
+<div id="k-job-biz-verdict-badge" style="background:rgba(93,173,226,0.15); border:1px solid #5dade2; color:#fff; border-radius:8px; padding:8px 12px; font-size:0.82rem; font-weight:bold; margin-bottom:12px;"></div>
+
+<!-- RATIO BAR -->
+<div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:6px; font-weight:bold;">
+<span style="color:#5dade2; display:inline-flex; align-items:center; gap:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="22" x2="9" y2="16"/><line x1="15" y1="22" x2="15" y2="16"/><line x1="9" y1="16" x2="15" y2="16"/><path d="M8 6h2M8 10h2M14 6h2M14 10h2"/></svg><span class="k-lbl-en">Corporate / Job</span><span class="k-lbl-hi" style="display:none;">नौकरी / सेवा</span> <span id="k-job-percent-lbl">(60%)</span></span>
+<span style="color:var(--gold); display:inline-flex; align-items:center; gap:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.25-2.5 3.5-2.5 3.5s2.25-1 3.5-2.5M12 5l-8 8V9l4-4M19 12l-8 8h4l4-4"/><path d="M12 15c2.5-2.5 5.5-2 7.5-4s1.5-5-2-7.5-5.5-1.5-7.5 2-2.5 5-2 7.5z"/></svg><span class="k-lbl-en">Business / Venture</span><span class="k-lbl-hi" style="display:none;">व्यापार / उद्यम</span> <span id="k-biz-percent-lbl">(40%)</span></span>
 </div>
-<p id="k-path-recommendation-text" style="color:var(--text-muted); font-size:0.78rem; margin:8px 0 0; line-height:1.4;"></p>
+<div style="height:10px; background:rgba(255,255,255,0.08); border-radius:5px; overflow:hidden; display:flex; margin-bottom:12px;">
+<div id="k-job-bar" style="height:100%; width:60%; background:#5dade2; transition:width 0.8s ease;"></div>
+<div id="k-biz-bar" style="height:100%; width:40%; background:var(--gold); transition:width 0.8s ease;"></div>
+</div>
+
+<!-- DUAL DETAILED INSIGHTS -->
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; font-size:0.75rem; line-height:1.4;">
+<div style="background:rgba(93,173,226,0.08); border-left:2.5px solid #5dade2; padding:8px 10px; border-radius:6px;">
+<strong style="color:#5dade2; display:block; margin-bottom:3px;"><span class="k-lbl-en">Job & Service Karma:</span><span class="k-lbl-hi" style="display:none;">नौकरी व सेवा कारक:</span></strong>
+<span id="k-job-reason-text" style="color:var(--text-muted);">--</span>
+</div>
+<div style="background:rgba(232,200,121,0.08); border-left:2.5px solid var(--gold); padding:8px 10px; border-radius:6px;">
+<strong style="color:var(--gold); display:block; margin-bottom:3px;"><span class="k-lbl-en">Business & Trade Karma:</span><span class="k-lbl-hi" style="display:none;">व्यापार व लाभ कारक:</span></strong>
+<span id="k-biz-reason-text" style="color:var(--text-muted);">--</span>
+</div>
+</div>
+
+<!-- ACTIONABLE ROADMAP -->
+<div style="background:rgba(255,255,255,0.03); border-radius:8px; padding:8px 10px; font-size:0.76rem; color:#ddd; line-height:1.45;">
+<strong style="color:#2ecc71; display:block; margin-bottom:2px;"><span class="k-lbl-en">Strategic Action Plan:</span><span class="k-lbl-hi" style="display:none;">सटीक कार्य योजना:</span></strong>
+<span id="k-path-roadmap-text">--</span>
+</div>
 </div>
 
 <!-- CURRENT CAREER WEATHER STATUS -->
@@ -11712,37 +11741,103 @@ if (careerPills) {
   
   careerPills.innerHTML = pillsHtml + derivationHtml;
 }
-// ── DYNAMIC CORPORATE VS BUSINESS SKEW (ASTROLOGICAL WEIGHTING) ──
-const jobBar = document.getElementById('k-job-bar');
-const bizBar = document.getElementById('k-biz-bar');
-const pathText = document.getElementById('k-path-recommendation-text');
-if (jobBar && bizBar && pathText) {
-  let jobWeight = 50;
-  let bizWeight = 50;
+// ── COMPREHENSIVE JOB VS BUSINESS DECISION SYNTHESIS ──
+const sixthSign = (lagnaSign + 5) % 12;
+const sixthLord = signLords[sixthSign];
+const seventhSignJob = (lagnaSign + 6) % 12;
+const seventhLordJob = signLords[seventhSignJob];
 
-  // 10th Lord influences
-  if (['Sun', 'Saturn', 'Mars'].includes(tenthLord)) jobWeight += 18;
-  if (['Mercury', 'Venus', 'Rahu'].includes(tenthLord)) bizWeight += 18;
-  if (tenthLord === 'Jupiter') { jobWeight += 10; bizWeight += 10; }
+let jobScore = 40;
+let bizScore = 40;
 
-  // 6th house (Service / Employment) vs 7th house (Business / Partnership)
-  const h6Planets = placements.filter(p => ((p.sign - lagnaSign + 12) % 12) + 1 === 6);
-  const h7Planets = placements.filter(p => ((p.sign - lagnaSign + 12) % 12) + 1 === 7);
-  jobWeight += h6Planets.length * 6;
-  bizWeight += h7Planets.length * 6;
+// 10th Lord affinity
+if (['Sun', 'Saturn', 'Mars'].includes(tenthLord)) jobScore += 16;
+if (['Mercury', 'Venus', 'Rahu'].includes(tenthLord)) bizScore += 16;
+if (tenthLord === 'Jupiter') { jobScore += 8; bizScore += 8; }
 
-  // Normalization to 100%
-  const totalWeight = jobWeight + bizWeight;
-  const jobRatio = Math.round((jobWeight / totalWeight) * 100);
-  const bizRatio = 100 - jobRatio;
+// 6th House (Job/Service) vs 7th/3rd/11th Houses (Business/Trade/Scale)
+const h6Pl = placements.filter(p => p.name !== 'Lagna' && (((p.sign - lagnaSign + 12) % 12) + 1 === 6));
+const h7Pl = placements.filter(p => p.name !== 'Lagna' && (((p.sign - lagnaSign + 12) % 12) + 1 === 7));
+const h3Pl = placements.filter(p => p.name !== 'Lagna' && (((p.sign - lagnaSign + 12) % 12) + 1 === 3));
+const h11Pl = placements.filter(p => p.name !== 'Lagna' && (((p.sign - lagnaSign + 12) % 12) + 1 === 11));
 
-  jobBar.style.width = `${jobRatio}%`;
-  bizBar.style.width = `${bizRatio}%`;
-  pathText.innerText = isHi 
-    ? `आपके दशमेश (${signLordsHi[tenthSign]}) एवं 6वें/7वें भाव के संरेखण अनुसार, आपकी कुंडली ${jobRatio}% ${jobRatio >= 50 ? 'कॉरपोरेट जॉब एवं नेतृत्व' : 'स्वतंत्र व्यवसाय एवं उद्यमिता'} के लिए अनुकूल है (${jobRatio}% / ${bizRatio}%)।`
-    : `Derived from your 10th Lord (${tenthLord}) and 6th/7th house alignments, your chart skews ${jobRatio}% toward ${jobRatio >= 50 ? 'Corporate Job & Executive Service' : 'Independent Business & Entrepreneurship'} (${jobRatio}% / ${bizRatio}%).`;
+jobScore += h6Pl.length * 7;
+bizScore += (h7Pl.length * 7) + (h3Pl.length * 4) + (h11Pl.length * 4);
+
+if ([1, 6, 10].includes(tenthLordHouse)) jobScore += 10;
+if ([3, 7, 9, 11].includes(tenthLordHouse)) bizScore += 10;
+
+const totalWeight = jobScore + bizScore;
+const jobRatio = Math.round((jobScore / totalWeight) * 100);
+const bizRatio = 100 - jobRatio;
+
+let verdictType = 'hybrid';
+let verdictTitle = '';
+if (jobRatio >= 58) {
+  verdictType = 'job';
+  verdictTitle = isHi 
+    ? `कॉरपोरेट नौकरी एवं उच्च प्रशासनिक नेतृत्व पर ध्यान दें (${jobRatio}% अनुकूलता)`
+    : `Focus on High-Growth Corporate Job & Leadership (${jobRatio}% Match)`;
+} else if (bizRatio >= 58) {
+  verdictType = 'business';
+  verdictTitle = isHi 
+    ? `स्वतंत्र व्यापार, स्टार्टअप एवं उद्यमिता पर ध्यान दें (${bizRatio}% अनुकूलता)`
+    : `Focus on Independent Business & Entrepreneurship (${bizRatio}% Match)`;
+} else {
+  verdictType = 'hybrid';
+  verdictTitle = isHi 
+    ? `दोहरा मार्ग: पहले नौकरी में विशेषज्ञता बनाएं, फिर व्यवसाय शुरू करें (${bizRatio}% व्यापार / ${jobRatio}% नौकरी)`
+    : `Dual-Track Strategy: Establish Career First, then Scale Business (${bizRatio}% Biz / ${jobRatio}% Job)`;
 }
 
+const verdictBadge = document.getElementById('k-job-biz-verdict-badge');
+if (verdictBadge) {
+  verdictBadge.innerText = verdictTitle;
+  verdictBadge.style.borderColor = (verdictType === 'business') ? 'var(--gold)' : (verdictType === 'job') ? '#5dade2' : '#2ecc71';
+  verdictBadge.style.background = (verdictType === 'business') ? 'rgba(232,200,121,0.15)' : (verdictType === 'job') ? 'rgba(93,173,226,0.15)' : 'rgba(46,204,113,0.15)';
+}
+
+const jobBar = document.getElementById('k-job-bar');
+const bizBar = document.getElementById('k-biz-bar');
+const jobLbl = document.getElementById('k-job-percent-lbl');
+const bizLbl = document.getElementById('k-biz-percent-lbl');
+if (jobBar && bizBar) {
+  jobBar.style.width = `${jobRatio}%`;
+  bizBar.style.width = `${bizRatio}%`;
+}
+if (jobLbl) jobLbl.innerText = `(${jobRatio}%)`;
+if (bizLbl) bizLbl.innerText = `(${bizRatio}%)`;
+
+const jobReasonEl = document.getElementById('k-job-reason-text');
+if (jobReasonEl) {
+  jobReasonEl.innerText = isHi 
+    ? `सेवा के 6वें भाव (${signNamesHi[sixthSign]}, स्वामी: ${signLordsHi[sixthSign]}) और ${signLordsHi[tenthSign]} की अनुकूलता स्थिर करियर उन्नति, सुरक्षित वेतन वृद्धि और वित्तीय सुरक्षा प्रदान करती है।`
+    : `Strong 6th house of service (${signNames[sixthSign]} ruled by ${sixthLord}) and ${tenthLord}'s governance provide steady organizational ascent, structured salary growth, and low capital risk.`;
+}
+
+const bizReasonEl = document.getElementById('k-biz-reason-text');
+if (bizReasonEl) {
+  bizReasonEl.innerText = isHi 
+    ? `व्यापार के 7वें भाव (${signNamesHi[seventhSignJob]}, स्वामी: ${signLordsHi[seventhSignJob]}) और 3रे पराक्रम भाव का संरेखण मजबूत क्लाइंट डीलिंग, स्वतंत्र लाभ अर्जन और व्यवसायिक विस्तार का समर्थन करता है।`
+    : `Active 7th house of commerce (${signNames[seventhSignJob]} ruled by ${seventhLordJob}) and 3rd house enterprise stimulate sharp client negotiation, profit scaling, and strategic equity creation.`;
+}
+
+const roadmapEl = document.getElementById('k-path-roadmap-text');
+if (roadmapEl) {
+  if (verdictType === 'business') {
+    roadmapEl.innerText = isHi 
+      ? `आपकी कुंडली में मजबूत व्यापारिक योग हैं। यदि नौकरी में हैं, तो 6-9 महीने का बैकअप फंड तैयार करें और गुरु/बुध के शुभ गोचर में व्यवसाय का विस्तार करें।`
+      : `You possess strong entrepreneurial karma. If currently employed, build a 6-9 month liquid capital runway and launch your venture under favorable Jupiter/Mercury transits.`;
+  } else if (verdictType === 'job') {
+    roadmapEl.innerText = isHi 
+      ? `प्रतिष्ठित संस्थानों में उच्च प्रशासनिक या डायरेक्टर पदों का लक्ष्य रखें। आप संरचित वेतन, बोनस और अधिकार क्षेत्र के माध्यम से अधिकतम धन संचय करेंगे।`
+      : `Aim for Director/VP leadership roles in reputed organizations. You maximize wealth through structured equity, performance bonuses, and senior executive authority.`;
+  } else {
+    roadmapEl.innerText = isHi 
+      ? `अपनी प्राथमिक नौकरी जारी रखते हुए साइड कंसल्टेंसी या पार्टनरशिप विकसित करें। जब व्यवसायिक आय वेतन का 80% हो जाए, तब पूर्णकालिक रूप से शिफ्ट हों।`
+      : `Maintain your primary professional income while developing a side enterprise/consultancy. Transition fully once side revenue matches 80% of your salary.`;
+  }
+}
 const weatherText = document.getElementById('k-career-weather-text');
 if (weatherText) {
   weatherText.innerText = isHi 
