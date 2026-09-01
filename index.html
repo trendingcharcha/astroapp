@@ -6293,128 +6293,163 @@ if (badge) badge.style.display = 'none';
 }
 }
 
-function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, userName) {
-  const month = targetDate.getMonth();
-  const dayOfWeek = targetDate.getDay();
-  const dayOfMonth = targetDate.getDate();
+const sanatanFestivalAlmanac = [
+  // 2024
+  { id: 'shivratri', year: 2024, startM: 3, startD: 8, endM: 3, endD: 8, titleEn: 'Maha Shivratri & Shiva-Shakti Vivah', titleHi: 'महाशिवरात्रि एवं शिव-पार्वती विवाह', badgeEn: 'Maha Shivratri', badgeHi: 'महाशिवरात्रि', deity: 'Shiva', planet: 'Moon' },
+  { id: 'holi', year: 2024, startM: 3, startD: 24, endM: 3, endD: 25, titleEn: 'Holika Dahan & Shubh Holi Utsav', titleHi: 'होलिका दहन एवं शुभ होली उत्सव', badgeEn: 'Holi Utsav', badgeHi: 'होली पर्व', deity: 'Narasimha', planet: 'Jupiter' },
+  { id: 'chaitra_navratri', year: 2024, startM: 4, startD: 9, endM: 4, endD: 17, titleEn: 'Chaitra Navratri & Shri Rama Navami', titleHi: 'चैत्र नवरात्रि एवं श्रीराम नवमी', badgeEn: 'Chaitra Navratri', badgeHi: 'चैत्र नवरात्रि', deity: 'Durga & Rama', planet: 'Sun' },
+  { id: 'akshaya_tritiya', year: 2024, startM: 5, startD: 10, endM: 5, endD: 10, titleEn: 'Akshaya Tritiya & Kubera-Lakshmi Siddhi', titleHi: 'अक्षय तृतीया एवं कुबेर-लक्ष्मी सिद्धि', badgeEn: 'Akshaya Tritiya', badgeHi: 'अक्षय तृतीया', deity: 'Lakshmi', planet: 'Venus' },
+  { id: 'shravan', year: 2024, startM: 7, startD: 22, endM: 8, endD: 19, titleEn: 'Holy Shravan Maas & Mahadev Aradhana', titleHi: 'पवित्र श्रावण मास एवं महादेव आराधना', badgeEn: 'Shravan Maas', badgeHi: 'श्रावण मास', deity: 'Shiva', planet: 'Moon' },
+  { id: 'janmashtami', year: 2024, startM: 8, startD: 26, endM: 8, endD: 27, titleEn: 'Shri Krishna Janmashtami & Bal Gopal Blessing', titleHi: 'श्रीकृष्ण जन्माष्टमी एवं बाल गोपाल आशीर्वाद', badgeEn: 'Janmashtami', badgeHi: 'जन्माष्टमी', deity: 'Krishna', planet: 'Mercury' },
+  { id: 'ganesh_chaturthi', year: 2024, startM: 9, startD: 7, endM: 9, endD: 17, titleEn: 'Ganesh Chaturthi & Ganeshotsav Vighnaharta Healing', titleHi: 'गणेश चतुर्थी एवं गणेशोत्सव विघ्नहर्ता पूजन', badgeEn: 'Ganesh Utsav', badgeHi: 'गणेश उत्सव', deity: 'Ganesha', planet: 'Ketu' },
+  { id: 'pitru_paksha', year: 2024, startM: 9, startD: 18, endM: 10, endD: 2, titleEn: 'Pitru Paksha Shraddha & Ancestral Peace', titleHi: 'पितृ पक्ष श्राद्ध एवं पितृ शांति तर्पण', badgeEn: 'Pitru Paksha', badgeHi: 'पितृ पक्ष', deity: 'Pitrus', planet: 'Saturn' },
+  { id: 'sharad_navratri', year: 2024, startM: 10, startD: 3, endM: 10, endD: 12, titleEn: 'Sharad Navratri & Durga Shakti Aradhana', titleHi: 'शरद नवरात्रि एवं नवदुर्गा शक्ति आराधना', badgeEn: 'Sharad Navratri', badgeHi: 'शरद नवरात्रि', deity: 'Durga', planet: 'Rahu' },
+  { id: 'diwali', year: 2024, startM: 10, startD: 29, endM: 11, endD: 3, titleEn: 'Shubh Deepavali, Dhanteras & Maha Lakshmi Kripa', titleHi: 'शुभ दीपावली, धनतेरस एवं महालक्ष्मी कृपा', badgeEn: 'Deepavali', badgeHi: 'दीपावली', deity: 'Lakshmi', planet: 'Venus' },
 
+  // 2025
+  { id: 'shivratri', year: 2025, startM: 2, startD: 26, endM: 2, endD: 26, titleEn: 'Maha Shivratri & Shiva-Shakti Vivah', titleHi: 'महाशिवरात्रि एवं शिव-पार्वती विवाह', badgeEn: 'Maha Shivratri', badgeHi: 'महाशिवरात्रि', deity: 'Shiva', planet: 'Moon' },
+  { id: 'holi', year: 2025, startM: 3, startD: 13, endM: 3, endD: 14, titleEn: 'Holika Dahan & Shubh Holi Utsav', titleHi: 'होलिका दहन एवं शुभ होली उत्सव', badgeEn: 'Holi Utsav', badgeHi: 'होली पर्व', deity: 'Narasimha', planet: 'Jupiter' },
+  { id: 'chaitra_navratri', year: 2025, startM: 3, startD: 30, endM: 4, endD: 7, titleEn: 'Chaitra Navratri & Shri Rama Navami', titleHi: 'चैत्र नवरात्रि एवं श्रीराम नवमी', badgeEn: 'Chaitra Navratri', badgeHi: 'चैत्र नवरात्रि', deity: 'Durga & Rama', planet: 'Sun' },
+  { id: 'akshaya_tritiya', year: 2025, startM: 4, startD: 30, endM: 4, endD: 30, titleEn: 'Akshaya Tritiya & Kubera-Lakshmi Siddhi', titleHi: 'अक्षय तृतीया एवं कुबेर-लक्ष्मी सिद्धि', badgeEn: 'Akshaya Tritiya', badgeHi: 'अक्षय तृतीया', deity: 'Lakshmi', planet: 'Venus' },
+  { id: 'shravan', year: 2025, startM: 7, startD: 11, endM: 8, endD: 9, titleEn: 'Holy Shravan Maas & Mahadev Aradhana', titleHi: 'पवित्र श्रावण मास एवं महादेव आराधना', badgeEn: 'Shravan Maas', badgeHi: 'श्रावण मास', deity: 'Shiva', planet: 'Moon' },
+  { id: 'janmashtami', year: 2025, startM: 8, startD: 15, endM: 8, endD: 16, titleEn: 'Shri Krishna Janmashtami & Bal Gopal Blessing', titleHi: 'श्रीकृष्ण जन्माष्टमी एवं बाल गोपाल आशीर्वाद', badgeEn: 'Janmashtami', badgeHi: 'जन्माष्टमी', deity: 'Krishna', planet: 'Mercury' },
+  { id: 'ganesh_chaturthi', year: 2025, startM: 8, startD: 27, endM: 9, endD: 6, titleEn: 'Ganesh Chaturthi & Ganeshotsav Vighnaharta Healing', titleHi: 'गणेश चतुर्थी एवं गणेशोत्सव विघ्नहर्ता पूजन', badgeEn: 'Ganesh Utsav', badgeHi: 'गणेश उत्सव', deity: 'Ganesha', planet: 'Ketu' },
+  { id: 'pitru_paksha', year: 2025, startM: 9, startD: 7, endM: 9, endD: 21, titleEn: 'Pitru Paksha Shraddha & Ancestral Peace', titleHi: 'पितृ पक्ष श्राद्ध एवं पितृ शांति तर्पण', badgeEn: 'Pitru Paksha', badgeHi: 'पितृ पक्ष', deity: 'Pitrus', planet: 'Saturn' },
+  { id: 'sharad_navratri', year: 2025, startM: 9, startD: 22, endM: 10, endD: 2, titleEn: 'Sharad Navratri & Durga Shakti Aradhana', titleHi: 'शरद नवरात्रि एवं नवदुर्गा शक्ति आराधना', badgeEn: 'Sharad Navratri', badgeHi: 'शरद नवरात्रि', deity: 'Durga', planet: 'Rahu' },
+  { id: 'diwali', year: 2025, startM: 10, startD: 18, endM: 10, endD: 23, titleEn: 'Shubh Deepavali, Dhanteras & Maha Lakshmi Kripa', titleHi: 'शुभ दीपावली, धनतेरस एवं महालक्ष्मी कृपा', badgeEn: 'Deepavali', badgeHi: 'दीपावली', deity: 'Lakshmi', planet: 'Venus' },
+
+  // 2026 (Astronomically Verified)
+  { id: 'shivratri', year: 2026, startM: 2, startD: 15, endM: 2, endD: 15, titleEn: 'Maha Shivratri & Shiva-Shakti Vivah', titleHi: 'महाशिवरात्रि एवं शिव-पार्वती विवाह', badgeEn: 'Maha Shivratri', badgeHi: 'महाशिवरात्रि', deity: 'Shiva', planet: 'Moon' },
+  { id: 'holi', year: 2026, startM: 3, startD: 3, endM: 3, endD: 4, titleEn: 'Holika Dahan & Shubh Holi Utsav', titleHi: 'होलिका दहन एवं शुभ होली उत्सव', badgeEn: 'Holi Utsav', badgeHi: 'होली पर्व', deity: 'Narasimha', planet: 'Jupiter' },
+  { id: 'chaitra_navratri', year: 2026, startM: 3, startD: 19, endM: 3, endD: 27, titleEn: 'Chaitra Navratri & Shri Rama Navami', titleHi: 'चैत्र नवरात्रि एवं श्रीराम नवमी', badgeEn: 'Chaitra Navratri', badgeHi: 'चैत्र नवरात्रि', deity: 'Durga & Rama', planet: 'Sun' },
+  { id: 'akshaya_tritiya', year: 2026, startM: 4, startD: 19, endM: 4, endD: 19, titleEn: 'Akshaya Tritiya & Kubera-Lakshmi Siddhi', titleHi: 'अक्षय तृतीया एवं कुबेर-लक्ष्मी सिद्धि', badgeEn: 'Akshaya Tritiya', badgeHi: 'अक्षय तृतीया', deity: 'Lakshmi', planet: 'Venus' },
+  { id: 'shravan', year: 2026, startM: 7, startD: 30, endM: 8, endD: 28, titleEn: 'Holy Shravan Maas & Mahadev Aradhana', titleHi: 'पवित्र श्रावण मास एवं महादेव आराधना', badgeEn: 'Shravan Maas', badgeHi: 'श्रावण मास', deity: 'Shiva', planet: 'Moon' },
+  { id: 'janmashtami', year: 2026, startM: 8, startD: 29, endM: 9, endD: 5, titleEn: 'Shri Krishna Janmashtami & Bal Gopal Blessing', titleHi: 'श्रीकृष्ण जन्माष्टमी एवं बाल गोपाल आशीर्वाद', badgeEn: 'Janmashtami', badgeHi: 'जन्माष्टमी', deity: 'Krishna', planet: 'Mercury' },
+  { id: 'ganesh_chaturthi', year: 2026, startM: 9, startD: 14, endM: 9, endD: 24, titleEn: 'Ganesh Chaturthi & Ganeshotsav Vighnaharta Healing', titleHi: 'गणेश चतुर्थी एवं गणेशोत्सव विघ्नहर्ता पूजन', badgeEn: 'Ganesh Utsav', badgeHi: 'गणेश उत्सव', deity: 'Ganesha', planet: 'Ketu' },
+  { id: 'pitru_paksha', year: 2026, startM: 9, startD: 26, endM: 10, endD: 10, titleEn: 'Pitru Paksha Shraddha & Ancestral Peace', titleHi: 'पितृ पक्ष श्राद्ध एवं पितृ शांति तर्पण', badgeEn: 'Pitru Paksha', badgeHi: 'पितृ पक्ष', deity: 'Pitrus', planet: 'Saturn' },
+  { id: 'sharad_navratri', year: 2026, startM: 10, startD: 11, endM: 10, endD: 19, titleEn: 'Sharad Navratri & Durga Shakti Aradhana', titleHi: 'शरद नवरात्रि एवं नवदुर्गा शक्ति आराधना', badgeEn: 'Sharad Navratri', badgeHi: 'शरद नवरात्रि', deity: 'Durga', planet: 'Rahu' },
+  { id: 'dussehra', year: 2026, startM: 10, startD: 20, endM: 10, endD: 20, titleEn: 'Vijayadashami / Dussehra & Dharma Triumph', titleHi: 'विजयादशमी / दशहरा एवं धर्म विजय उत्सव', badgeEn: 'Vijayadashami', badgeHi: 'दशहरा', deity: 'Rama & Durga', planet: 'Mars' },
+  { id: 'karwa_chauth', year: 2026, startM: 10, startD: 29, endM: 10, endD: 29, titleEn: 'Karwa Chauth & Matrimonial Longevity Vrat', titleHi: 'करवा चौथ एवं अखंड सौभाग्य व्रत', badgeEn: 'Karwa Chauth', badgeHi: 'करवा चौथ', deity: 'Gauri & Shiva', planet: 'Venus' },
+  { id: 'diwali', year: 2026, startM: 11, startD: 6, endM: 11, endD: 10, titleEn: 'Shubh Deepavali, Dhanteras & Maha Lakshmi Kripa', titleHi: 'शुभ दीपावली, धनतेरस एवं महालक्ष्मी कृपा', badgeEn: 'Deepavali', badgeHi: 'दीपावली', deity: 'Lakshmi', planet: 'Venus' },
+  { id: 'chhath_puja', year: 2026, startM: 11, startD: 14, endM: 11, endD: 15, titleEn: 'Maha Chhath Parva & Surya-Chhathi Maiya Aradhana', titleHi: 'महापर्व छठ एवं सूर्य-षष्ठी मैया आराधना', badgeEn: 'Chhath Parva', badgeHi: 'छठ महापर्व', deity: 'Surya', planet: 'Sun' },
+
+  // 2027 - 2030 Highlights
+  { id: 'shivratri', year: 2027, startM: 3, startD: 6, endM: 3, endD: 6, titleEn: 'Maha Shivratri & Shiva-Shakti Vivah', titleHi: 'महाशिवरात्रि एवं शिव-पार्वती विवाह', badgeEn: 'Maha Shivratri', badgeHi: 'महाशिवरात्रि', deity: 'Shiva', planet: 'Moon' },
+  { id: 'janmashtami', year: 2027, startM: 8, startD: 25, endM: 8, endD: 26, titleEn: 'Shri Krishna Janmashtami & Bal Gopal Blessing', titleHi: 'श्रीकृष्ण जन्माष्टमी एवं बाल गोपाल आशीर्वाद', badgeEn: 'Janmashtami', badgeHi: 'जन्माष्टमी', deity: 'Krishna', planet: 'Mercury' },
+  { id: 'ganesh_chaturthi', year: 2027, startM: 9, startD: 4, endM: 9, endD: 14, titleEn: 'Ganesh Chaturthi & Ganeshotsav Vighnaharta Healing', titleHi: 'गणेश चतुर्थी एवं गणेशोत्सव विघ्नहर्ता पूजन', badgeEn: 'Ganesh Utsav', badgeHi: 'गणेश उत्सव', deity: 'Ganesha', planet: 'Ketu' },
+  { id: 'diwali', year: 2027, startM: 10, startD: 27, endM: 10, endD: 31, titleEn: 'Shubh Deepavali, Dhanteras & Maha Lakshmi Kripa', titleHi: 'शुभ दीपावली, धनतेरस एवं महालक्ष्मी कृपा', badgeEn: 'Deepavali', badgeHi: 'दीपावली', deity: 'Lakshmi', planet: 'Venus' },
+  { id: 'janmashtami', year: 2028, startM: 8, startD: 13, endM: 8, endD: 14, titleEn: 'Shri Krishna Janmashtami & Bal Gopal Blessing', titleHi: 'श्रीकृष्ण जन्माष्टमी एवं बाल गोपाल आशीर्वाद', badgeEn: 'Janmashtami', badgeHi: 'जन्माष्टमी', deity: 'Krishna', planet: 'Mercury' },
+  { id: 'ganesh_chaturthi', year: 2028, startM: 8, startD: 24, endM: 9, endD: 3, titleEn: 'Ganesh Chaturthi & Ganeshotsav Vighnaharta Healing', titleHi: 'गणेश चतुर्थी एवं गणेशोत्सव विघ्नहर्ता पूजन', badgeEn: 'Ganesh Utsav', badgeHi: 'गणेश उत्सव', deity: 'Ganesha', planet: 'Ketu' },
+  { id: 'diwali', year: 2028, startM: 10, startD: 15, endM: 10, endD: 19, titleEn: 'Shubh Deepavali, Dhanteras & Maha Lakshmi Kripa', titleHi: 'शुभ दीपावली, धनतेरस एवं महालक्ष्मी कृपा', badgeEn: 'Deepavali', badgeHi: 'दीपावली', deity: 'Lakshmi', planet: 'Venus' }
+];
+
+function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, userName) {
+  const y = targetDate.getFullYear();
+  const m = targetDate.getMonth() + 1; // 1 to 12
+  const d = targetDate.getDate();
+  const dayOfWeek = targetDate.getDay();
+
+  const signNames = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+  const signNamesHi = ["मेष", "वृषभ", "मिथुन", "कर्क", "सिंह", "कन्या", "तुला", "वृश्चिक", "धनु", "मकर", "कुंभ", "मीन"];
   const signLordsHi = {0:'मंगल', 1:'शुक्र', 2:'बुध', 3:'चंद्र', 4:'सूर्य', 5:'बुध', 6:'शुक्र', 7:'मंगल', 8:'गुरु', 9:'शनि', 10:'शनि', 11:'गुरु'};
-  const lagnaLordHi = signLordsHi[lagnaSign] || lagnaLord;
+  const lagnaLordHi = signLordsHi[lagnaSign] || lagnaLord || 'सूर्य';
   const lagnaName = signNames[lagnaSign] || 'Aries';
   const lagnaNameHi = signNamesHi[lagnaSign] || 'मेष';
 
-  let eventTitleEn = "";
-  let eventTitleHi = "";
-  let remedyEn = "";
-  let remedyHi = "";
-  let badgeEn = "Sacred Holy Event";
-  let badgeHi = "पवित्र पर्व ऊर्जा";
+  // 1. Check Multi-Year Festival Almanac
+  const activeFestival = sanatanFestivalAlmanac.find(fest => {
+    if (fest.year !== y) return false;
+    const startNum = fest.startM * 100 + fest.startD;
+    const endNum = fest.endM * 100 + fest.endD;
+    const currentNum = m * 100 + d;
+    return (currentNum >= startNum && currentNum <= endNum);
+  });
 
-  // 1. SHRAVAN MAAS (July - August Window: months 6 & 7)
-  if (month === 6 || month === 7) {
-    if (dayOfWeek === 1) { // Monday - Shravan Somvar
-      eventTitleEn = "Shravan Somvar Vrat & Mahadev Abhishekam";
-      eventTitleHi = "श्रावण सोमवार व्रत एवं महादेव अभिषेक";
-      badgeEn = "Shravan Somvar";
-      badgeHi = "श्रावण सोमवार";
+  if (activeFestival) {
+    const fTitle = isHi ? activeFestival.titleHi : activeFestival.titleEn;
+    const fBadge = isHi ? activeFestival.badgeHi : activeFestival.badgeEn;
+    
+    // Dynamic Kundali synthesis for this specific festival
+    let remEn = '';
+    let remHi = '';
 
-      if (lagnaSign === 0 || lagnaSign === 7) { // Aries / Scorpio (Mars ruled)
-        remedyEn = `${userName} (${lagnaName} Ascendant - Mars Ruled): Offer Panchamrit & red flowers to Shivling today to dissolve debt, anger, and Mangal obstacles as per Lal Kitab.`;
-        remedyHi = `${userName} (${lagnaNameHi} लग्न - मंगल स्वामी): लाल किताब अनुसार आज शिवलिंग पर पंचामृत एवं लाल पुष्प अर्पण करें। ऋण व मंगल दोष शांत होंगे।`;
-      } else if (lagnaSign === 1 || lagnaSign === 6) { // Taurus / Libra (Venus ruled)
-        remedyEn = `${userName} (${lagnaName} Ascendant - Venus Ruled): Offer unboiled cow's milk & honey on Shivling today for matrimonial harmony, wealth, and Venus peace.`;
-        remedyHi = `${userName} (${lagnaNameHi} लग्न - शुक्र स्वामी): आज शिवलिंग पर कच्चा दूध व शहद अर्पित करें। वैवाहिक सुख व लक्ष्मी कृपा प्राप्त होगी।`;
-      } else if (lagnaSign === 2 || lagnaSign === 5) { // Gemini / Virgo (Mercury ruled)
-        remedyEn = `${userName} (${lagnaName} Ascendant - Mercury Ruled): Offer 108 Belpatra with Chandan paste on Shivling today for rapid career intellect and business success.`;
-        remedyHi = `${userName} (${lagnaNameHi} लग्न - बुध स्वामी): आज शिवलिंग पर चंदन लगाकर 108 बेलपत्र अर्पित करें। बुद्धि, व्यापार व करियर में वृद्धि होगी।`;
-      } else if (lagnaSign === 3) { // Cancer (Moon ruled)
-        remedyEn = `${userName} (${lagnaName} Ascendant - Moon Ruled): Perform pure Gangajal & milk Abhishekam today to calm mind, elevate intuition, and erase mental stress.`;
-        remedyHi = `${userName} (${lagnaNameHi} लग्न - चंद्र स्वामी): आज शिवलिंग पर गंगाजल व दूध से अभिषेक करें। मानसिक शांति व चंद्र कृपा मिलेगी।`;
-      } else if (lagnaSign === 4) { // Leo (Sun ruled)
-        remedyEn = `${userName} (${lagnaName} Ascendant - Sun Ruled): Offer Bhasma & water with 11 Akshat (unbroken rice) grains for authority, status, and health vitality.`;
-        remedyHi = `${userName} (${lagnaNameHi} लग्न - सूर्य स्वामी): आज शिवलिंग पर जल, भस्म एवं 11 अक्षत अर्पित करें। पद-प्रतिष्ठा व सूर्य ऊर्जा मजबूत होगी।`;
-      } else if (lagnaSign === 8 || lagnaSign === 11) { // Sagittarius / Pisces (Jupiter ruled)
-        remedyEn = `${userName} (${lagnaName} Ascendant - Jupiter Ruled): Offer saffron-mixed water & yellow flowers to Shivling for spiritual wisdom and financial expansion.`;
-        remedyHi = `${userName} (${lagnaNameHi} लग्न - गुरु स्वामी): आज शिवलिंग पर केसर मिश्रित जल व पीले पुष्प अर्पित करें। ज्ञान, भाग्य व धन वृद्धि होगी।`;
-      } else { // Capricorn / Aquarius (Saturn ruled)
-        remedyEn = `${userName} (${lagnaName} Ascendant - Saturn Ruled): Offer black sesame seeds & Gangajal to Shivling today to neutralize Shani Sade Sati/Dhaiya & karmic burdens.`;
-        remedyHi = `${userName} (${lagnaNameHi} लग्न - शनि स्वामी): आज शिवलिंग पर काले तिल व गंगाजल चढ़ाएं। शनि ढैय्या व कर्म बाधाएं समाप्त होंगे।`;
+    if (activeFestival.id === 'janmashtami') {
+      if (lagnaSign === 0 || lagnaSign === 7) { // Mars ruled
+        remEn = `${userName} (${lagnaName} Ascendant - Mars Ruled): Offer Makhan-Mishri and Tulsi dal to Laddu Gopal at midnight. Lal Kitab remedy to soothe fiery temperament and bless your career/progeny goals.`;
+        remHi = `${userName} (${lagnaNameHi} लग्न - मंगल स्वामी): मध्यरात्रि बाल गोपाल को माखन-मिश्री व तुलसी दल अर्पित करें। लाल किताब अनुसार क्रोध शांति व कर्म/संतान वृद्धि होगी।`;
+      } else if (lagnaSign === 1 || lagnaSign === 6) { // Venus ruled
+        remEn = `${userName} (${lagnaName} Ascendant - Venus Ruled): Decorate Bal Gopal with yellow flowers and chant "Om Kleem Krishnaya Namah" 108 times for deep relationship harmony and prosperity.`;
+        remHi = `${userName} (${lagnaNameHi} लग्न - शुक्र स्वामी): बाल गोपाल का पीले पुष्पों से श्रृंगार करें व 108 बार "ॐ क्लीं कृष्णाय नमः" जपें। वैवाहिक सुख व ऐश्वर्य बढ़ेगा।`;
+      } else if (lagnaSign === 2 || lagnaSign === 5) { // Mercury ruled
+        remEn = `${userName} (${lagnaName} Ascendant - Mercury Ruled): Chant Santana Gopala or Vishnu Sahasranama shlokas today. Mercury-Krishna alignment accelerates intellect and business expansion.`;
+        remHi = `${userName} (${lagnaNameHi} लग्न - बुध स्वामी): आज संतान गोपाल अथवा विष्णु सहस्रनाम का पाठ करें। बुध-कृष्ण संरेखण से प्रखर बुद्धि व व्यापारिक लाभ होगा।`;
+      } else if (lagnaSign === 3) { // Moon ruled
+        remEn = `${userName} (${lagnaName} Ascendant - Moon Ruled): Offer saffron milk panchamrit to Lord Krishna. Dissolves mental anxiety and activates joyful emotional security.`;
+        remHi = `${userName} (${lagnaNameHi} लग्न - चंद्र स्वामी): भगवान कृष्ण को केसर युक्त दूध-पंचामृत अर्पित करें। मानसिक चिंता दूर होगी व आत्मिक शांति मिलेगी।`;
+      } else if (lagnaSign === 4) { // Sun ruled
+        remEn = `${userName} (${lagnaName} Ascendant - Sun Ruled): Light a pure cow-ghee lamp before Lord Krishna facing East for authoritative success, solar vitality, and righteous victory.`;
+        remHi = `${userName} (${lagnaNameHi} लग्न - सूर्य स्वामी): पूर्व दिशा में शुद्ध गाय के घी का दीपक जलाकर कृष्ण उपासना करें। पद-प्रतिष्ठा व सूर्य ऊर्जा में वृद्धि होगी।`;
+      } else if (lagnaSign === 8 || lagnaSign === 11) { // Jupiter ruled
+        remEn = `${userName} (${lagnaName} Ascendant - Jupiter Ruled): Offer yellow peda or ripe bananas to Lord Krishna and donate educational books for rapid wealth and spiritual elevation.`;
+        remHi = `${userName} (${lagnaNameHi} लग्न - गुरु स्वामी): बाल गोपाल को पीले पेड़े का भोग लगाएं व धार्मिक पुस्तक दान करें। ज्ञान, भाग्य व धन का विस्तार होगा।`;
+      } else { // Saturn ruled
+        remEn = `${userName} (${lagnaName} Ascendant - Saturn Ruled): Offer blue flowers and fragrant Chandan to Lord Krishna. Dissolves Shani delays and brings steady career breakthroughs.`;
+        remHi = `${userName} (${lagnaNameHi} लग्न - शनि स्वामी): भगवान कृष्ण को नीले पुष्प व सुगंधित चंदन अर्पित करें। शनि जनित विलंब समाप्त होंगे व करियर में स्थिरता आएगी।`;
       }
-    } else if (dayOfWeek === 2) { // Tuesday - Mangalagauri Vrat
-      eventTitleEn = "Shravan Mangalagauri Vrat & Gauri Puja";
-      eventTitleHi = "श्रावण मंगलागौरी व्रत एवं गौरी पूजन";
-      badgeEn = "Mangalagauri Vrat";
-      badgeHi = "मंगलागौरी व्रत";
-      remedyEn = `${userName} (${lagnaName} Ascendant): Offer 16 red flowers or kumkum to Goddess Parvati today for marital bliss, progeny blessings, and Mangal peace.`;
-      remedyHi = `${userName} (${lagnaNameHi} लग्न): आज मां पार्वती को 16 लाल पुष्प या कुमकुम अर्पित करें। वैवाहिक सौहार्द व मंगल शांति प्राप्त होगी।`;
-    } else { // General Shravan Holy Days
-      eventTitleEn = "Holy Shravan Maas & Shiva Alignment";
-      eventTitleHi = "पवित्र श्रावण मास व शिव संरेखण";
-      badgeEn = "Shravan Month";
-      badgeHi = "श्रावण मास";
-      remedyEn = `${userName} (${lagnaName} Ascendant): Recite 'Om Namah Shivaya' 108 times daily facing East and maintain Sattvic diet during Shravan Maas.`;
-      remedyHi = `${userName} (${lagnaNameHi} लग्न): श्रावण मास में रोज पूर्व दिशा की ओर बैठकर 108 बार 'ॐ नमः शिवाय' का जाप करें व सात्विक आहार लें।`;
-    }
-  } 
-  // 2. BHADRAPADA (August - September: Ganesh Chaturthi & Janmashtami)
-  else if (month === 8) {
-    if (dayOfMonth >= 1 && dayOfMonth <= 10) {
-      eventTitleEn = "Ganesh Chaturthi & Vighnaharta Healing";
-      eventTitleHi = "गणेश चतुर्थी एवं विघ्नहर्ता पूजन";
-      badgeEn = "Ganesh Chaturthi";
-      badgeHi = "गणेश उत्सव";
-      remedyEn = `${userName} (${lagnaName} Ascendant): Offer 21 Durva grass blades & Modak to Lord Ganesha today. Lal Kitab remedy for Ketu/Mercury obstacle removal.`;
-      remedyHi = `${userName} (${lagnaNameHi} लग्न): आज भगवान गणेश को 21 दूर्वा एवं मोदक अर्पित करें। लाल किताब अनुसार केतु व बुध बाधाएं नष्ट होंगी।`;
+    } else if (activeFestival.id === 'ganesh_chaturthi') {
+      if (lagnaSign === 2 || lagnaSign === 5) {
+        remEn = `${userName} (${lagnaName} Ascendant - Mercury Ruled): Offer 21 Durva grass blades & Modak to Lord Ganesha. Lal Kitab remedy for rapid commercial growth and sharp communication.`;
+        remHi = `${userName} (${lagnaNameHi} लग्न - बुध स्वामी): गणेश जी को 21 दूर्वा व मोदक अर्पित करें। लाल किताब अनुसार व्यापार व संवाद कौशल में अभूतपूर्व प्रगति होगी।`;
+      } else if (lagnaSign === 0 || lagnaSign === 7) {
+        remEn = `${userName} (${lagnaName} Ascendant - Mars Ruled): Apply Sindoor tilak to Lord Ganesha and chant "Om Gan Ganapataye Namah" 108 times to dissolve debt and property litigation.`;
+        remHi = `${userName} (${lagnaNameHi} लग्न - मंगल स्वामी): श्री गणेश को सिंदूर तिलक लगाएं व 108 बार "ॐ गं गणपतये नमः" जपें। ऋण व संपत्ति विवाद दूर होंगे।`;
+      } else {
+        remEn = `${userName} (${lagnaName} Ascendant - ${lagnaLord} Ruled): Offer Durva and red hibiscus to Lord Ganesha to permanently dissolve Ketu/Rahu karmic obstacles.`;
+        remHi = `${userName} (${lagnaNameHi} लग्न - ${lagnaLordHi} स्वामी): गणपति जी को दूर्वा व लाल गुड़हल चढ़ाएं। केतु व राहु जनित समस्त जीवन विघ्न नष्ट होंगे।`;
+      }
+    } else if (activeFestival.id === 'shravan' || activeFestival.id === 'shivratri') {
+      if (dayOfWeek === 1 || activeFestival.id === 'shivratri') {
+        remEn = `${userName} (${lagnaName} Ascendant): Perform Mahadev Jal-Dugdha Abhishekam with 11 Belpatra for complete health vitality and mental tranquility.`;
+        remHi = `${userName} (${lagnaNameHi} लग्न): 11 बेलपत्र के साथ शिवलिंग पर जल-दुग्धाभिषेक करें। शारीरिक आरोग्य व मानसिक शांति की प्राप्ति होगी।`;
+      } else {
+        remEn = `${userName} (${lagnaName} Ascendant - ${lagnaLord} Ruled): Chant "Om Namah Shivaya" 108 times daily during Shravan Maas and maintain Sattvic diet.`;
+        remHi = `${userName} (${lagnaNameHi} लग्न - ${lagnaLordHi} स्वामी): श्रावण मास में रोज 108 बार 'ॐ नमः शिवाय' जपें एवं पूर्ण सात्विक दिनचर्या अपनाएं।`;
+      }
+    } else if (activeFestival.id === 'sharad_navratri' || activeFestival.id === 'chaitra_navratri') {
+      remEn = `${userName} (${lagnaName} Ascendant - ${lagnaLord} Ruled): Light a pure Desi Ghee Akhand lamp for Maa Durga and recite Argala Stotram to conquer obstacles.`;
+      remHi = `${userName} (${lagnaNameHi} लग्न - ${lagnaLordHi} स्वामी): मां भगवती के समक्ष शुद्ध देसी घी का दीपक जलाएं व अर्गला स्तोत्र पढ़ें। विजय व सुरक्षा प्राप्त होगी।`;
+    } else if (activeFestival.id === 'diwali') {
+      remEn = `${userName} (${lagnaName} Ascendant - Venus/Lakshmi Alignment): Light 11 mustard oil lamps at North-East & South-East zones for unbounded Dhan-Dhanya expansion.`;
+      remHi = `${userName} (${lagnaNameHi} लग्न - शुक्र/लक्ष्मी संरेखण): आज ईशान व आग्नेय कोण में 11 दीपक प्रज्वलित करें। अखंड धन-धान्य व समृद्धि की प्राप्ति होगी।`;
+    } else if (activeFestival.id === 'pitru_paksha') {
+      remEn = `${userName} (${lagnaName} Ascendant): Offer water with black sesame seeds facing South and feed birds/cows for ancestral blessings and karmic debt relief.`;
+      remHi = `${userName} (${lagnaNameHi} लग्न): दक्षिण दिशा में काले तिल युक्त जल से तर्पण करें व पक्षियों/गाय को भोजन दें। पितृ दोष शांति व कुल वृद्धि होगी।`;
     } else {
-      eventTitleEn = "Shri Krishna Janmashtami & Bal Gopal Blessing";
-      eventTitleHi = "श्रीकृष्ण जन्माष्टमी एवं बाल गोपाल आशीर्वाद";
-      badgeEn = "Janmashtami";
-      badgeHi = "जन्माष्टमी";
-      remedyEn = `${userName} (${lagnaName} Ascendant): Offer Tulsi leaf & Makhan-Mishri to Lord Krishna at midnight for Santan Gopal blessings and mind peace.`;
-      remedyHi = `${userName} (${lagnaNameHi} लग्न): आज माखन-मिश्री व तुलसी दल भगवान कृष्ण को अर्पित करें। संतान व मानसिक सुख की प्राप्ति होगी।`;
+      remEn = `${userName} (${lagnaName} Ascendant - ${lagnaLord} Ruled): Observe sacred festive rituals today and offer charity aligned with ${activeFestival.deity} to invite prosperity.`;
+      remHi = `${userName} (${lagnaNameHi} लग्न - ${lagnaLordHi} स्वामी): आज के पावन पर्व पर ${activeFestival.deity} की आराधना करें व जरूरतमंदों को दान देकर शुभ फल पाएं।`;
     }
+
+    return {
+      title: fTitle,
+      badge: fBadge,
+      remedy: isHi ? remHi : remEn
+    };
   }
-  // 3. ASHWIN (September - October: Sharad Navratri & Durga Puja)
-  else if (month === 9) {
-    eventTitleEn = "Sharad Navratri & Durga Shakti Aradhana";
-    eventTitleHi = "शरद नवरात्रि एवं शक्ति आराधना";
-    badgeEn = "Navratri";
-    badgeHi = "नवरात्रि";
-    remedyEn = `${userName} (${lagnaName} Ascendant): Light a pure Desi Ghee Akhand lamp for Maa Durga and chant Argala Stotram to eliminate Rahu & enemy obstacles.`;
-    remedyHi = `${userName} (${lagnaNameHi} लग्न): आज मां दुर्गा के समक्ष शुद्ध देसी घी का दीपक जलाएं व अर्गला स्तोत्र पढ़ें। राहु व शत्रु बाधाएं दूर होंगी।`;
-  }
-  // 4. KARTIK (October - November: Deepavali & Dhanteras)
-  else if (month === 10) {
-    eventTitleEn = "Shubh Deepavali & Maha Lakshmi Kripa";
-    eventTitleHi = "शुभ दीपावली एवं महालक्ष्मी कृपा";
-    badgeEn = "Deepavali";
-    badgeHi = "दीपावली";
-    remedyEn = `${userName} (${lagnaName} Ascendant): Light 11 mustard oil lamps at North-East & South-East corners. Lal Kitab remedy for Venus wealth expansion.`;
-    remedyHi = `${userName} (${lagnaNameHi} लग्न): आज ईशान व आग्नेय कोण में 11 दीपक जलाएं। लाल किताब अनुसार शुक्र धन वृद्धि व लक्ष्मी कृपा प्राप्त होगी।`;
-  }
-  // 5. PHALGUNA (February - March: Maha Shivratri)
-  else if (month === 1) {
-    eventTitleEn = "Maha Shivratri & Parvati-Shiva Vivah";
-    eventTitleHi = "महाशिवरात्रि एवं शिव-पार्वती विवाह";
-    badgeEn = "Maha Shivratri";
-    badgeHi = "महाशिवरात्रि";
-    remedyEn = `${userName} (${lagnaName} Ascendant): Perform 4-Prahar Jal Abhishekam & Belpatra offering for planetary peace, health vitality, and karma clearance.`;
-    remedyHi = `${userName} (${lagnaNameHi} लग्न): महाशिवरात्रि पर 4 प्रहर जल व बेलपत्र अर्पित करें। स्वास्थ्य, ग्रह शांति व कर्म दोष मुक्ति मिलेगी।`;
-  }
-  // 6. DEFAULT HOLY VEDIC ALIGNMENT
-  else {
-    eventTitleEn = "Daily Sanatan Planetary & Vedic Alignment";
-    eventTitleHi = "दैनिक सनातन ग्रह व वैदिक संरेखण";
-    badgeEn = "Sanatan Alignment";
-    badgeHi = "सनातन संरेखण";
-    remedyEn = `${userName} (${lagnaName} Ascendant - ${lagnaLord} Ruled): Offer Surya Arghya at sunrise and recite your Lagna Mantra 'Om' for daily strength.`;
-    remedyHi = `${userName} (${lagnaNameHi} लग्न - ${lagnaLordHi} स्वामी): सूर्योदय पर सूर्य देव को अर्घ्य दें और अपने लग्न मंत्र का जाप कर ऊर्जा बढ़ाएं।`;
-  }
+
+  // 2. Dynamic Daily Tithi & Vara Fallback (When outside major festival windows)
+  const weekdaysEn = ["Ravivar (Sun) - Surya Aradhana", "Somvar (Moon) - Shiva Alignment", "Mangalwar (Mars) - Hanuman Upasana", "Budhwar (Mercury) - Ganesha Blessing", "Guruwar (Jupiter) - Vishnu Kripa", "Shukrawar (Venus) - Mahalakshmi Siddhi", "Shaniwar (Saturn) - Shani Dev Karma Shanti"];
+  const weekdaysHi = ["रविवार (सूर्य) - सूर्य देव अर्घ्य", "सोमवार (चंद्र) - महादेव शिव संरेखण", "मंगलवार (मंगल) - श्री हनुमान उपासना", "बुधवार (बुध) - गणपति बुद्धि संरेखण", "गुरुवार (गुरु) - भगवान विष्णु कृपा", "शुक्रवार (शुक्र) - महालक्ष्मी समृद्धि सिद्धि", "शनिवार (शनि) - शनि देव कर्म शांति"];
+
+  const vTitle = isHi ? weekdaysHi[dayOfWeek] : weekdaysEn[dayOfWeek];
+  const vBadge = isHi ? "दैनिक ग्रह ऊर्जा" : "Daily Planetary Day";
+
+  let dRemEn = `${userName} (${lagnaName} Ascendant - ${lagnaLord} Ruled): Offer morning prayers to your ruling planet ${lagnaLord} and align with today's planetary energy for maximum focus.`;
+  let dRemHi = `${userName} (${lagnaNameHi} लग्न - ${lagnaLordHi} स्वामी): प्रातः अपने लग्नेश ${lagnaLordHi} का स्मरण करें और आज के ग्रह स्वामी की अनुकूलता प्राप्त कर दिन को सफल बनाएं।`;
 
   return {
-    title: isHi ? eventTitleHi : eventTitleEn,
-    badge: isHi ? badgeHi : badgeEn,
-    remedy: isHi ? remedyHi : remedyEn
+    title: vTitle,
+    badge: vBadge,
+    remedy: isHi ? dRemHi : dRemEn
   };
 }
 
