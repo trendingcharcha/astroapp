@@ -2245,6 +2245,15 @@ Surya Udaya Aligned
 </div>
 
 <!-- Vedic Vrat & Vedha Purity Guidance Box -->
+<!-- 24-HOUR DAILY HORA ENGINE TRIGGER BUTTON -->
+<div style="margin-top: 12px;">
+  <button type="button" onclick="openHoraModal()" class="btn" style="width: 100%; padding: 10px 14px; font-size: 0.82rem; font-weight: 700; background: linear-gradient(135deg, rgba(232,200,121,0.2), rgba(155,134,237,0.15)); border: 1.5px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; transition: all 0.25s ease;">
+    <svg class="animated-icon-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <span class="k-lbl-en">VIEW 24-HOUR DAILY HORA TIMINGS (LIVE)</span>
+    <span class="k-lbl-hi" style="display:none;">24-घंटे का दैनिक होरा चक्र देखें (लाइव मुहूर्त)</span>
+  </button>
+</div>
+
 <div id="p-vrat-guidance-box" style="background: rgba(232, 200, 121, 0.07); border: 1px dashed rgba(232, 200, 121, 0.35); padding: 8px 10px; border-radius: 8px; font-size: 0.76rem; line-height: 1.4; color: #E0DFEC;">
 <strong style="color: var(--gold); display: block; margin-bottom: 2px;" id="p-vrat-rule-title">
 <span class="k-lbl-en">Vedic Vrat & Udaya Tithi Rule:</span><span class="k-lbl-hi" style="display:none;">वैदिक व्रत एवं उदया तिथि नियम:</span>
@@ -3538,6 +3547,114 @@ H12
 </div>
 
 </div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- DEDICATED 24-HOUR DAILY HORA (होरा) TIMINGS PAGE & MODAL -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div id="hora-tracker-modal" class="modal" style="display: none; position: fixed; inset: 0; background: rgba(11, 9, 26, 0.94); z-index: 9999; overflow-y: auto; padding: 16px 12px; align-items: flex-start; justify-content: center; backdrop-filter: blur(12px);">
+  <div class="card" style="width: 100%; max-width: 580px; margin: 10px auto; background: linear-gradient(145deg, rgba(22, 17, 45, 0.98), rgba(30, 24, 64, 0.96)); border: 1.5px solid rgba(232, 200, 121, 0.35); border-radius: 20px; padding: 18px; box-shadow: 0 16px 40px rgba(0,0,0,0.6);">
+    
+    <!-- Top Nav Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid rgba(232, 200, 121, 0.2); padding-bottom: 12px;">
+      <button type="button" onclick="closeHoraModal()" class="btn btn-outline" style="width: auto; height: 34px; padding: 0 12px; font-size: 0.76rem; font-weight: 700; border-radius: 18px; border: 1px solid rgba(232,200,121,0.45); color: var(--gold); display: inline-flex; align-items: center; justify-content: center; gap: 4px; margin: 0;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        <span class="k-lbl-en">BACK</span><span class="k-lbl-hi" style="display:none;">वापस</span>
+      </button>
+
+      <div style="text-align: center;">
+        <h3 style="color: var(--gold); margin: 0; font-size: 1.05rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span class="k-lbl-en">Daily Planetary Hora</span><span class="k-lbl-hi" style="display:none;">दैनिक ग्रह होरा चक्र</span>
+        </h3>
+        <span id="hora-user-city-tag" style="font-size: 0.72rem; color: var(--text-muted);">New Delhi</span>
+      </div>
+
+      <button type="button" onclick="closeHoraModal()" style="background: none; border: none; color: #fff; font-size: 1.3rem; cursor: pointer; padding: 4px 8px; opacity: 0.8;">✕</button>
+    </div>
+
+    <!-- Date Switcher Navigator -->
+    <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; gap: 6px;">
+      <button type="button" onclick="navigateHoraDate(-1)" class="btn btn-outline" style="width: auto; padding: 6px 12px; font-size: 0.74rem; border-radius: 8px; margin: 0; border-color: rgba(255,255,255,0.15);">
+        ◀ <span class="k-lbl-en">Prev</span><span class="k-lbl-hi" style="display:none;">पिछला</span>
+      </button>
+
+      <div style="text-align: center; flex: 1;">
+        <strong id="hora-active-date-label" style="color: #fff; font-size: 0.86rem; display: block;">Today</strong>
+        <span id="hora-solar-times-label" style="color: var(--gold); font-size: 0.72rem;">Sunrise: -- | Sunset: --</span>
+      </div>
+
+      <button type="button" onclick="navigateHoraDate(1)" class="btn btn-outline" style="width: auto; padding: 6px 12px; font-size: 0.74rem; border-radius: 8px; margin: 0; border-color: rgba(255,255,255,0.15);">
+        <span class="k-lbl-en">Next</span><span class="k-lbl-hi" style="display:none;">अगला</span> ▶
+      </button>
+      <button type="button" onclick="navigateHoraToday()" class="btn" style="width: auto; padding: 6px 10px; font-size: 0.72rem; border-radius: 8px; margin: 0; background: var(--gold); color: #0C0922; font-weight: 700;">
+        <span class="k-lbl-en">TODAY</span><span class="k-lbl-hi" style="display:none;">आज</span>
+      </button>
+    </div>
+
+    <!-- Live Active Hora Hero Card -->
+    <div id="hora-live-hero-card" style="background: linear-gradient(135deg, rgba(232, 200, 121, 0.14), rgba(155, 134, 237, 0.12)); border: 1.5px solid var(--gold); border-radius: 16px; padding: 14px; margin-bottom: 16px; position: relative; box-shadow: 0 6px 20px rgba(0,0,0,0.35);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span style="background: rgba(46, 204, 113, 0.2); border: 1px solid #2ecc71; color: #2ecc71; padding: 2px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;">
+          <span style="display: inline-block; width: 7px; height: 7px; background: #2ecc71; border-radius: 50%; animation: pulse 1.5s infinite;"></span>
+          <span class="k-lbl-en">CURRENT ACTIVE HORA</span><span class="k-lbl-hi" style="display:none;">वर्तमान सक्रिय होरा</span>
+        </span>
+        <span id="hora-live-time-span" style="color: #fff; font-size: 0.76rem; font-weight: 700;">--:-- - --:--</span>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+        <div id="hora-live-icon-box" style="width: 44px; height: 44px; border-radius: 50%; background: rgba(232, 200, 121, 0.2); border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: var(--gold); flex-shrink: 0;">
+          🪐
+        </div>
+        <div>
+          <h4 id="hora-live-planet-name" style="margin: 0; color: #fff; font-size: 1.15rem; font-weight: 800;">Jupiter Hora</h4>
+          <span id="hora-live-nature-badge" style="font-size: 0.75rem; color: var(--gold); font-weight: 600;">Most Auspicious (Amrit)</span>
+        </div>
+      </div>
+
+      <div style="background: rgba(0,0,0,0.28); border-radius: 10px; padding: 10px; font-size: 0.78rem; line-height: 1.5;">
+        <p style="margin: 0 0 4px 0; color: #2ecc71;">
+          <strong><span class="k-lbl-en">✓ Best Actions:</span><span class="k-lbl-hi" style="display:none;">✓ सर्वोत्तम कार्य:</span></strong> 
+          <span id="hora-live-best-text">--</span>
+        </p>
+        <p style="margin: 0; color: #ff7675;">
+          <strong><span class="k-lbl-en">✕ Avoid:</span><span class="k-lbl-hi" style="display:none;">✕ वर्जित कार्य:</span></strong> 
+          <span id="hora-live-avoid-text">--</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div style="display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px;">
+      <button type="button" onclick="setHoraFilter('all')" id="h-filter-all" class="btn btn-compact" style="flex: 1; min-width: 90px; padding: 6px 10px; font-size: 0.74rem; font-weight: 700; border-radius: 20px; background: var(--gold); color: #0C0922; border: 1px solid var(--gold);">
+        <span class="k-lbl-en">All 24</span><span class="k-lbl-hi" style="display:none;">सभी 24</span>
+      </button>
+      <button type="button" onclick="setHoraFilter('day')" id="h-filter-day" class="btn btn-compact" style="flex: 1; min-width: 90px; padding: 6px 10px; font-size: 0.74rem; font-weight: 700; border-radius: 20px; background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.15);">
+        ☀️ <span class="k-lbl-en">Day (12)</span><span class="k-lbl-hi" style="display:none;">दिन (12)</span>
+      </button>
+      <button type="button" onclick="setHoraFilter('night')" id="h-filter-night" class="btn btn-compact" style="flex: 1; min-width: 90px; padding: 6px 10px; font-size: 0.74rem; font-weight: 700; border-radius: 20px; background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.15);">
+        🌙 <span class="k-lbl-en">Night (12)</span><span class="k-lbl-hi" style="display:none;">रात्रि (12)</span>
+      </button>
+      <button type="button" onclick="setHoraFilter('auspicious')" id="h-filter-auspicious" class="btn btn-compact" style="flex: 1; min-width: 100px; padding: 6px 10px; font-size: 0.74rem; font-weight: 700; border-radius: 20px; background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.15);">
+        ✨ <span class="k-lbl-en">Auspicious</span><span class="k-lbl-hi" style="display:none;">शुभ होरा</span>
+      </button>
+    </div>
+
+    <!-- 24-Hora Cards List Container -->
+    <div id="hora-cards-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 520px; overflow-y: auto; padding-right: 4px;">
+      <!-- Generated Dynamically by JS -->
+    </div>
+
+    <!-- Footer Note -->
+    <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); text-align: center;">
+      <p style="font-size: 0.72rem; color: var(--text-muted); margin: 0; line-height: 1.4;">
+        <span class="k-lbl-en">Calculated mathematically from your local sunrise & sunset according to classical Parashari Hora principles.</span>
+        <span class="k-lbl-hi" style="display:none;">महर्षि पराशर वैदिक होरा सिद्धांतों के अनुसार आपके स्थानीय सूर्योदय व सूर्यास्त से गणितीय रूप से संगणित।</span>
+      </p>
+    </div>
+
+  </div>
+</div>
+
 <!-- End phone-shell -->
 
 <!-- Astrological Scripts -->
@@ -12183,6 +12300,416 @@ if (kRes) kRes.style.display = 'block';
 if (typeof generateChart === 'function') {
 await generateChart({ preventDefault: () => {} });
 }
+}
+
+
+
+// ═══════════════════════════════════════════════════════════════
+// 24-HOUR DAILY HORA (होरा) TIMING ENGINE
+// Computes exact Day & Night planetary hours per user's location & birth chart
+// ═══════════════════════════════════════════════════════════════
+
+let currentHoraDateOffset = 0; // 0 = today, +1 = tomorrow, -1 = yesterday
+let currentHoraFilter = 'all';
+
+const horaPlanetSpeedOrder = ['Saturn', 'Jupiter', 'Mars', 'Sun', 'Venus', 'Mercury', 'Moon'];
+const weekdayLordMap = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn'];
+
+const planetHoraMeta = {
+  'Sun': {
+    nameHi: 'सूर्य होरा', natureEn: 'Neutral / Executive', natureHi: 'मध्यम / प्रशासनिक',
+    color: '#FF7675', icon: '☀️',
+    bestEn: 'Government work, executive meetings, applying for leadership positions, Surya Arghya.',
+    bestHi: 'सरकारी कार्य, उच्च अधिकारियों से बैठक, नेतृत्व के निर्णय, सूर्य अर्घ्य व प्रशासन।',
+    avoidEn: 'Signing delicate romantic treaties or emotional partnerships.',
+    avoidHi: 'अत्यधिक भावुक या नाजुक संबंध वार्ता करना।'
+  },
+  'Venus': {
+    nameHi: 'शुक्र होरा', natureEn: 'Auspicious (Shubha)', natureHi: 'अत्यंत शुभ',
+    color: '#FD79A8', icon: '💖',
+    bestEn: 'Luxury shopping, jewelry/vehicle purchase, romantic talks, arts, beauty treatments.',
+    bestHi: 'आभूषण, वाहन व वस्त्र क्रय, कला-संगीत, प्रेम चर्चा, सौंदर्य व सुख-सुविधा कार्य।',
+    avoidEn: 'Hostile arguments, aggressive debates, starting legal fights.',
+    avoidHi: 'विवाद, कटु बहस व कोर्ट केस प्रारंभ करना।'
+  },
+  'Mercury': {
+    nameHi: 'बुध होरा', natureEn: 'Auspicious (Shubha)', natureHi: 'शुभ',
+    color: '#00CEC9', icon: '🌿',
+    bestEn: 'Business contracts, accounting, trading/stocks, IT/coding, marketing, writing, studying.',
+    bestHi: 'व्यापारिक सौदे, लेखा-जोखा, शेयर व निवेश, कोडिंग व अध्ययन, विपणन, नया अनुबंध।',
+    avoidEn: 'Rash, uncalculated commitments.',
+    avoidHi: 'बिना सोचे-समझे जल्दबाजी में निर्णय लेना।'
+  },
+  'Moon': {
+    nameHi: 'चन्द्र होरा', natureEn: 'Auspicious (Shubha)', natureHi: 'शुभ',
+    color: '#74B9FF', icon: '🌙',
+    bestEn: 'Starting travels, shifting residence, buying silver/liquids, creative work, emotional healing.',
+    bestHi: 'यात्रा प्रारंभ, गृह प्रवेश/स्थानांतरण, चांदी व तरल पदार्थों का क्रय, रचनात्मक कार्य।',
+    avoidEn: 'Confrontations, aggressive actions, high-stress surgeries.',
+    avoidHi: 'आक्रामक विवाद व अत्यधिक तनावपूर्ण कार्य।'
+  },
+  'Saturn': {
+    nameHi: 'शनि होरा', natureEn: 'Caution / Discipline', natureHi: 'सावधानी / अनुशासन',
+    color: '#6C5CE7', icon: '🪐',
+    bestEn: 'Purchasing real estate, heavy machinery, iron, labor management, charity (Daan).',
+    bestHi: 'भूमि-भवन क्रय, भारी मशीनरी, लोहा, कृषि, श्रम प्रबंधन, शनि दान व जप।',
+    avoidEn: 'Starting urgent travels, celebratory milestones, buying new jewelry.',
+    avoidHi: 'शीघ्र यात्रा प्रारंभ करना, मांगलिक उत्सव या नए आभूषण खरीदना।'
+  },
+  'Jupiter': {
+    nameHi: 'गुरु होरा', natureEn: 'Most Auspicious (Amrit)', natureHi: 'अति शुभ (अमृत)',
+    color: '#FDCB6E', icon: '✨',
+    bestEn: 'Pujas, investing wealth, starting education, seeking guru blessings, signing major contracts.',
+    bestHi: 'पूजा-पाठ, वित्तीय निवेश, उच्च शिक्षा का आरंभ, गुरु दर्शन, बड़े व्यापारिक अनुबंध।',
+    avoidEn: 'Deceptive, unethical, or malicious actions.',
+    avoidHi: 'अनैतिक, असत्य या अनुचित कार्य।'
+  },
+  'Mars': {
+    nameHi: 'मंगल होरा', natureEn: 'Caution / Energetic', natureHi: 'उग्र / साहसिक',
+    color: '#E17055', icon: '🔥',
+    bestEn: 'Physical workouts, competitive exams, land/property visits, surgeries, debt clearance.',
+    bestHi: 'शारीरिक व्यायाम, प्रतियोगी परीक्षा, भूमि का निरीक्षण, शल्य चिकित्सा, ऋण चुकाना।',
+    avoidEn: 'Wedding talks, peaceful negotiations, delicate relationship discussions.',
+    avoidHi: 'विवाह वार्ता, शांति समझौते व कोमल सामाजिक आयोजन।'
+  }
+};
+
+function calculate24DailyHoras(targetDate, lat, lng, tz, userLagnaLord, userGoalLord) {
+  const d = targetDate ? new Date(targetDate) : new Date();
+  const latitude = (typeof lat === 'number') ? lat : (parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139);
+  const longitude = (typeof lng === 'number') ? lng : (parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090);
+  const timezone = (typeof tz === 'number') ? tz : (parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5);
+
+  const solar = calculateSolarTimings(d, latitude, longitude, timezone);
+
+  const nextDay = new Date(d);
+  nextDay.setDate(nextDay.getDate() + 1);
+  const nextSolar = calculateSolarTimings(nextDay, latitude, longitude, timezone);
+
+  const dayLengthMins = (solar.sunsetMins - solar.sunriseMins + 1440) % 1440;
+  const dayHoraDuration = dayLengthMins / 12;
+
+  const nightLengthMins = (nextSolar.sunriseMins - solar.sunsetMins + 1440) % 1440;
+  const nightHoraDuration = nightLengthMins / 12;
+
+  const weekdayIdx = d.getDay();
+  const startLord = weekdayLordMap[weekdayIdx];
+  const startIdxInCycle = horaPlanetSpeedOrder.indexOf(startLord);
+
+  const formatClock = (mins) => {
+    const totalMins = (Math.round(mins) + 1440) % 1440;
+    const h24 = Math.floor(totalMins / 60) % 24;
+    const m = Math.floor(totalMins % 60);
+    const period = h24 >= 12 ? 'PM' : 'AM';
+    const h12 = h24 % 12 || 12;
+    return String(h12).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ' ' + period;
+  };
+
+  const now = new Date();
+  const isToday = (d.toDateString() === now.toDateString());
+  const currentNowMins = now.getHours() * 60 + now.getMinutes();
+
+  const horas = [];
+
+  // 12 Day Horas
+  for (let i = 0; i < 12; i++) {
+    const planet = horaPlanetSpeedOrder[(startIdxInCycle + i) % 7];
+    const startM = solar.sunriseMins + (i * dayHoraDuration);
+    const endM = solar.sunriseMins + ((i + 1) * dayHoraDuration);
+    const meta = planetHoraMeta[planet] || planetHoraMeta['Sun'];
+
+    let isActive = false;
+    if (isToday) {
+      if (currentNowMins >= startM && currentNowMins < endM) isActive = true;
+    }
+
+    horas.push({
+      index: i + 1,
+      type: 'day',
+      typeEn: 'Day Hora #' + (i + 1),
+      typeHi: 'दिन की होरा #' + (i + 1),
+      planet: planet,
+      planetEn: planet + ' Hora',
+      planetHi: meta.nameHi,
+      startMins: startM,
+      endMins: endM,
+      startStr: formatClock(startM),
+      endStr: formatClock(endM),
+      natureEn: meta.natureEn,
+      natureHi: meta.natureHi,
+      color: meta.color,
+      icon: meta.icon,
+      bestEn: meta.bestEn,
+      bestHi: meta.bestHi,
+      avoidEn: meta.avoidEn,
+      avoidHi: meta.avoidHi,
+      isActive: isActive,
+      isLagnaLord: (planet === userLagnaLord),
+      isGoalLord: (planet === userGoalLord)
+    });
+  }
+
+  // 12 Night Horas
+  for (let i = 0; i < 12; i++) {
+    const planet = horaPlanetSpeedOrder[(startIdxInCycle + 12 + i) % 7];
+    const startM = solar.sunsetMins + (i * nightHoraDuration);
+    const endM = solar.sunsetMins + ((i + 1) * nightHoraDuration);
+    const meta = planetHoraMeta[planet] || planetHoraMeta['Sun'];
+
+    let isActive = false;
+    if (isToday) {
+      if (endM > 1440) {
+        if (currentNowMins >= startM || currentNowMins < (endM % 1440)) isActive = true;
+      } else {
+        if (currentNowMins >= startM && currentNowMins < endM) isActive = true;
+      }
+    }
+
+    horas.push({
+      index: i + 13,
+      type: 'night',
+      typeEn: 'Night Hora #' + (i + 1),
+      typeHi: 'रात्रि की होरा #' + (i + 1),
+      planet: planet,
+      planetEn: planet + ' Hora',
+      planetHi: meta.nameHi,
+      startMins: startM,
+      endMins: endM,
+      startStr: formatClock(startM),
+      endStr: formatClock(endM),
+      natureEn: meta.natureEn,
+      natureHi: meta.natureHi,
+      color: meta.color,
+      icon: meta.icon,
+      bestEn: meta.bestEn,
+      bestHi: meta.bestHi,
+      avoidEn: meta.avoidEn,
+      avoidHi: meta.avoidHi,
+      isActive: isActive,
+      isLagnaLord: (planet === userLagnaLord),
+      isGoalLord: (planet === userGoalLord)
+    });
+  }
+
+  return {
+    dateObj: d,
+    dateStr: d.toDateString(),
+    weekday: d.toLocaleDateString('en-US', { weekday: 'long' }),
+    solar: solar,
+    horas: horas,
+    activeHora: horas.find(h => h.isActive) || horas[0]
+  };
+}
+
+function openHoraModal(offsetDays) {
+  if (typeof offsetDays === 'number') {
+    currentHoraDateOffset = offsetDays;
+  } else if (offsetDays === undefined) {
+    currentHoraDateOffset = 0;
+  }
+  const modal = document.getElementById('hora-tracker-modal');
+  if (modal) {
+    modal.style.display = 'flex';
+    renderDailyHoraUI();
+  }
+}
+
+function closeHoraModal() {
+  const modal = document.getElementById('hora-tracker-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function navigateHoraDate(offsetChange) {
+  currentHoraDateOffset += offsetChange;
+  renderDailyHoraUI();
+}
+
+function navigateHoraToday() {
+  currentHoraDateOffset = 0;
+  renderDailyHoraUI();
+}
+
+function setHoraFilter(filterType) {
+  currentHoraFilter = filterType || 'all';
+  
+  const buttons = {
+    'all': document.getElementById('h-filter-all'),
+    'day': document.getElementById('h-filter-day'),
+    'night': document.getElementById('h-filter-night'),
+    'auspicious': document.getElementById('h-filter-auspicious')
+  };
+
+  Object.keys(buttons).forEach(k => {
+    const b = buttons[k];
+    if (b) {
+      if (k === currentHoraFilter) {
+        b.style.background = 'var(--gold)';
+        b.style.color = '#0C0922';
+        b.style.borderColor = 'var(--gold)';
+      } else {
+        b.style.background = 'transparent';
+        b.style.color = 'var(--text-muted)';
+        b.style.borderColor = 'rgba(255,255,255,0.15)';
+      }
+    }
+  });
+
+  renderDailyHoraUI();
+}
+
+function renderDailyHoraUI() {
+  const isHi = (currentAppLang === 'hi');
+  const targetDate = new Date();
+  targetDate.setDate(targetDate.getDate() + currentHoraDateOffset);
+
+  const cityName = localStorage.getItem('user_pob') || 'New Delhi';
+  const cleanCity = cityName.includes(',') ? cityName.split(',')[0].trim() : cityName;
+  const userLat = parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139;
+  const userLng = parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090;
+  const userTz = parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5;
+
+  const lagnaSign = (typeof cachedLagnaSignNum === 'number' && cachedLagnaSignNum >= 0) ? cachedLagnaSignNum : parseInt(localStorage.getItem('kundli_lagna_sign') || '0');
+  const userLagnaLord = signLords[lagnaSign] || 'Sun';
+  const userGoal = localStorage.getItem('user_goal') || 'job';
+  const goalLordMap = { job: 'Saturn', marriage: 'Venus', debt: 'Mars', baby: 'Jupiter', business: 'Mercury', property: 'Mars', health: 'Sun' };
+  const userGoalLord = goalLordMap[userGoal] || 'Jupiter';
+  const userName = localStorage.getItem('user_name') || 'Seeker';
+
+  const data = calculate24DailyHoras(targetDate, userLat, userLng, userTz, userLagnaLord, userGoalLord);
+
+  // 1. Update City & Date Header
+  const cityTag = document.getElementById('hora-user-city-tag');
+  if (cityTag) cityTag.innerText = cleanCity + (isHi ? ' • स्थानीय सौर समय' : ' • Local Solar Time');
+
+  const daysHi = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
+  const monthsHi = ["जनवरी", "फरवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"];
+
+  const dateLabel = document.getElementById('hora-active-date-label');
+  if (dateLabel) {
+    if (currentHoraDateOffset === 0) {
+      dateLabel.innerText = isHi 
+        ? 'आज, ' + daysHi[targetDate.getDay()] + ' (' + targetDate.getDate() + ' ' + monthsHi[targetDate.getMonth()] + ')' 
+        : 'Today, ' + data.weekday + ' (' + targetDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ')';
+    } else {
+      dateLabel.innerText = isHi
+        ? daysHi[targetDate.getDay()] + ', ' + targetDate.getDate() + ' ' + monthsHi[targetDate.getMonth()]
+        : targetDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    }
+  }
+
+  const solarLabel = document.getElementById('hora-solar-times-label');
+  if (solarLabel) {
+    solarLabel.innerText = isHi
+      ? 'सूर्योदय: ' + data.solar.sunriseStr + ' | सूर्यास्त: ' + data.solar.sunsetStr
+      : 'Sunrise: ' + data.solar.sunriseStr + ' | Sunset: ' + data.solar.sunsetStr;
+  }
+
+  // 2. Update Live Active Hora Hero Card
+  const active = data.activeHora;
+  const isToday = (currentHoraDateOffset === 0);
+
+  const heroCard = document.getElementById('hora-live-hero-card');
+  if (heroCard) {
+    if (!isToday) {
+      heroCard.style.display = 'none';
+    } else {
+      heroCard.style.display = 'block';
+      const timeSpan = document.getElementById('hora-live-time-span');
+      if (timeSpan) timeSpan.innerText = active.startStr + ' - ' + active.endStr;
+
+      const iconBox = document.getElementById('hora-live-icon-box');
+      if (iconBox) {
+        iconBox.innerText = active.icon;
+        iconBox.style.borderColor = active.color;
+      }
+
+      const pNameEl = document.getElementById('hora-live-planet-name');
+      if (pNameEl) pNameEl.innerText = isHi ? active.planetHi : active.planetEn;
+
+      const natureEl = document.getElementById('hora-live-nature-badge');
+      if (natureEl) {
+        natureEl.innerText = isHi ? active.natureHi : active.natureEn;
+        natureEl.style.color = active.color;
+      }
+
+      const bestEl = document.getElementById('hora-live-best-text');
+      if (bestEl) bestEl.innerText = isHi ? active.bestHi : active.bestEn;
+
+      const avoidEl = document.getElementById('hora-live-avoid-text');
+      if (avoidEl) avoidEl.innerText = isHi ? active.avoidHi : active.avoidEn;
+    }
+  }
+
+  // 3. Render 24-Hora Cards List
+  const listContainer = document.getElementById('hora-cards-list');
+  if (!listContainer) return;
+  listContainer.innerHTML = '';
+
+  let filteredHoras = data.horas;
+  if (currentHoraFilter === 'day') {
+    filteredHoras = data.horas.filter(h => h.type === 'day');
+  } else if (currentHoraFilter === 'night') {
+    filteredHoras = data.horas.filter(h => h.type === 'night');
+  } else if (currentHoraFilter === 'auspicious') {
+    filteredHoras = data.horas.filter(h => h.natureEn.includes('Auspicious'));
+  }
+
+  filteredHoras.forEach(h => {
+    const isLive = h.isActive && isToday;
+    const isSpecial = h.isLagnaLord || h.isGoalLord;
+    
+    let specialBadge = '';
+    if (h.isLagnaLord) {
+      specialBadge = isHi 
+        ? '<span style="background: rgba(232,200,121,0.2); border: 1px solid var(--gold); color: var(--gold); font-size: 0.68rem; padding: 1px 7px; border-radius: 10px; font-weight: 700;">⭐ आपके लग्न स्वामी (' + h.planetHi + ') का बलवान काल</span>'
+        : '<span style="background: rgba(232,200,121,0.2); border: 1px solid var(--gold); color: var(--gold); font-size: 0.68rem; padding: 1px 7px; border-radius: 10px; font-weight: 700;">⭐ Power Hora for ' + userName + ' (Lagna Lord)</span>';
+    } else if (h.isGoalLord) {
+      specialBadge = isHi
+        ? '<span style="background: rgba(93,173,226,0.2); border: 1px solid #5dade2; color: #5dade2; font-size: 0.68rem; padding: 1px 7px; border-radius: 10px; font-weight: 700;">🎯 लक्ष्य सिद्धि काल (' + (userGoal === 'job' ? 'करियर' : userGoal === 'marriage' ? 'विवाह' : 'धन') + ')</span>'
+        : '<span style="background: rgba(93,173,226,0.2); border: 1px solid #5dade2; color: #5dade2; font-size: 0.68rem; padding: 1px 7px; border-radius: 10px; font-weight: 700;">🎯 Goal Resonance (' + userGoal.toUpperCase() + ')</span>';
+    }
+
+    const card = document.createElement('div');
+    card.style.background = isLive 
+      ? 'linear-gradient(135deg, rgba(232,200,121,0.18), rgba(46,204,113,0.1))' 
+      : 'rgba(255,255,255,0.03)';
+    card.style.border = isLive 
+      ? '1.5px solid var(--gold)' 
+      : isSpecial 
+        ? '1px solid rgba(232,200,121,0.45)' 
+        : '1px solid rgba(255,255,255,0.07)';
+    card.style.borderLeft = '3.5px solid ' + h.color;
+    card.style.borderRadius = '12px';
+    card.style.padding = '10px 12px';
+    card.style.transition = 'all 0.2s ease';
+
+    card.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.1rem;">${h.icon}</span>
+          <strong style="color: #fff; font-size: 0.9rem;">${isHi ? h.planetHi : h.planetEn}</strong>
+          <span style="font-size: 0.7rem; color: ${h.color}; font-weight: 700;">(${isHi ? h.natureHi : h.natureEn})</span>
+        </div>
+        <div style="text-align: right;">
+          <strong style="color: var(--gold); font-size: 0.82rem; display: block;">${h.startStr} - ${h.endStr}</strong>
+          <span style="color: var(--text-muted); font-size: 0.68rem;">${isHi ? h.typeHi : h.typeEn}</span>
+        </div>
+      </div>
+
+      ${specialBadge ? '<div style="margin-bottom: 6px;">' + specialBadge + '</div>' : ''}
+
+      <div style="font-size: 0.76rem; line-height: 1.4; color: #ddd;">
+        <div style="margin-bottom: 2px;">
+          <span style="color: #2ecc71; font-weight: 700;">${isHi ? '✓ शुभ कार्य:' : '✓ Best:'}</span> ${isHi ? h.bestHi : h.bestEn}
+        </div>
+        <div>
+          <span style="color: #ff7675; font-weight: 700;">${isHi ? '✕ वर्जित:' : '✕ Avoid:'}</span> ${isHi ? h.avoidHi : h.avoidEn}
+        </div>
+      </div>
+    `;
+
+    listContainer.appendChild(card);
+  });
 }
 
 
