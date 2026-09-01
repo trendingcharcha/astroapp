@@ -11606,25 +11606,112 @@ if (houseBars) {
   `).join('');
 }
 
-// ── SECTION 3: CAREER BLUEPRINT (10TH HOUSE & D10) ──
+// ── SECTION 3: AUTHENTIC DYNAMIC CAREER BLUEPRINT (10TH HOUSE, D10 & JAIMINI AMK) ──
 const tenthSign = (lagnaSign + 9) % 12;
 const tenthLord = signLords[tenthSign];
-const careerPills = document.getElementById('k-career-pills');
-if (careerPills) {
-  const industryMap = {
-    'Sun': isHi ? ["सरकारी एवं प्रशासनिक सेवा", "कॉरपोरेट नेतृत्व", "सार्वजनिक नीति"] : ["Government & Public Service", "Corporate Executive", "Public Policy & Leadership"],
-    'Moon': isHi ? ["स्वास्थ्य एवं कल्याण", "हॉस्पिटैलिटी एवं फ़ूड टेक", "जनसंपर्क एवं मीडिया"] : ["Healthcare & Wellness", "Hospitality & Food Tech", "Public Relations & Media"],
-    'Mars': isHi ? ["रियल एस्टेट एवं निर्माण", "इंजीनियरिंग एवं ऑपरेशन्स", "सुरक्षा एवं रक्षा"] : ["Real Estate & Construction", "Engineering & Operations", "Defense & Cyber Security"],
-    'Mercury': isHi ? ["टेक एवं सॉफ्टवेयर इंजीनियरिंग", "वित्तीय बैंकिंग एवं विश्लेषक", "डिजिटल मीडिया एवं डेटा"] : ["Tech & Software Engineering", "Financial Banking & Analytics", "Digital Media & Data Science"],
-    'Jupiter': isHi ? ["कॉरपोरेट सलाहकार एवं कानून", "शिक्षा एवं कोचिंग", "वेल्थ मैनेजमेंट"] : ["Corporate Advisory & Law", "Education & Executive Coaching", "Wealth Management & Fintech"],
-    'Venus': isHi ? ["सृजनात्मक डिजाइन एवं मीडिया", "लक्जरी ब्रांडिंग एवं मार्केटिंग", "कला एवं मनोरंजन"] : ["Creative Design & Media", "Luxury Branding & Marketing", "Arts & Entertainment"],
-    'Saturn': isHi ? ["ऑपरेशन्स एवं लॉजिस्टिक्स", "इन्फ्रास्ट्रक्चर एवं विनिर्माण", "लीगल एवं अनुपालन"] : ["Operations & Logistics", "Infrastructure & Manufacturing", "Legal & Compliance"]
-  };
+const tenthElement = ["Fire", "Earth", "Air", "Water", "Fire", "Earth", "Air", "Water", "Fire", "Earth", "Air", "Water"][tenthSign];
+const tenthElementHi = ["अग्नि तत्व", "पृथ्वी तत्व", "वायु तत्व", "जल तत्व", "अग्नि तत्व", "पृथ्वी तत्व", "वायु तत्व", "जल तत्व", "अग्नि तत्व", "पृथ्वी तत्व", "वायु तत्व", "जल तत्व"][tenthSign];
 
-  const recs = industryMap[tenthLord] || industryMap['Mercury'];
-  careerPills.innerHTML = recs.map(r => `<span style="background:rgba(93,173,226,0.15); border:1px solid #5dade2; color:#5dade2; border-radius:14px; padding:4px 10px; font-size:0.75rem; font-weight:bold;">${r}</span>`).join('');
+// 1. Find 10th Lord placement house
+const tenthLordPl = placements.find(p => p.name === tenthLord);
+let tenthLordHouse = 10;
+if (tenthLordPl) {
+  tenthLordHouse = ((tenthLordPl.sign - lagnaSign + 12) % 12) + 1;
 }
 
+// 2. Find planets sitting in 10th house
+const tenthHousePlanets = placements.filter(p => p.name !== 'Lagna' && (((p.sign - lagnaSign + 12) % 12) + 1 === 10));
+
+// 3. Find Jaimini Amatyakaraka (AmK - 2nd highest degree planet)
+const sortedKarakas = placements.filter(p => !['Lagna', 'Rahu', 'Ketu'].includes(p.name)).sort((a, b) => (b.deg || 15) - (a.deg || 15));
+const amkPlanet = sortedKarakas[1] ? sortedKarakas[1].name : tenthLord;
+const amkPlanetHi = (typeof planetNamesHi !== 'undefined' && planetNamesHi[amkPlanet]) ? planetNamesHi[amkPlanet] : amkPlanet;
+
+// 4. Element-based baseline sectors
+const elementSectors = {
+  'Fire': isHi 
+    ? ["कार्यकारी नेतृत्व एवं प्रशासन", "रक्षा एवं साइबर ऑपरेशन्स", "ऊर्जा एवं पावर सिस्टम्स", "रणनीतिक प्रबंधन"]
+    : ["Executive Leadership & Administration", "Defense & Cyber Operations", "Energy & Power Systems", "Strategic Management"],
+  'Earth': isHi 
+    ? ["वित्तीय बैंकिंग एवं वेल्थ मैनेजमेंट", "रियल एस्टेट एवं इंफ्रास्ट्रक्चर", "कॉरपोरेट ऑपरेशन्स", "सप्लाई चेन एवं लॉजिस्टिक्स"]
+    : ["Financial Asset & Wealth Management", "Real Estate & Infrastructure", "Corporate Operations & Systems", "Supply Chain & Logistics"],
+  'Air': isHi 
+    ? ["सॉफ्टवेयर इंजीनियरिंग एवं AI", "डेटा साइंस एवं एनालिटिक्स", "डिजिटल मीडिया एवं संचार", "रणनीतिक फिनटेक परामर्श"]
+    : ["Software Engineering & AI Architecture", "Data Science & Advanced Analytics", "Digital Media & Communications", "Strategic FinTech Advisory"],
+  'Water': isHi 
+    ? ["हेल्थकेयर, बायो-टेक एवं फार्मा", "मनोविज्ञान एवं वेलनेस परामर्श", "रचनात्मक कला एवं मीडिया", "अंतरराष्ट्रीय वाणिज्य"]
+    : ["Healthcare, Bio-Tech & Pharma", "Psychology & Wellness Advisory", "Creative Arts & Media Production", "International Trade & Maritime"]
+};
+
+// 5. Planet-specific specialized career niches
+const planetNiches = {
+  'Sun': isHi 
+    ? ["सार्वजनिक नीति एवं प्रशासनिक नेतृत्व", "सरकारी उपक्रम एवं सिविल सेवा"]
+    : ["Public Policy & Administrative Leadership", "Government Enterprises & Civil Governance"],
+  'Moon': isHi 
+    ? ["जनसंपर्क एवं ब्रांड मीडिया", "हॉस्पिटैलिटी एवं वेलनेस कंसल्टिंग"]
+    : ["Public Relations & Brand Media", "Hospitality & Wellness Consulting"],
+  'Mars': isHi 
+    ? ["हाई-टेक इंजीनियरिंग एवं रोबोटिक्स", "रक्षा, सुरक्षा एवं ऑपरेशन्स"]
+    : ["High-Tech Engineering & Robotics", "Defense, Security & Operations"],
+  'Mercury': isHi 
+    ? ["एल्गोरिथमिक ट्रेडिंग एवं फिनटेक", "क्लाउड कंप्यूटिंग एवं सॉफ्टवेयर सिस्टम्स"]
+    : ["Algorithmic Trading & FinTech Systems", "Cloud Computing & Software Architecture"],
+  'Jupiter': isHi 
+    ? ["कॉरपोरेट लॉ एवं लीगल एडवाइजरी", "उच्च शिक्षा एवं एडटेक नेतृत्व", "वेल्थ कंसल्टिंग"]
+    : ["Corporate Law & Legal Advisory", "Higher Education & EdTech Leadership", "Strategic Wealth Consulting"],
+  'Venus': isHi 
+    ? ["लक्जरी ब्रांडिंग एवं प्रोडक्ट डिजाइन", "आर्किटेक्चर एवं क्रिएटिव मीडिया"]
+    : ["Luxury Branding & Product Design", "Architecture & Creative Media Strategy"],
+  'Saturn': isHi 
+    ? ["औद्योगिक ऑटोमेशन एवं मैन्युफैक्चरिंग", "एंटरप्राइज ऑपरेशन्स एवं लॉजिस्टिक्स"]
+    : ["Industrial Automation & Manufacturing", "Enterprise Operations & Logistics Systems"],
+  'Rahu': isHi 
+    ? ["आर्टिफिशियल इंटेलिजेंस एवं बिग डेटा", "ग्लोबल टेक वेंचर्स"]
+    : ["Artificial Intelligence & Big Data", "Global Tech Ventures & Innovation"],
+  'Ketu': isHi 
+    ? ["साइबर सुरक्षा एवं क्रिप्टोग्राफी", "गहन शोध एवं बायो-साइंस"]
+    : ["Cybersecurity & Cryptography", "Specialized R&D & Deep Tech Research"]
+};
+
+// 6. House placement specific niches for 10th Lord
+const houseNiches = {
+  1: isHi ? ["स्वतंत्र उद्यम एवं कंसल्टेंसी"] : ["Independent Enterprise & Strategic Consulting"],
+  2: isHi ? ["बैंकिंग एवं वित्तीय रणनीति"] : ["Banking & Financial Strategy"],
+  3: isHi ? ["डिजिटल मीडिया एवं कंटेंट टेक्नोलॉजी"] : ["Digital Media & Content Technology"],
+  4: isHi ? ["रियल एस्टेट एवं एजुकेशन मैनेजमेंट"] : ["Real Estate & Education Management"],
+  5: isHi ? ["वित्तीय मार्केट्स एवं वेंचर कैपिटल"] : ["Financial Markets & Venture Capital"],
+  6: isHi ? ["लीगल ऑडिटिंग एवं हेल्थकेयर सिस्टम्स"] : ["Legal Auditing & Healthcare Systems"],
+  7: isHi ? ["अंतरराष्ट्रीय व्यापार एवं पार्टनरशिप्स"] : ["International Trade & Global Partnerships"],
+  8: isHi ? ["गहन रिसर्च, डेटा साइंस एवं फोरेंसिक"] : ["Deep R&D, Data Science & Forensic Analytics"],
+  9: isHi ? ["ग्लोबल एडवाइजरी एवं कॉर्पोरेट लीगल"] : ["Global Advisory & Corporate Legal Strategy"],
+  10: isHi ? ["इंडस्ट्री लीडरशिप एवं मुख्य कार्यकारी"] : ["Industry Leadership & Executive Management"],
+  11: isHi ? ["स्केलेबल टेक प्लेटफॉर्म्स एवं नेटवर्क वेंचर्स"] : ["Scalable Tech Platforms & Network Ventures"],
+  12: isHi ? ["ग्लोबल MNCs एवं ओवरसीज ऑपरेशन्स"] : ["Global MNCs & Overseas Operations"]
+};
+
+// Synthesize unique career pool
+const dynamicPool = [];
+if (planetNiches[tenthLord]) dynamicPool.push(...planetNiches[tenthLord]);
+if (elementSectors[tenthElement]) dynamicPool.push(...elementSectors[tenthElement]);
+tenthHousePlanets.forEach(p => {
+  if (planetNiches[p.name]) dynamicPool.push(...planetNiches[p.name]);
+});
+if (planetNiches[amkPlanet]) dynamicPool.push(...planetNiches[amkPlanet]);
+if (houseNiches[tenthLordHouse]) dynamicPool.push(...houseNiches[tenthLordHouse]);
+
+const uniqueIndustries = Array.from(new Set(dynamicPool)).slice(0, 4);
+
+const careerPills = document.getElementById('k-career-pills');
+if (careerPills) {
+  const pillsHtml = uniqueIndustries.map(r => `<span style="background:rgba(93,173,226,0.15); border:1px solid #5dade2; color:#5dade2; border-radius:14px; padding:5px 12px; font-size:0.75rem; font-weight:700; display:inline-flex; align-items:center; gap:4px; box-shadow:0 2px 8px rgba(0,0,0,0.2);">✨ ${r}</span>`).join('');
+  
+  const derivationHtml = isHi 
+    ? `<div style="width:100%; color:var(--text-muted); font-size:0.72rem; margin-top:6px; line-height:1.4;">📐 ${signNamesHi[tenthSign]} राशि (${tenthElementHi}), दशमेश (${signLordsHi[tenthSign]} भाव ${tenthLordHouse} में) एवं अमात्यकारक (${amkPlanetHi}) के आधार पर संगणित।</div>`
+    : `<div style="width:100%; color:var(--text-muted); font-size:0.72rem; margin-top:6px; line-height:1.4;">📐 Calculated from your 10th House in ${signNames[tenthSign]} (${tenthElement} Element), 10th Lord (${tenthLord} in H${tenthLordHouse}), and Amatyakaraka (${amkPlanet}) alignment.</div>`;
+  
+  careerPills.innerHTML = pillsHtml + derivationHtml;
+}
 // ── DYNAMIC CORPORATE VS BUSINESS SKEW (ASTROLOGICAL WEIGHTING) ──
 const jobBar = document.getElementById('k-job-bar');
 const bizBar = document.getElementById('k-biz-bar');
