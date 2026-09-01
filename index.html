@@ -3435,6 +3435,16 @@ H12
 <ul id="vedic-tasks-list" style="margin-left: 20px; color: var(--text-muted); line-height: 1.6; font-size: 0.9rem;"></ul>
 </div>
 
+<!-- SACRED VISHNU PURANA UPAYA & STOTRA CARD -->
+<div class="card" style="margin-bottom: 20px; text-align: left; background: linear-gradient(135deg, rgba(232, 200, 121, 0.08), rgba(108, 92, 231, 0.06)); border: 1px solid rgba(232, 200, 121, 0.35);">
+<h4 style="color: var(--gold); margin-bottom: 12px; border-bottom: 1px solid rgba(232, 200, 121, 0.2); padding-bottom: 5px; font-size: 0.95rem; display:flex; align-items:center; gap:7px;">
+<svg class="animated-icon-glow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+<span class="k-lbl-en">Sacred Vishnu Purana Upaya & Stotra</span>
+<span class="k-lbl-hi" style="display:none;">विष्णु पुराण संकल्प व दिव्य स्तोत्र उपाय</span>
+</h4>
+<div id="vishnupuran-tasks-list" style="color: var(--text-muted); line-height: 1.6; font-size: 0.9rem;"></div>
+</div>
+
 <div class="card" style="margin-bottom: 20px; text-align: left;">
 <h4 style="color: var(--gold); margin-bottom: 12px; border-bottom: 1px solid rgba(232, 200, 121, 0.2); padding-bottom: 5px; font-size: 0.95rem; display:flex; align-items:center; gap:7px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="6" x2="16" y2="6"/><line x1="12" y1="10" x2="16" y2="10"/></svg> Lal Kitab Remedies</h4>
 <ul id="lalkitab-tasks-list" style="margin-left: 20px; color: var(--text-muted); line-height: 1.6; font-size: 0.9rem;"></ul>
@@ -3924,6 +3934,89 @@ document.getElementById('coach-result-view').style.display = 'none';
 document.getElementById('coach-form-view').style.display = 'block';
 }
 
+const vishnuPuranaGoalRemedies = {
+  'job': {
+    titleEn: 'Vishnu Purana Career Upaya: Vishnu Sahasranama & Surya-Narayana Arghya',
+    titleHi: 'विष्णु पुराण करियर उपाय: विष्णु सहस्रनाम व सूर्य-नारायण अर्घ्य',
+    stotraSanskrit: 'ॐ नमो भगवते वासुदेवाय ॥ यतः प्रवृत्तयः सर्वाः प्राणिनां प्राणधारिणाम्।',
+    meaningEn: 'Salutations to Lord Vasudeva, the supreme preserver who grants status, authority, and righteous career triumph.',
+    meaningHi: 'भगवान वासुदेव को नमन, जो समस्त जगत के पोषक हैं और कर्म में प्रतिष्ठा, अधिकार व सफलता प्रदान करते हैं।',
+    actionEn: 'Every Thursday morning, face East, light a pure cow-ghee lamp before Lord Vishnu, chant "Om Namo Bhagavate Vasudevaya" 108 times, and offer a pinch of turmeric in fresh water to clear workplace obstacles.',
+    actionHi: 'प्रत्येक गुरुवार सुबह पूर्व दिशा की ओर मुख करके भगवान विष्णु के समक्ष शुद्ध गाय के घी का दीपक जलाएं, 108 बार "ॐ नमो भगवते वासुदेवाय" का जाप करें और जल में एक चुटकी हल्दी मिलाकर अर्घ्य दें।',
+    ref: 'विष्णु पुराण (प्रथम अंश: राज्य-पद व प्रतिष्ठा प्रसंग)'
+  },
+  'business': {
+    titleEn: 'Vishnu Purana Commercial Upaya: Lakshmi-Narayana Hridayam & Kesar Tilak',
+    titleHi: 'विष्णु पुराण व्यापार उपाय: लक्ष्मी-नारायण हृदयम् व केसर तिलक',
+    stotraSanskrit: 'ॐ श्रीं ह्रीं क्लीं श्री लक्ष्मी-नारायणाय नमः ॥',
+    meaningEn: 'Salutations to Sri Lakshmi-Narayana, the divine source of boundless prosperity, ethical enterprise, and steady commercial scaling.',
+    meaningHi: 'श्री लक्ष्मी-नारायण को नमन, जो व्यापारिक विस्तार, प्रचुर समृद्धि व अखंड धन-वैभव के अधिष्ठाता हैं।',
+    actionEn: 'On Wednesdays and Thursdays, chant the Lakshmi-Narayana Samriddhi Shloka 21 times, apply a sacred Kesar/Chandan mark on your forehead, and offer green sprouts or tulsi to invite sustainable business growth.',
+    actionHi: 'बुधवार व गुरुवार को 21 बार लक्ष्मी-नारायण समृद्धि मंत्र का जाप करें, माथे पर केसर या चंदन का तिलक लगाएं और व्यापार वृद्धि हेतु भगवान को तुलसी दल अर्पित करें।',
+    ref: 'विष्णु पुराण (समुद्र मंथन व महालक्ष्मी प्राकट्य प्रसंग)'
+  },
+  'debt': {
+    titleEn: 'Vishnu Purana Rina-Vimochana Upaya: Sudarshana & Narayana Kavach',
+    titleHi: 'विष्णु पुराण ऋण-मुक्ति उपाय: सुदर्शन व नारायण कवच संकल्प',
+    stotraSanskrit: 'ॐ नमो नारायणाय ॥ सर्वदुःखप्रशमनं त्रैलोक्यस्याखिलेश्वरम्।',
+    meaningEn: 'Salutations to Narayana, the supreme redeemer who dissolves all karmic liabilities, debts, and financial anxieties.',
+    meaningHi: 'भगवान नारायण को नमन, जो समस्त सांसारिक ऋणों, चिंताओं व संकटों का समूल निवारण करने वाले हैं।',
+    actionEn: 'On Tuesdays and Thursdays, light an oil or ghee lamp facing North, chant "Om Namo Narayanaya" 108 times, and make a small voluntary principal debt repayment on Tuesdays to break the debt cycle.',
+    actionHi: 'मंगलवार व गुरुवार को उत्तर दिशा में घी का दीपक जलाकर 108 बार "ॐ नमो नारायणाय" का पाठ करें और मंगलवार को ऋण का एक छोटा हिस्सा चुकाकर ऋण-मुक्ति संकल्प लें।',
+    ref: 'विष्णु पुराण (नारायण स्तुति व सर्व संकटनाशन प्रसंग)'
+  },
+  'marriage': {
+    titleEn: 'Vishnu Purana Matrimonial Upaya: Rukmini-Krishna Kalyanam',
+    titleHi: 'विष्णु पुराण विवाह उपाय: रुक्मिणी-कृष्ण कल्याण संकल्प व तुलसी अर्पण',
+    stotraSanskrit: 'ॐ क्लीं कृष्णाय गोविंदाय गोपीजनवल्लभाय स्वाहा ॥',
+    meaningEn: 'Salutations to Lord Krishna and Devi Rukmini, bestowers of joyful union, deep emotional fidelity, and harmonious marriage.',
+    meaningHi: 'भगवान श्रीकृष्ण व देवी रुक्मिणी को नमन, जो दांपत्य सुख, अटूट प्रेम व शीघ्र विवाह के वरदान प्रदाता हैं।',
+    actionEn: 'On Friday and Thursday mornings, offer 2 fresh Tulsi leaves in holy water before Lord Vishnu/Krishna and chant the Kalyana Shloka 21 times to dissolve relationship friction and attract a righteous life partner.',
+    actionHi: 'शुक्रवार व गुरुवार को भगवान विष्णु/कृष्ण को जल में 2 ताजे तुलसी दल अर्पित करें और 21 बार कल्याण मंत्र का जाप करें ताकि विवाह की समस्त बाधाएं दूर हों।',
+    ref: 'विष्णु पुराण (पंचम अंश: रुक्मिणी-कृष्ण विवाह प्रसंग)'
+  },
+  'baby': {
+    titleEn: 'Vishnu Purana Progeny Upaya: Santana Gopala Mahamantra',
+    titleHi: 'विष्णु पुराण संतान उपाय: संतान गोपाल महामंत्र व वंश रक्षा',
+    stotraSanskrit: 'ॐ देवकीसुत गोविंद वासुदेव जगत्पते। देहि मे तनयं कृष्ण त्वामहं शरणं गतः ॥',
+    meaningEn: 'O Divine Child Govinda, Son of Devaki, Lord of the Universe! Grant me a righteous, healthy child; I surrender unto You.',
+    meaningHi: 'हे देवकीनंदन गोविंद! हे जगत्पति वासुदेव! मुझे तेजस्वी व स्वस्थ संतान का आशीर्वाद प्रदान करें, मैं आपकी शरण में हूँ।',
+    actionEn: 'Both partners recite the Santana Gopala Shloka 21 times each morning, offer yellow fruits/sweets at a Vishnu temple on Thursdays, and pray for the divine blessing of a healthy child.',
+    actionHi: 'दोनों साथी प्रतिदिन सुबह 21 बार संतान गोपाल श्लोक का पाठ करें, गुरुवार को पीले फल या मिठाई का दान करें और स्वस्थ संतान के लिए प्रार्थना करें।',
+    ref: 'विष्णु पुराण व हरिवंश पुराण (वंश वृद्धि व संतान प्रसंग)'
+  },
+  'property': {
+    titleEn: 'Vishnu Purana Bhoomi Upaya: Varaha Avatar Land & Registry Stotra',
+    titleHi: 'विष्णु पुराण भूमि उपाय: वराह अवतार भूमि व संपत्ति सिद्धि स्तोत्र',
+    stotraSanskrit: 'ॐ नमो भगवते वराहरूपाय भूर्भुवः स्वः पतये भूपतित्वं मे देहि दापय स्वाहा ॥',
+    meaningEn: 'Salutations to Lord Varaha, the divine upholder and protector of Earth, who grants immovable assets, land security, and home stability.',
+    meaningHi: 'भगवान वराह को नमन, जिन्होंने संपूर्ण पृथ्वी का उद्धार किया। वे मुझे भूमि, भवन व अचल संपत्ति की स्थिरता प्रदान करें।',
+    actionEn: 'On Tuesdays or Thursdays, face North-East, chant the Varaha Stotra 21 times, and maintain a vibrant Tulsi plant in the North-East of your residence to remove registry delays and property obstacles.',
+    actionHi: 'मंगलवार या गुरुवार को उत्तर-पूर्व दिशा की ओर मुख करके 21 बार वराह मंत्र का जाप करें और घर के ईशान कोण में तुलसी का पौधा लगाकर भूमि बाधाएं दूर करें।',
+    ref: 'विष्णु पुराण (प्रथम अंश, अध्याय 4: वराह रूप पृथ्वी उद्धार)'
+  },
+  'health': {
+    titleEn: 'Vishnu Purana Healing Upaya: Dhanvantari Amrita Stotra',
+    titleHi: 'विष्णु पुराण आरोग्य उपाय: धन्वंतरि अमृत स्तोत्र व आरोग्य संकल्प',
+    stotraSanskrit: 'ॐ नमो भगवते महाविष्णवे वासुदेवाय धन्वंतरये अमृतकलशहस्ताय सर्वभयनिवारणाय नमः ॥',
+    meaningEn: 'Salutations to Lord Dhanvantari, the Vishnu incarnation bearing the nectar pot of immortality, who removes all disease, fear, and suffering.',
+    meaningHi: 'अमृत कलश धारण करने वाले भगवान धन्वंतरि (महाविष्णु) को नमन, जो समस्त रोगों, भय व कष्टों का निवारण करते हैं।',
+    actionEn: 'Every morning, drink copper-infused water after reciting the Dhanvantari Healing Shloka 11 times to cleanse bodily toxins, pacify planetary heat, and restore immune balance.',
+    actionHi: 'प्रतिदिन सुबह तांबे के पात्र का जल पीने से पूर्व 11 बार धन्वंतरि आरोग्य श्लोक का स्मरण करें ताकि शारीरिक ऊर्जा व रोग प्रतिरोधक क्षमता में वृद्धि हो।',
+    ref: 'विष्णु पुराण (अमृत मंथन व धन्वंतरि प्राकट्य प्रसंग)'
+  },
+  'custom': {
+    titleEn: 'Vishnu Purana Universal Upaya: Narayana Sankat-Nivaran Stotra',
+    titleHi: 'विष्णु पुराण सार्वभौमिक उपाय: नारायण संकट-निवारण स्तोत्र',
+    stotraSanskrit: 'ॐ नमो नारायणाय ॥ शांताकारं भुजगशयनं पद्मनाभं सुरेशं विश्वाधारं गगनसदृशं मेघवर्णं शुभांगम्।',
+    meaningEn: 'Salutations to Supreme Lord Narayana, the serene protector resting upon Shesha, whose grace brings cosmic order and dissolves every crisis.',
+    meaningHi: 'शांत स्वरूप, शेषनाग की शैय्या पर शयन करने वाले भगवान नारायण को नमन, जिनका स्मरण हर संकट का निवारण करता है।',
+    actionEn: 'Offer clean water with a fresh Tulsi leaf to Lord Narayana facing East every morning and chant "Om Namo Narayanaya" 108 times for protection and total resolution of life obstacles.',
+    actionHi: 'प्रतिदिन सुबह पूर्व दिशा में भगवान नारायण को तुलसी युक्त जल अर्पित करें और जीवन की बाधाओं के निवारण हेतु 108 बार "ॐ नमो नारायणाय" का जाप करें।',
+    ref: 'विष्णु पुराण (सर्व बाधा शमन व नारायण स्तुति)'
+  }
+};
+
 async function generateCoachMission(e) {
 if (e && e.preventDefault) e.preventDefault();
 let btn = null;
@@ -4298,6 +4391,7 @@ city = { name: cityName, lat: 28.6139, lng: 77.2090, tz: 5.5 };
 }
 
 let activeGoalsList = (typeof getActiveGoals === 'function') ? getActiveGoals() : [];
+if (!activeGoalsList || activeGoalsList.length === 0) activeGoalsList = [goal || 'job'];
 const goalLabelsEn = {
 'job': 'Career & Profession',
 'debt': 'Debt & Finance',
@@ -5103,12 +5197,37 @@ let titleText = hasPartner
 ? (isHi ? `${name} और ${partnerName || 'साथी'} का ${combinedMissionType}` : `${name} & ${partnerName || 'Partner'}'s ${combinedMissionType}`)
 : (isHi ? `${name} का ${combinedMissionType}` : `${name}'s ${combinedMissionType}`);
 
+// ── SACRED VISHNU PURANA UPAYA & STOTRA COMPILATION ──
+let puranaHTML = '';
+const puranaEntries = activeGoalsList.map(g => {
+  let pKey = g;
+  if (g === 'marriage-single' || g === 'marriage-couple') pKey = 'marriage';
+  if (g === 'property-single' || g === 'property-couple') pKey = 'property';
+  if (g === 'custom') pKey = 'custom';
+  const item = (typeof vishnuPuranaGoalRemedies !== 'undefined' && vishnuPuranaGoalRemedies[pKey]) ? vishnuPuranaGoalRemedies[pKey] : vishnuPuranaGoalRemedies['job'];
+  const title = isHi ? item.titleHi : item.titleEn;
+  const meaning = isHi ? item.meaningHi : item.meaningEn;
+  const action = isHi ? item.actionHi : item.actionEn;
+
+  return `
+  <div style="background: rgba(255,255,255,0.03); border-left: 3px solid var(--gold); padding: 10px 12px; border-radius: 8px; margin-bottom: 10px;">
+    <strong style="color: var(--gold); display: block; margin-bottom: 4px; font-size: 0.88rem;">${title}</strong>
+    <div style="background: rgba(232, 200, 121, 0.08); padding: 8px 10px; border-radius: 6px; font-family: monospace; font-size: 0.85rem; color: #fff; margin-bottom: 6px;">${item.stotraSanskrit}</div>
+    <p style="margin: 0 0 6px; font-size: 0.8rem; color: var(--text-muted);"><strong>${isHi ? 'भावार्थ:' : 'Essence:'}</strong> ${meaning}</p>
+    <p style="margin: 0 0 4px; font-size: 0.82rem; color: #ddd;"><strong>${isHi ? 'सत्कर्म उपाय:' : 'Sacred Upaya:'}</strong> ${action}</p>
+    <span style="font-size: 0.72rem; color: #8e44ad; font-weight: 600;">${item.ref}</span>
+  </div>
+  `;
+});
+puranaHTML = puranaEntries.join('');
+
 return {
 vListHTML,
 lListHTML,
 vVastuHTML,
 pListHTML,
 predictionHTML,
+puranaHTML,
 titleText
 };
 }
@@ -5122,6 +5241,8 @@ document.getElementById('vedic-tasks-list').innerHTML = targetMission.vListHTML;
 document.getElementById('lalkitab-tasks-list').innerHTML = targetMission.lListHTML;
 document.getElementById('vastu-tasks-list').innerHTML = targetMission.vVastuHTML;
 document.getElementById('practical-tasks-list').innerHTML = targetMission.pListHTML;
+const puranaListEl = document.getElementById('vishnupuran-tasks-list');
+if (puranaListEl) puranaListEl.innerHTML = targetMission.puranaHTML;
 document.getElementById('coach-result-title').innerText = targetMission.titleText;
 const astroPredEl = document.getElementById('coach-astrological-prediction');
 if (astroPredEl) astroPredEl.innerHTML = targetMission.predictionHTML;
@@ -5147,6 +5268,9 @@ localStorage.setItem('today_mission_vastu_en', missionEn.vVastuHTML);
 localStorage.setItem('today_mission_vastu_hi', missionHi.vVastuHTML);
 localStorage.setItem('today_mission_practical_en', missionEn.pListHTML);
 localStorage.setItem('today_mission_practical_hi', missionHi.pListHTML);
+localStorage.setItem('today_mission_vishnupuran_en', missionEn.puranaHTML);
+localStorage.setItem('today_mission_vishnupuran_hi', missionHi.puranaHTML);
+localStorage.setItem('today_mission_vishnupuran', targetMission.puranaHTML);
 
 // Raw text content values for Dashboard Doable Quest Cards
 // We create temp elements to extract text safely for both languages
@@ -6090,6 +6214,22 @@ icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="curre
           xp: 15,
           color: '#2ecc71',
           icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
+        });
+      }
+
+      // 5. SACRED VISHNU PURANA SANKALPA TASK FOR TODAY'S GOAL
+      const pKey = (normGoal === 'job' || normGoal === 'business' || normGoal === 'debt' || normGoal === 'marriage' || normGoal === 'baby' || normGoal === 'property' || normGoal === 'health') ? normGoal : 'custom';
+      const pRemedy = (typeof vishnuPuranaGoalRemedies !== 'undefined' && vishnuPuranaGoalRemedies[pKey]) ? vishnuPuranaGoalRemedies[pKey] : null;
+      if (pRemedy) {
+        const pTitle = isHi ? pRemedy.titleHi : pRemedy.titleEn;
+        const pAction = isHi ? pRemedy.actionHi : pRemedy.actionEn;
+        tasks.push({
+          category: 'vedic',
+          title: pTitle,
+          text: pAction + ' [' + pRemedy.stotraSanskrit + ']',
+          xp: 25,
+          color: '#E8C879',
+          icon: '<svg class="animated-icon-glow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>'
         });
       }
 
@@ -10674,36 +10814,39 @@ const dashaPeriods = {Ketu:7, Venus:20, Sun:6, Moon:10, Mars:7, Rahu:18, Jupiter
 const dashaPeriodOrder = ['Ketu','Venus','Sun','Moon','Mars','Rahu','Jupiter','Saturn','Mercury'];
 
 function getNakshatra(siderealLon) {
-const idx = Math.floor(siderealLon / (360/27));
-return nakshatras[Math.min(idx, 26)];
+  if (typeof siderealLon !== 'number' || isNaN(siderealLon)) return (typeof nakshatras !== 'undefined' && nakshatras[0]) ? nakshatras[0] : { name: 'Ashwini', lord: 'Ketu', num: 1 };
+  const normalized = ((siderealLon % 360) + 360) % 360;
+  const idx = Math.floor(normalized / (360/27));
+  return (typeof nakshatras !== 'undefined' && nakshatras[Math.min(idx, 26)]) ? nakshatras[Math.min(idx, 26)] : { name: 'Ashwini', lord: 'Ketu', num: 1 };
 }
 
 function computeDasha(moonLon, birthYear, birthMonth, birthDay) {
-const nak = getNakshatra(moonLon);
-const nakLord = nak.lord;
-const nakDeg = moonLon % (360/27);
-const nakFraction = nakDeg / (360/27);
-const totalPeriod = dashaPeriods[nakLord];
-const remainingAtBirth = totalPeriod * (1 - nakFraction);
-const birthDate = new Date(birthYear, birthMonth-1, birthDay);
-const now = new Date();
-let cursor = new Date(birthDate);
-let orderIdx = dashaPeriodOrder.indexOf(nakLord);
-let found = null;
-let yearsLeft = remainingAtBirth;
+  const nak = getNakshatra(moonLon);
+  const nakLord = (nak && nak.lord) ? nak.lord : 'Sun';
+  const validMoonLon = (typeof moonLon === 'number' && !isNaN(moonLon)) ? moonLon : 0;
+  const nakDeg = ((validMoonLon % (360/27)) + (360/27)) % (360/27);
+  const nakFraction = nakDeg / (360/27);
+  const totalPeriod = dashaPeriods[nakLord] || 6;
+  const remainingAtBirth = totalPeriod * (1 - nakFraction);
+  const birthDate = new Date(birthYear || 1990, (birthMonth || 1) - 1, birthDay || 1);
+  const now = new Date();
+  let cursor = new Date(birthDate);
+  let orderIdx = dashaPeriodOrder.indexOf(nakLord);
+  if (orderIdx === -1) orderIdx = 0;
+  let found = null;
+  let yearsLeft = remainingAtBirth;
 
-for (let i = 0; i < 20; i++) {
-const planet = dashaPeriodOrder[(orderIdx + i) % 9];
-const years = i === 0 ? yearsLeft : dashaPeriods[planet];
-const endDate = new Date(cursor.getTime() + years * 365.25 * 24 * 3600 * 1000);
-if (now >= cursor && now < endDate) {
-found = {planet, start: new Date(cursor), end: endDate};
-break;
-}
-cursor = endDate;
-if (i === 0) yearsLeft = 0;
-}
-return found || {planet: nakLord, start: birthDate, end: new Date(birthDate.getFullYear()+7, birthMonth-1, birthDay)};
+  for (let i = 0; i < 20; i++) {
+    const planet = dashaPeriodOrder[(orderIdx + i) % 9];
+    const years = i === 0 ? yearsLeft : dashaPeriods[planet];
+    const endDate = new Date(cursor.getTime() + years * 365.25 * 24 * 3600 * 1000);
+    if (now >= cursor && now < endDate) {
+      found = {planet, start: new Date(cursor), end: endDate};
+      break;
+    }
+    cursor = endDate;
+  }
+  return found || {planet: nakLord, start: birthDate, end: new Date()};
 }
 
 // Lagna meanings EN+HI
