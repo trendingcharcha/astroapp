@@ -11801,23 +11801,70 @@ if (mTimeline) {
   `;
 }
 
-// Dynamic Spouse Persona derived from 7th Lord
+// Dynamic Multi-Factorial Spouse Persona (7th House, Element, Lord Placement & Jaimini Darakaraka)
 const spouseTags = document.getElementById('k-spouse-tags');
 if (spouseTags) {
-  const spouseTraitsMap = {
-    'Sun': isHi ? ["प्रतिष्ठित एवं स्वाभिमानी", "नेतृत्व क्षमता", "सरकारी/कॉरपोरेट पद", "पूर्व दिशा से"] : ["Authoritative & High Self-Respect", "Leadership Role", "Corporate/Govt Background", "From East Direction"],
-    'Moon': isHi ? ["भावुक एवं देखभाल करने वाले", "आकर्षक व्यक्तित्व", "पारिवारिक मूल्य", "उत्तर-पश्चिम दिशा से"] : ["Caring & Intuitive", "Charming Personality", "Family-Oriented Values", "From North-West Direction"],
-    'Mars': isHi ? ["साहसी एवं ऊर्जावान", "तकनीकी/खेल रुचि", "प्रखर स्वभाव", "दक्षिण दिशा से"] : ["Energetic & Bold", "Technical/Athletic Drive", "Passionate Nature", "From South Direction"],
-    'Mercury': isHi ? ["बुद्धिमान एवं प्रखर", "मधुर वाणी", "व्यावसायिक सोच", "उत्तर दिशा से"] : ["Intellectual & Sharp", "Witty & Communicative", "Business-Minded", "From North Direction"],
-    'Jupiter': isHi ? ["ज्ञानी एवं आध्यात्मिक", "आदरणीय परिवार", "संस्कारवान", "उत्तर-पूर्व दिशा से"] : ["Wise & Spiritual", "Respected Family Background", "Strong Moral Values", "From North-East Direction"],
-    'Venus': isHi ? ["रचनात्मक एवं सुंदर", "आकर्षक शैली", "कलाप्रिय", "दक्षिण-पूर्व दिशा से"] : ["Creative & Elegant", "Attractive Persona", "Artistic Refinement", "From South-East Direction"],
-    'Saturn': isHi ? ["गंभीर एवं व्यावहारिक", "अनुशासित एवं वफादार", "स्थिर सोच", "पश्चिम दिशा से"] : ["Mature & Practical", "Disciplined & Loyal", "Grounded Temperament", "From West Direction"]
+  const seventhElement = ["Fire", "Earth", "Air", "Water", "Fire", "Earth", "Air", "Water", "Fire", "Earth", "Air", "Water"][seventhSign];
+  const seventhElementHi = ["अग्नि तत्व", "पृथ्वी तत्व", "वायु तत्व", "जल तत्व", "अग्नि तत्व", "पृथ्वी तत्व", "वायु तत्व", "जल तत्व", "अग्नि तत्व", "पृथ्वी तत्व", "वायु तत्व", "जल तत्व"][seventhSign];
+
+  // 7th Lord placement house
+  const seventhLordPl = placements.find(p => p.name === seventhLord);
+  let seventhLordHouse = 7;
+  if (seventhLordPl) {
+    seventhLordHouse = ((seventhLordPl.sign - lagnaSign + 12) % 12) + 1;
+  }
+
+  // Planets occupying 7th house
+  const seventhHousePlanets = placements.filter(p => p.name !== 'Lagna' && (((p.sign - lagnaSign + 12) % 12) + 1 === 7));
+
+  // Jaimini Darakaraka (DK - lowest degree planet among 7 physical planets)
+  const sortedByDegreeAsc = placements.filter(p => !['Lagna', 'Rahu', 'Ketu'].includes(p.name)).sort((a, b) => (a.deg || 15) - (b.deg || 15));
+  const dkPlanet = sortedByDegreeAsc[0] ? sortedByDegreeAsc[0].name : seventhLord;
+  const dkPlanetHi = (typeof planetNamesHi !== 'undefined' && planetNamesHi[dkPlanet]) ? planetNamesHi[dkPlanet] : dkPlanet;
+
+  // Directions based on 7th sign
+  const dirMapEn = { 0: 'East', 4: 'East', 8: 'East', 1: 'South', 5: 'South', 9: 'South', 2: 'West', 6: 'West', 10: 'West', 3: 'North', 7: 'North', 11: 'North' };
+  const dirMapHi = { 0: 'पूर्व दिशा', 4: 'पूर्व दिशा', 8: 'पूर्व दिशा', 1: 'दक्षिण दिशा', 5: 'दक्षिण दिशा', 9: 'दक्षिण दिशा', 2: 'पश्चिम दिशा', 6: 'पश्चिम दिशा', 10: 'पश्चिम दिशा', 3: 'उत्तर दिशा', 7: 'उत्तर दिशा', 11: 'उत्तर दिशा' };
+  const originDir = isHi ? ('जन्म स्थान से ' + (dirMapHi[seventhSign] || 'उत्तर दिशा')) : ('From ' + (dirMapEn[seventhSign] || 'North') + ' Direction');
+
+  // Element-based traits
+  const elementTraits = {
+    'Fire': isHi ? ["साहसी एवं आत्मविश्वासी", "नेतृत्व एवं स्पष्टवादी स्वभाव"] : ["Bold & Self-Confident", "Leadership & Direct Nature"],
+    'Earth': isHi ? ["व्यावहारिक एवं अनुशासित", "वित्तीय समझ एवं स्थिर स्वभाव"] : ["Practical & Disciplined", "Financially Prudent & Grounded"],
+    'Air': isHi ? ["बुद्धिमान एवं संवादप्रिय", "आधुनिक सोच एवं सामाजिक आकर्षण"] : ["Intellectual & Communicative", "Modern Outlook & Social Charm"],
+    'Water': isHi ? ["भावुक एवं देखभाल करने वाले", "गहन समझ एवं परिवार-उन्मुख"] : ["Empathetic & Deeply Caring", "Intuitive & Family-Oriented"]
   };
 
-  const traits = spouseTraitsMap[seventhLord] || spouseTraitsMap['Mercury'];
-  spouseTags.innerHTML = traits.map(t => `<span style="background:rgba(231,76,60,0.15); border:1px solid #e74c3c; color:#ff6b6b; border-radius:14px; padding:4px 10px; font-size:0.75rem; font-weight:bold;">${t}</span>`).join('');
-}
+  // Planet specific traits
+  const planetTraits = {
+    'Sun': isHi ? ["प्रतिष्ठित एवं स्वाभिमानी व्यक्तित्व", "प्रशासनिक व उच्च परिवार"] : ["Authoritative & Dignified Personality", "High Social/Executive Standing"],
+    'Moon': isHi ? ["सौम्य, आकर्षक एवं दयालु", "सहानुभूतिपूर्ण दृष्टिकोण"] : ["Charming & Gentle Demeanor", "Nurturing & Warm Heart"],
+    'Mars': isHi ? ["ऊर्जावान, स्पष्ट व साहसी", "तकनीकी व सक्रिय जीवनशैली"] : ["Energetic, Driven & Courageous", "Active & Technical Mindset"],
+    'Mercury': isHi ? ["प्रखर बुद्धि एवं मधुर वाणी", "व्यावसायिक एवं तार्किक सोच"] : ["Witty & Sweet Spoken", "Analytical & Business-Savvy"],
+    'Jupiter': isHi ? ["ज्ञानी, आध्यात्मिक व आदरणीय", "संस्कारवान एवं मार्गदर्शक"] : ["Wise, Spiritual & Respected", "High Moral Values & Guiding Mind"],
+    'Venus': isHi ? ["अत्यंत सुंदर एवं कलाप्रेमी", "सृजनात्मक व सुरुचिपूर्ण शैली"] : ["Graceful, Artistic & Refined", "Aesthetic Charm & Creative"],
+    'Saturn': isHi ? ["गंभीर, वफादार एवं परिपक्व", "कठिन परिस्थितियों में दृढ़"] : ["Mature, Loyal & Patient", "Steadfast & Highly Reliable"]
+  };
 
+  const traitPool = [];
+  if (elementTraits[seventhElement]) traitPool.push(...elementTraits[seventhElement]);
+  if (planetTraits[seventhLord]) traitPool.push(...planetTraits[seventhLord]);
+  seventhHousePlanets.forEach(p => {
+    if (planetTraits[p.name]) traitPool.push(...planetTraits[p.name]);
+  });
+  if (planetTraits[dkPlanet]) traitPool.push(...planetTraits[dkPlanet]);
+  traitPool.push(originDir);
+
+  const uniqueTraits = Array.from(new Set(traitPool)).slice(0, 4);
+
+  const pillsHtml = uniqueTraits.map(t => `<span style="background:rgba(231,76,60,0.15); border:1px solid #e74c3c; color:#ff6b6b; border-radius:14px; padding:5px 12px; font-size:0.75rem; font-weight:700; display:inline-flex; align-items:center; gap:4px; box-shadow:0 2px 8px rgba(0,0,0,0.2);">❤️ ${t}</span>`).join('');
+
+  const derivationHtml = isHi 
+    ? `<div style="width:100%; color:var(--text-muted); font-size:0.72rem; margin-top:6px; line-height:1.4;">📐 ${signNamesHi[seventhSign]} सप्तम भाव (${seventhElementHi}), सप्तमेश (${signLordsHi[seventhSign]} भाव ${seventhLordHouse} में) एवं दाराकारक (${dkPlanetHi}) के आधार पर संगणित।</div>`
+    : `<div style="width:100%; color:var(--text-muted); font-size:0.72rem; margin-top:6px; line-height:1.4;">📐 Calculated from your 7th House in ${signNames[seventhSign]} (${seventhElement} Element), 7th Lord (${seventhLord} in H${seventhLordHouse}), and Darakaraka (${dkPlanet}) alignment.</div>`;
+
+  spouseTags.innerHTML = pillsHtml + derivationHtml;
+}
 // ── AUTHENTIC MANGLIK & KALSARPA DOSHA EVALUATION (ZERO HARDCODED CLEAR) ──
 const doshaSummary = document.getElementById('k-dosha-alerts-summary');
 if (doshaSummary) {
@@ -11958,38 +12005,44 @@ pColors.innerHTML = pList.map((c, idx) => `<span style="background:${idx===0?'#f
 dColors.innerHTML = dList.map(c => `<span style="background:#34495e; color:#fff; padding:2px 6px; border-radius:4px; font-size:0.7rem; font-weight:bold;">${c}</span>`).join('');
 }
 
-// Dynamic Financial Diet derived from 2nd House Lord
+// Dynamic Multi-Factorial Financial Diet (2nd House, Sign Element, 2nd Lord Placement & 11th Lord)
 const secondHouseSign = (lagnaSign + 1) % 12;
 const secondLord = signLords[secondHouseSign];
+const secondElement = ["Fire", "Earth", "Air", "Water", "Fire", "Earth", "Air", "Water", "Fire", "Earth", "Air", "Water"][secondHouseSign];
+const secondElementHi = ["अग्नि तत्व", "पृथ्वी तत्व", "वायु तत्व", "जल तत्व", "अग्नि तत्व", "पृथ्वी तत्व", "वायु तत्व", "जल तत्व", "अग्नि तत्व", "पृथ्वी तत्व", "वायु तत्व", "जल तत्व"][secondHouseSign];
+
+const secondLordPl = placements.find(p => p.name === secondLord);
+let secondLordHouse = 2;
+if (secondLordPl) {
+  secondLordHouse = ((secondLordPl.sign - lagnaSign + 12) % 12) + 1;
+}
+
+const eleventhHouseSign = (lagnaSign + 10) % 12;
+const eleventhLord = signLords[eleventhHouseSign];
+
 const finDiet = document.getElementById('k-financial-diet-text');
 if (finDiet) {
-const dietMapEn = {
-'Sun': `For ${userName} (2nd Lord Sun): Drinking water stored in a copper vessel on Sundays activates wealth retention. Avoid skipping morning meals to prevent career stress.`,
-'Moon': `For ${userName} (2nd Lord Moon): Consuming fresh dairy products and avoiding cold liquid waste on Mondays stabilizes daily cash flow.`,
-'Mars': `For ${userName} (2nd Lord Mars): Avoid overly spicy or junk foods on Tuesdays. Consuming jaggery or lentils protects impulsive financial drains.`,
-'Mercury': `For ${userName} (2nd Lord Mercury): Consuming green leafy sprouts on Wednesdays enhances commercial decision-making and wealth intake.`,
-'Jupiter': `For ${userName} (2nd Lord Jupiter): Consuming Sattvic meals with turmeric on Thursdays protects your bank savings and expansion assets.`,
-'Venus': `For ${userName} (2nd Lord Venus): Avoid excessive evening sweets and luxury waste on Fridays to maintain steady financial accumulation.`,
-'Saturn': `For ${userName} (2nd Lord Saturn): Consuming sesame seeds and avoiding alcohol or heavy oil on Saturdays stabilizes long-term asset security.`
-};
+  const elementDietEn = {
+    'Fire': 'Prioritize warm, freshly cooked sattvic meals. Avoid skipping breakfast, and consume water stored in a copper vessel on auspicious mornings to activate executive wealth retention.',
+    'Earth': 'Incorporate whole grains, root vegetables, and nuts. Maintain regular meal schedules to ground your financial investments and steady long-term capital accumulation.',
+    'Air': 'Favor light, nutrient-rich greens, sprouts, and hydrating herbal infusions. Avoid rushed eating during high-stakes financial negotiations to preserve crisp decision-making.',
+    'Water': 'Include pure dairy, coconut water, and soothing natural fluids. Avoid excessive cold liquids at night to balance cash flow stability and emotional wealth security.'
+  };
 
-const dietMapHi = {
-'Sun': `${userName} के लिए (द्वितीयेश सूर्य): रविवार को तांबे के पात्र का जल पीने से धन संचय बढ़ता है। भोजन न छोड़ें।`,
-'Moon': `${userName} के लिए (द्वितीयेश चंद्र): सोमवार को ताजे डेयरी उत्पादों का सेवन करने से दैनिक नकदी प्रवाह स्थिर रहता है।`,
-'Mars': `${userName} के लिए (द्वितीयेश मंगल): मंगलवार को अत्यधिक मसालेदार भोजन से बचें। गुड़ व दालों का सेवन वित्तीय नुकसान से बचाता है।`,
-'Mercury': `${userName} के लिए (द्वितीयेश बुध): बुधवार को हरी पत्तेदार सब्जियों व अंकुरित अनाज का सेवन वित्तीय निर्णय क्षमता को मजबूत करता है।`,
-'Jupiter': `${userName} के लिए (द्वितीयेश गुरु): गुरुवार को हल्दी युक्त सात्विक भोजन करने से आपकी बैंक बचत और धन वृद्धि सुरक्षित रहती है।`,
-'Venus': `${userName} के लिए (द्वितीयेश शुक्र): शुक्रवार को अत्यधिक मीठे व अनावश्यक खर्चों से बचें ताकि धन संचय बना रहे।`,
-'Saturn': `${userName} के लिए (द्वितीयेश शनि): शनिवार को तिल का सेवन करने व तामसिक भोजन से बचने से दीर्घकालिक संपत्ति सुरक्षा मिलती है।`
-};
+  const elementDietHi = {
+    'Fire': 'ताजे, गर्म व सात्विक भोजन को प्राथमिकता दें। सुबह का नाश्ता न छोड़ें और तांबे के पात्र का जल पीने से धन संचय व निर्णय क्षमता मजबूत होती है।',
+    'Earth': 'साबुत अनाज, दालें व मेवे आहार में शामिल करें। समय पर भोजन करने से दीर्घकालिक वित्तीय निवेश व पूंजी सुरक्षा को बल मिलता है।',
+    'Air': 'हरी पत्तेदार सब्जियां, अंकुरित अनाज व हर्बल पेय लें। जल्दबाजी में भोजन करने से बचें ताकि वित्तीय सौदों में एकाग्रता बनी रहे।',
+    'Water': 'ताजे डेयरी उत्पाद, नारियल पानी व शुद्ध जल का सेवन करें। रात में अत्यधिक ठंडे खाद्य पदार्थों से बचें ताकि नकदी प्रवाह स्थिर रहे।'
+  };
 
-finDiet.innerHTML = isHi ? (dietMapHi[secondLord] || dietMapHi['Mercury']) : (dietMapEn[secondLord] || dietMapEn['Mercury']);
+  const dietDesc = isHi 
+    ? `${userName} के लिए (द्वितीय भाव: ${signNamesHi[secondHouseSign]} - ${secondElementHi}, द्वितीयेश: ${signLordsHi[secondHouseSign]} भाव ${secondLordHouse} में एवं लाभेश: ${signLordsHi[eleventhHouseSign]}): ${elementDietHi[secondElement]}<div style="margin-top:4px; font-size:0.7rem; color:var(--gold);">📐 द्वितीयेश (${signLordsHi[secondHouseSign]}) व ${secondElementHi} ऊर्जा संतुलन अनुसार संगणित।</div>`
+    : `For ${userName} (2nd House: ${signNames[secondHouseSign]} - ${secondElement} Element, 2nd Lord: ${secondLord} in H${secondLordHouse}, Gains Lord: ${eleventhLord}): ${elementDietEn[secondElement]}<div style="margin-top:4px; font-size:0.7rem; color:var(--gold);">📐 Synthesized from your 2nd House (${secondElement} Element) and 2nd/11th Lords alignment.</div>`;
+
+  finDiet.innerHTML = dietDesc;
 }
 }
-
-
-
-
 
 async function generateChart(e) {
 if (e && typeof e.preventDefault === 'function') e.preventDefault();
