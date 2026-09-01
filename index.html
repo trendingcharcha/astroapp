@@ -11741,32 +11741,63 @@ if (careerPills) {
   
   careerPills.innerHTML = pillsHtml + derivationHtml;
 }
-// ── COMPREHENSIVE JOB VS BUSINESS DECISION SYNTHESIS ──
+// ── DEEP MULTI-FACTORIAL JOB VS BUSINESS DECISION SYNTHESIS ──
 const sixthSign = (lagnaSign + 5) % 12;
 const sixthLord = signLords[sixthSign];
 const seventhSignJob = (lagnaSign + 6) % 12;
 const seventhLordJob = signLords[seventhSignJob];
 
-let jobScore = 40;
-let bizScore = 40;
+let jobScore = 50;
+let bizScore = 50;
 
-// 10th Lord affinity
-if (['Sun', 'Saturn', 'Mars'].includes(tenthLord)) jobScore += 16;
+// 1. 10th Lord Planet Nature & 10th Sign Element
+if (tenthElement === 'Fire') { jobScore += 12; }
+else if (tenthElement === 'Earth') { jobScore += 10; bizScore += 5; }
+else if (tenthElement === 'Air') { bizScore += 14; }
+else if (tenthElement === 'Water') { jobScore += 6; bizScore += 8; }
+
+if (['Sun', 'Saturn', 'Mars'].includes(tenthLord)) jobScore += 14;
 if (['Mercury', 'Venus', 'Rahu'].includes(tenthLord)) bizScore += 16;
-if (tenthLord === 'Jupiter') { jobScore += 8; bizScore += 8; }
+if (['Jupiter', 'Moon'].includes(tenthLord)) { jobScore += 7; bizScore += 7; }
 
-// 6th House (Job/Service) vs 7th/3rd/11th Houses (Business/Trade/Scale)
-const h6Pl = placements.filter(p => p.name !== 'Lagna' && (((p.sign - lagnaSign + 12) % 12) + 1 === 6));
-const h7Pl = placements.filter(p => p.name !== 'Lagna' && (((p.sign - lagnaSign + 12) % 12) + 1 === 7));
-const h3Pl = placements.filter(p => p.name !== 'Lagna' && (((p.sign - lagnaSign + 12) % 12) + 1 === 3));
-const h11Pl = placements.filter(p => p.name !== 'Lagna' && (((p.sign - lagnaSign + 12) % 12) + 1 === 11));
+// 2. 10th Lord Placement House
+if ([1, 6, 10].includes(tenthLordHouse)) jobScore += 12;
+if ([3, 7, 9, 11].includes(tenthLordHouse)) bizScore += 14;
 
-jobScore += h6Pl.length * 7;
-bizScore += (h7Pl.length * 7) + (h3Pl.length * 4) + (h11Pl.length * 4);
+// 3. 6th Lord vs 7th Lord Placement House
+const sixthLordPl = placements.find(p => p.name === sixthLord);
+if (sixthLordPl) {
+  const sixthLordH = ((sixthLordPl.sign - lagnaSign + 12) % 12) + 1;
+  if ([6, 10, 1].includes(sixthLordH)) jobScore += 10;
+}
+const seventhLordPl = placements.find(p => p.name === seventhLordJob);
+if (seventhLordPl) {
+  const seventhLordH = ((seventhLordPl.sign - lagnaSign + 12) % 12) + 1;
+  if ([7, 3, 11, 2].includes(seventhLordH)) bizScore += 12;
+}
 
-if ([1, 6, 10].includes(tenthLordHouse)) jobScore += 10;
-if ([3, 7, 9, 11].includes(tenthLordHouse)) bizScore += 10;
+// 4. Planets occupying 6th, 7th, 3rd, 11th houses
+placements.forEach(p => {
+  if (p.name === 'Lagna') return;
+  const h = ((p.sign - lagnaSign + 12) % 12) + 1;
+  if (h === 6) {
+    jobScore += ['Sun', 'Mars', 'Saturn'].includes(p.name) ? 12 : 7;
+  } else if (h === 7) {
+    bizScore += ['Mercury', 'Venus', 'Rahu', 'Jupiter'].includes(p.name) ? 14 : 8;
+  } else if (h === 3) {
+    bizScore += ['Mars', 'Mercury', 'Rahu'].includes(p.name) ? 10 : 5;
+  } else if (h === 11) {
+    bizScore += ['Jupiter', 'Mercury', 'Venus'].includes(p.name) ? 10 : 6;
+    jobScore += ['Sun', 'Saturn'].includes(p.name) ? 8 : 4;
+  }
+});
 
+// 5. Jaimini Amatyakaraka (AmK)
+if (['Mercury', 'Venus', 'Rahu'].includes(amkPlanet)) bizScore += 12;
+else if (['Sun', 'Saturn', 'Mars'].includes(amkPlanet)) jobScore += 12;
+else { jobScore += 6; bizScore += 6; }
+
+// 6. Normalization
 const totalWeight = jobScore + bizScore;
 const jobRatio = Math.round((jobScore / totalWeight) * 100);
 const bizRatio = 100 - jobRatio;
