@@ -6318,13 +6318,13 @@ const sanatanFestivalAlmanac = [
   { id: 'sharad_navratri', year: 2025, startM: 9, startD: 22, endM: 10, endD: 2, titleEn: 'Sharad Navratri & Durga Shakti Aradhana', titleHi: 'शरद नवरात्रि एवं नवदुर्गा शक्ति आराधना', badgeEn: 'Sharad Navratri', badgeHi: 'शरद नवरात्रि', deity: 'Durga', planet: 'Rahu' },
   { id: 'diwali', year: 2025, startM: 10, startD: 18, endM: 10, endD: 23, titleEn: 'Shubh Deepavali, Dhanteras & Maha Lakshmi Kripa', titleHi: 'शुभ दीपावली, धनतेरस एवं महालक्ष्मी कृपा', badgeEn: 'Deepavali', badgeHi: 'दीपावली', deity: 'Lakshmi', planet: 'Venus' },
 
-  // 2026 (Astronomically Verified)
+  // 2026 (Astronomically Exact Spans)
   { id: 'shivratri', year: 2026, startM: 2, startD: 15, endM: 2, endD: 15, titleEn: 'Maha Shivratri & Shiva-Shakti Vivah', titleHi: 'महाशिवरात्रि एवं शिव-पार्वती विवाह', badgeEn: 'Maha Shivratri', badgeHi: 'महाशिवरात्रि', deity: 'Shiva', planet: 'Moon' },
   { id: 'holi', year: 2026, startM: 3, startD: 3, endM: 3, endD: 4, titleEn: 'Holika Dahan & Shubh Holi Utsav', titleHi: 'होलिका दहन एवं शुभ होली उत्सव', badgeEn: 'Holi Utsav', badgeHi: 'होली पर्व', deity: 'Narasimha', planet: 'Jupiter' },
   { id: 'chaitra_navratri', year: 2026, startM: 3, startD: 19, endM: 3, endD: 27, titleEn: 'Chaitra Navratri & Shri Rama Navami', titleHi: 'चैत्र नवरात्रि एवं श्रीराम नवमी', badgeEn: 'Chaitra Navratri', badgeHi: 'चैत्र नवरात्रि', deity: 'Durga & Rama', planet: 'Sun' },
   { id: 'akshaya_tritiya', year: 2026, startM: 4, startD: 19, endM: 4, endD: 19, titleEn: 'Akshaya Tritiya & Kubera-Lakshmi Siddhi', titleHi: 'अक्षय तृतीया एवं कुबेर-लक्ष्मी सिद्धि', badgeEn: 'Akshaya Tritiya', badgeHi: 'अक्षय तृतीया', deity: 'Lakshmi', planet: 'Venus' },
   { id: 'shravan', year: 2026, startM: 7, startD: 30, endM: 8, endD: 28, titleEn: 'Holy Shravan Maas & Mahadev Aradhana', titleHi: 'पवित्र श्रावण मास एवं महादेव आराधना', badgeEn: 'Shravan Maas', badgeHi: 'श्रावण मास', deity: 'Shiva', planet: 'Moon' },
-  { id: 'janmashtami', year: 2026, startM: 8, startD: 29, endM: 9, endD: 5, titleEn: 'Shri Krishna Janmashtami & Bal Gopal Blessing', titleHi: 'श्रीकृष्ण जन्माष्टमी एवं बाल गोपाल आशीर्वाद', badgeEn: 'Janmashtami', badgeHi: 'जन्माष्टमी', deity: 'Krishna', planet: 'Mercury' },
+  { id: 'janmashtami', year: 2026, startM: 9, startD: 4, endM: 9, endD: 5, titleEn: 'Shri Krishna Janmashtami & Bal Gopal Blessing', titleHi: 'श्रीकृष्ण जन्माष्टमी एवं बाल गोपाल आशीर्वाद', badgeEn: 'Janmashtami', badgeHi: 'जन्माष्टमी', deity: 'Krishna', planet: 'Mercury' },
   { id: 'ganesh_chaturthi', year: 2026, startM: 9, startD: 14, endM: 9, endD: 24, titleEn: 'Ganesh Chaturthi & Ganeshotsav Vighnaharta Healing', titleHi: 'गणेश चतुर्थी एवं गणेशोत्सव विघ्नहर्ता पूजन', badgeEn: 'Ganesh Utsav', badgeHi: 'गणेश उत्सव', deity: 'Ganesha', planet: 'Ketu' },
   { id: 'pitru_paksha', year: 2026, startM: 9, startD: 26, endM: 10, endD: 10, titleEn: 'Pitru Paksha Shraddha & Ancestral Peace', titleHi: 'पितृ पक्ष श्राद्ध एवं पितृ शांति तर्पण', badgeEn: 'Pitru Paksha', badgeHi: 'पितृ पक्ष', deity: 'Pitrus', planet: 'Saturn' },
   { id: 'sharad_navratri', year: 2026, startM: 10, startD: 11, endM: 10, endD: 19, titleEn: 'Sharad Navratri & Durga Shakti Aradhana', titleHi: 'शरद नवरात्रि एवं नवदुर्गा शक्ति आराधना', badgeEn: 'Sharad Navratri', badgeHi: 'शरद नवरात्रि', deity: 'Durga', planet: 'Rahu' },
@@ -6356,43 +6356,44 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
   const lagnaName = signNames[lagnaSign] || 'Aries';
   const lagnaNameHi = signNamesHi[lagnaSign] || 'मेष';
 
-  // 1. Check Multi-Year Festival Almanac
+  const currentNum = m * 100 + d;
+
+  // 1. Check if an active festival is happening TODAY
   const activeFestival = sanatanFestivalAlmanac.find(fest => {
     if (fest.year !== y) return false;
     const startNum = fest.startM * 100 + fest.startD;
     const endNum = fest.endM * 100 + fest.endD;
-    const currentNum = m * 100 + d;
     return (currentNum >= startNum && currentNum <= endNum);
   });
 
   if (activeFestival) {
     const fTitle = isHi ? activeFestival.titleHi : activeFestival.titleEn;
     const fBadge = isHi ? activeFestival.badgeHi : activeFestival.badgeEn;
+    const sectionTag = isHi ? 'वर्तमान पवित्र पर्व' : 'Ongoing Holy Festival';
     
-    // Dynamic Kundali synthesis for this specific festival
     let remEn = '';
     let remHi = '';
 
     if (activeFestival.id === 'janmashtami') {
-      if (lagnaSign === 0 || lagnaSign === 7) { // Mars ruled
+      if (lagnaSign === 0 || lagnaSign === 7) {
         remEn = `${userName} (${lagnaName} Ascendant - Mars Ruled): Offer Makhan-Mishri and Tulsi dal to Laddu Gopal at midnight. Lal Kitab remedy to soothe fiery temperament and bless your career/progeny goals.`;
         remHi = `${userName} (${lagnaNameHi} लग्न - मंगल स्वामी): मध्यरात्रि बाल गोपाल को माखन-मिश्री व तुलसी दल अर्पित करें। लाल किताब अनुसार क्रोध शांति व कर्म/संतान वृद्धि होगी।`;
-      } else if (lagnaSign === 1 || lagnaSign === 6) { // Venus ruled
+      } else if (lagnaSign === 1 || lagnaSign === 6) {
         remEn = `${userName} (${lagnaName} Ascendant - Venus Ruled): Decorate Bal Gopal with yellow flowers and chant "Om Kleem Krishnaya Namah" 108 times for deep relationship harmony and prosperity.`;
         remHi = `${userName} (${lagnaNameHi} लग्न - शुक्र स्वामी): बाल गोपाल का पीले पुष्पों से श्रृंगार करें व 108 बार "ॐ क्लीं कृष्णाय नमः" जपें। वैवाहिक सुख व ऐश्वर्य बढ़ेगा।`;
-      } else if (lagnaSign === 2 || lagnaSign === 5) { // Mercury ruled
+      } else if (lagnaSign === 2 || lagnaSign === 5) {
         remEn = `${userName} (${lagnaName} Ascendant - Mercury Ruled): Chant Santana Gopala or Vishnu Sahasranama shlokas today. Mercury-Krishna alignment accelerates intellect and business expansion.`;
         remHi = `${userName} (${lagnaNameHi} लग्न - बुध स्वामी): आज संतान गोपाल अथवा विष्णु सहस्रनाम का पाठ करें। बुध-कृष्ण संरेखण से प्रखर बुद्धि व व्यापारिक लाभ होगा।`;
-      } else if (lagnaSign === 3) { // Moon ruled
+      } else if (lagnaSign === 3) {
         remEn = `${userName} (${lagnaName} Ascendant - Moon Ruled): Offer saffron milk panchamrit to Lord Krishna. Dissolves mental anxiety and activates joyful emotional security.`;
         remHi = `${userName} (${lagnaNameHi} लग्न - चंद्र स्वामी): भगवान कृष्ण को केसर युक्त दूध-पंचामृत अर्पित करें। मानसिक चिंता दूर होगी व आत्मिक शांति मिलेगी।`;
-      } else if (lagnaSign === 4) { // Sun ruled
+      } else if (lagnaSign === 4) {
         remEn = `${userName} (${lagnaName} Ascendant - Sun Ruled): Light a pure cow-ghee lamp before Lord Krishna facing East for authoritative success, solar vitality, and righteous victory.`;
         remHi = `${userName} (${lagnaNameHi} लग्न - सूर्य स्वामी): पूर्व दिशा में शुद्ध गाय के घी का दीपक जलाकर कृष्ण उपासना करें। पद-प्रतिष्ठा व सूर्य ऊर्जा में वृद्धि होगी।`;
-      } else if (lagnaSign === 8 || lagnaSign === 11) { // Jupiter ruled
+      } else if (lagnaSign === 8 || lagnaSign === 11) {
         remEn = `${userName} (${lagnaName} Ascendant - Jupiter Ruled): Offer yellow peda or ripe bananas to Lord Krishna and donate educational books for rapid wealth and spiritual elevation.`;
         remHi = `${userName} (${lagnaNameHi} लग्न - गुरु स्वामी): बाल गोपाल को पीले पेड़े का भोग लगाएं व धार्मिक पुस्तक दान करें। ज्ञान, भाग्य व धन का विस्तार होगा।`;
-      } else { // Saturn ruled
+      } else {
         remEn = `${userName} (${lagnaName} Ascendant - Saturn Ruled): Offer blue flowers and fragrant Chandan to Lord Krishna. Dissolves Shani delays and brings steady career breakthroughs.`;
         remHi = `${userName} (${lagnaNameHi} लग्न - शनि स्वामी): भगवान कृष्ण को नीले पुष्प व सुगंधित चंदन अर्पित करें। शनि जनित विलंब समाप्त होंगे व करियर में स्थिरता आएगी।`;
       }
@@ -6408,13 +6409,8 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
         remHi = `${userName} (${lagnaNameHi} लग्न - ${lagnaLordHi} स्वामी): गणपति जी को दूर्वा व लाल गुड़हल चढ़ाएं। केतु व राहु जनित समस्त जीवन विघ्न नष्ट होंगे।`;
       }
     } else if (activeFestival.id === 'shravan' || activeFestival.id === 'shivratri') {
-      if (dayOfWeek === 1 || activeFestival.id === 'shivratri') {
-        remEn = `${userName} (${lagnaName} Ascendant): Perform Mahadev Jal-Dugdha Abhishekam with 11 Belpatra for complete health vitality and mental tranquility.`;
-        remHi = `${userName} (${lagnaNameHi} लग्न): 11 बेलपत्र के साथ शिवलिंग पर जल-दुग्धाभिषेक करें। शारीरिक आरोग्य व मानसिक शांति की प्राप्ति होगी।`;
-      } else {
-        remEn = `${userName} (${lagnaName} Ascendant - ${lagnaLord} Ruled): Chant "Om Namah Shivaya" 108 times daily during Shravan Maas and maintain Sattvic diet.`;
-        remHi = `${userName} (${lagnaNameHi} लग्न - ${lagnaLordHi} स्वामी): श्रावण मास में रोज 108 बार 'ॐ नमः शिवाय' जपें एवं पूर्ण सात्विक दिनचर्या अपनाएं।`;
-      }
+      remEn = `${userName} (${lagnaName} Ascendant): Perform Mahadev Jal-Dugdha Abhishekam with 11 Belpatra for complete health vitality and mental tranquility.`;
+      remHi = `${userName} (${lagnaNameHi} लग्न): 11 बेलपत्र के साथ शिवलिंग पर जल-दुग्धाभिषेक करें। शारीरिक आरोग्य व मानसिक शांति की प्राप्ति होगी।`;
     } else if (activeFestival.id === 'sharad_navratri' || activeFestival.id === 'chaitra_navratri') {
       remEn = `${userName} (${lagnaName} Ascendant - ${lagnaLord} Ruled): Light a pure Desi Ghee Akhand lamp for Maa Durga and recite Argala Stotram to conquer obstacles.`;
       remHi = `${userName} (${lagnaNameHi} लग्न - ${lagnaLordHi} स्वामी): मां भगवती के समक्ष शुद्ध देसी घी का दीपक जलाएं व अर्गला स्तोत्र पढ़ें। विजय व सुरक्षा प्राप्त होगी।`;
@@ -6430,26 +6426,89 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
     }
 
     return {
+      sectionTag,
       title: fTitle,
       badge: fBadge,
       remedy: isHi ? remHi : remEn
     };
   }
 
-  // 2. Dynamic Daily Tithi & Vara Fallback (When outside major festival windows)
-  const weekdaysEn = ["Ravivar (Sun) - Surya Aradhana", "Somvar (Moon) - Shiva Alignment", "Mangalwar (Mars) - Hanuman Upasana", "Budhwar (Mercury) - Ganesha Blessing", "Guruwar (Jupiter) - Vishnu Kripa", "Shukrawar (Venus) - Mahalakshmi Siddhi", "Shaniwar (Saturn) - Shani Dev Karma Shanti"];
-  const weekdaysHi = ["रविवार (सूर्य) - सूर्य देव अर्घ्य", "सोमवार (चंद्र) - महादेव शिव संरेखण", "मंगलवार (मंगल) - श्री हनुमान उपासना", "बुधवार (बुध) - गणपति बुद्धि संरेखण", "गुरुवार (गुरु) - भगवान विष्णु कृपा", "शुक्रवार (शुक्र) - महालक्ष्मी समृद्धि सिद्धि", "शनिवार (शनि) - शनि देव कर्म शांति"];
+  // 2. Check for an UPCOMING Festival (within 1 to 5 days)
+  let upcomingFestival = null;
+  let daysUntil = 0;
+  for (const fest of sanatanFestivalAlmanac) {
+    if (fest.year === y) {
+      const startNum = fest.startM * 100 + fest.startD;
+      if (startNum > currentNum) {
+        const festDate = new Date(y, fest.startM - 1, fest.startD);
+        const diffMs = festDate.getTime() - targetDate.getTime();
+        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+        if (diffDays >= 1 && diffDays <= 5) {
+          upcomingFestival = fest;
+          daysUntil = diffDays;
+          break;
+        }
+      }
+    }
+  }
 
+  // 3. Dynamic Daily Planetary Alignment (When outside major festival spans)
+  const weekdaysEn = [
+    "Ravivar (Sun) - Surya Aradhana & Solar Power",
+    "Somvar (Moon) - Shiva Alignment & Mind Peace",
+    "Mangalwar (Mars) - Hanuman Upasana & Courage",
+    "Budhwar (Mercury) - Ganesha Blessing & Intellect Alignment",
+    "Guruwar (Jupiter) - Vishnu Kripa & Wisdom Expansion",
+    "Shukrawar (Venus) - Mahalakshmi Siddhi & Harmony",
+    "Shaniwar (Saturn) - Shani Dev Karma Shanti"
+  ];
+  const weekdaysHi = [
+    "रविवार (सूर्य) - सूर्य देव अर्घ्य एवं आत्मबल",
+    "सोमवार (चंद्र) - महादेव शिव संरेखण एवं मानसिक शांति",
+    "मंगलवार (मंगल) - श्री हनुमान उपासना एवं पराक्रम",
+    "बुधवार (बुध) - गणपति बुद्धि संरेखण एवं व्यापार सिद्धि",
+    "गुरुवार (गुरु) - भगवान विष्णु कृपा एवं ज्ञान विस्तार",
+    "शुक्रवार (शुक्र) - महालक्ष्मी समृद्धि सिद्धि एवं सौंदर्य",
+    "शनिवार (शनि) - शनि देव कर्म शुद्धि एवं ग्रह शांति"
+  ];
+
+  const dailyRemediesEn = {
+    0: `${userName} (${lagnaName} Ascendant): Offer fresh water with a pinch of red kumkum to the rising Sun. Recite Gayatri Mantra 11 times for authority and radiant vitality.`,
+    1: `${userName} (${lagnaName} Ascendant): Perform Jal Abhishekam on Shivling and chant 'Om Namah Shivaya' 21 times to cultivate emotional calm and clear intuition.`,
+    2: `${userName} (${lagnaName} Ascendant): Chant Hanuman Chalisa once and apply a dot of orange sindoor on your forehead for supreme protection and decisive courage.`,
+    3: `${userName} (${lagnaName} Ascendant): Offer green grass (Durva) or whole green moong to Lord Ganesha. Sharpens analytical focus and communication for career growth.`,
+    4: `${userName} (${lagnaName} Ascendant): Light a pure cow-ghee lamp before Lord Vishnu and apply a chandan/turmeric tilak for wisdom, auspiciousness, and financial expansion.`,
+    5: `${userName} (${lagnaName} Ascendant): Light a fragrant ghee lamp in the evening before Maa Lakshmi and wear clean white/pastel attire for marital peace and prosperity.`,
+    6: `${userName} (${lagnaName} Ascendant): Light a mustard oil lamp near a Peepal tree at dusk or feed stray dogs to dissolve karmic delays and steady life foundations.`
+  };
+
+  const dailyRemediesHi = {
+    0: `${userName} (${lagnaNameHi} लग्न): उगते सूर्य को तांबे के पात्र से कुमकुम युक्त जल अर्पित करें व 11 बार गायत्री मंत्र पढ़ें। आत्मबल व प्रतिष्ठा में वृद्धि होगी।`,
+    1: `${userName} (${lagnaNameHi} लग्न): शिवलिंग पर गंगाजल व कच्चा दूध चढ़ाएं और 21 बार 'ॐ नमः शिवाय' जपें। मानसिक शांति व एकाग्रता प्राप्त होगी।`,
+    2: `${userName} (${lagnaNameHi} लग्न): श्री हनुमान चालीसा का पाठ करें और सिंदूर का तिलक लगाएं। भय व बाधाओं का नाश होगा और पराक्रम बढ़ेगा।`,
+    3: `${userName} (${lagnaNameHi} लग्न): भगवान गणेश को 21 दूर्वा दल अर्पित करें व हरी मूंग का दान करें। बुद्धि प्रखर होगी व कार्यक्षेत्र में सफलता मिलेगी।`,
+    4: `${userName} (${lagnaNameHi} लग्न): भगवान विष्णु के समक्ष शुद्ध घी का दीपक जलाएं और केसर/हल्दी का तिलक लगाएं। ज्ञान, मान-सम्मान व धन वृद्धि होगी।`,
+    5: `${userName} (${lagnaNameHi} लग्न): शाम को महालक्ष्मी के सम्मुख घी का दीपक जलाएं व सफेद वस्त्र धारण करें। दांपत्य सुख व अखंड लक्ष्मी कृपा मिलेगी।`,
+    6: `${userName} (${lagnaNameHi} लग्न): शाम को पीपल के नीचे सरसों के तेल का दीपक जलाएं या काले कुत्ते को भोजन दें। शनि कर्म बाधाएं समाप्त होंगी।`
+  };
+
+  const sectionTag = isHi ? 'दैनिक सनातन ग्रह संरेखण' : 'Daily Sanatan Alignment';
   const vTitle = isHi ? weekdaysHi[dayOfWeek] : weekdaysEn[dayOfWeek];
-  const vBadge = isHi ? "दैनिक ग्रह ऊर्जा" : "Daily Planetary Day";
+  
+  let vBadge = isHi ? "दैनिक ग्रह ऊर्जा" : "Daily Planetary Day";
+  if (upcomingFestival) {
+    vBadge = isHi 
+      ? (daysUntil === 1 ? `कल: ${upcomingFestival.badgeHi}` : `${daysUntil} दिन में: ${upcomingFestival.badgeHi}`)
+      : (daysUntil === 1 ? `Tomorrow: ${upcomingFestival.badgeEn}` : `${upcomingFestival.badgeEn} in ${daysUntil}d`);
+  }
 
-  let dRemEn = `${userName} (${lagnaName} Ascendant - ${lagnaLord} Ruled): Offer morning prayers to your ruling planet ${lagnaLord} and align with today's planetary energy for maximum focus.`;
-  let dRemHi = `${userName} (${lagnaNameHi} लग्न - ${lagnaLordHi} स्वामी): प्रातः अपने लग्नेश ${lagnaLordHi} का स्मरण करें और आज के ग्रह स्वामी की अनुकूलता प्राप्त कर दिन को सफल बनाएं।`;
+  const remText = isHi ? (dailyRemediesHi[dayOfWeek] || dailyRemediesHi[0]) : (dailyRemediesEn[dayOfWeek] || dailyRemediesEn[0]);
 
   return {
+    sectionTag,
     title: vTitle,
     badge: vBadge,
-    remedy: isHi ? dRemHi : dRemEn
+    remedy: remText
   };
 }
 
@@ -6457,11 +6516,12 @@ function updateDashboardHolyFestivalCard() {
   const titleEl = document.getElementById('dash-fest-title');
   const badgeEl = document.getElementById('dash-fest-badge');
   const remedyEl = document.getElementById('dash-fest-remedy-text');
+  const tagEl = document.getElementById('dash-fest-month-tag');
   if (!titleEl || !badgeEl || !remedyEl) return;
 
   const isHi = currentAppLang === 'hi';
   const userName = localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || 'Seeker';
-  const lagnaSign = (typeof cachedLagnaSignNum !== 'undefined') ? cachedLagnaSignNum : 0;
+  const lagnaSign = (typeof cachedLagnaSignNum === 'number' && cachedLagnaSignNum >= 0) ? cachedLagnaSignNum : parseInt(localStorage.getItem('kundli_lagna_sign') || localStorage.getItem('user_lagna_sign_num') || '0');
   const lagnaLord = signLords[lagnaSign] || 'Sun';
   const dayNum = (typeof selectedRoadmapDay !== 'undefined') ? selectedRoadmapDay : 1;
 
@@ -6473,6 +6533,9 @@ function updateDashboardHolyFestivalCard() {
   titleEl.innerHTML = data.title;
   badgeEl.innerText = data.badge;
   remedyEl.innerHTML = data.remedy;
+  if (tagEl && data.sectionTag) {
+    tagEl.innerText = data.sectionTag;
+  }
 }
 
 function updateSanatanNotifications() {
@@ -6491,7 +6554,7 @@ function updateSanatanNotifications() {
       const userName = localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || 'Seeker';
       const userGoal = localStorage.getItem('user_goal') || 'job';
       const userProf = localStorage.getItem('user_profession') || 'Professional';
-      const lagnaSign = (typeof cachedLagnaSignNum !== 'undefined') ? cachedLagnaSignNum : 0;
+      const lagnaSign = (typeof cachedLagnaSignNum === 'number' && cachedLagnaSignNum >= 0) ? cachedLagnaSignNum : parseInt(localStorage.getItem('kundli_lagna_sign') || localStorage.getItem('user_lagna_sign_num') || '0');
       const lagnaLord = signLords[lagnaSign] || 'Sun';
       const lagnaName = signNames[lagnaSign] || 'Aries';
       const lagnaNameHi = signNamesHi[lagnaSign] || 'मेष';
