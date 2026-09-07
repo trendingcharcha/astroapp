@@ -2200,9 +2200,17 @@ Partner / Spouse Details
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
 <span><span class="k-lbl-en">Today's Vedic Panchang & Udaya Tithi</span><span class="k-lbl-hi" style="display:none;">आज का वैदिक पंचांग एवं उदया तिथि</span></span>
 </h4>
-<span id="p-maas-paksha" style="font-size: 0.78rem; color: #E8C879; display: block; margin-top: 3px; font-weight: 600;">
-Bhadrapada Maas • Krishna Paksha
-</span>
+<div style="display: flex; align-items: center; gap: 8px; margin-top: 3px; flex-wrap: wrap;">
+  <span id="p-maas-paksha" style="font-size: 0.78rem; color: #E8C879; font-weight: 600;">
+  Bhadrapada Maas • Krishna Paksha
+  </span>
+  <span style="color: rgba(255,255,255,0.3); font-size: 0.75rem;">•</span>
+  <span id="p-location-badge" style="font-size: 0.72rem; color: #a9a6c9; display: inline-flex; align-items: center; gap: 4px;">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    <span id="p-current-city-name" style="color: #fff; font-weight: 600;">Dewas</span>
+    <button type="button" onclick="openLocationPickerModal('panchang')" style="background: none; border: none; color: var(--gold); font-size: 0.72rem; cursor: pointer; text-decoration: underline; padding: 0 2px;">Change</button>
+  </span>
+</div>
 </div>
 <span id="p-udaya-badge" style="background: rgba(232, 200, 121, 0.15); border: 1px solid var(--gold); color: var(--gold); padding: 2px 8px; border-radius: 10px; font-size: 0.68rem; font-weight: bold;">
 Surya Udaya Aligned
@@ -3488,7 +3496,8 @@ H12
 </div>
 </div>
 <div style="background: rgba(232, 200, 121, 0.06); padding: 12px; border-radius: 8px; border-left: 3px solid var(--gold); font-size: 0.85rem; line-height: 1.6;">
-<div style="margin-bottom: 4px;"><strong><span class="k-lbl-en">Birth Details:</span><span class="k-lbl-hi" style="display:none;">जन्म विवरण:</span></strong> <span id="settings-profile-birth" style="color: #A098AE;">--</span></div>
+<div style="margin-bottom: 4px;"><strong><span class="k-lbl-en">Birthplace (Fixed Kundli):</span><span class="k-lbl-hi" style="display:none;">जन्म स्थान (स्थायी कुंडली):</span></strong> <span id="settings-profile-birth" style="color: #A098AE;">--</span></div>
+<div style="margin-bottom: 4px;"><strong><span class="k-lbl-en">Living Location (Hora/Panchang):</span><span class="k-lbl-hi" style="display:none;">वर्तमान स्थान (होरा/पंचांग):</span></strong> <span id="settings-profile-living" style="color: #2ecc71; font-weight: 600;">--</span> <button type="button" onclick="openLocationPickerModal('settings')" style="background: rgba(232,200,121,0.15); border: 1px solid var(--gold); color: var(--gold); border-radius: 6px; padding: 1px 7px; font-size: 0.68rem; cursor: pointer; margin-left: 6px;">Change</button></div>
 <div style="margin-bottom: 4px;"><strong><span class="k-lbl-en">Ascendant / Moon:</span><span class="k-lbl-hi" style="display:none;">लग्न / चंद्र राशि:</span></strong> <span id="settings-profile-kundli" style="color: var(--gold);">--</span></div>
 <div><strong><span class="k-lbl-en">Active Focus Goal:</span><span class="k-lbl-hi" style="display:none;">सक्रिय लक्ष्य:</span></strong> <span id="settings-profile-goal" style="color: #5dade2;">--</span></div>
 </div>
@@ -3618,7 +3627,13 @@ H12
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           <span class="k-lbl-en">Daily Planetary Hora</span><span class="k-lbl-hi" style="display:none;">दैनिक ग्रह होरा चक्र</span>
         </h3>
-        <span id="hora-user-city-tag" style="font-size: 0.72rem; color: var(--text-muted);">New Delhi</span>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 3px;">
+          <span id="hora-user-city-tag" style="font-size: 0.74rem; color: #E8C879; font-weight: 600;">Dewas • Local Solar Time</span>
+          <button type="button" onclick="openLocationPickerModal('hora')" class="btn" style="width: auto; padding: 2px 8px; font-size: 0.68rem; font-weight: 700; border-radius: 10px; background: rgba(232, 200, 121, 0.15); border: 1px solid var(--gold); color: var(--gold); display: inline-flex; align-items: center; gap: 4px; cursor: pointer; margin: 0;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span class="k-lbl-en">Change / GPS</span><span class="k-lbl-hi" style="display:none;">स्थान बदलें</span>
+          </button>
+        </div>
       </div>
 
       <button type="button" onclick="closeHoraModal()" style="background: none; border: none; color: #fff; font-size: 1.3rem; cursor: pointer; padding: 4px 8px; opacity: 0.8;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -3708,6 +3723,65 @@ H12
 </div>
 
 <!-- End phone-shell -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- DUAL-LOCATION PICKER MODAL (CURRENT LIVING CITY SWITCHER) -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div id="location-picker-modal" class="modal" style="display: none; position: fixed; inset: 0; background: rgba(11, 9, 26, 0.94); z-index: 10000; overflow-y: auto; padding: 16px 12px; align-items: center; justify-content: center; backdrop-filter: blur(12px);">
+  <div class="card" style="width: 100%; max-width: 480px; margin: 20px auto; background: linear-gradient(145deg, rgba(22, 17, 45, 0.98), rgba(30, 24, 64, 0.98)); border: 1.5px solid rgba(232, 200, 121, 0.4); border-radius: 20px; padding: 20px; box-shadow: 0 16px 40px rgba(0,0,0,0.7); text-align: left;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid rgba(232, 200, 121, 0.2); padding-bottom: 10px;">
+      <h4 style="color: var(--gold); margin: 0; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span><span class="k-lbl-en">Current Living Location</span><span class="k-lbl-hi" style="display:none;">वर्तमान निवास स्थान</span></span>
+      </h4>
+      <button type="button" onclick="closeLocationPickerModal()" style="background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; padding: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+
+    <p style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.5; margin: 0 0 14px 0;">
+      <span class="k-lbl-en">Your birth chart (Kundali, Lagna, Dasha) stays permanently locked to your <strong>Birth Place</strong>. Setting your <strong>Current Location</strong> aligns your real-time 24-Hour Hora, local Sunrise/Sunset, and Rahu Kaal to your physical surroundings.</span>
+      <span class="k-lbl-hi" style="display:none;">आपकी जन्म कुंडली (लग्न, दशा) आपके <strong>जन्म स्थान</strong> से स्थायी रूप से जुड़ी रहती है। आपका <strong>वर्तमान स्थान</strong> आपके दैनिक होरा, स्थानीय सूर्योदय एवं राहुकाल को वास्तविक सूर्य स्थिति से संरेखित करता है।</span>
+    </p>
+
+    <!-- 1-Click GPS Button -->
+    <div style="margin-bottom: 16px;">
+      <button type="button" id="loc-gps-btn" onclick="detectLocationGPS()" class="btn" style="width: 100%; padding: 11px 14px; font-size: 0.84rem; font-weight: 700; background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(39, 174, 96, 0.15)); border: 1.5px solid #2ecc71; color: #2ecc71; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; cursor: pointer; transition: all 0.2s ease;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polygon points="12 8 16 16 12 14 8 16 12 8"/></svg>
+        <span><span class="k-lbl-en">Use Current GPS Location (1-Click)</span><span class="k-lbl-hi" style="display:none;">वर्तमान जीपीएस स्थान का उपयोग करें</span></span>
+      </button>
+    </div>
+
+    <!-- Divider -->
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+      <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.1);"></div>
+      <span style="font-size: 0.72rem; color: var(--text-muted);"><span class="k-lbl-en">OR SEARCH CITY</span><span class="k-lbl-hi" style="display:none;">या शहर खोजें</span></span>
+      <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.1);"></div>
+    </div>
+
+    <!-- Search Input with Autocomplete -->
+    <div style="position: relative; margin-bottom: 16px;">
+      <input type="text" id="loc-search-input" placeholder="Type city (e.g. Dewas, Indore, Mumbai, London)" oninput="filterLivingCities(this.value)" autocomplete="off" style="width: 100%; background: #14102C; border: 1px solid rgba(232,200,121,0.35); border-radius: 10px; padding: 10px 14px; color: #fff; font-size: 0.88rem; box-sizing: border-box;">
+      <div id="loc-search-suggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: #1A1438; border: 1px solid var(--gold); border-radius: 10px; z-index: 10001; max-height: 180px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.6); margin-top: 4px;"></div>
+    </div>
+
+    <!-- Quick City Selection Chips -->
+    <div style="margin-bottom: 10px;">
+      <span style="font-size: 0.72rem; color: var(--gold); font-weight: 700; display: block; margin-bottom: 6px;"><span class="k-lbl-en">Quick Select:</span><span class="k-lbl-hi" style="display:none;">त्वरित चयन:</span></span>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+        <button type="button" onclick="setCurrentLivingLocation('Dewas', 22.9676, 76.0534, 5.5)" style="background: rgba(232, 200, 121, 0.15); border: 1px solid var(--gold); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 0.74rem; cursor: pointer; font-weight: 600;">Dewas (देवास)</button>
+        <button type="button" onclick="setCurrentLivingLocation('Indore', 22.7196, 75.8577, 5.5)" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 0.74rem; cursor: pointer;">Indore (इंदौर)</button>
+        <button type="button" onclick="setCurrentLivingLocation('Gorakhpur', 26.7606, 83.3732, 5.5)" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 0.74rem; cursor: pointer;">Gorakhpur (गोरखपुर)</button>
+        <button type="button" onclick="setCurrentLivingLocation('Mumbai', 19.0760, 72.8777, 5.5)" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 0.74rem; cursor: pointer;">Mumbai (मुंबई)</button>
+        <button type="button" onclick="setCurrentLivingLocation('New Delhi', 28.6139, 77.2090, 5.5)" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 0.74rem; cursor: pointer;">New Delhi (दिल्ली)</button>
+        <button type="button" onclick="setCurrentLivingLocation('Bengaluru', 12.9716, 77.5946, 5.5)" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 0.74rem; cursor: pointer;">Bengaluru (बेंगलुरु)</button>
+        <button type="button" onclick="setCurrentLivingLocation('Dubai', 25.2048, 55.2708, 4.0)" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 0.74rem; cursor: pointer;">Dubai (दुबई)</button>
+        <button type="button" onclick="setCurrentLivingLocation('London', 51.5074, -0.1278, 1.0)" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 0.74rem; cursor: pointer;">London (लंदन)</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <!-- Astrological Scripts -->
 <script>
@@ -6123,9 +6197,10 @@ icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="curre
 
       if (typeof calculateSolarTimings === 'function' && typeof getJulianDay === 'function' && typeof getPlanetLongitude === 'function') {
         try {
-          const userLat = parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139;
-          const userLng = parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090;
-          const userTz = parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5;
+          const curLoc = (typeof getCurrentLocation === 'function') ? getCurrentLocation() : null;
+          const userLat = (curLoc && curLoc.lat) ? curLoc.lat : (parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139);
+          const userLng = (curLoc && curLoc.lng) ? curLoc.lng : (parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090);
+          const userTz = (curLoc && curLoc.tz) ? curLoc.tz : (parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5);
 
           const solarToday = calculateSolarTimings(targetDate, userLat, userLng, userTz);
           const sHourToday = Math.floor(solarToday.sunriseMins / 60);
@@ -6317,6 +6392,227 @@ if (badge) badge.style.display = 'none';
 }
 }
 
+
+// ═════════════════════════════════════════════════════════════════════
+// DUAL-LOCATION ENGINE: (Birth Location vs. Current Living Location)
+// ═════════════════════════════════════════════════════════════════════
+
+function getCurrentLocation() {
+  const currentCity = localStorage.getItem('user_current_city');
+  const storedPob = localStorage.getItem('user_pob') || localStorage.getItem('kundli_city') || 'New Delhi';
+  const cityName = (currentCity && currentCity.trim()) ? currentCity.trim() : storedPob;
+  const cleanCity = cityName.includes(',') ? cityName.split(',')[0].trim() : cityName;
+
+  let lat = 28.6139;
+  let lng = 77.2090;
+  let tz = 5.5;
+
+  if (currentCity && localStorage.getItem('user_current_lat')) {
+    lat = parseFloat(localStorage.getItem('user_current_lat')) || 28.6139;
+    lng = parseFloat(localStorage.getItem('user_current_lng')) || 77.2090;
+    tz = parseFloat(localStorage.getItem('user_current_timezone')) || 5.5;
+  } else {
+    lat = parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139;
+    lng = parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090;
+    tz = parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5;
+  }
+
+  return { cityName, cleanCity, lat, lng, tz, isCustomLiving: !!(currentCity && currentCity !== storedPob) };
+}
+
+function setCurrentLivingLocation(cityName, lat, lng, tz) {
+  if (!cityName) return;
+  const cleanCity = cityName.includes(',') ? cityName.split(',')[0].trim() : cityName;
+  const numLat = parseFloat(lat) || 28.6139;
+  const numLng = parseFloat(lng) || 77.2090;
+  const numTz = (typeof tz === 'number') ? tz : (parseFloat(tz) || 5.5);
+
+  localStorage.setItem('user_current_city', cleanCity);
+  localStorage.setItem('user_current_lat', String(numLat));
+  localStorage.setItem('user_current_lng', String(numLng));
+  localStorage.setItem('user_current_timezone', String(numTz));
+
+  // Sync to Cloud profile if available
+  if (typeof syncProfileToCloud === 'function') {
+    syncProfileToCloud();
+  }
+
+  // Refresh Panchang Card
+  if (typeof updatePanchangCard === 'function') {
+    updatePanchangCard(currentAppLang);
+  }
+
+  // Refresh Hora UI if open
+  if (typeof renderDailyHoraUI === 'function') {
+    renderDailyHoraUI();
+  }
+
+  // Refresh Festival Card sunrise Parana
+  if (typeof updateDashboardHolyFestivalCard === 'function') {
+    updateDashboardHolyFestivalCard();
+  }
+
+  // Refresh Settings Profile Card
+  if (typeof updateSettingsProfileCard === 'function') {
+    updateSettingsProfileCard(currentAppLang);
+  }
+
+  // Refresh Roadmap tasks for current day
+  if (typeof selectedRoadmapDay !== 'undefined' && typeof renderRoadmapDayTasks === 'function') {
+    renderRoadmapDayTasks(selectedRoadmapDay);
+  }
+
+  const isHi = currentAppLang === 'hi';
+  const msg = isHi 
+    ? `वर्तमान स्थान सफलतापूर्वक "${cleanCity}" सेट किया गया। दैनिक होरा और पंचांग अद्यतन!`
+    : `Current location successfully set to "${cleanCity}". Hora & Panchang updated!`;
+  if (typeof showToast === 'function') showToast(msg);
+
+  closeLocationPickerModal();
+}
+
+let _locationPickerOrigin = 'hora';
+function openLocationPickerModal(origin) {
+  _locationPickerOrigin = origin || 'hora';
+  const modal = document.getElementById('location-picker-modal');
+  if (modal) {
+    modal.style.display = 'flex';
+    const loc = getCurrentLocation();
+    const curLabel = document.getElementById('p-current-city-name');
+    if (curLabel) curLabel.innerText = loc.cleanCity;
+    const input = document.getElementById('loc-search-input');
+    if (input) { input.value = ''; input.focus(); }
+    const sug = document.getElementById('loc-search-suggestions');
+    if (sug) sug.style.display = 'none';
+  }
+}
+
+function closeLocationPickerModal() {
+  const modal = document.getElementById('location-picker-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function detectLocationGPS() {
+  const gpsBtn = document.getElementById('loc-gps-btn');
+  const isHi = currentAppLang === 'hi';
+  if (!navigator.geolocation) {
+    alert(isHi ? 'आपके ब्राउज़र में जीपीएस स्थान उपलब्ध नहीं है।' : 'Geolocation is not supported by your browser/device.');
+    return;
+  }
+
+  if (gpsBtn) {
+    gpsBtn.disabled = true;
+    gpsBtn.innerHTML = `<svg class="animated-icon-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10"/></svg> <span>${isHi ? 'स्थान खोजा जा रहा है...' : 'Detecting GPS...'}</span>`;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      let detectedName = 'Local GPS Position';
+
+      try {
+        const resp = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`, {
+          headers: { 'User-Agent': 'CosmoVedic/1.0 (trendingcharcha@gmail.com)' }
+        });
+        const data = await resp.json();
+        if (data && data.address) {
+          detectedName = data.address.city || data.address.town || data.address.village || data.address.county || data.address.state || 'Local GPS';
+        }
+      } catch (e) {
+        console.warn('Reverse geocode error:', e);
+      }
+
+      const tz = getTimezoneFromCoordinates(lat, lng, detectedName);
+      setCurrentLivingLocation(detectedName, lat, lng, tz);
+
+      if (gpsBtn) {
+        gpsBtn.disabled = false;
+        gpsBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="12 8 16 16 12 14 8 16 12 8"/></svg> <span>${isHi ? 'वर्तमान जीपीएस स्थान का उपयोग करें' : 'Use Current GPS Location (1-Click)'}</span>`;
+      }
+    },
+    (error) => {
+      console.error('GPS error:', error);
+      if (gpsBtn) {
+        gpsBtn.disabled = false;
+        gpsBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="12 8 16 16 12 14 8 16 12 8"/></svg> <span>${isHi ? 'वर्तमान जीपीएस स्थान का उपयोग करें' : 'Use Current GPS Location (1-Click)'}</span>`;
+      }
+      alert(isHi ? 'स्थान की अनुमति अस्वीकृत या उपलब्ध नहीं। कृपया शहर का नाम खोजें।' : 'Location permission denied or unavailable. Please type city name in search.');
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
+  );
+}
+
+async function filterLivingCities(query) {
+  const suggestionsDiv = document.getElementById('loc-search-suggestions');
+  if (!suggestionsDiv) return;
+  if (query.trim().length < 2) {
+    suggestionsDiv.style.display = 'none';
+    return;
+  }
+
+  try {
+    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=6`, {
+      headers: { 'User-Agent': 'CosmoVedic/1.0 (trendingcharcha@gmail.com)' }
+    });
+    const data = await response.json();
+    if (!data || data.length === 0) {
+      filterLocalLivingCities(query);
+      return;
+    }
+
+    suggestionsDiv.innerHTML = "";
+    data.forEach(item => {
+      const city = {
+        name: item.display_name,
+        lat: parseFloat(item.lat),
+        lng: parseFloat(item.lon),
+        tz: getTimezoneFromCoordinates(parseFloat(item.lat), parseFloat(item.lon), item.display_name)
+      };
+
+      const div = document.createElement('div');
+      div.style.padding = '10px 14px';
+      div.style.cursor = 'pointer';
+      div.style.borderBottom = '1px solid rgba(255,255,255,0.08)';
+      div.style.fontSize = '0.84rem';
+      div.style.color = '#FFFFFF';
+      div.innerText = city.name;
+      div.onmousedown = () => {
+        setCurrentLivingLocation(city.name, city.lat, city.lng, city.tz);
+      };
+      suggestionsDiv.appendChild(div);
+    });
+    suggestionsDiv.style.display = 'block';
+  } catch(e) {
+    filterLocalLivingCities(query);
+  }
+}
+
+function filterLocalLivingCities(query) {
+  const suggestionsDiv = document.getElementById('loc-search-suggestions');
+  if (!suggestionsDiv) return;
+  const matches = (typeof majorCities !== 'undefined' ? majorCities : []).filter(c => c.name.toLowerCase().includes(query.toLowerCase()));
+  if (matches.length === 0) {
+    suggestionsDiv.style.display = 'none';
+    return;
+  }
+  suggestionsDiv.innerHTML = "";
+  matches.forEach(city => {
+    const div = document.createElement('div');
+    div.style.padding = '10px 14px';
+    div.style.cursor = 'pointer';
+    div.style.borderBottom = '1px solid rgba(255,255,255,0.08)';
+    div.style.fontSize = '0.84rem';
+    div.style.color = '#FFFFFF';
+    div.innerText = city.name;
+    div.onmousedown = () => {
+      setCurrentLivingLocation(city.name, city.lat, city.lng, city.tz);
+    };
+    suggestionsDiv.appendChild(div);
+  });
+  suggestionsDiv.style.display = 'block';
+}
+
 const ekadashiAlmanac = {
   'Chaitra': {
     krishna: { nameEn: 'Papmochani Ekadashi', nameHi: 'पापमोचिनी एकादशी', descEn: 'Absolves grave karmic transgressions and purifies spiritual consciousness.', descHi: 'समस्त पापों का विमोचन कर आत्मा को पवित्र करती है।' },
@@ -6369,9 +6665,10 @@ const ekadashiAlmanac = {
 };
 
 function calculateAstronomicalPanchang(targetDate, userLat, userLng, userTz) {
-  const lat = (typeof userLat === 'number') ? userLat : (parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139);
-  const lng = (typeof userLng === 'number') ? userLng : (parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090);
-  const tz = (typeof userTz === 'number') ? userTz : (parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5);
+  const curLoc = (typeof getCurrentLocation === 'function') ? getCurrentLocation() : null;
+  const lat = (typeof userLat === 'number') ? userLat : (curLoc ? curLoc.lat : (parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139));
+  const lng = (typeof userLng === 'number') ? userLng : (curLoc ? curLoc.lng : (parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090));
+  const tz = (typeof userTz === 'number') ? userTz : (curLoc ? curLoc.tz : (parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5));
 
   const solar = (typeof calculateSolarTimings === 'function') 
     ? calculateSolarTimings(targetDate, lat, lng, tz)
@@ -7299,9 +7596,13 @@ function updatePanchangCard(lang) {
   const isHi = targetLang === 'hi';
   const now = new Date();
 
-  const userLat = parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139;
-  const userLng = parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090;
-  const userTz = parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5;
+  const curLoc = (typeof getCurrentLocation === 'function') ? getCurrentLocation() : null;
+  const userLat = (curLoc && curLoc.lat) ? curLoc.lat : (parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139);
+  const userLng = (curLoc && curLoc.lng) ? curLoc.lng : (parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090);
+  const userTz = (curLoc && curLoc.tz) ? curLoc.tz : (parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5);
+  
+  const curCityEl = document.getElementById('p-current-city-name');
+  if (curCityEl && curLoc) curCityEl.innerText = curLoc.cleanCity;
 
   const pInfo = calculateAstronomicalPanchang(now, userLat, userLng, userTz);
   const solar = pInfo.solar;
@@ -7881,9 +8182,14 @@ function updateSettingsProfileCard(lang) {
     }
   }
 
+  const curLoc = (typeof getCurrentLocation === 'function') ? getCurrentLocation() : null;
   if (profileBirth) {
     const cleanCity = storedPob.includes(',') ? storedPob.split(',')[0].trim() : storedPob;
     profileBirth.innerText = `${storedDob} | ${storedTob} | ${cleanCity}`;
+  }
+  const profileLiving = document.getElementById('settings-profile-living');
+  if (profileLiving) {
+    profileLiving.innerText = curLoc ? curLoc.cleanCity : (storedPob.includes(',') ? storedPob.split(',')[0].trim() : storedPob);
   }
 
   if (profileKundli) {
@@ -10562,6 +10868,17 @@ document.getElementById('auth-screen').style.display = 'flex';
 
 // App Initialization (100% Dynamic Engine for New and Existing Users)
 async function initApp() {
+  // Dual-Location Auto-Initialization for Gorakhpur user residing in Dewas
+  if (!localStorage.getItem('user_current_city')) {
+    const pCity = localStorage.getItem('user_pob') || localStorage.getItem('kundli_city') || '';
+    if (pCity.toLowerCase().includes('gorakhpur')) {
+      localStorage.setItem('user_current_city', 'Dewas');
+      localStorage.setItem('user_current_lat', '22.9676');
+      localStorage.setItem('user_current_lng', '76.0534');
+      localStorage.setItem('user_current_timezone', '5.5');
+    }
+  }
+
   // 1. Automatic Engine Migration for Existing Users
   const CURRENT_DYNAMIC_ENGINE_VERSION = '2026.09.01_dynamic_v4';
   const currentDob = localStorage.getItem('user_dob') || localStorage.getItem('kundli_date') || '';
@@ -13352,11 +13669,12 @@ function renderDailyHoraUI() {
   const targetDate = new Date();
   targetDate.setDate(targetDate.getDate() + currentHoraDateOffset);
 
-  const cityName = localStorage.getItem('user_pob') || 'New Delhi';
-  const cleanCity = cityName.includes(',') ? cityName.split(',')[0].trim() : cityName;
-  const userLat = parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139;
-  const userLng = parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090;
-  const userTz = parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5;
+  const curLoc = (typeof getCurrentLocation === 'function') ? getCurrentLocation() : null;
+  const cityName = curLoc ? curLoc.cityName : (localStorage.getItem('user_pob') || 'New Delhi');
+  const cleanCity = curLoc ? curLoc.cleanCity : (cityName.includes(',') ? cityName.split(',')[0].trim() : cityName);
+  const userLat = (curLoc && curLoc.lat) ? curLoc.lat : (parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139);
+  const userLng = (curLoc && curLoc.lng) ? curLoc.lng : (parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090);
+  const userTz = (curLoc && curLoc.tz) ? curLoc.tz : (parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5);
 
   const lagnaSign = (typeof cachedLagnaSignNum === 'number' && cachedLagnaSignNum >= 0) ? cachedLagnaSignNum : parseInt(localStorage.getItem('kundli_lagna_sign') || '0');
   const userLagnaLord = signLords[lagnaSign] || 'Sun';
