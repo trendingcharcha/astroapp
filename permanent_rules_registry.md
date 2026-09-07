@@ -59,3 +59,10 @@
 ### Rule 8: Flutter Exclusive Mobile Packaging Engine
 - **Flutter Only**: Flutter (`lib/main.dart`, `pubspec.yaml`, `android/`) is the sole, permanent standard for all Android APK (`.apk`) and App Bundle (`.aab`) release builds.
 - **No Alternatives**: Never suggest, offer, or use any third-party alternative build tools or services (PWABuilder, TWA, external wrappers, etc.). All mobile builds must use Flutter exclusively.
+
+---
+
+### Rule 9: Unified Astronomical Panchang, Dynamic Vrat/Festival & Karmic Task Integration Engine
+- **All 24 Ekadashis Mathematically Derived**: The application must never rely solely on a manual/static list of major annual festivals. It MUST compute the astronomical Lunar Month (*Maas*) from the Sun's longitude and the exact Udaya Tithi at local sunrise to dynamically identify and name all 24 Ekadashis per year (Aja, Parivartini, Indira, Papankusha, Rama, Devutthana, Utpanna, Mokshada, Saphala, Pausha Putrada, Shat-tila, Jaya, Vijaya, Amalaki, Papmochani, Kamada, Varuthini, Mohini, Apara, Nirjala, Yogini, Devshayani, Kamika, Pavitra) along with Pradosh Vrats, Satyanarayan Purnima, Amavasya Tarpan, and Surya Sankrantis.
+- **Full 5-Limb Panchang Transparency**: The Panchang view must present all five limbs (*Tithi, Vara, Nakshatra, Yoga, Karana*) plus *Maas (Lunar Month), Paksha (Fortnight), Sunrise, Sunset, Brahma Muhurta, Abhijit Muhurta, and Rahu Kaal* so every user clearly understands the cosmic and daily energy shifts.
+- **Mandatory Karmic Task & Coach Integration**: Whenever a sacred fast, Ekadashi, or holy Vrat is active, the engine MUST automatically inject a dedicated high-priority fasting and spiritual sadhana task (+30 XP) into the user's **90-Day Roadmap** and align the **Coach Mission** and **Notification Bell** with the fasting protocol and Parana timings. No fast or festival may remain passive or disconnected from the user's daily actionable duties.

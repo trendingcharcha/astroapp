@@ -2195,37 +2195,46 @@ Partner / Spouse Details
 <!-- TODAY'S VEDIC PANCHANG & UDAYA TITHI CARD -->
 <div class="card" id="panchang-card" style="border: 1px solid rgba(232, 200, 121, 0.4); background: linear-gradient(135deg, rgba(20, 16, 44, 0.95), rgba(42, 36, 78, 0.8)); margin-top: 20px; border-radius: 16px; position: relative; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.35);">
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(232, 200, 121, 0.15); padding-bottom: 8px;">
+<div>
 <h4 style="color: var(--gold); margin: 0; display: flex; align-items: center; gap: 8px; font-size: 1.05rem;">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
 <span><span class="k-lbl-en">Today's Vedic Panchang & Udaya Tithi</span><span class="k-lbl-hi" style="display:none;">आज का वैदिक पंचांग एवं उदया तिथि</span></span>
 </h4>
+<span id="p-maas-paksha" style="font-size: 0.78rem; color: #E8C879; display: block; margin-top: 3px; font-weight: 600;">
+Bhadrapada Maas • Krishna Paksha
+</span>
+</div>
 <span id="p-udaya-badge" style="background: rgba(232, 200, 121, 0.15); border: 1px solid var(--gold); color: var(--gold); padding: 2px 8px; border-radius: 10px; font-size: 0.68rem; font-weight: bold;">
 Surya Udaya Aligned
 </span>
 </div>
 
-<!-- 4 Primary Panchang Parameters -->
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.88rem; margin-bottom: 12px;">
+<!-- 5 Primary Panchang Limbs (Pancha-Anga) -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; font-size: 0.88rem; margin-bottom: 12px;">
 <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 8px; border-left: 2.5px solid var(--gold);">
-<p style="color: var(--text-muted); font-size: 0.72rem; margin: 0 0 2px 0;"><span class="k-lbl-en">Udaya Tithi (Ruling)</span><span class="k-lbl-hi" style="display:none;">उदया तिथि (मान्य)</span></p>
-<strong id="p-tithi" style="color: #fff; font-size: 0.92rem;">Prathama</strong>
+<p style="color: var(--text-muted); font-size: 0.72rem; margin: 0 0 2px 0;"><span class="k-lbl-en">Udaya Tithi</span><span class="k-lbl-hi" style="display:none;">उदया तिथि (मान्य)</span></p>
+<strong id="p-tithi" style="color: #fff; font-size: 0.88rem;">Prathama</strong>
 </div>
 <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 8px; border-left: 2.5px solid #8e44ad;">
 <p style="color: var(--text-muted); font-size: 0.72rem; margin: 0 0 2px 0;"><span class="k-lbl-en">Nakshatra</span><span class="k-lbl-hi" style="display:none;">नक्षत्र</span></p>
-<strong id="p-nakshatra" style="color: #fff; font-size: 0.92rem;">Ashwini</strong>
+<strong id="p-nakshatra" style="color: #fff; font-size: 0.88rem;">Ashwini</strong>
 </div>
 <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 8px; border-left: 2.5px solid #3498db;">
 <p style="color: var(--text-muted); font-size: 0.72rem; margin: 0 0 2px 0;"><span class="k-lbl-en">Yoga</span><span class="k-lbl-hi" style="display:none;">योग</span></p>
-<strong id="p-yoga" style="color: #fff; font-size: 0.92rem;">Vishkumbha</strong>
+<strong id="p-yoga" style="color: #fff; font-size: 0.88rem;">Vishkumbha</strong>
+</div>
+<div style="background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 8px; border-left: 2.5px solid #e67e22;">
+<p style="color: var(--text-muted); font-size: 0.72rem; margin: 0 0 2px 0;"><span class="k-lbl-en">Karana (5th Limb)</span><span class="k-lbl-hi" style="display:none;">करण (पंचम अंग)</span></p>
+<strong id="p-karana" style="color: #fff; font-size: 0.88rem;">Bava</strong>
 </div>
 <div style="background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 8px; border-left: 2.5px solid #2ecc71;">
 <p style="color: var(--text-muted); font-size: 0.72rem; margin: 0 0 2px 0;"><span class="k-lbl-en">Solar Day (Vara)</span><span class="k-lbl-hi" style="display:none;">वार (दिन)</span></p>
-<strong id="p-vara" style="color: #fff; font-size: 0.92rem;">Monday</strong>
+<strong id="p-vara" style="color: #fff; font-size: 0.88rem;">Monday</strong>
 </div>
 </div>
 
-<!-- Astronomical Solar & Muhurat Timings for User's City -->
-<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; background: rgba(0,0,0,0.25); padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); margin-bottom: 10px; font-size: 0.74rem;">
+<!-- Astronomical Solar, Rahu Kaal & Muhurat Timings -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; background: rgba(0,0,0,0.25); padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); margin-bottom: 10px; font-size: 0.74rem;">
 <div>
 <span style="color: var(--gold);"><span class="k-lbl-en">Surya Udaya (Sunrise):</span><span class="k-lbl-hi" style="display:none;">सूर्योदय:</span></span>
 <strong id="p-sunrise-val" style="display: block; color: #fff; margin-top: 1px;">-</strong>
@@ -2233,6 +2242,10 @@ Surya Udaya Aligned
 <div>
 <span style="color: #ff6b6b;"><span class="k-lbl-en">Surya Ast (Sunset):</span><span class="k-lbl-hi" style="display:none;">सूर्यास्त:</span></span>
 <strong id="p-sunset-val" style="display: block; color: #fff; margin-top: 1px;">-</strong>
+</div>
+<div>
+<span style="color: #e74c3c;"><span class="k-lbl-en">Rahu Kaal (Avoid):</span><span class="k-lbl-hi" style="display:none;">राहुकाल (त्याज्य):</span></span>
+<strong id="p-rahu-val" style="display: block; color: #ff8b8b; margin-top: 1px;">-</strong>
 </div>
 <div>
 <span style="color: #5dade2;"><span class="k-lbl-en">Brahma Muhurat:</span><span class="k-lbl-hi" style="display:none;">ब्रह्म मुहूर्त:</span></span>
@@ -2244,9 +2257,8 @@ Surya Udaya Aligned
 </div>
 </div>
 
-<!-- Vedic Vrat & Vedha Purity Guidance Box -->
 <!-- 24-HOUR DAILY HORA ENGINE TRIGGER BUTTON -->
-<div style="margin-top: 12px;">
+<div style="margin-top: 10px; margin-bottom: 10px;">
   <button type="button" onclick="openHoraModal()" class="btn" style="width: 100%; padding: 10px 14px; font-size: 0.82rem; font-weight: 700; background: linear-gradient(135deg, rgba(232,200,121,0.2), rgba(155,134,237,0.15)); border: 1.5px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; transition: all 0.25s ease;">
     <svg class="animated-icon-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
     <span class="k-lbl-en">VIEW 24-HOUR DAILY HORA TIMINGS (LIVE)</span>
@@ -2254,6 +2266,7 @@ Surya Udaya Aligned
   </button>
 </div>
 
+<!-- Vedic Vrat & Vedha Purity Guidance Box -->
 <div id="p-vrat-guidance-box" style="background: rgba(232, 200, 121, 0.07); border: 1px dashed rgba(232, 200, 121, 0.35); padding: 8px 10px; border-radius: 8px; font-size: 0.76rem; line-height: 1.4; color: #E0DFEC;">
 <strong style="color: var(--gold); display: block; margin-bottom: 2px;" id="p-vrat-rule-title">
 <span class="k-lbl-en">Vedic Vrat & Udaya Tithi Rule:</span><span class="k-lbl-hi" style="display:none;">वैदिक व्रत एवं उदया तिथि नियम:</span>
@@ -6146,14 +6159,27 @@ icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="curre
         }
       }
 
+      const pInfoTarget = (typeof calculateAstronomicalPanchang === 'function') 
+        ? calculateAstronomicalPanchang(targetDate)
+        : null;
+      const targetEk = (pInfoTarget && pInfoTarget.activeEkadashi) ? pInfoTarget.activeEkadashi : null;
+      const paranaSunriseStr = (pInfoTarget && pInfoTarget.solar) ? pInfoTarget.solar.sunriseStr : '06:01 AM';
+
       if (isEkadashiToday) {
+        const ekTitleEn = targetEk ? `Sacred ${targetEk.nameEn} Full Vrat Fast (Udaya Tithi)` : 'Sacred Ekadashi Full Vrat Fast (Udaya Tithi)';
+        const ekTitleHi = targetEk ? `पवित्र ${targetEk.nameHi} पूर्ण व्रत (उदया तिथि)` : 'पवित्र एकादशी पूर्ण व्रत (उदया तिथि)';
+        const ekTextEn = targetEk
+          ? `Today is sacred ${targetEk.nameEn} (Sovereign Udaya Tithi): ${targetEk.descEn} Refrain from grains; consume only water, milk, or fresh fruits. Offer 11 Tulsi leaves to Lord Vishnu and chant "Om Namo Bhagavate Vasudevaya" 108 times. Parana tomorrow after sunrise (${paranaSunriseStr}).`
+          : `Observe full Ekadashi Vrat fast today (Sovereign Udaya Tithi at local sunrise). Refrain from grains; consume only water, milk, or fruits to burn karmic debt.`;
+        const ekTextHi = targetEk
+          ? `आज सूर्योदय कालीन उदया तिथि अनुसार पावन ${targetEk.nameHi} है: ${targetEk.descHi} अन्न का पूर्ण त्याग करें; केवल जल, दूध या ताजे फल लें। भगवान विष्णु को 11 तुलसी दल अर्पित करें व 108 बार "ॐ नमो भगवते वासुदेवाय" जपें। पारण कल सूर्योदय (${paranaSunriseStr}) उपरांत।`
+          : `आज सूर्योदय कालीन उदया तिथि अनुसार मुख्य एकादशी व्रत है। अन्न का पूर्ण त्याग करें; केवल जल, दूध या ताजे फलों का सेवन करें ताकि कर्म दोष भस्म हों।`;
+
         tasks.push({
           category: 'vedic',
-          title: isHi ? 'पवित्र एकादशी पूर्ण व्रत (उदया तिथि)' : 'Sacred Ekadashi Full Vrat Fast (Udaya Tithi)',
+          title: isHi ? ekTitleHi : ekTitleEn,
           timeWindow: 'Full Day Fast',
-          text: isHi
-            ? 'आज सूर्योदय कालीन उदया तिथि अनुसार मुख्य एकादशी व्रत है। अन्न का पूर्ण त्याग करें; केवल जल, दूध या ताजे फलों का सेवन करें ताकि कर्म दोष भस्म हों।'
-            : 'Observe full Ekadashi Vrat fast today (Sovereign Udaya Tithi at local sunrise). Refrain from grains; consume only water, milk, or fruits to burn karmic debt.',
+          text: isHi ? ekTextHi : ekTextEn,
           xp: 30,
           color: 'var(--gold)',
           icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>'
@@ -6293,6 +6319,182 @@ if (badge) badge.style.display = 'none';
 }
 }
 
+const ekadashiAlmanac = {
+  'Chaitra': {
+    krishna: { nameEn: 'Papmochani Ekadashi', nameHi: 'पापमोचिनी एकादशी', descEn: 'Absolves grave karmic transgressions and purifies spiritual consciousness.', descHi: 'समस्त पापों का विमोचन कर आत्मा को पवित्र करती है।' },
+    shukla: { nameEn: 'Kamada Ekadashi', nameHi: 'कामदा एकादशी', descEn: 'Fulfills noble heartfelt desires and burns negative karmic curses.', descHi: 'समस्त शुभ कामनाओं को पूर्ण करने वाली एवं शाप विमोचिनी।' }
+  },
+  'Vaishakha': {
+    krishna: { nameEn: 'Varuthini Ekadashi', nameHi: 'बरूथिनी एकादशी', descEn: 'Acts as divine armor (Varutha) protecting against misfortune and poverty.', descHi: 'सौभाग्य का कवच बनकर दुखों से रक्षा एवं अक्षय पुण्य प्रदायिनी।' },
+    shukla: { nameEn: 'Mohini Ekadashi', nameHi: 'मोहिनी एकादशी', descEn: 'Commemorates Lord Vishnu assuming the Mohini Avatar to distribute divine Amrita.', descHi: 'अमृत रक्षा हेतु भगवान विष्णु के मोहिनी अवतार का स्मरण दिवस।' }
+  },
+  'Jyeshtha': {
+    krishna: { nameEn: 'Apara Ekadashi', nameHi: 'अपरा एकादशी', descEn: 'Bestows boundless (apara) wealth, renown, and spiritual merit.', descHi: 'अपार धन, कीर्ति एवं असीम पुण्य फल प्रदान करने वाली।' },
+    shukla: { nameEn: 'Nirjala Ekadashi', nameHi: 'निर्जला (भीमसेनी) एकादशी', descEn: 'Supreme fast observed without water; grants the combined merit of all 24 Ekadashis.', descHi: 'बिना जल ग्रहण किए अखंड निर्जला व्रत; 24 एकादशियों का सम्मिलित महापुण्य।' }
+  },
+  'Ashadha': {
+    krishna: { nameEn: 'Yogini Ekadashi', nameHi: 'योगिनी एकादशी', descEn: 'Dissolves severe illnesses and cleanses subtle mental and physical toxins.', descHi: 'समस्त शारीरिक व्याधियों का शमन एवं आरोग्य प्रदायिनी।' },
+    shukla: { nameEn: 'Devshayani Ekadashi', nameHi: 'देवशयनी (हरिशयनी) एकादशी', descEn: 'Inaugurates the sacred 4-month Chaturmas period as Lord Vishnu enters Yoga Nidra.', descHi: 'चातुर्मास का शुभारंभ; भगवान विष्णु का क्षीरसागर में योग निद्रा प्रवेश।' }
+  },
+  'Shravana': {
+    krishna: { nameEn: 'Kamika Ekadashi', nameHi: 'कामिका एकादशी', descEn: 'Grants fruit equal to Ashwamedha Yajna through Vishnu Puja with Tulsi leaves.', descHi: 'अश्वमेध यज्ञ के समान पुण्य फल एवं तुलसी दल अर्पण से विष्णु कृपा।' },
+    shukla: { nameEn: 'Shravana Putrada Ekadashi', nameHi: 'श्रावण पुत्रदा (पवित्रोपना) एकादशी', descEn: 'Blesses with noble progeny, child protection, and family lineage longevity.', descHi: 'संतान की दीर्घायु, कुल शुद्धि एवं मनोकामना सिद्धि।' }
+  },
+  'Bhadrapada': {
+    krishna: { nameEn: 'Aja Ekadashi', nameHi: 'अजा (अन्नदा) एकादशी', descEn: 'Dissolves all past karmic debts and grants divine redemption and prosperity.', descHi: 'अजा (अन्नदा) एकादशी समस्त पूर्व पापों को नष्ट कर सुख-समृद्धि एवं मुक्ति प्रदान करती है।' },
+    shukla: { nameEn: 'Parivartini Ekadashi', nameHi: 'परिवर्तिनी (वामन) एकादशी', descEn: 'Lord Vishnu turns onto His side in Yoga Nidra; celebrates Vamana Avatar.', descHi: 'भगवान विष्णु योग निद्रा में करवट बदलते हैं; वामन अवतार की आराधना।' }
+  },
+  'Ashvina': {
+    krishna: { nameEn: 'Indira Ekadashi', nameHi: 'इन्दिरा एकादशी', descEn: 'Observed during Pitru Paksha for ancestral liberation and pitru debt relief.', descHi: 'पितृ पक्ष में पूर्वजों की मुक्ति और पितृ शांति हेतु विशेष फलदायी।' },
+    shukla: { nameEn: 'Papankusha Ekadashi', nameHi: 'पापांकुशा एकादशी', descEn: 'Controls negative sins like a goad (ankusha) and grants health and heavenly status.', descHi: 'पापों पर अंकुश लगाकर आरोग्य, ऐश्वर्य और सद्गति प्रदान करती है।' }
+  },
+  'Kartika': {
+    krishna: { nameEn: 'Rama Ekadashi', nameHi: 'रमा एकादशी', descEn: 'Dedicated to Goddess Rama (Lakshmi); destroys poverty and bestows lasting fortune.', descHi: 'महालक्ष्मी (रमा) को समर्पित; दरिद्रता का नाश कर अखंड लक्ष्मी कृपा दिलाती है।' },
+    shukla: { nameEn: 'Devutthana Ekadashi', nameHi: 'देवउठनी (प्रबोधिनी) एकादशी', descEn: 'Lord Vishnu awakens from Chaturmas; commences all sacred marriages and ceremonies.', descHi: 'भगवान विष्णु चार मास के शयन से जागते हैं; समस्त शुभ-मांगलिक कार्य प्रारंभ होते हैं।' }
+  },
+  'Margashirsha': {
+    krishna: { nameEn: 'Utpanna Ekadashi', nameHi: 'उत्पन्ना एकादशी', descEn: 'Celebrates the divine origin of Ekadashi Devi from Lord Vishnu.', descHi: 'एकादशी देवी का प्राकट्य दिवस; एकादशी व्रत प्रारंभ करने का सर्वोत्तम दिन।' },
+    shukla: { nameEn: 'Mokshada Ekadashi & Gita Jayanti', nameHi: 'मोक्षदा एकादशी एवं गीता जयंती', descEn: 'Grants Moksha (liberation) and commemorates the divine revelation of Shrimad Bhagavad Gita.', descHi: 'मोक्ष प्रदायिनी एवं श्रीमद्भगवद्गीता का प्राकट्य महापर्व।' }
+  },
+  'Pausha': {
+    krishna: { nameEn: 'Saphala Ekadashi', nameHi: 'सफला एकादशी', descEn: 'Assures success (saphala) in noble endeavours and dissolves stubborn stagnation.', descHi: 'सभी शुभ कार्यों में सफलता एवं मनोवांछित फल प्रदान करती है।' },
+    shukla: { nameEn: 'Pausha Putrada Ekadashi', nameHi: 'पौष पुत्रदा एकादशी', descEn: 'Blesses with worthy descendants, family harmony, and wisdom.', descHi: 'संतान सुख, वंश वृद्धि एवं कुल की रक्षा का वरदान देती है।' }
+  },
+  'Magha': {
+    krishna: { nameEn: 'Shat-tila Ekadashi', nameHi: 'षट्तिला एकादशी', descEn: 'Uses sesame in 6 sacred forms (bath, tilak, oblation, drink, food, donation) to cleanse karma.', descHi: 'तिल के छह प्रकार के प्रयोग (स्नान, उबटन, हवन, तर्पण, भोजन, दान) से पाप नाश।' },
+    shukla: { nameEn: 'Jaya Ekadashi', nameHi: 'जया (भैमी) एकादशी', descEn: 'Grants victory over all trials, frees from malefic attachments, and elevates karma.', descHi: 'शत्रुओं पर विजय एवं भूत-पिशाच योनि से मुक्ति दिलाती है।' }
+  },
+  'Phalguna': {
+    krishna: { nameEn: 'Vijaya Ekadashi', nameHi: 'विजया एकादशी', descEn: 'Performed by Lord Rama to secure victory over Ravana; grants success in all struggles.', descHi: 'श्रीराम द्वारा लंका विजय पूर्व अनुष्ठित; कठिन परिस्थितियों में निश्चित विजय।' },
+    shukla: { nameEn: 'Amalaki Ekadashi', nameHi: 'आमलकी एकादशी', descEn: 'Dedicated to sacred Amla tree and Lord Vishnu; bestows robust vitality and wealth.', descHi: 'भगवान विष्णु स्वरूप आंवले के वृक्ष की पूजा एवं आरोग्य-दीर्घायु वरदान।' }
+  }
+};
+
+function calculateAstronomicalPanchang(targetDate, userLat, userLng, userTz) {
+  const lat = (typeof userLat === 'number') ? userLat : (parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139);
+  const lng = (typeof userLng === 'number') ? userLng : (parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090);
+  const tz = (typeof userTz === 'number') ? userTz : (parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5);
+
+  const solar = (typeof calculateSolarTimings === 'function') 
+    ? calculateSolarTimings(targetDate, lat, lng, tz)
+    : { sunriseStr: '06:00 AM', sunsetStr: '06:30 PM', sunriseMins: 360, sunsetMins: 1110, brahmaMuhurat: '04:24 AM - 05:12 AM', abhijitMuhurat: '11:50 AM - 12:40 PM' };
+
+  const sHour = Math.floor(solar.sunriseMins / 60);
+  const sMin = Math.floor(solar.sunriseMins % 60);
+  
+  let sunLon = 0, moonLon = 0, diff = 0;
+  let tithiIdx = 0, nakIdx = 0, yogaIdx = 0;
+
+  if (typeof getJulianDay === 'function' && typeof getPlanetLongitude === 'function') {
+    try {
+      const jd = getJulianDay(targetDate.getFullYear(), targetDate.getMonth() + 1, targetDate.getDate(), sHour, sMin, tz);
+      const ayanamsa = getLahiriAyanamsa(jd);
+      sunLon = (getPlanetLongitude("Sun", jd) - ayanamsa + 360) % 360;
+      moonLon = (getPlanetLongitude("Moon", jd) - ayanamsa + 360) % 360;
+      diff = (moonLon - sunLon + 360) % 360;
+      tithiIdx = Math.floor(diff / 12) % 30;
+      nakIdx = Math.floor(moonLon / (360 / 27)) % 27;
+      yogaIdx = Math.floor(((sunLon + moonLon) % 360) / (360 / 27)) % 27;
+    } catch(e) {
+      const dayOfYear = Math.floor((targetDate - new Date(targetDate.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+      tithiIdx = (dayOfYear % 30);
+      nakIdx = (dayOfYear % 27);
+      yogaIdx = ((dayOfYear * 2) % 27);
+    }
+  } else {
+    const dayOfYear = Math.floor((targetDate - new Date(targetDate.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+    tithiIdx = (dayOfYear % 30);
+    nakIdx = (dayOfYear % 27);
+    yogaIdx = ((dayOfYear * 2) % 27);
+  }
+
+  // 11 Karanas calculation (60 half-tithis)
+  const halfTithi = Math.floor(diff / 6);
+  const fixedKaranas = { 0: 'Kintughna', 57: 'Shakuni', 58: 'Chatushpada', 59: 'Naga' };
+  const fixedKaranasHi = { 0: 'किंस्तुघ्न', 57: 'शकुनि', 58: 'चतुष्पाद', 59: 'नाग' };
+  const movableKaranas = ["Bava", "Balava", "Kaulava", "Taitila", "Gara", "Vanija", "Vishti (Bhadra)"];
+  const movableKaranasHi = ["बव", "बालव", "कौलव", "तैतिल", "गर", "वणिज", "विष्टि (भद्रा)"];
+
+  let karanaEn = '', karanaHi = '';
+  if (halfTithi === 0) { karanaEn = fixedKaranas[0]; karanaHi = fixedKaranasHi[0]; }
+  else if (halfTithi >= 57) { karanaEn = fixedKaranas[halfTithi]; karanaHi = fixedKaranasHi[halfTithi]; }
+  else {
+    const movIdx = (halfTithi - 1) % 7;
+    karanaEn = movableKaranas[movIdx];
+    karanaHi = movableKaranasHi[movIdx];
+  }
+
+  // Rahu Kaal calculation (8 segments of day length)
+  const dayLength = solar.sunsetMins - solar.sunriseMins;
+  const segmentLength = dayLength / 8;
+  const dayOfWeek = targetDate.getDay();
+  const rahuSegMap = [8, 2, 7, 5, 6, 4, 3];
+  const rSeg = rahuSegMap[dayOfWeek];
+  const rahuStartMins = Math.round(solar.sunriseMins + (rSeg - 1) * segmentLength);
+  const rahuEndMins = Math.round(solar.sunriseMins + rSeg * segmentLength);
+
+  const formatMins = (m) => {
+    const h = Math.floor(m / 60) % 24;
+    const min = Math.floor(m % 60);
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const dispH = h % 12 === 0 ? 12 : h % 12;
+    return `${String(dispH).padStart(2, '0')}:${String(min).padStart(2, '0')} ${ampm}`;
+  };
+  const rahuKaalStr = `${formatMins(rahuStartMins)} - ${formatMins(rahuEndMins)}`;
+
+  // Lunar Month (Maas) determination based on sidereal Sun
+  const maasNamesEn = ["Vaishakha", "Jyeshtha", "Ashadha", "Shravana", "Bhadrapada", "Ashvina", "Kartika", "Margashirsha", "Pausha", "Magha", "Phalguna", "Chaitra"];
+  const maasNamesHi = ["वैशाख", "ज्येष्ठ", "आषाढ़", "श्रावण", "भाद्रपद", "आश्विन", "कार्तिक", "मार्गशीर्ष", "पौष", "माघ", "फाल्गुन", "चैत्र"];
+  const sunSignIdx = Math.floor(sunLon / 30);
+  const maasEn = maasNamesEn[sunSignIdx] || "Bhadrapada";
+  const maasHi = maasNamesHi[sunSignIdx] || "भाद्रपद";
+
+  const isShukla = tithiIdx < 15;
+  const pakshaEn = isShukla ? "Shukla Paksha" : "Krishna Paksha";
+  const pakshaHi = isShukla ? "शुक्ल पक्ष" : "कृष्ण पक्ष";
+
+  // Check Ekadashi
+  let activeEkadashi = null;
+  if (tithiIdx === 10 || tithiIdx === 25) {
+    const pakshaKey = isShukla ? 'shukla' : 'krishna';
+    if (ekadashiAlmanac[maasEn] && ekadashiAlmanac[maasEn][pakshaKey]) {
+      activeEkadashi = ekadashiAlmanac[maasEn][pakshaKey];
+    }
+  }
+
+  // Check Pradosh Vrat (Trayodashi = 12 / 27)
+  const isPradosh = (tithiIdx === 12 || tithiIdx === 27);
+  const pradoshNamesEn = ["Ravi Pradosh", "Som Pradosh", "Bhaum Pradosh", "Saumya Pradosh", "Guru Pradosh", "Bhrigu Pradosh", "Shani Pradosh"];
+  const pradoshNamesHi = ["रवि प्रदोष", "सोम प्रदोष", "भौम प्रदोष", "बुध प्रदोष", "गुरु प्रदोष", "शुक्र प्रदोष", "शनि प्रदोष"];
+
+  const isPurnima = (tithiIdx === 14);
+  const isAmavasya = (tithiIdx === 29);
+
+  return {
+    solar,
+    sunLon,
+    moonLon,
+    diff,
+    tithiIdx,
+    nakIdx,
+    yogaIdx,
+    karanaEn,
+    karanaHi,
+    rahuKaalStr,
+    maasEn,
+    maasHi,
+    pakshaEn,
+    pakshaHi,
+    dayOfWeek,
+    activeEkadashi,
+    isPradosh,
+    pradoshNameEn: pradoshNamesEn[dayOfWeek],
+    pradoshNameHi: pradoshNamesHi[dayOfWeek],
+    isPurnima,
+    isAmavasya
+  };
+}
+
 const sanatanFestivalAlmanac = [
   // 2024
   { id: 'shivratri', year: 2024, startM: 3, startD: 8, endM: 3, endD: 8, titleEn: 'Maha Shivratri & Shiva-Shakti Vivah', titleHi: 'महाशिवरात्रि एवं शिव-पार्वती विवाह', badgeEn: 'Maha Shivratri', badgeHi: 'महाशिवरात्रि', deity: 'Shiva', planet: 'Moon' },
@@ -6356,9 +6558,97 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
   const lagnaName = signNames[lagnaSign] || 'Aries';
   const lagnaNameHi = signNamesHi[lagnaSign] || 'मेष';
 
-  const currentNum = m * 100 + d;
+  const pInfo = calculateAstronomicalPanchang(targetDate);
 
-  // 1. Check if an active festival is happening TODAY
+  // 1. Check if an EKADASHI is active TODAY
+  if (pInfo.activeEkadashi) {
+    const ek = pInfo.activeEkadashi;
+    const fSection = isHi ? 'पवित्र एकादशी महाव्रत' : 'Sacred Ekadashi Maha Vrat';
+    const fTitle = isHi ? `${ek.nameHi} व्रत एवं श्री विष्णु आराधना` : `${ek.nameEn} Vrat & Lord Vishnu Aradhana`;
+    const fBadge = isHi ? ek.nameHi : ek.nameEn;
+
+    let remEn = '';
+    let remHi = '';
+
+    if (lagnaSign === 0 || lagnaSign === 7) { // Mars ruled
+      remEn = `${userName} (${lagnaName} Ascendant - Mars Ruled): Today is sacred ${ek.nameEn}. Observe grainless fast. Chant "Om Namo Bhagavate Vasudevaya" 108 times and offer Tulsi dal to Lord Vishnu to dissolve anger, debts, and Mangal obstacles. Parana: Tomorrow after sunrise (${pInfo.solar.sunriseStr}) post-Hari Vasara.`;
+      remHi = `${userName} (${lagnaNameHi} लग्न - मंगल स्वामी): आज पावन ${ek.nameHi} है। अन्न त्याग कर फलाहार व्रत रखें। 108 बार "ॐ नमो भगवते वासुदेवाय" जपें व तुलसी दल अर्पित करें। मंगल दोष व ऋण शांति होगी। पारण: कल सूर्योदय (${pInfo.solar.sunriseStr}) उपरांत।`;
+    } else if (lagnaSign === 2 || lagnaSign === 5) { // Mercury ruled
+      remEn = `${userName} (${lagnaName} Ascendant - Mercury Ruled): Today is sacred ${ek.nameEn}. ${ek.descEn} Refrain from grains; consume only water/fruits. Offer 11 Tulsi leaves and recite Vishnu Sahasranama to sharpen intellect and accelerate business/career expansion. Parana: Tomorrow after sunrise (${pInfo.solar.sunriseStr}).`;
+      remHi = `${userName} (${lagnaNameHi} लग्न - बुध स्वामी): आज पावन ${ek.nameHi} है: ${ek.descHi} अन्न त्याग कर शुद्ध फलाहार लें। भगवान विष्णु को 11 तुलसी दल अर्पित कर विष्णु सहस्रनाम जपें; प्रखर बुद्धि व व्यापारिक सिद्धि मिलेगी। पारण: कल सूर्योदय (${pInfo.solar.sunriseStr}) उपरांत।`;
+    } else if (lagnaSign === 1 || lagnaSign === 6) { // Venus ruled
+      remEn = `${userName} (${lagnaName} Ascendant - Venus Ruled): Today is sacred ${ek.nameEn}. Decorate Lord Vishnu & Lakshmi with fragrant white flowers and chant "Om Kleem Krishnaya Namah" 108 times for immense marital harmony, prosperity, and Venus peace. Parana: Tomorrow after sunrise (${pInfo.solar.sunriseStr}).`;
+      remHi = `${userName} (${lagnaNameHi} लग्न - शुक्र स्वामी): आज ${ek.nameHi} पर लक्ष्मी-नारायण को श्वेत पुष्प अर्पित करें व 108 बार "ॐ क्लीं कृष्णाय नमः" जपें। अखंड दांपत्य सुख व ऐश्वर्य मिलेगा। पारण: कल सूर्योदय (${pInfo.solar.sunriseStr}) उपरांत।`;
+    } else if (lagnaSign === 3) { // Moon ruled
+      remEn = `${userName} (${lagnaName} Ascendant - Moon Ruled): Observe holy ${ek.nameEn} consuming only milk or fruits. Meditate on Lord Vishnu's lotus feet to dissolve mental anxiety and awaken deep emotional serenity. Parana: Tomorrow after sunrise (${pInfo.solar.sunriseStr}).`;
+      remHi = `${userName} (${lagnaNameHi} लग्न - चंद्र स्वामी): आज ${ek.nameHi} पर केवल दुग्ध/फलाहार लें। श्रीहरि के चरण कमलों का ध्यान करें; मानसिक तनाव नष्ट होगा व आत्मिक शांति मिलेगी। पारण: कल सूर्योदय (${pInfo.solar.sunriseStr}) उपरांत।`;
+    } else if (lagnaSign === 4) { // Sun ruled
+      remEn = `${userName} (${lagnaName} Ascendant - Sun Ruled): Light a pure cow-ghee lamp for Lord Vishnu facing East. Observing ${ek.nameEn} elevates soul vitality, executive authority, and righteous victory. Parana: Tomorrow after sunrise (${pInfo.solar.sunriseStr}).`;
+      remHi = `${userName} (${lagnaNameHi} लग्न - सूर्य स्वामी): पूर्व दिशा में शुद्ध गाय के घी का दीपक जलाकर भगवान विष्णु की आराधना करें। ${ek.nameHi} व्रत से आत्मबल, पद-प्रतिष्ठा व विजय मिलेगी। पारण: कल सूर्योदय (${pInfo.solar.sunriseStr}) उपरांत।`;
+    } else if (lagnaSign === 8 || lagnaSign === 11) { // Jupiter ruled
+      remEn = `${userName} (${lagnaName} Ascendant - Jupiter Ruled): Offer yellow sweets or ripe bananas to Lord Vishnu and donate educational books. ${ek.nameEn} unlocks divine wisdom and rapid financial luck. Parana: Tomorrow after sunrise (${pInfo.solar.sunriseStr}).`;
+      remHi = `${userName} (${lagnaNameHi} लग्न - गुरु स्वामी): श्रीहरि को पीले फल का भोग लगाएं व धार्मिक पुस्तक दान करें। ${ek.nameHi} से गुरु कृपा, ज्ञान व अटके धन की प्राप्ति होगी। पारण: कल सूर्योदय (${pInfo.solar.sunriseStr}) उपरांत।`;
+    } else { // Saturn ruled
+      remEn = `${userName} (${lagnaName} Ascendant - Saturn Ruled): Observe ${ek.nameEn} and prepare food donation for the needy during tomorrow's Parana. Neutralizes Shani delays and heavy karmic burdens. Parana: Tomorrow after sunrise (${pInfo.solar.sunriseStr}).`;
+      remHi = `${userName} (${lagnaNameHi} लग्न - शनि स्वामी): ${ek.nameHi} व्रत रखें व कल पारण समय निर्धनों को अन्न दान दें। शनि जनित विलंब व कर्म दोष शांत होंगे। पारण: कल सूर्योदय (${pInfo.solar.sunriseStr}) उपरांत।`;
+    }
+
+    return {
+      sectionTag: fSection,
+      title: fTitle,
+      badge: fBadge,
+      remedy: isHi ? remHi : remEn
+    };
+  }
+
+  // 2. Check if PRADOSH VRAT is active TODAY
+  if (pInfo.isPradosh) {
+    const pTitle = isHi ? `${pInfo.pradoshNameHi} एवं संध्या शिव साधना` : `${pInfo.pradoshNameEn} & Evening Shiva Sadhana`;
+    const pBadge = isHi ? pInfo.pradoshNameHi : pInfo.pradoshNameEn;
+    const pSection = isHi ? 'पवित्र प्रदोष व्रत' : 'Sacred Pradosh Vrat';
+    const remEn = `${userName} (${lagnaName} Ascendant - ${lagnaLord} Ruled): Today is ${pInfo.pradoshNameEn}. Light a pure cow-ghee lamp on Shivling during Pradosha Kaal (from sunset ${pInfo.solar.sunsetStr}) and chant "Om Namah Shivaya" 108 times for complete dosha clearance.`;
+    const remHi = `${userName} (${lagnaNameHi} लग्न - ${lagnaLordHi} स्वामी): आज ${pInfo.pradoshNameHi} है। सूर्यास्त (${pInfo.solar.sunsetStr}) के समय प्रदोष काल में शिवलिंग पर शुद्ध घी का दीपक जलाएं व 108 बार "ॐ नमः शिवाय" जपें। समस्त दोष शांत होंगे।`;
+
+    return {
+      sectionTag: pSection,
+      title: pTitle,
+      badge: pBadge,
+      remedy: isHi ? remHi : remEn
+    };
+  }
+
+  // 3. Check if PURNIMA is active TODAY
+  if (pInfo.isPurnima) {
+    const purTitle = isHi ? `${pInfo.maasHi} पूर्णिमा व्रत एवं सत्यनारायण पूजन` : `${pInfo.maasEn} Purnima Vrat & Satyanarayan Puja`;
+    const purSection = isHi ? 'पवित्र सत्यनारायण पूर्णिमा' : 'Sacred Satyanarayan Purnima';
+    const remEn = `${userName} (${lagnaName} Ascendant): Offer raw milk and water Arghya to the rising Full Moon tonight and recite Satyanarayan Katha for family prosperity and mental tranquility.`;
+    const remHi = `${userName} (${lagnaNameHi} लग्न): आज रात्रि पूर्ण चंद्रोदय पर कच्चे दूध व जल से अर्घ्य दें और श्री सत्यनारायण कथा सुनें। पारिवारिक समृद्धि व मानसिक शांति मिलेगी।`;
+
+    return {
+      sectionTag: purSection,
+      title: purTitle,
+      badge: isHi ? 'सत्यनारायण पूर्णिमा' : 'Satyanarayan Purnima',
+      remedy: isHi ? remHi : remEn
+    };
+  }
+
+  // 4. Check if AMAVASYA is active TODAY
+  if (pInfo.isAmavasya) {
+    const amTitle = isHi ? `${pInfo.maasHi} अमावस्या एवं पितृ शांति तर्पण` : `${pInfo.maasEn} Amavasya & Ancestral Peace Tarpan`;
+    const amSection = isHi ? 'पवित्र अमावस्या तर्पण' : 'Sacred Amavasya Tarpan';
+    const remEn = `${userName} (${lagnaName} Ascendant): Offer water with black sesame seeds facing South at sunrise and feed cows/birds for ancestral blessings and karmic debt relief.`;
+    const remHi = `${userName} (${lagnaNameHi} लग्न): आज दक्षिण दिशा में काले तिल युक्त जल से पितृ तर्पण करें व गाय/पक्षियों को भोजन दें। पितृ दोष शांति व वंश वृद्धि होगी।`;
+
+    return {
+      sectionTag: amSection,
+      title: amTitle,
+      badge: isHi ? 'अमावस्या तर्पण' : 'Amavasya Tarpan',
+      remedy: isHi ? remHi : remEn
+    };
+  }
+
+  // 5. Check if an active MULTI-DAY ANNUAL FESTIVAL is happening TODAY
+  const currentNum = m * 100 + d;
   const activeFestival = sanatanFestivalAlmanac.find(fest => {
     if (fest.year !== y) return false;
     const startNum = fest.startM * 100 + fest.startD;
@@ -6433,7 +6723,7 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
     };
   }
 
-  // 2. Check for an UPCOMING Festival (within 1 to 5 days)
+  // 6. Check for an UPCOMING Festival (within 1 to 5 days)
   let upcomingFestival = null;
   let daysUntil = 0;
   for (const fest of sanatanFestivalAlmanac) {
@@ -6452,7 +6742,7 @@ function getHolyFestivalAlignmentData(targetDate, lagnaSign, lagnaLord, isHi, us
     }
   }
 
-  // 3. Dynamic Daily Planetary Alignment (When outside major festival spans)
+  // 7. Dynamic Daily Planetary Alignment (When outside major festival / vrat days)
   const weekdaysEn = [
     "Ravivar (Sun) - Surya Aradhana & Solar Power",
     "Somvar (Moon) - Shiva Alignment & Mind Peace",
@@ -7004,17 +7294,13 @@ function updatePanchangCard(lang) {
   const targetLang = lang || (typeof currentAppLang !== 'undefined' ? currentAppLang : 'en');
   const isHi = targetLang === 'hi';
   const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth() + 1;
-  const day = now.getDate();
 
   const userLat = parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139;
   const userLng = parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090;
   const userTz = parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5;
 
-  const solar = calculateSolarTimings(now, userLat, userLng, userTz);
-  const sunriseHour = Math.floor(solar.sunriseMins / 60);
-  const sunriseMin = Math.floor(solar.sunriseMins % 60);
+  const pInfo = calculateAstronomicalPanchang(now, userLat, userLng, userTz);
+  const solar = pInfo.solar;
 
   const tithiListEn = ["Shukla Pratipada", "Shukla Dwitiya", "Shukla Tritiya", "Shukla Chaturthi", "Shukla Panchami", "Shukla Shasthi", "Shukla Saptami", "Shukla Ashtami", "Shukla Navami", "Shukla Dashami", "Shukla Ekadashi", "Shukla Dwadashi", "Shukla Trayodashi", "Shukla Chaturdashi", "Purnima", "Krishna Pratipada", "Krishna Dwitiya", "Krishna Tritiya", "Krishna Chaturthi", "Krishna Panchami", "Krishna Shasthi", "Krishna Saptami", "Krishna Ashtami", "Krishna Navami", "Krishna Dashami", "Krishna Ekadashi", "Krishna Dwadashi", "Krishna Trayodashi", "Krishna Chaturdashi", "Amavasya"];
   const tithiListHi = ["शुक्ल प्रतिपदा", "शुक्ल द्वितीया", "शुक्ल तृतीया", "शुक्ल चतुर्थी", "शुक्ल पंचमी", "शुक्ल षष्ठी", "शुक्ल सप्तमी", "शुक्ल अष्टमी", "शुक्ल नवमी", "शुक्ल दशमी", "शुक्ल एकादशी", "शुक्ल द्वादशी", "शुक्ल त्रयोदशी", "शुक्ल चतुर्दशी", "पूर्णिमा", "कृष्ण प्रतिपदा", "कृष्ण द्वितीया", "कृष्ण तृतीया", "कृष्ण चतुर्थी", "कृष्ण पंचमी", "कृष्ण षष्ठी", "कृष्ण सप्तमी", "कृष्ण अष्टमी", "कृष्ण नवमी", "कृष्ण दशमी", "कृष्ण एकादशी", "कृष्ण द्वादशी", "कृष्ण त्रयोदशी", "कृष्ण चतुर्दशी", "अमावस्या"];
@@ -7025,77 +7311,63 @@ function updatePanchangCard(lang) {
   const varaListEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const varaListHi = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
 
-  let tithiIdx = 0, nakIdx = 0, yogaIdx = 0;
-  if (typeof getJulianDay === 'function' && typeof getPlanetLongitude === 'function') {
-    try {
-      const jd = getJulianDay(year, month, day, sunriseHour, sunriseMin, userTz);
-      const ayanamsa = getLahiriAyanamsa(jd);
-      const sunLon = (getPlanetLongitude("Sun", jd) - ayanamsa + 360) % 360;
-      const moonLon = (getPlanetLongitude("Moon", jd) - ayanamsa + 360) % 360;
-      const diff = (moonLon - sunLon + 360) % 360;
-      tithiIdx = Math.floor(diff / 12) % 30;
-      nakIdx = Math.floor(moonLon / (360 / 27)) % 27;
-      yogaIdx = Math.floor(((sunLon + moonLon) % 360) / (360 / 27)) % 27;
-    } catch(e) {
-      const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
-      tithiIdx = (dayOfYear % 30);
-      nakIdx = (dayOfYear % 27);
-      yogaIdx = ((dayOfYear * 2) % 27);
-    }
-  } else {
-    const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
-    tithiIdx = (dayOfYear % 30);
-    nakIdx = (dayOfYear % 27);
-    yogaIdx = ((dayOfYear * 2) % 27);
-  }
-
+  const maasPakshaEl = document.getElementById('p-maas-paksha');
   const tithiEl = document.getElementById('p-tithi');
   const nakEl = document.getElementById('p-nakshatra');
   const yogaEl = document.getElementById('p-yoga');
+  const karanaEl = document.getElementById('p-karana');
   const varaEl = document.getElementById('p-vara');
 
-  if (tithiEl) tithiEl.innerText = isHi ? tithiListHi[tithiIdx] : tithiListEn[tithiIdx];
-  if (nakEl) nakEl.innerText = isHi ? nakshatraListHi[nakIdx] : nakshatraListEn[nakIdx];
-  if (yogaEl) yogaEl.innerText = isHi ? yogaListHi[yogaIdx] : yogaListEn[yogaIdx];
+  if (maasPakshaEl) {
+    maasPakshaEl.innerText = isHi 
+      ? `${pInfo.maasHi} मास • ${pInfo.pakshaHi}`
+      : `${pInfo.maasEn} Maas • ${pInfo.pakshaEn}`;
+  }
+
+  let tithiDisplay = isHi ? tithiListHi[pInfo.tithiIdx] : tithiListEn[pInfo.tithiIdx];
+  if (pInfo.activeEkadashi) {
+    tithiDisplay += isHi ? ` (${pInfo.activeEkadashi.nameHi})` : ` (${pInfo.activeEkadashi.nameEn})`;
+  }
+  if (tithiEl) tithiEl.innerText = tithiDisplay;
+  if (nakEl) nakEl.innerText = isHi ? nakshatraListHi[pInfo.nakIdx] : nakshatraListEn[pInfo.nakIdx];
+  if (yogaEl) yogaEl.innerText = isHi ? yogaListHi[pInfo.yogaIdx] : yogaListEn[pInfo.yogaIdx];
+  if (karanaEl) karanaEl.innerText = isHi ? pInfo.karanaHi : pInfo.karanaEn;
   if (varaEl) varaEl.innerText = isHi ? varaListHi[now.getDay()] : varaListEn[now.getDay()];
 
   const sunriseEl = document.getElementById('p-sunrise-val');
   const sunsetEl = document.getElementById('p-sunset-val');
+  const rahuEl = document.getElementById('p-rahu-val');
   const brahmaEl = document.getElementById('p-brahma-val');
   const abhijitEl = document.getElementById('p-abhijit-val');
   const vratTextEl = document.getElementById('p-vrat-rule-text');
 
   if (sunriseEl) sunriseEl.innerText = solar.sunriseStr;
   if (sunsetEl) sunsetEl.innerText = solar.sunsetStr;
+  if (rahuEl) rahuEl.innerText = pInfo.rahuKaalStr;
   if (brahmaEl) brahmaEl.innerText = solar.brahmaMuhurat;
   if (abhijitEl) abhijitEl.innerText = solar.abhijitMuhurat;
 
   if (vratTextEl) {
-    const isEkadashi = (tithiIdx === 10 || tithiIdx === 25);
-    const isPradosh = (tithiIdx === 12 || tithiIdx === 27);
-    const isPurnima = (tithiIdx === 14);
-    const isAmavasya = (tithiIdx === 29);
-
-    if (isEkadashi) {
+    if (pInfo.activeEkadashi) {
       vratTextEl.innerHTML = isHi
-        ? `<strong>आज पवित्र एकादशी व्रत:</strong> उदया तिथि सूर्योदय (${solar.sunriseStr}) से मान्य है। अन्न त्याग कर केवल जल/दूध/फल लें। व्रत का पारण कल सूर्योदय (${solar.sunriseStr}) के बाद हरि वासर समाप्त होने पर करें।`
-        : `<strong>Today Sacred Ekadashi Vrat:</strong> Udaya Tithi is active at sunrise (${solar.sunriseStr}). Refrain from grains; consume only water/milk/fruits. Parana (fast breaking) tomorrow after sunrise (${solar.sunriseStr}) post-Hari Vasara.`;
-    } else if (isPradosh) {
+        ? `<strong>आज पवित्र ${pInfo.activeEkadashi.nameHi} महाव्रत (उदया तिथि मान्य):</strong> अन्न का पूर्ण त्याग कर फलाहार/जल लें। 108 बार "ॐ नमो भगवते वासुदेवाय" जपें व तुलसी दल अर्पित करें। पारण कल सूर्योदय (${solar.sunriseStr}) के बाद हरि वासर समाप्त होने पर करें।`
+        : `<strong>Today is Sacred ${pInfo.activeEkadashi.nameEn} (Sovereign Udaya Tithi):</strong> Refrain from all grains; consume light water/milk/fruits. Worship Lord Vishnu with Tulsi leaves and recite Vishnu Sahasranama. Parana (fast breaking) tomorrow after sunrise (${solar.sunriseStr}) post-Hari Vasara.`;
+    } else if (pInfo.isPradosh) {
       vratTextEl.innerHTML = isHi
-        ? `<strong>आज प्रदोष व्रत:</strong> त्रयोदशी संध्या पूजन प्रदोष काल (सूर्यास्त ${solar.sunsetStr} से 2.4 घंटे तक) में शिव साधना एवं दीपदान के साथ करें।`
-        : `<strong>Today Pradosh Vrat:</strong> Trayodashi evening worship during Pradosh Kaal (from sunset ${solar.sunsetStr} for 2.4 hours) with pure ghee lamp for Lord Shiva.`;
-    } else if (isPurnima) {
+        ? `<strong>आज ${pInfo.pradoshNameHi}:</strong> त्रयोदशी संध्या पूजन प्रदोष काल (सूर्यास्त ${solar.sunsetStr} से 2.4 घंटे तक) में शिवलिंग पर शुद्ध घी का दीपक जलाकर व शिव साधना के साथ करें।`
+        : `<strong>Today is ${pInfo.pradoshNameEn}:</strong> Trayodashi evening worship during Pradosh Kaal (from sunset ${solar.sunsetStr} for 2.4 hours) with pure cow-ghee lamp on Shivling.`;
+    } else if (pInfo.isPurnima) {
       vratTextEl.innerHTML = isHi
-        ? `<strong>आज सत्यनारायण पूर्णिमा:</strong> चंद्रोदय समय अर्घ्य दें और सत्यनारायण कथा व पितृ तर्पण संपन्न करें।`
-        : `<strong>Today Satyanarayan Purnima:</strong> Offer Arghya at Moonrise, perform Satyanarayan Puja, and practice sacred charity.`;
-    } else if (isAmavasya) {
+        ? `<strong>आज ${pInfo.maasHi} सत्यनारायण पूर्णिमा:</strong> चंद्रोदय समय अर्घ्य दें और सत्यनारायण कथा व सात्विक दान संपन्न करें।`
+        : `<strong>Today is ${pInfo.maasEn} Satyanarayan Purnima:</strong> Offer Arghya at Moonrise, perform Satyanarayan Puja, and practice sacred charity.`;
+    } else if (pInfo.isAmavasya) {
       vratTextEl.innerHTML = isHi
-        ? `<strong>आज अमावस्या तर्पण:</strong> पितरों के निमित्त सूर्योदय (${solar.sunriseStr}) पर तर्पण करें व सात्विक अन्न दान करें।`
-        : `<strong>Today Amavasya Tarpan:</strong> Offer ancestral reflection at sunrise (${solar.sunriseStr}) and distribute food to the needy.`;
+        ? `<strong>आज ${pInfo.maasHi} अमावस्या तर्पण:</strong> पितरों के निमित्त सूर्योदय (${solar.sunriseStr}) पर काले तिल से तर्पण करें व सात्विक अन्न दान करें।`
+        : `<strong>Today is ${pInfo.maasEn} Amavasya Tarpan:</strong> Offer ancestral reflection at sunrise (${solar.sunriseStr}) with black sesame seeds and distribute food to the needy.`;
     } else {
       vratTextEl.innerHTML = isHi
-        ? `सनातन पंचांग अनुसार सभी धार्मिक व्रत स्थानीय सूर्योदय (${solar.sunriseStr}) पर उपस्थित उदया तिथि एवं अरुणोदय शुद्धि से ही निर्धारित होते हैं।`
-        : `As per Vedic Panchang, all sacred fasts are determined by the sovereign Udaya Tithi at local sunrise (${solar.sunriseStr}) with pre-dawn Arunodaya purity.`;
+        ? `सनातन पंचांग अनुसार सभी धार्मिक व्रत स्थानीय सूर्योदय (${solar.sunriseStr}) पर उपस्थित उदया तिथि एवं अरुणोदय शुद्धि से ही निर्धारित होते हैं। राहुकाल (${pInfo.rahuKaalStr}) में शुभ कार्य वर्जित हैं।`
+        : `As per Vedic Panchang, all sacred fasts are determined by the sovereign Udaya Tithi at local sunrise (${solar.sunriseStr}) with pre-dawn Arunodaya purity. Avoid new ventures during Rahu Kaal (${pInfo.rahuKaalStr}).`;
     }
   }
 }
