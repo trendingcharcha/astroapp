@@ -3713,7 +3713,7 @@ H12
 <script>
 // 1. ZODIAC DICTIONARIES & GLOBAL KUNDLI CACHE
 var cachedPlacementsList = [];
-var cachedLagnaSignNum = 0;
+var cachedLagnaSignNum = (typeof localStorage !== 'undefined' && localStorage.getItem('kundli_lagna_sign') !== null) ? parseInt(localStorage.getItem('kundli_lagna_sign')) : 0;
 var cachedBirthDateStr = '';
 
 function escapeHTML(str) {
@@ -5891,12 +5891,10 @@ const coachIssueNoteEn = userCustomIssue ? ` with focus on "${userCustomIssue}"`
 const coachIssueNoteHi = userCustomIssue ? ` और "${userCustomIssue}" पर विशेष ध्यान` : '';
 
 // Retrieve user's authentic Kundali parameters
-let uLagnaIdx = (typeof cachedLagnaSignNum === 'number' && cachedLagnaSignNum >= 0) ? cachedLagnaSignNum : -1;
-if (uLagnaIdx < 0) {
-  const storedL = localStorage.getItem('kundli_lagna_sign');
-  if (storedL !== null) uLagnaIdx = parseInt(storedL);
-  else uLagnaIdx = 0;
-}
+const _storedL = (typeof localStorage !== 'undefined') ? (localStorage.getItem('kundli_lagna_sign') || localStorage.getItem('user_lagna_sign_num')) : null;
+let uLagnaIdx = (_storedL !== null && _storedL !== undefined && !isNaN(parseInt(_storedL)))
+  ? parseInt(_storedL)
+  : ((typeof cachedLagnaSignNum === 'number' && cachedLagnaSignNum >= 0) ? cachedLagnaSignNum : 0);
 const uLagnaLord = signLords[uLagnaIdx] || 'Mars';
 const uLagnaLordHi = signLordsHi[uLagnaIdx] || 'मंगल';
 const uLagnaName = signNames[uLagnaIdx] || 'Aries';
@@ -6086,7 +6084,7 @@ icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="curre
 const _powerDirMapEn = { 'Sun': 'East', 'Moon': 'North-West', 'Mars': 'South', 'Mercury': 'North', 'Jupiter': 'North-East', 'Venus': 'South-East', 'Saturn': 'West' };
 const _powerDirMapHi = { 'Sun': 'पूर्व', 'Moon': 'उत्तर-पश्चिम', 'Mars': 'दक्षिण', 'Mercury': 'उत्तर', 'Jupiter': 'उत्तर-पूर्व', 'Venus': 'दक्षिण-पूर्व', 'Saturn': 'पश्चिम' };
 const _signLordsArr = ['Mars','Venus','Mercury','Moon','Sun','Mercury','Venus','Mars','Jupiter','Saturn','Saturn','Jupiter'];
-const _lagnaIdx = (typeof cachedLagnaSignNum === 'number' && cachedLagnaSignNum >= 0) ? cachedLagnaSignNum : (localStorage.getItem('kundli_lagna_sign') !== null ? parseInt(localStorage.getItem('kundli_lagna_sign')) : 0);
+const _lagnaIdx = uLagnaIdx;
 const _lagnaLordTask = _signLordsArr[_lagnaIdx] || 'Mars';
 const _lagnaLordHiTask = {'Sun':'सूर्य','Moon':'चन्द्र','Mars':'मंगल','Mercury':'बुध','Jupiter':'गुरु','Venus':'शुक्र','Saturn':'शनि'};
 const _dirEn = _powerDirMapEn[_lagnaLordTask] || 'East';
@@ -6811,7 +6809,10 @@ function updateDashboardHolyFestivalCard() {
 
   const isHi = currentAppLang === 'hi';
   const userName = localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || 'Seeker';
-  const lagnaSign = (typeof cachedLagnaSignNum === 'number' && cachedLagnaSignNum >= 0) ? cachedLagnaSignNum : parseInt(localStorage.getItem('kundli_lagna_sign') || localStorage.getItem('user_lagna_sign_num') || '0');
+  const _stLagna = (typeof localStorage !== 'undefined') ? (localStorage.getItem('kundli_lagna_sign') || localStorage.getItem('user_lagna_sign_num')) : null;
+  const lagnaSign = (_stLagna !== null && _stLagna !== undefined && !isNaN(parseInt(_stLagna)))
+    ? parseInt(_stLagna)
+    : ((typeof cachedLagnaSignNum === 'number' && cachedLagnaSignNum >= 0) ? cachedLagnaSignNum : 0);
   const lagnaLord = signLords[lagnaSign] || 'Sun';
   const dayNum = (typeof selectedRoadmapDay !== 'undefined') ? selectedRoadmapDay : 1;
 
@@ -6844,7 +6845,10 @@ function updateSanatanNotifications() {
       const userName = localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || 'Seeker';
       const userGoal = localStorage.getItem('user_goal') || 'job';
       const userProf = localStorage.getItem('user_profession') || 'Professional';
-      const lagnaSign = (typeof cachedLagnaSignNum === 'number' && cachedLagnaSignNum >= 0) ? cachedLagnaSignNum : parseInt(localStorage.getItem('kundli_lagna_sign') || localStorage.getItem('user_lagna_sign_num') || '0');
+      const _stLagna = (typeof localStorage !== 'undefined') ? (localStorage.getItem('kundli_lagna_sign') || localStorage.getItem('user_lagna_sign_num')) : null;
+  const lagnaSign = (_stLagna !== null && _stLagna !== undefined && !isNaN(parseInt(_stLagna)))
+    ? parseInt(_stLagna)
+    : ((typeof cachedLagnaSignNum === 'number' && cachedLagnaSignNum >= 0) ? cachedLagnaSignNum : 0);
       const lagnaLord = signLords[lagnaSign] || 'Sun';
       const lagnaName = signNames[lagnaSign] || 'Aries';
       const lagnaNameHi = signNamesHi[lagnaSign] || 'मेष';
