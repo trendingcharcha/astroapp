@@ -2212,7 +2212,7 @@ Partner / Spouse Details
   </span>
 </div>
 </div>
-<span id="p-udaya-badge" style="background: rgba(232, 200, 121, 0.15); border: 1px solid var(--gold); color: var(--gold); padding: 2px 8px; border-radius: 10px; font-size: 0.68rem; font-weight: bold;">
+<span id="p-udaya-badge" style="background: rgba(232, 200, 121, 0.15); border: 1px solid var(--gold); color: var(--gold); padding: 2px 8px; border-radius: 10px; font-size: 0.68rem; font-weight: bold; white-space: nowrap; flex-shrink: 0;">
 Surya Udaya Aligned
 </span>
 </div>
@@ -6776,6 +6776,8 @@ function calculateAstronomicalPanchang(targetDate, userLat, userLng, userTz) {
     karanaEn,
     karanaHi,
     rahuKaalStr,
+    rahuStartMins,
+    rahuEndMins,
     maasEn,
     maasHi,
     pakshaEn,
@@ -7126,7 +7128,7 @@ function updateDashboardHolyFestivalCard() {
   }
 }
 
-function updateSanatanNotifications() {
+function updateSanatanNotifications(lang) {
       if (typeof updateDashboardHolyFestivalCard === 'function') {
         updateDashboardHolyFestivalCard();
       }
@@ -7134,8 +7136,8 @@ function updateSanatanNotifications() {
       const container = document.getElementById('notification-alerts-list');
       if (!container) return;
 
-      const lang = currentAppLang;
-      const isHi = lang === 'hi';
+      const targetLang = lang || (typeof currentAppLang !== 'undefined' ? currentAppLang : (localStorage.getItem('app_language') || 'en'));
+      const isHi = targetLang === 'hi';
       const dayNum = (typeof selectedRoadmapDay !== 'undefined') ? selectedRoadmapDay : 1;
 
       // Extract user personal details & Kundli parameters
@@ -7161,67 +7163,38 @@ function updateSanatanNotifications() {
         ? targetDate.toLocaleDateString('hi-IN', dateOptions) 
         : targetDate.toLocaleDateString('en-US', dateOptions);
 
-      // Day of Week Rahu Kaal Map (Rotates dynamically per day!)
-      const rahuKaalMap = [
-        { en: '04:30 PM - 06:00 PM', hi: 'शाम 04:30 - 06:00', dayEn: 'Sunday', dayHi: 'रविवार' },
-        { en: '07:30 AM - 09:00 AM', hi: 'सुबह 07:30 - 09:00', dayEn: 'Monday', dayHi: 'सोमवार' },
-        { en: '03:00 PM - 04:30 PM', hi: 'दोपहर 03:00 - 04:30', dayEn: 'Tuesday', dayHi: 'मंगलवार' },
-        { en: '12:00 PM - 01:30 PM', hi: 'दोपहर 12:00 - 01:30', dayEn: 'Wednesday', dayHi: 'बुधवार' },
-        { en: '01:30 PM - 03:00 PM', hi: 'दोपहर 01:30 - 03:00', dayEn: 'Thursday', dayHi: 'गुरुवार' },
-        { en: '10:30 AM - 12:00 PM', hi: 'सुबह 10:30 - 12:00', dayEn: 'Friday', dayHi: 'शुक्रवार' },
-        { en: '09:00 AM - 10:30 AM', hi: 'सुबह 09:00 - 10:30', dayEn: 'Saturday', dayHi: 'शनिवार' }
-      ];
-      const rk = rahuKaalMap[targetDate.getDay()];
+      const varaListEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const varaListHi = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
 
-      let isEkadashiToday = false;
-      let isEkadashiTomorrow = false;
-      let isPradoshToday = false;
-      let isPurnimaAmavasya = false;
+      // Astronomical Panchang & Solar Calculation for Target Date (Dual-Location Calibrated)
+      const pInfoToday = (typeof calculateAstronomicalPanchang === 'function')
+        ? calculateAstronomicalPanchang(targetDate)
+        : null;
+      const solarToday = (pInfoToday && pInfoToday.solar)
+        ? pInfoToday.solar
+        : ((typeof calculateSolarTimings === 'function')
+            ? calculateSolarTimings(targetDate)
+            : { sunriseStr: '06:00 AM', sunsetStr: '06:30 PM', brahmaMuhurat: '04:24 AM - 05:12 AM', abhijitMuhurat: '11:50 AM - 12:40 PM' });
+      const rkTodayStr = (pInfoToday && pInfoToday.rahuKaalStr) ? pInfoToday.rahuKaalStr : '07:30 AM - 09:00 AM';
+
+      const tomDate = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate() + 1);
+      const pInfoTom = (typeof calculateAstronomicalPanchang === 'function')
+        ? calculateAstronomicalPanchang(tomDate)
+        : null;
+
+      const isEkadashiToday = !!(pInfoToday && (pInfoToday.tithiIdx === 10 || pInfoToday.tithiIdx === 25));
+      const isEkadashiTomorrow = (!isEkadashiToday && !!(pInfoTom && (pInfoTom.tithiIdx === 10 || pInfoTom.tithiIdx === 25)));
+      const isPradoshToday = !!(pInfoToday && pInfoToday.isPradosh);
+      const isPurnimaAmavasya = !!(pInfoToday && (pInfoToday.isPurnima || pInfoToday.isAmavasya));
+
       let daysLeftToEkadashi = 0;
-
-      if (typeof calculateSolarTimings === 'function' && typeof getJulianDay === 'function' && typeof getPlanetLongitude === 'function') {
-        try {
-          const userLat = parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139;
-          const userLng = parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090;
-          const userTz = parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5;
-
-          const solarToday = calculateSolarTimings(targetDate, userLat, userLng, userTz);
-          const sHourToday = Math.floor(solarToday.sunriseMins / 60);
-          const sMinToday = Math.floor(solarToday.sunriseMins % 60);
-          const jdToday = getJulianDay(targetDate.getFullYear(), targetDate.getMonth() + 1, targetDate.getDate(), sHourToday, sMinToday, userTz);
-          const ayanamsaToday = getLahiriAyanamsa(jdToday);
-          const sunLonToday = (getPlanetLongitude("Sun", jdToday) - ayanamsaToday + 360) % 360;
-          const moonLonToday = (getPlanetLongitude("Moon", jdToday) - ayanamsaToday + 360) % 360;
-          const diffToday = (moonLonToday - sunLonToday + 360) % 360;
-          const tithiAtSunrise = Math.floor(diffToday / 12) % 30;
-
-          const tomDate = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate() + 1);
-          const solarTom = calculateSolarTimings(tomDate, userLat, userLng, userTz);
-          const sHourTom = Math.floor(solarTom.sunriseMins / 60);
-          const sMinTom = Math.floor(solarTom.sunriseMins % 60);
-          const jdTom = getJulianDay(tomDate.getFullYear(), tomDate.getMonth() + 1, tomDate.getDate(), sHourTom, sMinTom, userTz);
-          const ayanamsaTom = getLahiriAyanamsa(jdTom);
-          const sunLonTom = (getPlanetLongitude("Sun", jdTom) - ayanamsaTom + 360) % 360;
-          const moonLonTom = (getPlanetLongitude("Moon", jdTom) - ayanamsaTom + 360) % 360;
-          const diffTom = (moonLonTom - sunLonTom + 360) % 360;
-          const tithiAtSunriseTom = Math.floor(diffTom / 12) % 30;
-
-          isEkadashiToday = (tithiAtSunrise === 10 || tithiAtSunrise === 25);
-          isEkadashiTomorrow = (!isEkadashiToday && (tithiAtSunriseTom === 10 || tithiAtSunriseTom === 25));
-          isPradoshToday = (tithiAtSunrise === 12 || tithiAtSunrise === 27);
-          isPurnimaAmavasya = (tithiAtSunrise === 14 || tithiAtSunrise === 29);
-
-          if (tithiAtSunrise < 10) {
-            daysLeftToEkadashi = 10 - tithiAtSunrise;
-          } else if (tithiAtSunrise < 25) {
-            daysLeftToEkadashi = 25 - tithiAtSunrise;
-          } else {
-            daysLeftToEkadashi = (30 - tithiAtSunrise) + 10;
-          }
-        } catch(e) {
-          isEkadashiToday = false;
-          isEkadashiTomorrow = true;
-          daysLeftToEkadashi = 1;
+      if (pInfoToday && typeof pInfoToday.tithiIdx === 'number') {
+        if (pInfoToday.tithiIdx < 10) {
+          daysLeftToEkadashi = 10 - pInfoToday.tithiIdx;
+        } else if (pInfoToday.tithiIdx < 25) {
+          daysLeftToEkadashi = 25 - pInfoToday.tithiIdx;
+        } else {
+          daysLeftToEkadashi = (30 - pInfoToday.tithiIdx) + 10;
         }
       }
 
@@ -7253,25 +7226,25 @@ function updateSanatanNotifications() {
 
       // 1. DYNAMIC USER GOAL & KUNDLI TRANSIT ALERT (Tailored to Name, Lagna Lord & Goal)
       const goalAlertMapEn = {
-        job: `Career Acceleration Notice for ${userName} (${lagnaName} Ascendant): Your ruling planet ${lagnaLord} enhances executive authority today. Schedule high-value work tasks during Abhijit Muhurat.`,
-        debt: `Financial Protection Notice for ${userName}: Avoid granting loans or signing debt contracts during Rahu Kaal (${rk.en}).`,
+        job: `Career Acceleration Notice for ${userName} (${lagnaName} Ascendant): Your ruling planet ${lagnaLord} enhances executive authority today. Schedule high-value work tasks during Abhijit Muhurat (${solarToday.abhijitMuhurat}).`,
+        debt: `Financial Protection Notice for ${userName}: Avoid granting loans or signing debt contracts during Rahu Kaal (${rkTodayStr}).`,
         marriage: `Relationship Harmony Notice for ${userName}: Venus & Moon energy activated for matrimonial progress and peaceful communication.`,
-        baby: `Progeny Blessing Notice for ${userName}: Perform Santan Gopal mantra during morning Brahma Muhurat for maximum spiritual energy.`,
-        business: `Commercial Expansion Notice for ${userName}: 10th House Lord energy is active. Finalize business proposals outside Rahu Kaal window.`,
-        property: `Real Estate Acquisition Notice for ${userName}: Mars energy supported. Inspect property agreements during Abhijit Success Window.`,
-        health: `Vitality Spectrum Notice for ${userName}: Drink copper vessel water at sunrise to balance Lagna lord ${lagnaLord} energy.`,
-        custom: `Karmic Alignment Notice for ${userName} (${userProf}): Focus on your core goal priorities outside Rahu Kaal.`
+        baby: `Progeny Blessing Notice for ${userName}: Perform Santan Gopal mantra during morning Brahma Muhurat (${solarToday.brahmaMuhurat}) for maximum spiritual energy.`,
+        business: `Commercial Expansion Notice for ${userName}: 10th House Lord energy is active. Finalize business proposals outside Rahu Kaal (${rkTodayStr}).`,
+        property: `Real Estate Acquisition Notice for ${userName}: Mars energy supported. Inspect property agreements during Abhijit Success Window (${solarToday.abhijitMuhurat}).`,
+        health: `Vitality Spectrum Notice for ${userName}: Drink copper vessel water at sunrise (${solarToday.sunriseStr}) to balance Lagna lord ${lagnaLord} energy.`,
+        custom: `Karmic Alignment Notice for ${userName} (${userProf}): Focus on your core goal priorities outside Rahu Kaal (${rkTodayStr}).`
       };
 
       const goalAlertMapHi = {
-        job: `${userName} (${lagnaNameHi} लग्न) के लिए करियर त्वरण अलर्ट: आपके स्वामी ग्रह ${signLordsHi[lagnaSign] || lagnaLord} आज अधिकार बढ़ाते हैं। अभिजीत मुहूर्त में महत्वपूर्ण कार्य पूरा करें।`,
-        debt: `${userName} के लिए वित्तीय सुरक्षा अलर्ट: राहु काल (${rk.hi}) के दौरान ऋण लेने या वित्तीय समझौतों से बचें।`,
+        job: `${userName} (${lagnaNameHi} लग्न) के लिए करियर त्वरण अलर्ट: आपके स्वामी ग्रह ${signLordsHi[lagnaSign] || lagnaLord} आज अधिकार बढ़ाते हैं। अभिजीत मुहूर्त (${solarToday.abhijitMuhurat}) में महत्वपूर्ण कार्य पूरा करें।`,
+        debt: `${userName} के लिए वित्तीय सुरक्षा अलर्ट: राहु काल (${rkTodayStr}) के दौरान ऋण लेने या वित्तीय समझौतों से बचें।`,
         marriage: `${userName} के लिए वैवाहिक सौहार्द अलर्ट: विवाह प्रस्तावों एवं संवाद हेतु शुक्र व चंद्र ऊर्जा अनुकूल है।`,
-        baby: `${userName} के लिए संतान आशीर्वाद अलर्ट: आध्यात्मिक ऊर्जा हेतु ब्रह्म मुहूर्त में संतान गोपाल मंत्र का जाप करें।`,
-        business: `${userName} के लिए व्यापार विस्तार अलर्ट: 10वें भाव के स्वामी की ऊर्जा सक्रिय है। राहु काल के बाहर व्यावसायिक निर्णय लें।`,
-        property: `${userName} के लिए संपत्ति संचय अलर्ट: मंगल ऊर्जा अनुकूल है। अभिजीत मुहूर्त में संपत्ति दस्तावेजों की समीक्षा करें।`,
-        health: `${userName} के लिए स्वास्थ्य ऊर्जा अलर्ट: स्वामी ग्रह ${signLordsHi[lagnaSign] || lagnaLord} की शांति हेतु सूर्योदय पर अर्घ्य दें।`,
-        custom: `${userName} (${userProf}) के लिए कर्म संरेखण अलर्ट: राहु काल को छोड़कर अपने प्राथमिक लक्ष्य पर ध्यान दें।`
+        baby: `${userName} के लिए संतान आशीर्वाद अलर्ट: आध्यात्मिक ऊर्जा हेतु ब्रह्म मुहूर्त (${solarToday.brahmaMuhurat}) में संतान गोपाल मंत्र का जाप करें।`,
+        business: `${userName} के लिए व्यापार विस्तार अलर्ट: 10वें भाव के स्वामी की ऊर्जा सक्रिय है। राहु काल (${rkTodayStr}) के बाहर व्यावसायिक निर्णय लें।`,
+        property: `${userName} के लिए संपत्ति संचय अलर्ट: मंगल ऊर्जा अनुकूल है। अभिजीत मुहूर्त (${solarToday.abhijitMuhurat}) में संपत्ति दस्तावेजों की समीक्षा करें।`,
+        health: `${userName} के लिए स्वास्थ्य ऊर्जा अलर्ट: स्वामी ग्रह ${signLordsHi[lagnaSign] || lagnaLord} की शांति हेतु सूर्योदय (${solarToday.sunriseStr}) पर अर्घ्य दें।`,
+        custom: `${userName} (${userProf}) के लिए कर्म संरेखण अलर्ट: राहु काल (${rkTodayStr}) को छोड़कर अपने प्राथमिक लक्ष्य पर ध्यान दें।`
       };
 
       alertsHTML += `
@@ -7319,22 +7292,22 @@ function updateSanatanNotifications() {
         alertsHTML += `
           <div style="background: rgba(142, 68, 173, 0.15); border-left: 3px solid #8e44ad; padding: 10px 12px; border-radius: 8px;">
             <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #8e44ad; font-weight: bold; margin-bottom: 4px;">
-              <span>${isHi ? 'आज प्रदोष व्रत एवं शिव आराधना' : 'Today Pradosh Vrat & Shiva Sandhya'}</span>
-              <span style="background: #8e44ad; color:#fff; padding:1px 6px; border-radius:4px; font-size:0.68rem;">${isHi ? 'आज सक्रिय' : 'Active Today'}</span>
+              <span>${isHi ? 'आज पवित्र प्रदोष व्रत (संध्या शिव साधना)' : 'Today Sacred Pradosh Vrat (Evening Shiva Sadhana)'}</span>
+              <span style="background: #8e44ad; color:#fff; padding:1px 6px; border-radius:4px; font-size:0.68rem;">${isHi ? 'त्रयोदशी' : 'Trayodashi'}</span>
             </div>
             <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
               ${isHi
-                ? 'संध्या समय (06:30 PM - 07:30 PM) भगवान शिव के समक्ष शुद्ध घी का दीपक जलाएं और "ॐ नमः शिवाय" का जाप करें।'
-                : 'Evening twilight window (06:30 PM - 07:30 PM). Light a pure ghee lamp for Lord Shiva and chant "Om Namah Shivaya" for planetary peace.'}
+                ? `संध्या समय प्रदोष काल (सूर्यास्त ${solarToday.sunsetStr} से) में भगवान शिव के समक्ष शुद्ध घी का दीपक जलाएं और "ॐ नमः शिवाय" का जाप करें।`
+                : `Evening twilight window (from sunset ${solarToday.sunsetStr}). Light a pure ghee lamp for Lord Shiva and chant "Om Namah Shivaya" for planetary peace.`}
             </p>
           </div>
         `;
       } else if (isPurnimaAmavasya) {
         alertsHTML += `
-          <div style="background: rgba(26, 188, 156, 0.15); border-left: 3px solid #1abc9c; padding: 10px 12px; border-radius: 8px;">
-            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #1abc9c; font-weight: bold; margin-bottom: 4px;">
-              <span>${isHi ? 'पूर्णिमा / अमावस्या तर्पण एवं दान' : 'Purnima / Amavasya Tarpan & Charity'}</span>
-              <span style="background: #1abc9c; color:#fff; padding:1px 6px; border-radius:4px; font-size:0.68rem;">${isHi ? 'आज सक्रिय' : 'Active Today'}</span>
+          <div style="background: rgba(46, 204, 113, 0.12); border-left: 3px solid #2ecc71; padding: 10px 12px; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #2ecc71; font-weight: bold; margin-bottom: 4px;">
+              <span>${isHi ? 'पूर्णिमा / अमावस्या विशेष शुद्धि' : 'Purnima / Amavasya Sacred Alignment'}</span>
+              <span style="background: #2ecc71; color:#0C0922; padding:1px 6px; border-radius:4px; font-size:0.68rem;">${isHi ? 'पवित्र तिथि' : 'Sacred Tithi'}</span>
             </div>
             <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
               ${isHi
@@ -7359,12 +7332,12 @@ function updateSanatanNotifications() {
         `;
       }
 
-      // 3. Day-Specific Rahu Kaal Warning (Rotates daily!)
+      // 3. Day-Specific Rahu Kaal Warning (Unified Local Solar Horizon)
       alertsHTML += `
         <div style="background: rgba(231, 76, 60, 0.1); border-left: 3px solid #e74c3c; padding: 10px 12px; border-radius: 8px;">
           <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #e74c3c; font-weight: bold; margin-bottom: 4px;">
-            <span>${isHi ? `राहु काल सावधान (${rk.dayHi})` : `Rahu Kaal Alert (${rk.dayEn})`}</span>
-            <span>${isHi ? rk.hi : rk.en}</span>
+            <span>${isHi ? `राहु काल सावधान (${varaListHi[targetDate.getDay()]})` : `Rahu Kaal Alert (${varaListEn[targetDate.getDay()]})`}</span>
+            <span style="font-weight: 700; color: #ff8b8b;">${rkTodayStr}</span>
           </div>
           <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
             ${isHi
@@ -7377,7 +7350,7 @@ function updateSanatanNotifications() {
         <div style="background: rgba(93, 173, 226, 0.1); border-left: 3px solid #5dade2; padding: 10px 12px; border-radius: 8px;">
           <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #5dade2; font-weight: bold; margin-bottom: 4px;">
             <span>${isHi ? 'अभिजीत मुहूर्त (दैनिक सफलता काल)' : 'Abhijit Muhurat (Daily Success Window)'}</span>
-            <span>11:45 AM - 12:30 PM</span>
+            <span style="font-weight: 700; color: #5dade2;">${solarToday.abhijitMuhurat}</span>
           </div>
           <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
             ${isHi
@@ -7390,7 +7363,7 @@ function updateSanatanNotifications() {
         <div style="background: rgba(46, 204, 113, 0.1); border-left: 3px solid #2ecc71; padding: 10px 12px; border-radius: 8px;">
           <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #2ecc71; font-weight: bold; margin-bottom: 4px;">
             <span>${isHi ? 'ब्रह्म मुहूर्त (साधना काल)' : 'Brahma Muhurat (Spiritual Window)'}</span>
-            <span>04:30 AM - 05:15 AM</span>
+            <span style="font-weight: 700; color: #2ecc71;">${solarToday.brahmaMuhurat}</span>
           </div>
           <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
             ${isHi
@@ -7542,9 +7515,10 @@ let currentAppLang = localStorage.getItem('app_language') || 'en';
 
 function calculateSolarTimings(dateObj, lat, lng, tz) {
   const d = dateObj || new Date();
-  const latitude = (typeof lat === 'number') ? lat : (parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139);
-  const longitude = (typeof lng === 'number') ? lng : (parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090);
-  const timezone = (typeof tz === 'number') ? tz : (parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5);
+  const curLoc = (typeof getCurrentLocation === 'function') ? getCurrentLocation() : null;
+  const latitude = (typeof lat === 'number') ? lat : (curLoc ? curLoc.lat : (parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139));
+  const longitude = (typeof lng === 'number') ? lng : (curLoc ? curLoc.lng : (parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090));
+  const timezone = (typeof tz === 'number') ? tz : (curLoc ? curLoc.tz : (parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5));
 
   const startOfYear = new Date(d.getFullYear(), 0, 0);
   const dayOfYear = Math.floor((d - startOfYear) / (1000 * 60 * 60 * 24));
@@ -13483,9 +13457,10 @@ const planetHoraMeta = {
 
 function calculate24DailyHoras(targetDate, lat, lng, tz, userLagnaLord, userGoalLord) {
   const d = targetDate ? new Date(targetDate) : new Date();
-  const latitude = (typeof lat === 'number') ? lat : (parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139);
-  const longitude = (typeof lng === 'number') ? lng : (parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090);
-  const timezone = (typeof tz === 'number') ? tz : (parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5);
+  const curLoc = (typeof getCurrentLocation === 'function') ? getCurrentLocation() : null;
+  const latitude = (typeof lat === 'number') ? lat : (curLoc ? curLoc.lat : (parseFloat(localStorage.getItem('user_lat') || '28.6139') || 28.6139));
+  const longitude = (typeof lng === 'number') ? lng : (curLoc ? curLoc.lng : (parseFloat(localStorage.getItem('user_lng') || '77.2090') || 77.2090));
+  const timezone = (typeof tz === 'number') ? tz : (curLoc ? curLoc.tz : (parseFloat(localStorage.getItem('user_timezone') || '5.5') || 5.5));
 
   const solar = calculateSolarTimings(d, latitude, longitude, timezone);
 
@@ -16035,12 +16010,24 @@ function scheduleNativeLocalNotifications() {
       body: `Day active for your ${userGoal} Journey. Tap to complete today's 4 custom remedies and claim your XP.`,
       scheduledTime: `${todayStr}T07:00:00`
     },
-    rahuKaalWarning: {
-      type: 'rahu_warning',
-      title: `Rahu Kaal Advance Warning`,
-      body: `Rahu Kaal window begins in 15 minutes. Postpone major contract signings or debt agreements.`,
-      scheduledTime: `${todayStr}T14:45:00`
-    },
+    rahuKaalWarning: (() => {
+      let rTime = `${todayStr}T14:45:00`;
+      try {
+        const pInf = (typeof calculateAstronomicalPanchang === 'function') ? calculateAstronomicalPanchang(new Date()) : null;
+        if (pInf && typeof pInf.rahuStartMins === 'number') {
+          const advM = Math.max(0, pInf.rahuStartMins - 15);
+          const h24 = Math.floor(advM / 60);
+          const m = Math.floor(advM % 60);
+          rTime = `${todayStr}T${String(h24).padStart(2,'0')}:${String(m).padStart(2,'0')}:00`;
+        }
+      } catch(e) {}
+      return {
+        type: 'rahu_warning',
+        title: `Rahu Kaal Advance Warning`,
+        body: `Rahu Kaal window begins in 15 minutes. Postpone major contract signings or debt agreements.`,
+        scheduledTime: rTime
+      };
+    })(),
     streakKeeper: {
       type: 'streak_keeper',
       title: `Protect Your Streak!`,
