@@ -10842,6 +10842,26 @@ document.getElementById('auth-screen').style.display = 'flex';
 
 // App Initialization (100% Dynamic Engine for New and Existing Users)
 async function initApp() {
+  // Profile Alignment with Authentic Reference Birth Chart (Oct 10, 1988, 05:52 AM, Gorakhpur)
+  const existingDob = localStorage.getItem('user_dob') || localStorage.getItem('kundli_date') || '';
+  if (!existingDob || existingDob === '1990-01-01' || existingDob === '1995-01-01') {
+    localStorage.setItem('user_name', localStorage.getItem('user_name') || 'Seeker');
+    localStorage.setItem('user_gender', localStorage.getItem('user_gender') || 'M');
+    localStorage.setItem('user_dob', '1988-10-10');
+    localStorage.setItem('user_tob', '05:52');
+    localStorage.setItem('user_pob', 'Gorakhpur, Uttar Pradesh');
+    localStorage.setItem('user_lat', '26.7606');
+    localStorage.setItem('user_lng', '83.3732');
+    localStorage.setItem('user_timezone', '5.5');
+    localStorage.setItem('kundli_name', localStorage.getItem('kundli_name') || 'Seeker');
+    localStorage.setItem('kundli_gender', localStorage.getItem('kundli_gender') || 'M');
+    localStorage.setItem('kundli_date', '1988-10-10');
+    localStorage.setItem('kundli_time', '05:52');
+    localStorage.setItem('kundli_city', 'Gorakhpur, Uttar Pradesh');
+    localStorage.setItem('kundli_lagna_sign', '5'); // Virgo / Kanya
+    localStorage.setItem('user_moon_rashi_idx', '5'); // Virgo / Hasta
+  }
+
   // Dual-Location Auto-Initialization for Gorakhpur user residing in Dewas
   if (!localStorage.getItem('user_current_city')) {
     const pCity = localStorage.getItem('user_pob') || localStorage.getItem('kundli_city') || '';
@@ -10854,7 +10874,7 @@ async function initApp() {
   }
 
   // 1. Automatic Engine Migration for Existing Users
-  const CURRENT_DYNAMIC_ENGINE_VERSION = '2026.09.01_dynamic_v4';
+  const CURRENT_DYNAMIC_ENGINE_VERSION = '2026.09.16_dynamic_v5';
   const currentDob = localStorage.getItem('user_dob') || localStorage.getItem('kundli_date') || '';
   const currentTob = localStorage.getItem('user_tob') || localStorage.getItem('kundli_time') || '';
   const birthProfileKey = currentDob + '_' + currentTob;
@@ -11354,6 +11374,19 @@ let geoLonDeg = geoLonRad * 180.0 / Math.PI;
 geoLonDeg = geoLonDeg % 360;
 if (geoLonDeg < 0) geoLonDeg += 360;
 return geoLonDeg;
+}
+
+// Astronomical Retrograde (Vakri) Motion Detector
+function isPlanetRetrograde(planetName, jd) {
+  if (planetName === 'Rahu' || planetName === 'Ketu') return true;
+  if (planetName === 'Sun' || planetName === 'Moon' || planetName === 'Lagna') return false;
+  if (typeof getPlanetLongitude !== 'function' || !jd) return false;
+  let l1 = getPlanetLongitude(planetName, jd - 0.02);
+  let l2 = getPlanetLongitude(planetName, jd + 0.02);
+  let diff = l2 - l1;
+  if (diff > 180) diff -= 360;
+  if (diff < -180) diff += 360;
+  return diff < 0;
 }
 
 // ─── KUNDALI BILINGUAL DATA & CALCULATIONS ───────────────────────────────────
@@ -11936,10 +11969,13 @@ else startSign = 3; // Water -> Cancer
 const d9Sign = (startSign + pada) % 12;
 if (p.name === 'Lagna') d9LagnaSign = d9Sign;
 
+const isEx = (typeof planetStrength !== 'undefined' && planetStrength[p.name] && planetStrength[p.name].exalt === d9Sign);
 d9List.push({
 name: p.name,
 sign: d9Sign,
-degree: (deg % 3.333333) * 9.0
+degree: (deg % 3.333333) * 9.0,
+isRetrograde: p.isRetrograde || false,
+isExalted: !!isEx
 });
 });
 return d9List;
@@ -11954,10 +11990,13 @@ const sign = p.sign;
 let startSign = (sign % 2 === 0) ? sign : (sign + 8) % 12; // Odd vs Even sign start
 const d10Sign = (startSign + part) % 12;
 
+const isEx = (typeof planetStrength !== 'undefined' && planetStrength[p.name] && planetStrength[p.name].exalt === d10Sign);
 d10List.push({
 name: p.name,
 sign: d10Sign,
-degree: (deg % 3.0) * 10.0
+degree: (deg % 3.0) * 10.0,
+isRetrograde: p.isRetrograde || false,
+isExalted: !!isEx
 });
 });
 return d10List;
@@ -13014,9 +13053,9 @@ const kGoalEl = document.getElementById('k-goal');
 
 const name = (kNameEl && kNameEl.value && kNameEl.value.trim()) ? kNameEl.value.trim() : (storedName || 'User');
 const gender = (kGenderEl && kGenderEl.value) ? kGenderEl.value : storedGender;
-const date = (kDateEl && kDateEl.value) ? kDateEl.value : (storedDate || '1995-01-01');
-const time = (kTimeEl && kTimeEl.value) ? kTimeEl.value : (storedTime || '12:00');
-const cityName = (kCityEl && kCityEl.value && kCityEl.value.trim()) ? kCityEl.value.trim() : (storedCity || 'New Delhi');
+const date = (kDateEl && kDateEl.value) ? kDateEl.value : (storedDate || '1988-10-10');
+const time = (kTimeEl && kTimeEl.value) ? kTimeEl.value : (storedTime || '05:52');
+const cityName = (kCityEl && kCityEl.value && kCityEl.value.trim()) ? kCityEl.value.trim() : (storedCity || 'Gorakhpur, Uttar Pradesh');
 const goal = (kGoalEl && kGoalEl.value) ? kGoalEl.value : storedGoal;
 
 // Sync inputs so user sees their actual birth details
@@ -13100,16 +13139,22 @@ const lagnaSignNum = Math.floor(siderealAsc / 30.0);
 const lagnaDegree = siderealAsc % 30.0;
 const lagnaNak = getNakshatra(siderealAsc);
 
-const planetsList = [{name: 'Lagna', sign: lagnaSignNum, degree: lagnaDegree}];
+const planetsList = [{name: 'Lagna', sign: lagnaSignNum, degree: lagnaDegree, isRetrograde: false, isExalted: false}];
 const planetKeys = ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn','Rahu','Ketu'];
 planetKeys.forEach(pName => {
 const tropLon = getPlanetLongitude(pName, jd);
 const sidLon = (tropLon - ayanamsa + 360) % 360;
+const pSign = Math.floor(sidLon / 30.0);
+const pDegree = sidLon % 30.0;
+const isRet = isPlanetRetrograde(pName, jd);
+const isEx = (typeof planetStrength !== 'undefined' && planetStrength[pName] && planetStrength[pName].exalt === pSign);
 planetsList.push({
 name: pName,
-sign: Math.floor(sidLon / 30.0),
-degree: sidLon % 30.0,
-sidLon: sidLon
+sign: pSign,
+degree: pDegree,
+sidLon: sidLon,
+isRetrograde: isRet,
+isExalted: !!isEx
 });
 });
 currentPlacements = planetsList;
@@ -13352,10 +13397,10 @@ document.getElementById('kundli-form-view').style.display = 'block';
 
 // Auto fill details from user profile/onboarding data
 async function autoFillKundliFromOnboarding() {
-const name = localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || document.getElementById('o-name')?.value || 'User';
-const date = localStorage.getItem('user_dob') || localStorage.getItem('kundli_date') || document.getElementById('o-date')?.value || '1995-01-01';
-const time = localStorage.getItem('user_tob') || localStorage.getItem('kundli_time') || document.getElementById('o-time')?.value || '12:00';
-const city = localStorage.getItem('user_pob') || localStorage.getItem('kundli_city') || document.getElementById('o-city')?.value || 'New Delhi, India';
+const name = localStorage.getItem('user_name') || localStorage.getItem('kundli_name') || document.getElementById('o-name')?.value || 'Seeker';
+const date = localStorage.getItem('user_dob') || localStorage.getItem('kundli_date') || document.getElementById('o-date')?.value || '1988-10-10';
+const time = localStorage.getItem('user_tob') || localStorage.getItem('kundli_time') || document.getElementById('o-time')?.value || '05:52';
+const city = localStorage.getItem('user_pob') || localStorage.getItem('kundli_city') || document.getElementById('o-city')?.value || 'Gorakhpur, Uttar Pradesh';
 const gender = localStorage.getItem('user_gender') || localStorage.getItem('kundli_gender') || 'M';
 const goal = localStorage.getItem('user_goal') || 'general';
 
@@ -13876,20 +13921,67 @@ const signVal = i + 1; // Always Aries Ascendant style
 ctx.fillText(signVal.toString(), signNumberCoords[i].x, signNumberCoords[i].y);
 }
 
-// Draw Planets grouped by House
+// Draw Planets grouped by House with degree & authentic abbreviations
+const planetAbbrMapLK = {
+  'Lagna': 'As', 'Sun': 'Su', 'Moon': 'Mo', 'Mars': 'Ma',
+  'Mercury': 'Me', 'Jupiter': 'Ju', 'Venus': 'Ve', 'Saturn': 'Sa',
+  'Rahu': 'Ra', 'Ketu': 'Ke'
+};
+
 const housePlanets = Array.from({length: 13}, () => []);
 cachedPlacementsList.forEach(p => {
-if (p.name === 'Lagna') return;
-const houseIdx = ((p.sign - cachedPlacementsList[0].sign + 12) % 12) + 1;
-const short = p.name.substring(0, 2);
-housePlanets[houseIdx].push(short);
+  if (p.name === 'Lagna') return;
+  const houseIdx = ((p.sign - cachedPlacementsList[0].sign + 12) % 12) + 1;
+  const abbr = planetAbbrMapLK[p.name] || p.name.substring(0, 2);
+  const deg = Math.floor(typeof p.degree === 'number' ? p.degree : 0);
+  let markers = '';
+  if (p.isRetrograde || p.name === 'Rahu' || p.name === 'Ketu') markers += '*';
+  if (p.isExalted) markers += '^';
+  
+  let color = isLight ? '#1C1A30' : '#FFFFFF';
+  if (p.isExalted) color = isLight ? '#1b7a43' : '#2ecc71';
+  else if (p.isRetrograde || p.name === 'Rahu' || p.name === 'Ketu') color = isLight ? '#2471a3' : '#5dade2';
+  
+  housePlanets[houseIdx].push({
+    text: deg + '° ' + abbr + markers,
+    color: color
+  });
 });
 
-ctx.fillStyle = isLight ? '#1C1A30' : '#FFFFFF';
-ctx.font = '10px sans-serif';
+function getHousePositionsLK(cx, cy, count, isDiamond) {
+  const pos = [];
+  if (count === 1) pos.push({x: cx, y: cy});
+  else if (count === 2) {
+    if (isDiamond) { pos.push({x: cx - 26, y: cy}); pos.push({x: cx + 26, y: cy}); }
+    else { pos.push({x: cx, y: cy - 9}); pos.push({x: cx, y: cy + 9}); }
+  } else if (count === 3) {
+    if (isDiamond) { pos.push({x: cx - 26, y: cy - 9}); pos.push({x: cx + 26, y: cy - 9}); pos.push({x: cx, y: cy + 9}); }
+    else { pos.push({x: cx, y: cy - 14}); pos.push({x: cx, y: cy}); pos.push({x: cx, y: cy + 14}); }
+  } else if (count === 4) {
+    pos.push({x: cx - 26, y: cy - 10}); pos.push({x: cx + 26, y: cy - 10});
+    pos.push({x: cx - 26, y: cy + 10}); pos.push({x: cx + 26, y: cy + 10});
+  } else {
+    pos.push({x: cx - 26, y: cy - 13}); pos.push({x: cx + 26, y: cy - 13});
+    pos.push({x: cx - 26, y: cy}); pos.push({x: cx + 26, y: cy}); pos.push({x: cx, y: cy + 13});
+  }
+  return pos;
+}
+
+const diamondHousesLK = [1, 4, 7, 10];
+ctx.font = 'bold 10px sans-serif';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+
 for (let h = 1; h <= 12; h++) {
-const text = housePlanets[h].join(" ");
-ctx.fillText(text, houseCenters[h-1].x, houseCenters[h-1].y);
+  const items = housePlanets[h];
+  if (!items || items.length === 0) continue;
+  const c = houseCenters[h - 1];
+  const isDiam = diamondHousesLK.includes(h);
+  const pts = getHousePositionsLK(c.x, c.y, items.length, isDiam);
+  for (let idx = 0; idx < items.length; idx++) {
+    ctx.fillStyle = items[idx].color;
+    ctx.fillText(items[idx].text, pts[idx].x, pts[idx].y);
+  }
 }
 }
 
@@ -14349,6 +14441,33 @@ else if (chartType === 'D10') activePlacements = calculateD10Placements(cachedPl
 
 if (!activePlacements || activePlacements.length === 0) return;
 
+// Format planet display string with degree and authentic markers: e.g. 22° As, 25° Me*^
+const planetAbbrMap = {
+  'Lagna': 'As', 'Sun': 'Su', 'Moon': 'Mo', 'Mars': 'Ma',
+  'Mercury': 'Me', 'Jupiter': 'Ju', 'Venus': 'Ve', 'Saturn': 'Sa',
+  'Rahu': 'Ra', 'Ketu': 'Ke'
+};
+
+function formatPlanetItem(p) {
+  const abbr = planetAbbrMap[p.name] || p.name.substring(0, 2);
+  const deg = Math.floor(typeof p.degree === 'number' ? p.degree : 0);
+  let markers = '';
+  if (p.isRetrograde || p.name === 'Rahu' || p.name === 'Ketu') markers += '*';
+  if (p.isExalted) markers += '^';
+
+  let color = isPrint ? '#000000' : (isLight ? '#1C1A30' : '#FFFFFF');
+  if (!isPrint) {
+    if (p.name === 'Lagna') color = isLight ? '#A07F10' : '#E8C879';
+    else if (p.isExalted) color = isLight ? '#1b7a43' : '#2ecc71';
+    else if (p.isRetrograde || p.name === 'Rahu' || p.name === 'Ketu') color = isLight ? '#2471a3' : '#5dade2';
+  }
+  return {
+    text: deg + '° ' + abbr + markers,
+    color: color,
+    name: p.name
+  };
+}
+
 if (isNorthIndianStyle) {
 // Draw North Indian style (Diamond)
 ctx.strokeStyle = isPrint ? '#000000' : (isLight ? '#A07F10' : '#E8C879');
@@ -14365,35 +14484,36 @@ ctx.lineTo(w/2, h); ctx.lineTo(w, h/2);
 ctx.lineTo(w/2, 0);
 ctx.stroke();
 
-// Placements center coords (12 houses)
-const houseCenters = [
-{x: w * 0.5, y: h * 0.28}, // House 1
-{x: w * 0.25, y: h * 0.16}, // House 2
-{x: w * 0.16, y: h * 0.25}, // House 3
-{x: w * 0.28, y: h * 0.5}, // House 4
-{x: w * 0.16, y: h * 0.75}, // House 5
-{x: w * 0.25, y: h * 0.84}, // House 6
-{x: w * 0.5, y: h * 0.72}, // House 7
-{x: w * 0.75, y: h * 0.84}, // House 8
-{x: w * 0.84, y: h * 0.75}, // House 9
-{x: w * 0.72, y: h * 0.5}, // House 10
-{x: w * 0.84, y: h * 0.25}, // House 11
-{x: w * 0.75, y: h * 0.16}, // House 12
+// Geometric Sign Number positions (near inner vertices)
+const signNumberCoords = [
+  {x: w * 0.50, y: h * 0.41}, // House 1
+  {x: w * 0.25, y: h * 0.21}, // House 2
+  {x: w * 0.21, y: h * 0.25}, // House 3
+  {x: w * 0.41, y: h * 0.50}, // House 4
+  {x: w * 0.21, y: h * 0.75}, // House 5
+  {x: w * 0.25, y: h * 0.79}, // House 6
+  {x: w * 0.50, y: h * 0.59}, // House 7
+  {x: w * 0.75, y: h * 0.79}, // House 8
+  {x: w * 0.79, y: h * 0.75}, // House 9
+  {x: w * 0.59, y: h * 0.50}, // House 10
+  {x: w * 0.79, y: h * 0.25}, // House 11
+  {x: w * 0.75, y: h * 0.21}, // House 12
 ];
 
-const signNumberCoords = [
-{x: w * 0.5, y: h * 0.38},
-{x: w * 0.28, y: h * 0.12},
-{x: w * 0.12, y: h * 0.28},
-{x: w * 0.38, y: h * 0.5},
-{x: w * 0.12, y: h * 0.72},
-{x: w * 0.28, y: h * 0.88},
-{x: w * 0.5, y: h * 0.62},
-{x: w * 0.72, y: h * 0.88},
-{x: w * 0.88, y: h * 0.72},
-{x: w * 0.62, y: h * 0.5},
-{x: w * 0.88, y: h * 0.28},
-{x: w * 0.72, y: h * 0.12},
+// House Centers for Planets
+const houseCenters = [
+  {x: w * 0.50, y: h * 0.22}, // House 1
+  {x: w * 0.25, y: h * 0.10}, // House 2
+  {x: w * 0.10, y: h * 0.25}, // House 3
+  {x: w * 0.22, y: h * 0.50}, // House 4
+  {x: w * 0.10, y: h * 0.75}, // House 5
+  {x: w * 0.25, y: h * 0.90}, // House 6
+  {x: w * 0.50, y: h * 0.78}, // House 7
+  {x: w * 0.75, y: h * 0.90}, // House 8
+  {x: w * 0.90, y: h * 0.75}, // House 9
+  {x: w * 0.78, y: h * 0.50}, // House 10
+  {x: w * 0.90, y: h * 0.25}, // House 11
+  {x: w * 0.75, y: h * 0.10}, // House 12
 ];
 
 // Draw Sign Numbers
@@ -14401,25 +14521,75 @@ const lagnaSign = activePlacements[0].sign + 1; // 1-based index
 ctx.fillStyle = isPrint ? '#000000' : (isLight ? '#A07F10' : '#E8C879');
 ctx.font = 'bold 12px sans-serif';
 ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
 
 for (let i = 0; i < 12; i++) {
-const signVal = (lagnaSign - 1 + i) % 12 + 1;
-ctx.fillText(signVal.toString(), signNumberCoords[i].x, signNumberCoords[i].y);
+  const signVal = (lagnaSign - 1 + i) % 12 + 1;
+  ctx.fillText(signVal.toString(), signNumberCoords[i].x, signNumberCoords[i].y);
 }
 
-// Draw Planets grouped by House
+// Group Planets by House
 const housePlanets = Array.from({length: 13}, () => []);
 activePlacements.forEach(p => {
-const houseIdx = ((p.sign - activePlacements[0].sign + 12) % 12) + 1;
-const short = p.name.substring(0, 2);
-housePlanets[houseIdx].push(short);
+  const houseIdx = ((p.sign - activePlacements[0].sign + 12) % 12) + 1;
+  housePlanets[houseIdx].push(formatPlanetItem(p));
 });
 
-ctx.fillStyle = isPrint ? '#000000' : (isLight ? '#1C1A30' : '#FFFFFF');
-ctx.font = '10px sans-serif';
+// Position calculator for multiple planets per house
+function getHousePositions(cx, cy, count, isDiamond) {
+  const pos = [];
+  if (count === 1) {
+    pos.push({x: cx, y: cy});
+  } else if (count === 2) {
+    if (isDiamond) {
+      pos.push({x: cx - 26, y: cy});
+      pos.push({x: cx + 26, y: cy});
+    } else {
+      pos.push({x: cx, y: cy - 9});
+      pos.push({x: cx, y: cy + 9});
+    }
+  } else if (count === 3) {
+    if (isDiamond) {
+      pos.push({x: cx - 26, y: cy - 9});
+      pos.push({x: cx + 26, y: cy - 9});
+      pos.push({x: cx, y: cy + 9});
+    } else {
+      pos.push({x: cx, y: cy - 14});
+      pos.push({x: cx, y: cy});
+      pos.push({x: cx, y: cy + 14});
+    }
+  } else if (count === 4) {
+    pos.push({x: cx - 26, y: cy - 10});
+    pos.push({x: cx + 26, y: cy - 10});
+    pos.push({x: cx - 26, y: cy + 10});
+    pos.push({x: cx + 26, y: cy + 10});
+  } else if (count >= 5) {
+    pos.push({x: cx - 26, y: cy - 13});
+    pos.push({x: cx + 26, y: cy - 13});
+    pos.push({x: cx - 26, y: cy});
+    pos.push({x: cx + 26, y: cy});
+    pos.push({x: cx, y: cy + 13});
+  }
+  return pos;
+}
+
+const diamondHouses = [1, 4, 7, 10];
+ctx.font = 'bold 10px sans-serif';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+
 for (let h = 1; h <= 12; h++) {
-const text = housePlanets[h].join(" ");
-ctx.fillText(text, houseCenters[h-1].x, houseCenters[h-1].y);
+  const items = housePlanets[h];
+  if (!items || items.length === 0) continue;
+  const c = houseCenters[h - 1];
+  const isDiam = diamondHouses.includes(h);
+  const pts = getHousePositions(c.x, c.y, items.length, isDiam);
+  for (let idx = 0; idx < items.length; idx++) {
+    const item = items[idx];
+    const pt = pts[idx];
+    ctx.fillStyle = item.color;
+    ctx.fillText(item.text, pt.x, pt.y);
+  }
 }
 
 } else {
@@ -14450,30 +14620,60 @@ const gridCoords = [
 {r: 2, c: 0}, {r: 1, c: 0}, {r: 0, c: 0}
 ];
 
-// Draw Signs headers & planets
+// Group items by Zodiac sign (0-11)
 const signPlanets = Array.from({length: 12}, () => []);
 activePlacements.forEach(p => {
-const short = p.name.substring(0, 2);
-signPlanets[p.sign].push(short);
+  signPlanets[p.sign].push(formatPlanetItem(p));
 });
 
 for (let s = 0; s < 12; s++) {
-const c = gridCoords[s];
-const x = c.c * step;
-const y = c.r * step;
+  const c = gridCoords[s];
+  const x = c.c * step;
+  const y = c.r * step;
 
-// Header
-ctx.fillStyle = isPrint ? '#000000' : (isLight ? '#6A38C8' : '#8E6FD6');
-ctx.font = 'bold 9px sans-serif';
-ctx.textAlign = 'left';
-ctx.fillText(signNames[s].substring(0, 3).toUpperCase(), x + 4, y + 12);
+  // Header
+  ctx.fillStyle = isPrint ? '#000000' : (isLight ? '#6A38C8' : '#8E6FD6');
+  ctx.font = 'bold 9px sans-serif';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  ctx.fillText(signNames[s].substring(0, 3).toUpperCase(), x + 4, y + 4);
 
-// Planets
-ctx.fillStyle = isPrint ? '#000000' : (isLight ? '#1C1A30' : '#FFFFFF');
-ctx.font = '10px sans-serif';
-ctx.textAlign = 'center';
-const text = signPlanets[s].join(" ");
-ctx.fillText(text, x + step/2, y + step/2 + 4);
+  // Planets inside the sign box
+  const items = signPlanets[s];
+  if (!items || items.length === 0) continue;
+
+  ctx.font = 'bold 9.5px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  if (items.length === 1) {
+    ctx.fillStyle = items[0].color;
+    ctx.fillText(items[0].text, x + step / 2, y + step / 2 + 3);
+  } else if (items.length === 2) {
+    ctx.fillStyle = items[0].color;
+    ctx.fillText(items[0].text, x + step / 2, y + step * 0.38);
+    ctx.fillStyle = items[1].color;
+    ctx.fillText(items[1].text, x + step / 2, y + step * 0.68);
+  } else if (items.length === 3) {
+    ctx.fillStyle = items[0].color;
+    ctx.fillText(items[0].text, x + step / 2, y + step * 0.32);
+    ctx.fillStyle = items[1].color;
+    ctx.fillText(items[1].text, x + step / 2, y + step * 0.54);
+    ctx.fillStyle = items[2].color;
+    ctx.fillText(items[2].text, x + step / 2, y + step * 0.76);
+  } else {
+    // 4 items (2x2 grid)
+    const coords = [
+      {x: x + step * 0.30, y: y + step * 0.40},
+      {x: x + step * 0.70, y: y + step * 0.40},
+      {x: x + step * 0.30, y: y + step * 0.70},
+      {x: x + step * 0.70, y: y + step * 0.70}
+    ];
+    items.slice(0, 4).forEach((it, idx) => {
+      ctx.fillStyle = it.color;
+      ctx.fillText(it.text, coords[idx].x, coords[idx].y);
+    });
+  }
 }
 }
 }
