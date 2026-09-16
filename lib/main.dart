@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -138,26 +137,6 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen>
     if (state == AppLifecycleState.resumed) {
       debugPrint('App resumed from background.');
       _controller.runJavaScript("if (typeof checkSupabaseSession === 'function') checkSupabaseSession();");
-    }
-  }
-
-  Future<void> _launchExternalAuth(String urlStr) async {
-    try {
-      final Uri url = Uri.parse(urlStr);
-      bool launched = await launchUrl(
-        url,
-        mode: LaunchMode.externalApplication,
-      );
-      if (!launched) {
-        await launchUrl(url, mode: LaunchMode.platformDefault);
-      }
-    } catch (e) {
-      debugPrint('Error launching external Google Auth: $e');
-      try {
-        await launchUrl(Uri.parse(urlStr), mode: LaunchMode.inAppBrowserView);
-      } catch (err) {
-        debugPrint('Fallback launch error: $err');
-      }
     }
   }
 

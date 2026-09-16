@@ -373,7 +373,6 @@ class _HomeDashboardState extends State<HomeDashboard> {
     if (_profile == null) return const Scaffold(body: Center(child: CircularProgressIndicator()));
 
     final name = _profile!['name'] ?? 'Seeker';
-    final goalName = _profile!['goal'] ?? 'job';
     final pathName = _profile!['onboarding_path'] ?? 'single';
     final partner = _profile!['partner_name'] ?? '';
 
