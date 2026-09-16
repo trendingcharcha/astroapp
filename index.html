@@ -3802,6 +3802,254 @@ return str
 }
 
 const signNames = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+const signNamesHi = ['मेष', 'वृषभ', 'मिथुन', 'कर्क', 'सिंह', 'कन्या', 'तुला', 'वृश्चिक', 'धनु', 'मकर', 'कुम्भ', 'मीन'];
+const signElements = ['Fire', 'Earth', 'Air', 'Water', 'Fire', 'Earth', 'Air', 'Water', 'Fire', 'Earth', 'Air', 'Water'];
+const signElementsHi = ['अग्नि', 'पृथ्वी', 'वायु', 'जल', 'अग्नि', 'पृथ्वी', 'वायु', 'जल', 'अग्नि', 'पृथ्वी', 'वायु', 'जल'];
+const signLords = ['Mars', 'Venus', 'Mercury', 'Moon', 'Sun', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Saturn', 'Jupiter'];
+const signLordsHi = ['मंगल', 'शुक्र', 'बुध', 'चन्द्र', 'सूर्य', 'बुध', 'शुक्र', 'मंगल', 'गुरु', 'शनि', 'शनि', 'गुरु'];
+const planetNamesHi = {
+  'Lagna': 'लग्न', 'Sun': 'सूर्य', 'Moon': 'चन्द्र', 'Mars': 'मंगल', 'Mercury': 'बुध', 
+  'Jupiter': 'गुरु', 'Venus': 'शुक्र', 'Saturn': 'शनि', 'Rahu': 'राहु', 'Ketu': 'केतु'
+};
+
+// Authentic Vedic Mantras & Ritual Directions
+const vedicLordMantraMeta = {
+  'Sun': {
+    mantra: 'Om Hram Hreem Hroum Sah Suryaya Namah',
+    mantraHi: 'ॐ ह्रां ह्रीं ह्रौं सः सूर्याय नमः',
+    dirEn: 'East', dirHi: 'पूर्व',
+    stotraEn: 'Aditya Hridaya Stotra', stotraHi: 'आदित्य हृदय स्तोत्र',
+    timeEn: 'Sunrise (Brahma Muhurta)', timeHi: 'प्रातः सूर्योदय काल'
+  },
+  'Moon': {
+    mantra: 'Om Shram Shreem Shroum Sah Chandramase Namah',
+    mantraHi: 'ॐ श्रां श्रीं श्रौं सः चन्द्रमसे नमः',
+    dirEn: 'North-West', dirHi: 'उत्तर-पश्चिम',
+    stotraEn: 'Chandra Kavacham', stotraHi: 'चन्द्र कवचम्',
+    timeEn: 'Evening Sandhya or Moonrise', timeHi: 'संध्या काल अथवा चंद्रोदय'
+  },
+  'Mars': {
+    mantra: 'Om Kram Kreem Kroum Sah Bhaumaya Namah',
+    mantraHi: 'ॐ क्रां क्रीं क्रौं सः भौमाय नमः',
+    dirEn: 'South', dirHi: 'दक्षिण',
+    stotraEn: 'Rinmochana Mangala Stotra / Hanuman Chalisa', stotraHi: 'ऋणमोचन मंगल स्तोत्र / हनुमान चालीसा',
+    timeEn: 'Tuesday Sunrise or Noon', timeHi: 'मंगलवार प्रातः अथवा दोपहर'
+  },
+  'Mercury': {
+    mantra: 'Om Bram Breem Broum Sah Budhaya Namah',
+    mantraHi: 'ॐ ब्रां ब्रीं ब्रौं सः बुधाय नमः',
+    dirEn: 'North', dirHi: 'उत्तर',
+    stotraEn: 'Vishnu Sahasranama / Budha Kavacham', stotraHi: 'विष्णु सहस्रनाम / बुध कवचम्',
+    timeEn: 'Wednesday Morning', timeHi: 'बुधवार प्रातः काल'
+  },
+  'Jupiter': {
+    mantra: 'Om Gram Greem Groum Sah Guruve Namah',
+    mantraHi: 'ॐ ग्रां ग्रीं ग्रौं सः गुरवे नमः',
+    dirEn: 'North-East', dirHi: 'उत्तर-पूर्व (ईशान)',
+    stotraEn: 'Guru Stotra / Purusha Sukta', stotraHi: 'गुरु स्तोत्र / पुरुष सूक्त',
+    timeEn: 'Thursday Sunrise with Haldi Tilak', timeHi: 'गुरुवार प्रातः हल्दी तिलक के साथ'
+  },
+  'Venus': {
+    mantra: 'Om Dram Dreem Droum Sah Shukraya Namah',
+    mantraHi: 'ॐ द्रां द्रीं द्रौं सः शुक्राय नमः',
+    dirEn: 'South-East', dirHi: 'दक्षिण-पूर्व (आग्नेय)',
+    stotraEn: 'Sri Sukta / Kanakadhara Stotra', stotraHi: 'श्री सूक्त / कनकधारा स्तोत्र',
+    timeEn: 'Friday Morning or Evening', timeHi: 'शुक्रवार प्रातः अथवा संध्या'
+  },
+  'Saturn': {
+    mantra: 'Om Pram Preem Proum Sah Shanaishcharaya Namah',
+    mantraHi: 'ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः',
+    dirEn: 'West', dirHi: 'पश्चिम',
+    stotraEn: 'Dasharatha Shani Stotra / Hanuman Chalisa', stotraHi: 'दशरथ कृत शनि स्तोत्र / हनुमान चालीसा',
+    timeEn: 'Saturday Sunset (Pradosha)', timeHi: 'शनिवार सूर्यास्त (प्रदोष काल)'
+  },
+  'Rahu': {
+    mantra: 'Om Bhram Bhreem Bhroum Sah Rahave Namah',
+    mantraHi: 'ॐ भ्रां भ्रीं भ्रौं सः राहवे नमः',
+    dirEn: 'South-West', dirHi: 'दक्षिण-पश्चिम',
+    stotraEn: 'Durga Saptashati / Rahu Stotra', stotraHi: 'दुर्गा सप्तशती / राहु स्तोत्र',
+    timeEn: 'Nightfall or Saturday Evening', timeHi: 'संध्याकाल अथवा शनिवार रात्रि'
+  },
+  'Ketu': {
+    mantra: 'Om Stram Streem Stroum Sah Ketave Namah',
+    mantraHi: 'ॐ स्त्रां स्त्रीं स्त्रौं सः केतवे नमः',
+    dirEn: 'North-East', dirHi: 'उत्तर-पूर्व',
+    stotraEn: 'Ganesha Atharvashirsha / Ketu Kavacham', stotraHi: 'गणेश अथर्वशीर्ष / केतु कवचम्',
+    timeEn: 'Tuesday Early Morning', timeHi: 'मंगलवार प्रातः काल'
+  }
+};
+
+function getGoalAstrologicalHouse(goal, lagnaSignNum) {
+  let norm = goal || 'job';
+  if (norm.startsWith('marriage')) norm = 'marriage';
+  if (norm.startsWith('property')) norm = 'property';
+
+  if (norm === 'job' || norm === 'business') {
+    const houseNum = (norm === 'business') ? 7 : 10;
+    const signNum = (lagnaSignNum + houseNum - 1) % 12;
+    return { houseNum, signNum, lord: signLords[signNum], significator: (norm === 'business' ? 'Mercury & Venus' : 'Sun & Saturn') };
+  } else if (norm === 'marriage' || norm === 'love') {
+    const houseNum = 7;
+    const signNum = (lagnaSignNum + 6) % 12;
+    return { houseNum, signNum, lord: signLords[signNum], significator: 'Venus & Jupiter' };
+  } else if (norm === 'debt' || norm === 'money') {
+    const houseNum = 2;
+    const signNum = (lagnaSignNum + 1) % 12;
+    return { houseNum, signNum, lord: signLords[signNum], significator: 'Jupiter & Mars' };
+  } else if (norm === 'baby' || norm === 'pregnancy') {
+    const houseNum = 5;
+    const signNum = (lagnaSignNum + 4) % 12;
+    return { houseNum, signNum, lord: signLords[signNum], significator: 'Jupiter (Putrakaraka)' };
+  } else if (norm === 'property') {
+    const houseNum = 4;
+    const signNum = (lagnaSignNum + 3) % 12;
+    return { houseNum, signNum, lord: signLords[signNum], significator: 'Mars (Bhumikaraka)' };
+  } else if (norm === 'health') {
+    const houseNum = 6;
+    const signNum = (lagnaSignNum + 5) % 12;
+    return { houseNum, signNum, lord: signLords[signNum], significator: 'Sun & Lagna Lord' };
+  } else {
+    const houseNum = 1;
+    const signNum = lagnaSignNum;
+    return { houseNum, signNum, lord: signLords[signNum], significator: 'Lagna Lord' };
+  }
+}
+
+function getKundaliVedicSolution(g, lagnaSignNum, coachPlacements, userDasha, lang) {
+  const isHi = lang === 'hi';
+  const gMeta = getGoalAstrologicalHouse(g, lagnaSignNum);
+  const houseLord = gMeta.lord;
+  const pPl = (coachPlacements || []).find(p => p.name === houseLord);
+  const pHouse = pPl ? (((pPl.sign - lagnaSignNum + 12) % 12) + 1) : gMeta.houseNum;
+  const lordM = vedicLordMantraMeta[houseLord] || vedicLordMantraMeta['Sun'];
+  const dPlanet = (userDasha && userDasha.planet) ? userDasha.planet : 'Sun';
+  const dPlanetHi = planetNamesHi[dPlanet] || dPlanet;
+
+  if (isHi) {
+    return `आपकी कुंडली में ${gMeta.houseNum}वें भाव (${signNamesHi[gMeta.signNum]}) के स्वामी <strong>${signLordsHi[gMeta.signNum]}</strong> (${pHouse}वें भाव में) हैं। वर्तमान <strong>${dPlanetHi}</strong> महादशा के साथ अनुकूलता हेतु: प्रातः ${lordM.dirHi} दिशा की ओर मुख करके 108 बार <strong>"${lordM.mantraHi}"</strong> का जाप करें। साथ ही ${lordM.stotraHi} का पाठ करें।`;
+  } else {
+    return `Your ${gMeta.houseNum}th House of ${g} (${signNames[gMeta.signNum]}) is governed by <strong>${houseLord}</strong> (positioned in House ${pHouse}). In alignment with your active <strong>${dPlanet}</strong> Mahadasha: Face ${lordM.dirEn} during ${lordM.timeEn} and chant 108 times: <strong>"${lordM.mantra}"</strong>, supported by recitation of ${lordM.stotraEn}.`;
+  }
+}
+
+function getKundaliLalKitabSolutions(coachPlacements, lagnaSignNum, userDasha, goal, lang) {
+  const isHi = lang === 'hi';
+  const upayas = [];
+  const lagnaLord = signLords[lagnaSignNum] || 'Sun';
+  const placements = coachPlacements || [];
+  const lPl = placements.find(p => p.name === lagnaLord);
+  const lHouse = lPl ? (((lPl.sign - lagnaSignNum + 12) % 12) + 1) : 1;
+
+  // A. Lagna Lord Lal Kitab Upaya
+  const lkLagnaUpayasEn = {
+    'Sun': `Lagna Lord Sun (House ${lHouse}): Offer water mixed with jaggery and red flowers to the rising Sun from a copper vessel; touch father's feet daily.`,
+    'Moon': `Lagna Lord Moon (House ${lHouse}): Drink water from a solid silver glass and keep a silver square in your pocket; honor mother daily.`,
+    'Mars': `Lagna Lord Mars (House ${lHouse}): Feed sweet tandoori rotis to stray dogs on Tuesdays and keep a solid pure silver square in your locker.`,
+    'Mercury': `Lagna Lord Mercury (House ${lHouse}): Feed whole green moong dal or fresh spinach to desi cows on Wednesdays; clean teeth with alum water.`,
+    'Jupiter': `Lagna Lord Jupiter (House ${lHouse}): Apply saffron (kesar) or turmeric tilak on forehead, navel & tongue each morning; respect teachers & elders.`,
+    'Venus': `Lagna Lord Venus (House ${lHouse}): Feed cows with curd or jowar on Fridays, wear neat fragrant attire, and maintain mutual spousal respect.`,
+    'Saturn': `Lagna Lord Saturn (House ${lHouse}): Perform Chhaya Daan (donate mustard oil in an iron bowl after viewing your reflection) on Saturdays; feed crows.`
+  };
+  const lkLagnaUpayasHi = {
+    'Sun': `लग्नेश सूर्य (${lHouse}वें भाव में): तांबे के पात्र से गुड़ व लाल फूल मिलाकर उगते सूर्य को अर्घ्य दें; प्रतिदिन पिता का आशीर्वाद लें।`,
+    'Moon': `लग्नेश चन्द्र (${lHouse}वें भाव में): शुद्ध चांदी के गिलास से जल पिएं और जेब में चौकोर चांदी का टुकड़ा रखें; माता के चरण स्पर्श करें।`,
+    'Mars': `लग्नेश मंगल (${lHouse}वें भाव में): मंगलवार को आवारा कुत्तों को मीठी रोटी खिलाएं और तिजोरी में ठोस चांदी की गोली या चौकोर टुकड़ा रखें।`,
+    'Mercury': `लग्नेश बुध (${lHouse}वें भाव में): बुधवार को गायों को साबुत हरी मूंग या पालक खिलाएं; फिटकरी से दांत साफ रखें।`,
+    'Jupiter': `लग्नेश गुरु (${lHouse}वें भाव में): प्रतिदिन माथे, नाभि और जिह्वा पर केसर या हल्दी का तिलक लगाएं; गुरुजनों का आदर करें।`,
+    'Venus': `लग्नेश शुक्र (${lHouse}वें भाव में): शुक्रवार को गाय को दही या ज्वार का आटा खिलाएं, सुगंधित वस्त्र पहनें और जीवनसाथी का सम्मान करें।`,
+    'Saturn': `लग्नेश शनि (${lHouse}वें भाव में): शनिवार को लोहे के पात्र में सरसों का तेल भरकर छाया दान करें; कौवों व काले कुत्तों को भोजन दें।`
+  };
+  upayas.push(isHi ? (lkLagnaUpayasHi[lagnaLord] || lkLagnaUpayasHi['Sun']) : (lkLagnaUpayasEn[lagnaLord] || lkLagnaUpayasEn['Sun']));
+
+  // B. Mars Placement
+  const marsPl = placements.find(p => p.name === 'Mars');
+  const marsHouse = marsPl ? (((marsPl.sign - lagnaSignNum + 12) % 12) + 1) : 1;
+  const isMangalBad = [1, 4, 7, 8, 12].includes(marsHouse);
+  if (isMangalBad) {
+    upayas.push(isHi 
+      ? `मंगल बद शांति (मंगल भाव ${marsHouse}): अपनी जेब या तिजोरी में ठोस चांदी की गोली रखें; मंगलवार को कभी कर्ज न लें, बल्कि पुराना कर्ज थोड़ा चुकाएं।`
+      : `Mangal Bad Pacification (Mars in House ${marsHouse}): Keep a solid pure silver ball in your pocket or vault; avoid initiating loans on Tuesdays; repay debt installments on Tuesday mornings.`);
+  } else {
+    upayas.push(isHi
+      ? `मंगल नेक संवर्धन (मंगल भाव ${marsHouse}): छोटे भाइयों का सहयोग करें, शारीरिक ऊर्जा बनाए रखें और मंगलवार को लाल मसूर की दाल दान करें।`
+      : `Mangal Nek Activation (Mars in House ${marsHouse}): Support siblings, maintain athletic discipline, and donate red lentils (masoor dal) on Tuesdays.`);
+  }
+
+  // C. Mercury Placement
+  const mercPl = placements.find(p => p.name === 'Mercury');
+  const mercHouse = mercPl ? (((mercPl.sign - lagnaSignNum + 12) % 12) + 1) : 1;
+  const isBudhManda = [3, 8, 9, 12].includes(mercHouse);
+  if (isBudhManda) {
+    upayas.push(isHi
+      ? `बुध मंदा शांति (बुध भाव ${mercHouse}): गले में सफेद धागे में छेद वाला तांबे का सिक्का धारण करें; महत्वपूर्ण कार्यों में हरे वस्त्र न पहनें।`
+      : `Budh Manda Remediation (Mercury in House ${mercHouse}): Wear a copper coin with a central drilled hole around your neck in a white thread; avoid dark green clothing during key meetings.`);
+  } else {
+    upayas.push(isHi
+      ? `बुध नेक संवर्धन (बुध भाव ${mercHouse}): बुधवार को पक्षियों को भिगोया हुआ हरा मूंग डालें और कार्यस्थल के उत्तर में हरा इनडोर पौधा रखें।`
+      : `Budh Nek Enhancement (Mercury in House ${mercHouse}): Feed soaked green moong dal to birds on Wednesdays and place a vibrant green plant in the North zone of your desk.`);
+  }
+
+  // D. Mahadasha Lord Lal Kitab Pacification
+  const dPlanet = (userDasha && userDasha.planet) ? userDasha.planet : 'Sun';
+  const dashaUpayasEn = {
+    'Sun': `Mahadasha Lord Sun Pacification: Throw a copper coin into a flowing river or feed wheat rotis with jaggery to a cow on Sundays.`,
+    'Moon': `Mahadasha Lord Moon Pacification: Keep an earthen or silver pot filled with rainwater/Gangajal on your terrace; avoid consuming milk late at night.`,
+    'Mars': `Mahadasha Lord Mars Pacification: Donate sweet bread (revadi or patasha) in flowing water on Tuesdays; avoid harsh speech with colleagues.`,
+    'Mercury': `Mahadasha Lord Mercury Pacification: Clean your teeth with alum (fitkari) powder every morning and donate copper utensils to a temple.`,
+    'Jupiter': `Mahadasha Lord Jupiter Pacification: Plant a yellow flowering sapling or peepal tree in a public garden; wear a yellow sacred thread.`,
+    'Venus': `Mahadasha Lord Venus Pacification: Donate pure desi cow ghee or camphor at a temple on Fridays; maintain clean and uncluttered bedroom bedding.`,
+    'Saturn': `Mahadasha Lord Saturn Pacification: Bury a small bottle of pure mustard oil in secluded unpaved land on a Saturday evening; respect laborers.`,
+    'Rahu': `Mahadasha Lord Rahu Pacification: Float 8 dry coconuts in flowing water on a Wednesday evening; keep a silver square under your pillow.`,
+    'Ketu': `Mahadasha Lord Ketu Pacification: Feed two-colored sesame bread to black-and-white stray dogs; donate a dual-color blanket to a hospital or needy.`
+  };
+  const dashaUpayasHi = {
+    'Sun': `महादशा स्वामी सूर्य शांति: रविवार को बहते जल में तांबे का सिक्का प्रवाहित करें या गाय को गुड़-गेहूं की रोटी खिलाएं।`,
+    'Moon': `महादशा स्वामी चन्द्र शांति: घर की छत पर चांदी या मिट्टी के बर्तन में गंगाजल या वर्षा का जल रखें; रात्रि में दूध पीने से बचें।`,
+    'Mars': `महादशा स्वामी मंगल शांति: मंगलवार को रेवड़ी या बताशे बहते जल में प्रवाहित करें; कटु वाणी से बचें।`,
+    'Mercury': `महादशा स्वामी बुध शांति: प्रतिदिन प्रातः फिटकरी से दांत साफ करें और मंदिर में तांबे का पात्र दान करें।`,
+    'Jupiter': `महादशा स्वामी गुरु शांति: गुरुवार को पीले फूलों का पौधा लगाएं; कलाई में पीला सूती धागा बांधें।`,
+    'Venus': `महादशा स्वामी शुक्र शांति: शुक्रवार को मंदिर में गाय का शुद्ध घी या कपूर दान करें; बेडरूम को सुगंधित व स्वच्छ रखें।`,
+    'Saturn': `महादशा स्वामी शनि शांति: शनिवार शाम को कच्ची जमीन में थोड़ा सा सरसों का तेल दबाएं; श्रमिकों व सहायकों का आदर करें।`,
+    'Rahu': `महादशा स्वामी राहु शांति: बुधवार शाम को 8 सूखे नारियल बहते पानी में प्रवाहित करें; तकिये के नीचे चांदी का चौकोर टुकड़ा रखें।`,
+    'Ketu': `महादशा स्वामी केतु शांति: चितकबरे कुत्तों को मीठी रोटी या बिस्कुट खिलाएं; जरूरतमंदों को दोरंगा कंबल दान करें।`
+  };
+  upayas.push(isHi ? (dashaUpayasHi[dPlanet] || dashaUpayasHi['Sun']) : (dashaUpayasEn[dPlanet] || dashaUpayasEn['Sun']));
+
+  return upayas;
+}
+
+function getKundaliVastuSolutions(lagnaSignNum, coachPlacements, goal, lang) {
+  const isHi = lang === 'hi';
+  const lagnaLord = signLords[lagnaSignNum] || 'Sun';
+  const elements = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3]; // 0: Fire, 1: Earth, 2: Air, 3: Water
+  const elIdx = elements[lagnaSignNum];
+  const elNamesEn = ["Fire (Agnitattva)", "Earth (Prithvitattva)", "Air (Vayutattva)", "Water (Jalatattva)"];
+  const elNamesHi = ["अग्नि तत्व", "पृथ्वी तत्व", "वायु तत्व", "जल तत्व"];
+  
+  const powerDirMapEn = { 'Sun': 'East', 'Moon': 'North-West', 'Mars': 'South', 'Mercury': 'North', 'Jupiter': 'North-East', 'Venus': 'South-East', 'Saturn': 'West' };
+  const powerDirMapHi = { 'Sun': 'पूर्व', 'Moon': 'उत्तर-पश्चिम', 'Mars': 'दक्षिण', 'Mercury': 'उत्तर', 'Jupiter': 'उत्तर-पूर्व', 'Venus': 'दक्षिण-पूर्व', 'Saturn': 'पश्चिम' };
+  const pDirEn = powerDirMapEn[lagnaLord] || 'East';
+  const pDirHi = powerDirMapHi[lagnaLord] || 'पूर्व';
+
+  const gMeta = getGoalAstrologicalHouse(goal, lagnaSignNum);
+  const goalDirEn = powerDirMapEn[gMeta.lord] || 'North';
+  const goalDirHi = powerDirMapHi[gMeta.lord] || 'उत्तर';
+
+  if (isHi) {
+    return [
+      `<strong>लग्न तत्व संरेखण (${elNamesHi[elIdx]}):</strong> आपकी कुंडली ${signNamesHi[lagnaSignNum]} लग्न (${elNamesHi[elIdx]}) से संचालित है। अपने परिसर के केंद्र (ब्रह्मस्थान) को खुला व हल्का रखें।`,
+      `<strong>व्यक्तिगत महादिशा (${pDirHi}):</strong> आपके लग्नेश (${signLordsHi[lagnaSignNum] || lagnaLord}) की ऊर्जा दिशा ${pDirHi} है। महत्वपूर्ण निर्णय, रणनीति व ध्यान के समय ${pDirHi} की ओर मुख करें।`,
+      `<strong>लक्ष्य वास्तु कोण (${gMeta.houseNum}वां भाव: ${goalDirHi}):</strong> आपके लक्ष्य स्वामी (${signLordsHi[gMeta.signNum] || gMeta.lord}) का प्रभाव क्षेत्र ${goalDirHi} है। अपने कार्यक्षेत्र या कमरे के ${goalDirHi} कोण को साफ रखें और वहां धातु/प्रकाश संतुलित रखें।`
+    ];
+  } else {
+    return [
+      `<strong>Ascendant Element (${elNamesEn[elIdx]}):</strong> Your ${signNames[lagnaSignNum]} Lagna resonates with ${elNamesEn[elIdx]}. Keep the central Brahmasthan open, clutter-free, and well-lit.`,
+      `<strong>Personal Power Direction (${pDirEn}):</strong> Governed by your Lagna Lord ${lagnaLord}. Face ${pDirEn} during key professional calls, negotiations, and daily meditation for peak clarity.`,
+      `<strong>Goal Vastu Vector (${gMeta.houseNum}th House: ${goalDirEn}):</strong> Your goal lord ${gMeta.lord} channels vibrations into the ${goalDirEn} sector. Keep the ${goalDirEn} corner of your workspace pristine and energized with natural light.`
+    ];
+  }
+}
+
 const horoscopes = {
 "Aries": "Your energy is aligned for career initiatives today. Trust your intuition.",
 "Taurus": "Take it slow. Financial investments made today show strong long-term promise.",
@@ -5006,90 +5254,47 @@ function getGoalAstrologicalForecast(g, targetLang) {
   return isH ? detailHi : detailEn;
 }
 
-// Vedic Tasks
+// Vedic Tasks (100% Kundli-Derived via getKundaliVedicSolution)
 if (!hasPartner) {
-const goalVedicContextEn = {
-job: `Perform Surya Namaskaar (12 rounds) before sunrise to activate career and authority vibrations.`,
-debt: `Recite the Shiva Panchakshari mantra "Om Namah Shivaya" 108 times before meals to dissolve financial anxieties.`,
-marriage: `Recite the Katyayani mantra "Om Katyayanyai Namah" 108 times on a Friday morning to attract your destined partner.`,
-baby: `Both partners should recite the Santan Gopal mantra "Om Devaki Sut Govind..." 108 times together each morning.`,
-business: `Perform Ganesh puja on Wednesdays and light incense (dhoop) at your business entrance.`,
-property: `Recite the Bhoomi Sukta prayer (from Atharvaveda) before property visits. Also chant "Om Bhaumaya Namah" 11 times for Mars blessings on property.`,
-health: `Perform Surya Namaskar (sun salutation) at sunrise and drink copper vessel water in the morning for vitality.`,
-custom: `Perform an evening puja with incense and a ghee lamp, focusing your intention on resolving: "${issueText}".`
-};
-const goalVedicContextHi = {
-job: `करियर और अधिकार के स्पंदनों को सक्रिय करने के लिए सूर्योदय से पहले सूर्य नमस्कार (12 चक्र) करें।`,
-debt: `वित्तीय चिंताओं को दूर करने के लिए भोजन से पहले 108 बार शिव पंचाक्षरी मंत्र "ॐ नमः शिवाय" का जाप करें।`,
-marriage: `अपने भाग्यशाली जीवनसाथी को आकर्षित करने के लिए शुक्रवार की सुबह कात्यायनी मंत्र "ॐ कात्यायन्यै नमः" का 108 बार जाप करें।`,
-baby: `संतान सुख के लिए दोनों साथी मिलकर प्रत्येक सुबह 108 बार संतान गोपाल मंत्र "ॐ देवकी सुत गोविंद..." का जाप करें।`,
-business: `बुधवार को गणेश पूजा करें और अपने व्यावसायिक प्रवेश द्वार पर धूप जलाएं।`,
-property: `संपत्ति के दौरों से पहले भूमि सूक्त प्रार्थना (अथर्ववेद से) का पाठ करें। संपत्ति पर मंगल के आशीर्वाद के लिए "ॐ भौमाय नमः" का 11 बार जाप करें।`,
-health: `सूर्योदय के समय सूर्य नमस्कार करें और जीवन शक्ति के लिए सुबह तांबे के बर्तन का पानी पिएं।`,
-custom: `शाम को धूप और घी के दीये के साथ पूजा करें, अपने ध्यान को इस समस्या के समाधान पर केंद्रित करें: "${issueText}"।`
-};
-
-const contextMap = isHi ? goalVedicContextHi : goalVedicContextEn;
-const rituals = [];
+const ritualsList = [];
 activeGoalsList.forEach(g => {
-let normG = g;
-if (g === 'marriage-single' || g === 'marriage-couple') normG = 'marriage';
-if (g === 'property-single' || g === 'property-couple') normG = 'property';
-const contextKey = ['property-single','property-couple'].includes(g) ? 'property' : ['marriage-single','marriage-couple'].includes(g) ? 'marriage' : (normG in contextMap ? normG : 'custom');
-const ritual = contextMap[contextKey] || contextMap.custom;
-const label = (isHi ? (goalLabelsHi[g] || goalLabelsEn[g] || g) : (goalLabelsEn[g] || g));
-rituals.push(`<strong>${label}:</strong> ${ritual}`);
+  const vSol = getKundaliVedicSolution(g, lagnaSignNum, coachPlacements, userDasha, isHi ? 'hi' : 'en');
+  const label = (isHi ? (goalLabelsHi[g] || goalLabelsEn[g] || g) : (goalLabelsEn[g] || g));
+  ritualsList.push(`<strong>[${label}]:</strong> ${vSol}`);
 });
-const ritualsHTML = rituals.map(r => `<div style="margin-top: 4px; padding-left: 10px; border-left: 2px solid var(--gold);">${r}</div>`).join('');
+const ritualsHTML = ritualsList.map(r => `<div style="margin-top: 6px; padding-left: 10px; border-left: 2px solid var(--gold); line-height: 1.5;">${r}</div>`).join('');
 
 if (isHi) {
 vListHTML = `
-<li style="margin-bottom: 10px;"><strong>शासक ग्रह मंत्र:</strong> प्रत्येक सुबह पूर्व की ओर मुंह करके 108 बार <strong>"${lordDetails.mantra}"</strong> का लगातार 40 दिनों तक जाप करें।</li>
+<li style="margin-bottom: 10px;"><strong>शासक ग्रह मंत्र:</strong> प्रत्येक सुबह 108 बार <strong>"${lordDetails.mantra}"</strong> का जाप करें (आपके लग्न के स्वामी: ${signLordsHi[lagnaSignNum] || rulingLord})।</li>
 <li style="margin-bottom: 10px;"><strong>पवित्र पाठ:</strong> ${lordDetails.text}</li>
-<li style="margin-bottom: 10px;"><strong>लक्ष्य अनुष्ठान:</strong> ${ritualsHTML}</li>
-<li><strong>एकादशी व्रत:</strong> अपने लक्ष्यों से जुड़े कर्मों को संरेखित करने के लिए प्रति माह कम से कम एक एकादशी का व्रत रखें, जिसमें केवल फल या पानी का सेवन करें।</li>
+<li style="margin-bottom: 10px;"><strong>कुंडली आधारित लक्ष्य अनुष्ठान:</strong> ${ritualsHTML}</li>
+<li><strong>एकादशी व्रत:</strong> अपनी कुंडली के ग्रहों को सात्विक ऊर्जा देने हेतु माह में कम से कम एक बार एकादशी व्रत का पालन करें।</li>
 `;
 } else {
 vListHTML = `
-<li style="margin-bottom: 10px;"><strong>Ruling Planet Mantra:</strong> Chant <strong>"${lordDetails.mantra}"</strong> exactly 108 times each morning facing East for 40 consecutive days.</li>
+<li style="margin-bottom: 10px;"><strong>Ruling Planet Mantra:</strong> Chant <strong>"${lordDetails.mantra}"</strong> 108 times each morning (ruler of your Lagna: ${rulingLord}).</li>
 <li style="margin-bottom: 10px;"><strong>Sacred Text:</strong> ${lordDetails.text}</li>
-<li style="margin-bottom: 10px;"><strong>Goal Ritual(s):</strong> ${ritualsHTML}</li>
-<li><strong>Ekadashi Fast:</strong> Observe at least one Ekadashi (11th lunar day) fast per month, drinking only fruit or water, to burn karmic debt aligned with your goals.</li>
+<li style="margin-bottom: 10px;"><strong>Kundali-Driven Goal Ritual(s):</strong> ${ritualsHTML}</li>
+<li><strong>Ekadashi Fast:</strong> Observe at least one Ekadashi fast per month to cleanse karmic blockages aligned with your planetary configurations.</li>
 `;
 }
 } else {
 const partnerLordDetails = isHi ? (vedicMantrasHi[partnerRulingLord] || vedicMantrasHi["Sun"]) : (vedicMantrasEn[partnerRulingLord] || vedicMantrasEn["Sun"]);
-const coupleGoalRitualsEn = {
-marriage: `Both partners should recite the Vivah Sukta verses from the Rigveda together each morning and offer flowers to Lord Vishnu on Thursdays.`,
-baby: `Both partners should recite the Santan Gopal mantra "Om Devaki Sut Govind..." 108 times together each morning.`,
-property: `Both partners should offer water, a flower, and a pinch of turmeric to a rising sun, and chant "Om Bhaumaya Namah" 11 times together before any property visits.`,
-debt: `Both partners should recite the Shiva Panchakshari mantra together 108 times on Monday mornings while holding water in cupped hands.`,
-custom: `Both partners should perform evening puja together with ghee lamp, flowers, and focused collective intention on resolving the shared challenge.`
-};
-const coupleGoalRitualsHi = {
-marriage: `दोनों साथी प्रत्येक सुबह मिलकर ऋग्वेद के विवाह सूक्त श्लोकों का पाठ करें और गुरुवार को भगवान विष्णु को फूल अर्पित करें।`,
-baby: `दोनों साथी प्रत्येक सुबह मिलकर संतान गोपाल मंत्र "ॐ देवकी सुत गोविंद..." का 108 बार जाप करें।`,
-property: `दोनों साथी किसी भी संपत्ति के दौरे से पहले उगते सूर्य को जल, फूल और एक चुटकी हल्दी अर्पित करें, और मिलकर 11 बार "ॐ भौमाय नमः" का जाप करें।`,
-debt: `दोनों साथी सोमवार की सुबह हाथों में जल लेकर मिलकर 108 बार शिव पंचाक्षरी मंत्र का जाप करें।`,
-custom: `दोनों साथी शाम को मिलकर घी के दीपक, फूलों और सामूहिक ध्यान के साथ साझा चुनौती को हल करने के लिए पूजा करें।`
-};
-
-const coupleMap = isHi ? coupleGoalRitualsHi : coupleGoalRitualsEn;
 const coupleRituals = [];
 activeGoalsList.forEach(g => {
-let normG = g;
-if (g === 'marriage-single' || g === 'marriage-couple') normG = 'marriage';
-if (g === 'property-single' || g === 'property-couple') normG = 'property';
-const coupleContextKey = normG in coupleMap ? normG : 'custom';
-const ritual = coupleMap[coupleContextKey];
-const label = (isHi ? (goalLabelsHi[g] || goalLabelsEn[g] || g) : (goalLabelsEn[g] || g));
-coupleRituals.push(`<strong>${label}:</strong> ${ritual}`);
+  const userSol = getKundaliVedicSolution(g, lagnaSignNum, coachPlacements, userDasha, isHi ? 'hi' : 'en');
+  const partnerSol = (partnerPlacements && partnerPlacements.length > 0 && typeof partnerLagnaSignNum !== 'undefined')
+    ? getKundaliVedicSolution(g, partnerLagnaSignNum, partnerPlacements, partnerDasha, isHi ? 'hi' : 'en')
+    : (isHi ? `साथी भी ${partnerRulingLord} के मंत्र का 108 बार जाप करें।` : `Partner also chants ${partnerRulingLord} mantra 108 times.`);
+  const label = (isHi ? (goalLabelsHi[g] || goalLabelsEn[g] || g) : (goalLabelsEn[g] || g));
+  coupleRituals.push(`<strong>[${label}]:</strong> ${userSol} <br/><span style="color:var(--text-muted); font-size:0.85rem;">${isHi ? 'साथी अनुष्ठान: ' : 'Partner Ritual: '}${partnerSol}</span>`);
 });
-const coupleRitualsHTML = coupleRituals.map(r => `<div style="margin-top: 4px; padding-left: 10px; border-left: 2px solid var(--gold);">${r}</div>`).join('');
+const coupleRitualsHTML = coupleRituals.map(r => `<div style="margin-top: 6px; padding-left: 10px; border-left: 2px solid var(--gold); line-height: 1.5;">${r}</div>`).join('');
 
 if (isHi) {
 vListHTML = `
-<li style="margin-bottom: 10px;"><strong>${name} का मंत्र:</strong> प्रत्येक सुबह 108 बार <strong>"${lordDetails.mantra}"</strong> का जाप करें (आपके लग्न के स्वामी: ${rulingLord})।</li>
+<li style="margin-bottom: 10px;"><strong>${name} का मंत्र:</strong> प्रत्येक सुबह 108 बार <strong>"${lordDetails.mantra}"</strong> का जाप करें (आपके लग्न के स्वामी: ${signLordsHi[lagnaSignNum] || rulingLord})।</li>
 <li style="margin-bottom: 10px;"><strong>${partnerName || 'साथी'} का मंत्र:</strong> प्रत्येक सुबह 108 बार <strong>"${partnerLordDetails.mantra}"</strong> का जाप करें (उनके लग्न के स्वामी: ${partnerRulingLord})।</li>
 <li style="margin-bottom: 10px;"><strong>युगल लक्ष्य अनुष्ठान:</strong> ${coupleRitualsHTML}</li>
 <li style="margin-bottom: 10px;"><strong>साझा पवित्र पाठ:</strong> अपने साझा लक्ष्यों के लिए ईश्वरीय सहायता प्राप्त करने के लिए प्रत्येक शाम एक साथ गुरु स्तोत्र या शिव पुराण का पाठ करें।</li>
@@ -5107,93 +5312,24 @@ vListHTML = `
 }
 
 // ── DYNAMIC KUNDLI-DRIVEN LAL KITAB UPAYAS ──
-const marsPl = coachPlacements.find(p => p.name === 'Mars');
-const marsHouse = marsPl ? (((marsPl.sign - lagnaSignNum + 12) % 12) + 1) : 1;
-const isMangalBad = [1, 4, 7, 8, 12].includes(marsHouse);
-
-const mercPl = coachPlacements.find(p => p.name === 'Mercury');
-const mercHouse = mercPl ? (((mercPl.sign - lagnaSignNum + 12) % 12) + 1) : 1;
-const isBudhManda = [3, 8, 9, 12].includes(mercHouse);
-
-const dynamicUpayasEn = [
-  isMangalBad
-    ? `Mangal Bad Pacification (Mars in House ${marsHouse}): Keep a solid silver ball or square piece of pure silver in your pocket/safe to calm emotional & marital friction.`
-    : `Mangal Nek Activation (Mars in House ${marsHouse}): Support siblings, maintain physical vigor, and feed sweet rotis to stray dogs on Tuesdays.`,
-  isBudhManda
-    ? `Budh Manda Pacification (Mercury in House ${mercHouse}): Feed whole green moong or spinach to cows on Wednesdays and clean teeth with alum water.`
-    : `Budh Nek Enhancement (Mercury in House ${mercHouse}): Chant Vishnu Sahasranama on Wednesdays and keep a green plant in your workspace.`,
-  `Lagna Lord ${rulingLord} Alignment: Offer water from a copper vessel to the rising Sun and avoid dark clothing during key negotiations.`
-];
-
-const dynamicUpayasHi = [
-  isMangalBad
-    ? `मंगल बद शांति (मंगल ${marsHouse}वें भाव में): अपने बटुए या तिजोरी में ठोस चांदी की गोली या चौकोर टुकड़ा रखें ताकि उग्रता व तनाव शांत हो।`
-    : `मंगल नेक संवर्धन (मंगल ${marsHouse}वें भाव में): भाइयों का सहयोग करें, शारीरिक ऊर्जा बनाए रखें और मंगलवार को कुत्तों को मीठी रोटी खिलाएं।`,
-  isBudhManda
-    ? `बुध मंदा शांति (बुध ${mercHouse}वें भाव में): बुधवार को गायों को साबुत हरी मूंग या पालक खिलाएं और फिटकरी से दांत साफ रखें।`
-    : `बुध नेक संवर्धन (बुध ${mercHouse}वें भाव में): बुधवार को विष्णु सहस्रनाम का पाठ करें और अपने कार्यस्थल पर हरा पौधा रखें।`,
-  `लग्नेश ${signLordsHi[lagnaSignNum] || rulingLord} संरेखण: प्रातः तांबे के पात्र से सूर्य को जल अर्पित करें और महत्वपूर्ण कार्यों के दौरान गहरे काले वस्त्रों से बचें।`
-];
-
-const remMap = isHi ? lalkitabRemediesHi : lalkitabRemediesEn;
-let allRemedies = isHi ? [...dynamicUpayasHi] : [...dynamicUpayasEn];
-
+const allRemedies = [];
 activeGoalsList.forEach(g => {
-  let rKey = g;
-  if (g === 'marriage-single' || g === 'marriage-couple') rKey = 'marriage';
-  if (g === 'property-single' || g === 'property-couple') rKey = 'property';
-  if (g === 'custom') rKey = "custom_" + customCategory;
-  let goalRemedies = remMap[rKey] || remMap["job"];
-  if (goalRemedies && goalRemedies.length > 0) {
-    allRemedies.push(goalRemedies[0]);
-    if (goalRemedies.length > 1) allRemedies.push(goalRemedies[1]);
-  }
+  const lkSols = getKundaliLalKitabSolutions(coachPlacements, lagnaSignNum, userDasha, g, isHi ? 'hi' : 'en');
+  lkSols.forEach(rem => {
+    if (!allRemedies.includes(rem)) allRemedies.push(rem);
+  });
 });
-
 const lListHTML = allRemedies.slice(0, 6).map(r => `<li style="margin-bottom: 8px;">${r}</li>`).join('');
 
 // ── DYNAMIC KUNDLI-DRIVEN VASTU ALIGNMENT ──
-const elementsMap = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3];
-const elIdx = elementsMap[lagnaSignNum];
-const elementNamesEn = ["Fire (Agnitattva)", "Earth (Prithvitattva)", "Air (Vayutattva)", "Water (Jalatattva)"];
-const elementNamesHi = ["अग्नि तत्व", "पृथ्वी तत्व", "वायु तत्व", "जल तत्व"];
-const powerDirMapEn = { 'Sun': 'East', 'Moon': 'North-West', 'Mars': 'South', 'Mercury': 'North', 'Jupiter': 'North-East', 'Venus': 'South-East', 'Saturn': 'West' };
-const powerDirMapHi = { 'Sun': 'पूर्व', 'Moon': 'उत्तर-पश्चिम', 'Mars': 'दक्षिण', 'Mercury': 'उत्तर', 'Jupiter': 'उत्तर-पूर्व', 'Venus': 'दक्षिण-पूर्व', 'Saturn': 'पश्चिम' };
-const pDirEn = powerDirMapEn[rulingLord] || 'East';
-const pDirHi = powerDirMapHi[rulingLord] || 'पूर्व';
-
-let vVastuHTML;
-if (isHi) {
-  const goalVastuEntries = activeGoalsList.map(g => {
-    let vKey = g;
-    if (g === 'marriage-single' || g === 'marriage-couple') vKey = 'marriage';
-    if (g === 'property-single' || g === 'property-couple') vKey = 'property';
-    if (g === 'custom') vKey = "custom_" + customCategory;
-    const vText = vastuSuggestionsHi[vKey] || vastuSuggestionsHi.job;
-    const gLabel = goalLabelsHi[g] || g;
-    return `<strong>${gLabel}:</strong> ${vText}`;
+const allVastuEntries = [];
+activeGoalsList.forEach(g => {
+  const vSols = getKundaliVastuSolutions(lagnaSignNum, coachPlacements, g, isHi ? 'hi' : 'en');
+  vSols.forEach(v => {
+    if (!allVastuEntries.includes(v)) allVastuEntries.push(v);
   });
-  vVastuHTML = `
-  <li style="margin-bottom: 8px;"><strong>लग्न तत्व संरेखण (${elementNamesHi[elIdx]}):</strong> आपकी कुंडली ${lagnaNameHi} लग्न (${elementNamesHi[elIdx]}) से संचालित है। अपने घर के केंद्र (ब्रह्मस्थान) को हल्का व अवरोध-मुक्त रखें।</li>
-  <li style="margin-bottom: 8px;"><strong>व्यक्तिगत महादिशा (${pDirHi}):</strong> आपके लग्न स्वामी ${signLordsHi[lagnaSignNum] || rulingLord} की मुख्य ऊर्जा दिशा ${pDirHi} है। महत्वपूर्ण कार्य व ध्यान करते समय ${pDirHi} की ओर मुख करें।</li>
-  ${goalVastuEntries.map(e => `<li style="margin-bottom: 8px;">${e}</li>`).join('')}
-  `;
-} else {
-  const goalVastuEntries = activeGoalsList.map(g => {
-    let vKey = g;
-    if (g === 'marriage-single' || g === 'marriage-couple') vKey = 'marriage';
-    if (g === 'property-single' || g === 'property-couple') vKey = 'property';
-    if (g === 'custom') vKey = "custom_" + customCategory;
-    const vText = vastuSuggestionsEn[vKey] || vastuSuggestionsEn.job;
-    const gLabel = goalLabelsEn[g] || g;
-    return `<strong>${gLabel}:</strong> ${vText}`;
-  });
-  vVastuHTML = `
-  <li style="margin-bottom: 8px;"><strong>Ascendant Element (${elementNamesEn[elIdx]}):</strong> Your ${lagnaName} Lagna vibrates with ${elementNamesEn[elIdx]}. Maintain spacious openness at the center of your space (Brahmasthan).</li>
-  <li style="margin-bottom: 8px;"><strong>Personal Power Direction (${pDirEn}):</strong> Your Lagna Lord (${rulingLord}) governs the ${pDirEn} vector. Face ${pDirEn} during key professional work and meditations.</li>
-  ${goalVastuEntries.map(e => `<li style="margin-bottom: 8px;">${e}</li>`).join('')}
-  `;
-}
+});
+const vVastuHTML = allVastuEntries.slice(0, 6).map(e => `<li style="margin-bottom: 8px;">${e}</li>`).join('');
 
 // ── DYNAMIC PRACTICAL ACTIONS ──
 const practicalMap = isHi ? practicalActionsHi : practicalActions;
@@ -5397,54 +5533,50 @@ renderRoadmapDayTasks(selectedRoadmapDay);
 // Populate Active Goals UI
 if (typeof renderActiveGoalsUI === 'function') renderActiveGoalsUI();
 
-// SMART MULTI-GOAL DE-DUPLICATION FOR HOME DASHBOARD
+// ── 100% KUNDLI-DRIVEN HOME DASHBOARD DOABLE QUEST CARDS ──
 activeGoalsList = (typeof getActiveGoals === 'function') ? getActiveGoals() : activeGoalsList;
-const activeGoalNames = activeGoalsList.map(g => goalLabels[g] || g).join(', ');
+const primaryGoal = activeGoalsList[0] || 'job';
 
-const lordDetails = currentAppLang === 'hi' ? (vedicMantrasHi[rulingLord] || vedicMantrasHi["Sun"]) : (vedicMantrasEn[rulingLord] || vedicMantrasEn["Sun"]);
-// Build goal-specific ritual text for the dashboard quest card
-const _contextMap = currentAppLang === 'hi' ? {
-job: 'करियर और अधिकार के स्पंदनों को सक्रिय करने के लिए सूर्योदय से पहले सूर्य नमस्कार (12 चक्र) करें।',
-debt: 'वित्तीय चिंताओं को दूर करने के लिए भोजन से पहले 108 बार "ॐ नमः शिवाय" का जाप करें।',
-marriage: 'अपने भाग्यशाली जीवनसाथी को आकर्षित करने के लिए शुक्रवार की सुबह कात्यायनी मंत्र का 108 बार जाप करें।',
-baby: 'संतान सुख के लिए प्रत्येक सुबह 108 बार संतान गोपाल मंत्र का जाप करें।',
-business: 'बुधवार को गणेश पूजा करें और अपने व्यावसायिक प्रवेश द्वार पर धूप जलाएं।',
-property: 'संपत्ति के दौरों से पहले "ॐ भौमाय नमः" का 11 बार जाप करें।',
-health: 'सूर्योदय के समय सूर्य नमस्कार करें और जीवन शक्ति के लिए तांबे के बर्तन का पानी पिएं।',
-custom: 'शाम को घी के दीये के साथ पूजा करें और अपने लक्ष्य पर ध्यान केंद्रित करें।'
-} : {
-job: 'Perform Surya Namaskaar (12 rounds) before sunrise to activate career and authority vibrations.',
-debt: 'Recite "Om Namah Shivaya" 108 times before meals to dissolve financial anxieties.',
-marriage: 'Recite the Katyayani mantra 108 times on Friday morning to attract your destined partner.',
-baby: 'Recite the Santan Gopal mantra 108 times each morning for progeny blessings.',
-business: 'Perform Ganesh puja on Wednesdays and light incense at your business entrance.',
-property: 'Chant "Om Bhaumaya Namah" 11 times before property visits for Mars blessings.',
-health: 'Perform Surya Namaskar at sunrise and drink copper vessel water in the morning for vitality.',
-custom: 'Perform an evening puja with incense and a ghee lamp, focusing intention on your goal.'
-};
+// 1. Dynamic Vedic Quest
+const vedicSolEn = getKundaliVedicSolution(primaryGoal, lagnaSignNum, coachPlacements, userDasha, 'en');
+const vedicSolHi = getKundaliVedicSolution(primaryGoal, lagnaSignNum, coachPlacements, userDasha, 'hi');
+localStorage.setItem('today_quest_vedic_text_en', vedicSolEn);
+localStorage.setItem('today_quest_vedic_text_hi', vedicSolHi);
+localStorage.setItem('today_quest_vedic_text', currentAppLang === 'hi' ? vedicSolHi : vedicSolEn);
 
-const ritualsList = [];
-activeGoalsList.forEach(g => {
-let nG = g;
-if (g === 'marriage-single' || g === 'marriage-couple') nG = 'marriage';
-if (g === 'property-single' || g === 'property-couple') nG = 'property';
-const targetRitualKey = nG in _contextMap ? nG : 'custom';
-const ritualText = _contextMap[targetRitualKey] || _contextMap['custom'];
-const label = (currentAppLang === 'hi' ? (goalLabelsHi[g] || goalLabelsEn[g] || g) : (goalLabelsEn[g] || g));
-ritualsList.push(`[${label}]: ${ritualText}`);
-});
-const combinedGoalRitualsText = ritualsList.join(" ");
+// 2. Dynamic Lal Kitab Quest
+const lkSolsEn = getKundaliLalKitabSolutions(coachPlacements, lagnaSignNum, userDasha, primaryGoal, 'en');
+const lkSolsHi = getKundaliLalKitabSolutions(coachPlacements, lagnaSignNum, userDasha, primaryGoal, 'hi');
+const lkQuestTextEn = lkSolsEn.slice(0, 3).map((r, i) => `Remedy ${i+1}: ${r}`).join(' ');
+const lkQuestTextHi = lkSolsHi.slice(0, 3).map((r, i) => `उपाय ${i+1}: ${r}`).join(' ');
+localStorage.setItem('today_quest_lalkitab_text_en', lkQuestTextEn);
+localStorage.setItem('today_quest_lalkitab_text_hi', lkQuestTextHi);
+localStorage.setItem('today_quest_lalkitab_text', currentAppLang === 'hi' ? lkQuestTextHi : lkQuestTextEn);
 
-const unifiedVedicText = currentAppLang === 'hi'
-? `शासक ग्रह मंत्र: "${lordDetails.mantra}" का 108 बार जाप करें (लक्ष्य: ${activeGoalNames})। पवित्र पाठ: ${lordDetails.text} लक्ष्य अनुष्ठान: ${combinedGoalRitualsText}`
-: `Ruling Planet Mantra: Chant "${lordDetails.mantra}" 108 times each morning facing East. (Goals: ${activeGoalNames}). Sacred Text: ${lordDetails.text} Goal Rituals: ${combinedGoalRitualsText}`;
-localStorage.setItem('today_quest_vedic_text', unifiedVedicText);
+// 3. Dynamic Vastu Quest
+const vastuSolsEn = getKundaliVastuSolutions(lagnaSignNum, coachPlacements, primaryGoal, 'en');
+const vastuSolsHi = getKundaliVastuSolutions(lagnaSignNum, coachPlacements, primaryGoal, 'hi');
+const tempVastuDivEn = document.createElement('div'); tempVastuDivEn.innerHTML = vastuSolsEn.join(' ');
+const tempVastuDivHi = document.createElement('div'); tempVastuDivHi.innerHTML = vastuSolsHi.join(' ');
+const vastuQuestTextEn = tempVastuDivEn.innerText || vastuSolsEn.join(' ');
+const vastuQuestTextHi = tempVastuDivHi.innerText || vastuSolsHi.join(' ');
+localStorage.setItem('today_quest_vastu_text_en', vastuQuestTextEn);
+localStorage.setItem('today_quest_vastu_text_hi', vastuQuestTextHi);
+localStorage.setItem('today_quest_vastu_text', currentAppLang === 'hi' ? vastuQuestTextHi : vastuQuestTextEn);
+
+// 4. Dynamic Practical Quest
+const currentPlanDay = (typeof getPlanStartDayOffset === 'function') ? getPlanStartDayOffset() : 1;
+const practicalQuestTextEn = get90DayPracticalTask(currentPlanDay, primaryGoal, 'en');
+const practicalQuestTextHi = get90DayPracticalTask(currentPlanDay, primaryGoal, 'hi');
+localStorage.setItem('today_quest_practical_text_en', practicalQuestTextEn);
+localStorage.setItem('today_quest_practical_text_hi', practicalQuestTextHi);
+localStorage.setItem('today_quest_practical_text', currentAppLang === 'hi' ? practicalQuestTextHi : practicalQuestTextEn);
 
 // Populate Home Quest Cards with clean multi-line HTML formatting
-document.getElementById('q-vedic-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_vedic_text'));
-document.getElementById('q-lalkitab-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_lalkitab_text'));
-document.getElementById('q-vastu-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_vastu_text'));
-document.getElementById('q-practical-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_practical_text'));
+if (document.getElementById('q-vedic-text')) document.getElementById('q-vedic-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_vedic_text'));
+if (document.getElementById('q-lalkitab-text')) document.getElementById('q-lalkitab-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_lalkitab_text'));
+if (document.getElementById('q-vastu-text')) document.getElementById('q-vastu-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_vastu_text'));
+if (document.getElementById('q-practical-text')) document.getElementById('q-practical-text').innerHTML = formatQuestHTML(localStorage.getItem('today_quest_practical_text'));
 
 // Show Quests Section on Home, Hide prompt
 const qUnlockPrompt = document.getElementById('quest-unlock-prompt');
@@ -11465,16 +11597,7 @@ el.style.color = 'var(--gold)';
 document.getElementById('k-gender').value = val;
 }
 
-// Sign translations & info
-const signNamesHi = ['मेष', 'वृषभ', 'मिथुन', 'कर्क', 'सिंह', 'कन्या', 'तुला', 'वृश्चिक', 'धनु', 'मकर', 'कुम्भ', 'मीन'];
-const signElements = ['Fire', 'Earth', 'Air', 'Water', 'Fire', 'Earth', 'Air', 'Water', 'Fire', 'Earth', 'Air', 'Water'];
-const signElementsHi = ['अग्नि', 'पृथ्वी', 'वायु', 'जल', 'अग्नि', 'पृथ्वी', 'वायु', 'जल', 'अग्नि', 'पृथ्वी', 'वायु', 'जल'];
-const signLords = ['Mars', 'Venus', 'Mercury', 'Moon', 'Sun', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Saturn', 'Jupiter'];
-const signLordsHi = ['मंगल', 'शुक्र', 'बुध', 'चन्द्र', 'सूर्य', 'बुध', 'शुक्र', 'मंगल', 'गुरु', 'शनि', 'शनि', 'गुरु'];
-const planetNamesHi = {
-'Lagna': 'लग्न', 'Sun': 'सूर्य', 'Moon': 'चन्द्र', 'Mars': 'मंगल', 'Mercury': 'बुध', 
-'Jupiter': 'गुरु', 'Venus': 'शुक्र', 'Saturn': 'शनि', 'Rahu': 'राहु', 'Ketu': 'केतु'
-};
+// Sign translations & info (already globally defined at top of script)
 
 // 27 Nakshatras array
 const nakshatras = [
@@ -11796,71 +11919,300 @@ return {en:'Neutral', hi:'सामान्य', color:'#aaa'};
 
 // Dosha calculations
 function computeDoshas(placements, lagnaSign) {
-const doshas = [];
-const get = name => placements.find(p => p.name === name);
-const mars = get('Mars');
-const saturn = get('Saturn');
-const rahu = get('Rahu');
-const moon = get('Moon');
+  const doshas = [];
+  const get = name => placements.find(p => p.name === name);
+  const mars = get('Mars');
+  const saturn = get('Saturn');
+  const rahu = get('Rahu');
+  const ketu = get('Ketu');
+  const moon = get('Moon');
+  const sun = get('Sun');
+  const jupiter = get('Jupiter');
+  const venus = get('Venus');
+  const mercury = get('Mercury');
 
-// Mangal Dosha
-if (mars) {
-const marsHouse = ((mars.sign - lagnaSign + 12) % 12) + 1;
-if ([1,2,4,7,8,12].includes(marsHouse)) {
-doshas.push({
-name: 'Mangal Dosha (Kuja Dosha)',
-nameHi: 'मंगल दोष (कुज दोष)',
-present: true,
-en: 'Mars is placed in the ' + marsHouse + ' house from Lagna - a Mangal Dosha is present. This can create delays in marriage or cause friction in relationships. Remedies: Chant Om Angarakaya Namah 108 times daily; visit Hanuman temple on Tuesdays; perform Mangal Shanti puja.',
-hi: 'मंगल लग्न से ' + marsHouse + 'वें भाव में है - मंगल दोष विद्यमान है। यह विवाह में देरी या वैवाहिक जीवन में कलह उत्पन्न कर सकता है। उपाय: मंगलवार को हनुमान मंदिर जाएं; ॐ अंगारकाय नमः का 108 बार जाप करें; मंगल शांति पूजा करवाएं।'
-});
-}
+  // 1. Mangal Dosha (Kuja Dosha) with House-Specific Analysis & Cancellation (Bhanga)
+  if (mars) {
+    const marsHouse = ((mars.sign - lagnaSign + 12) % 12) + 1;
+    const kujaHouses = [1, 2, 4, 7, 8, 12];
+    if (kujaHouses.includes(marsHouse)) {
+      const isHighManglik = [1, 7, 8].includes(marsHouse);
+      const marsSignName = signNames[mars.sign];
+      const marsSignNameHi = signNamesHi[mars.sign];
+
+      // Cancellation (Bhanga) conditions
+      let isMitigated = false;
+      let mitigationReasonEn = '';
+      let mitigationReasonHi = '';
+
+      if (mars.sign === 0 || mars.sign === 7) { // Aries or Scorpio (Own signs)
+        isMitigated = true;
+        mitigationReasonEn = `Mars is seated in its own sign (${marsSignName}), which converts aggressive heat into protective courage (Swakshetra Bhanga).`;
+        mitigationReasonHi = `मंगल अपनी स्वराशि (${marsSignNameHi}) में स्थित है, जिससे इसकी आक्रामकता रक्षात्मक साहस में परिवर्तित होकर दोष शमित होता है।`;
+      } else if (mars.sign === 9) { // Capricorn (Exaltation)
+        isMitigated = true;
+        mitigationReasonEn = `Mars is exalted (Uchcha) in Capricorn, channeling intense discipline and canceling disruptive friction (Uchcha Bhanga).`;
+        mitigationReasonHi = `मंगल मकर राशि में उच्च का है, जिससे यह अनुशासित और उत्पादक ऊर्जा प्रदान करता है और दोष प्रभाव शांत होता है।`;
+      } else if (jupiter && (jupiter.sign === mars.sign || [4, 6, 8].includes(((mars.sign - jupiter.sign + 12) % 12)))) { // Guru aspect (5th, 7th, 9th drishti) or conjunction
+        isMitigated = true;
+        mitigationReasonEn = `Jupiter aspects or conjoins Mars, creating the auspicious Guru-Mangal Yoga that neutralizes marital discord.`;
+        mitigationReasonHi = `देवगुरु बृहस्पति की दृष्टि या युति मंगल पर होने से गुरु-मंगल योग बनता है, जो दोष को निष्प्रभावी करता है।`;
+      } else if (moon && moon.sign === mars.sign) { // Chandra-Mangal
+        isMitigated = true;
+        mitigationReasonEn = `Conjunction with the Moon forms auspicious Chandra-Mangal Yoga, transmuting fiery tension into material prosperity.`;
+        mitigationReasonHi = `चन्द्रमा के साथ युति से शुभ चन्द्र-मंगल योग का निर्माण होता है, जो तनाव को धन समृद्धि में रूपांतरित करता है।`;
+      }
+
+      const houseSpecificImpactEn = {
+        1: `Mars in the 1st House generates intense personal drive, leadership, but requires emotional patience to prevent impetuous reactions in partnerships.`,
+        2: `Mars in the 2nd House impacts speech tone (Vani) and family finances; mindful, measured communication dissolves tension.`,
+        4: `Mars in the 4th House brings restlessness regarding domestic roots and living spaces; creating an orderly home environment grounds energy.`,
+        7: `Mars in the 7th House directly aspects the partnership axis; prioritizing collaborative compromise prevents marital friction.`,
+        8: `Mars in the 8th House influences joint finances and sudden hurdles; regular physical discipline stabilizes vitality.`,
+        12: `Mars in the 12th House affects nocturnal rest and unbudgeted outflows; disciplined sleep routines balance the nervous system.`
+      };
+
+      const houseSpecificImpactHi = {
+        1: `प्रथम भाव में मंगल अत्यधिक ऊर्जा व नेतृत्व देता है, किंतु साझेदारी में धैर्य व विनम्रता आवश्यक है।`,
+        2: `द्वितीय भाव में मंगल वाणी व पारिवारिक आर्थिक व्यवस्था को प्रभावित करता है; संयमित वाणी से संबंध मधुर रहेंगे।`,
+        4: `चतुर्थ भाव में मंगल गृहस्थ सुख व मानसिक शांति को प्रभावित करता है; घर को सुव्यवस्थित रखने से ऊर्जा शांत होती है।`,
+        7: `सप्तम भाव में मंगल वैवाहिक साझेदारी पर सीधा प्रभाव डालता है; आपसी समझ और संवाद से सामंजस्य बना रहेगा।`,
+        8: `अष्टम भाव में मंगल अचानक आने वाली बाधाओं व ससुराल पक्ष को प्रभावित करता है; शारीरिक योग व साधना से स्थिरता आती है।`,
+        12: `द्वादश भाव में मंगल व्यय व निद्रा चक्र को प्रभावित करता है; नियमित दिनचर्या व ध्यान से ऊर्जा संतुलित होती है।`
+      };
+
+      const remediesEn = `Remedies: Recite Hanuman Chalisa daily at twilight; offer sweet roti or jaggery to cows/dogs on Tuesdays; maintain pure silver article in pocket; speak with gentle warmth during disagreements.`;
+      const remediesHi = `उपाय: प्रतिदिन संध्या समय श्री हनुमान चालीसा का पाठ करें; मंगलवार को गाय या कुत्ते को मीठी रोटी या गुड़ खिलाएं; बटुए में ठोस चांदी रखें।`;
+
+      if (isMitigated) {
+        doshas.push({
+          name: `Mangal Dosha (House ${marsHouse} - Mitigated / Bhanga)`,
+          nameHi: `मंगल दोष (${marsHouse}वां भाव - शमित / भंग)`,
+          present: false,
+          en: `Mars is placed in House ${marsHouse} (${marsSignName}), forming potential Kuja Dosha. However, it is auspiciously mitigated: ${mitigationReasonEn} ${houseSpecificImpactEn[marsHouse]} Continue regular devotional practices for lasting harmony.`,
+          hi: `मंगल ${marsHouse}वें भाव (${marsSignNameHi}) में स्थित है। यह दोष शुभ प्रभाव से शमित (भंग) हो चुका है: ${mitigationReasonHi} ${houseSpecificImpactHi[marsHouse]} जीवन में शांति व समृद्धि बनी रहेगी।`
+        });
+      } else {
+        doshas.push({
+          name: `${isHighManglik ? 'High' : 'Anshik'} Mangal Dosha (House ${marsHouse} - ${marsSignName})`,
+          nameHi: `${isHighManglik ? 'पूर्ण' : 'आंशिक'} मंगल दोष (${marsHouse}वां भाव - ${marsSignNameHi})`,
+          present: true,
+          en: `Mars is placed in the ${marsHouse} house (${marsSignName}) from Lagna, establishing ${isHighManglik ? 'a potent' : 'an Anshik (mild)'} Mangal Dosha. ${houseSpecificImpactEn[marsHouse]} ${remediesEn}`,
+          hi: `मंगल लग्न से ${marsHouse}वें भाव (${marsSignNameHi}) में स्थित है, जिससे ${isHighManglik ? 'पूर्ण' : 'आंशिक'} मंगल दोष का प्रभाव बनता है। ${houseSpecificImpactHi[marsHouse]} ${remediesHi}`
+        });
+      }
+    }
+  }
+
+  // 2. Shani Sade Sati / Shani Dhaiya with Exact Phase Analysis
+  if (saturn && moon) {
+    const satMoonDiff = ((saturn.sign - moon.sign + 12) % 12);
+    const satSignName = signNames[saturn.sign];
+    const moonSignName = signNames[moon.sign];
+    const moonSignNameHi = signNamesHi[moon.sign];
+
+    if (satMoonDiff === 11) {
+      doshas.push({
+        name: `Shani Sade Sati - Phase 1 (Rising Phase)`,
+        nameHi: `शनि साढ़े साती - प्रथम चरण (उदय चरण)`,
+        present: true,
+        en: `Saturn in ${satSignName} is transiting 12th from your natal Moon (${moonSignName}). This Rising Phase tests financial discipline, increases overseas or travel possibilities, and induces mental restructuring. Remedy: Light a mustard oil lamp under a Peepal tree on Saturday evenings; chant "Om Sham Shanaishcharaya Namah" 108 times; avoid unnecessary financial liabilities.`,
+        hi: `शनि (${satSignName}) आपकी जन्म चन्द्र राशि (${moonSignNameHi}) से 12वें भाव में गोचर कर रहे हैं। यह साढ़े साती का प्रथम चरण (उदय) है, जो व्यय नियंत्रण, यात्राओं और मानसिक धैर्य की परीक्षा लेता है। उपाय: शनिवार शाम पीपल के वृक्ष के नीचे सरसों के तेल का दीपक जलाएं; "ॐ शं शनैश्चराय नमः" का 108 बार जाप करें; फिजूलखर्ची से बचें।`
+      });
+    } else if (satMoonDiff === 0) {
+      doshas.push({
+        name: `Shani Sade Sati - Phase 2 (Peak / Janma Shani)`,
+        nameHi: `शनि साढ़े साती - द्वितीय चरण (शिखर / जन्म शनि)`,
+        present: true,
+        en: `Saturn is transiting directly over your natal Moon in ${moonSignName}. This Peak Phase demands profound maturity, hard work, emotional resilience, and karmic realignment. Remedy: Recite Dasharatha Shani Stotra on Saturdays; donate black sesame or iron articles to workers/laborers; perform Shiva Panchakshari japa daily.`,
+        hi: `शनि आपकी जन्म चन्द्र राशि (${moonSignNameHi}) के ऊपर से ही गोचर कर रहे हैं। यह साढ़े साती का मुख्य शिखर चरण (जन्म शनि) है, जो गहन कर्म निष्ठा, भावनात्मक परिपक्वता और आत्म-अनुशासन की मांग करता है। उपाय: शनिवार को दशरथकृत शनि स्तोत्र का पाठ करें; श्रमिकों व सेवादारों को काले तिल या भोजन दान करें; नित्य "ॐ नमः शिवाय" का जाप करें।`
+      });
+    } else if (satMoonDiff === 1) {
+      doshas.push({
+        name: `Shani Sade Sati - Phase 3 (Setting Phase)`,
+        nameHi: `शनि साढ़े साती - तृतीय चरण (अस्त चरण)`,
+        present: true,
+        en: `Saturn in ${satSignName} is transiting 2nd from your natal Moon (${moonSignName}). This Setting Phase focuses on settling accumulated responsibilities, consolidating wealth, and stabilizing family harmony. Remedy: Feed crows or black dogs on Saturdays; speak with deliberate truth and patience; honor elderly mentors.`,
+        hi: `शनि आपकी जन्म चन्द्र राशि (${moonSignNameHi}) से द्वितीय भाव में गोचर कर रहे हैं। यह साढ़े साती का अंतिम चरण (उतरती साढ़े साती) है, जिसमें संचित धन की रक्षा, पारिवारिक जिम्मेदारियों का निर्वहन और कर्म शुद्धि पूर्ण होती है। उपाय: शनिवार को कौवों या काले कुत्तों को रोटी खिलाएं; सत्य व नम्र वाणी का प्रयोग करें।`
+      });
+    } else if (satMoonDiff === 3) {
+      doshas.push({
+        name: `Shani Kantak Dhaiya (4th from Moon)`,
+        nameHi: `शनि कंटक ढैय्या (चन्द्र से चतुर्थ भाव)`,
+        present: true,
+        en: `Saturn is positioned 4th from your Moon in ${moonSignName}, forming Kantak Dhaiya. This can cause occasional restlessness regarding residence, mother's health, or inner peace. Remedy: Worship Lord Shiva on Mondays; avoid property litigation; keep domestic spaces calm and clutter-free.`,
+        hi: `शनि आपकी चन्द्र राशि (${moonSignNameHi}) से चौथे भाव में गोचररत हैं, जिससे कंटक ढैय्या का प्रभाव बनता है। यह गृहस्थ शांति व माता के स्वास्थ्य के प्रति सतर्क रहने का संकेत है। उपाय: सोमवार को शिवलिंग पर जल अर्पित करें; घर में शांत वातावरण रखें।`
+      });
+    } else if (satMoonDiff === 7) {
+      doshas.push({
+        name: `Shani Ashtam Dhaiya (8th from Moon)`,
+        nameHi: `शनि अष्टम ढैय्या (चन्द्र से अष्टम भाव)`,
+        present: true,
+        en: `Saturn is transiting 8th from your Moon in ${moonSignName}, forming Ashtam Dhaiya. Caution is advised with unexpected changes, routine health, and speculative investments. Remedy: Recite Hanuman Chalisa daily; pour mustard oil in a bowl, view reflection (Chhaya Daan), and donate on Saturdays.`,
+        hi: `शनि आपकी चन्द्र राशि (${moonSignNameHi}) से आठवें भाव में हैं, जिससे अष्टम ढैय्या का प्रभाव है। अचानक आने वाले परिवर्तनों और स्वास्थ्य के प्रति सजग रहें। उपाय: प्रतिदिन हनुमान चालीसा का पाठ करें; शनिवार को कटोरी में सरसों के तेल में अपना चेहरा देखकर छाया दान करें।`
+      });
+    }
+  }
+
+  // 3. Kaal Sarp Dosha (12 Authentic Classical Types)
+  if (rahu && ketu) {
+    const rahuSign = rahu.sign;
+    const ketuSign = ketu.sign;
+    const corePlanets = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn']
+      .map(name => get(name))
+      .filter(Boolean);
+
+    if (corePlanets.length === 7) {
+      let planetsBetweenRahuKetu = 0;
+      let planetsBetweenKetuRahu = 0;
+
+      corePlanets.forEach(p => {
+        const diffRahu = (p.sign - rahuSign + 12) % 12;
+        if (diffRahu > 0 && diffRahu < 6) planetsBetweenRahuKetu++;
+        const diffKetu = (p.sign - ketuSign + 12) % 12;
+        if (diffKetu > 0 && diffKetu < 6) planetsBetweenKetuRahu++;
+      });
+
+      const isFullKaalSarp = planetsBetweenRahuKetu === 7 || planetsBetweenKetuRahu === 7;
+      const isAnshikKaalSarp = !isFullKaalSarp && (planetsBetweenRahuKetu === 6 || planetsBetweenKetuRahu === 6);
+
+      if (isFullKaalSarp || isAnshikKaalSarp) {
+        const rahuHouse = ((rahuSign - lagnaSign + 12) % 12) + 1;
+        const kaalSarpTypesEn = [
+          'Anant Kaal Sarp (Self & Relationships)',
+          'Kulik Kaal Sarp (Wealth & Speech)',
+          'Vasuki Kaal Sarp (Courage & Siblings)',
+          'Shankhpal Kaal Sarp (Mother & Peace)',
+          'Padam Kaal Sarp (Progeny & Intellect)',
+          'Maha Padam Kaal Sarp (Debts & Competitions)',
+          'Takshak Kaal Sarp (Marriage & Partnerships)',
+          'Karkotak Kaal Sarp (Sudden Obstacles & Secrets)',
+          'Shankhchud Kaal Sarp (Fortune & Dharma)',
+          'Ghaatak Kaal Sarp (Profession & Career Karma)',
+          'Vishdhar Kaal Sarp (Income & Networks)',
+          'Sheshnag Kaal Sarp (Expenditures & Spiritual Liberation)'
+        ];
+        const kaalSarpTypesHi = [
+          'अनंत काल सर्प (व्यक्तित्व व वैवाहिक संतुलन)',
+          'कुलिक काल सर्प (धन संचय व वाणी)',
+          'वासुकी काल सर्प (पराक्रम व बंधु-बांधव)',
+          'शंखपाल काल सर्प (माता व मानसिक शांति)',
+          'पद्म काल सर्प (संतान व उच्च विद्या)',
+          'महापद्म काल सर्प (ऋण, रोग व शत्रु विजय)',
+          'तक्षक काल सर्प (विवाह व व्यापारिक साझेदारी)',
+          'कर्कोटक काल सर्प (आकस्मिक घटनाएं व गूढ़ विद्या)',
+          'शंखचूड़ काल सर्प (भाग्य व धर्म कर्म)',
+          'घातक काल सर्प (आजीविका व पद-प्रतिष्ठा)',
+          'विषधर काल सर्प (लाभ, आय व मित्र वर्ग)',
+          'शेषनाग काल सर्प (व्यय, विदेश गमन व मोक्ष)'
+        ];
+
+        const typeNameEn = kaalSarpTypesEn[rahuHouse - 1] || 'Kaal Sarp Yoga';
+        const typeNameHi = kaalSarpTypesHi[rahuHouse - 1] || 'काल सर्प योग';
+
+        doshas.push({
+          name: `${isFullKaalSarp ? 'Purna' : 'Anshik'} ${typeNameEn}`,
+          nameHi: `${isFullKaalSarp ? 'पूर्ण' : 'आंशिक'} ${typeNameHi}`,
+          present: true,
+          en: `All key planetary energies are channeled within the Rahu-Ketu nodal axis (Rahu in House ${rahuHouse}, Ketu in House ${((rahuHouse + 5) % 12) + 1}), forming ${isFullKaalSarp ? 'Purna' : 'Anshik'} ${typeNameEn}. This accelerates intense karmic growth and spiritual awakenings through recurring hurdles. Remedy: Perform Maha Mrityunjaya Japa (108 times on Mondays); offer raw milk or water to Shiva Lingam; float a pair of lead or silver snakes in flowing water on Nag Panchami or Amavasya.`,
+          hi: `सभी प्रमुख ग्रह राहु-केतु अक्ष के भीतर स्थित हैं (राहु ${rahuHouse}वें भाव में, केतु ${((rahuHouse + 5) % 12) + 1}वें भाव में), जिससे ${isFullKaalSarp ? 'पूर्ण' : 'आंशिक'} ${typeNameHi} का निर्माण होता है। यह जीवन में कड़े संघर्ष के बाद असाधारण सफलता और आध्यात्मिक जागृति देता है। उपाय: प्रत्येक सोमवार को 108 बार महामृत्युंजय मंत्र का जाप करें; शिवलिंग पर कच्चा दूध अर्पित करें; नागपंचमी पर बहते जल में चांदी का नाग-नागिन जोड़ा प्रवाहित करें।`
+        });
+      }
+    }
+  }
+
+  // 4. Guru Chandal Dosha (Jupiter conjunct Rahu or Ketu)
+  if (jupiter && (rahu || ketu)) {
+    const withRahu = rahu && jupiter.sign === rahu.sign;
+    const withKetu = ketu && jupiter.sign === ketu.sign;
+    if (withRahu || withKetu) {
+      const nodeName = withRahu ? 'Rahu' : 'Ketu';
+      const nodeNameHi = withRahu ? 'राहु' : 'केतु';
+      const jupHouse = ((jupiter.sign - lagnaSign + 12) % 12) + 1;
+      doshas.push({
+        name: `Guru Chandal Dosha (Jupiter-${nodeName} in House ${jupHouse})`,
+        nameHi: `गुरु चांडाल दोष (गुरु-${nodeNameHi} युति ${jupHouse}वें भाव में)`,
+        present: true,
+        en: `Jupiter is conjunct ${nodeName} in House ${jupHouse} (${signNames[jupiter.sign]}), creating Guru Chandal Dosha. This can lead to unconventional philosophies, ideological friction with mentors, or skepticism in traditional guidance. Remedy: Respect spiritual teachers and elders; donate yellow split peas (chana dal) or turmeric in a temple on Thursdays; chant "Om Brihaspataye Namah" 108 times.`,
+        hi: `देवगुरु बृहस्पति ${jupHouse}वें भाव (${signNamesHi[jupiter.sign]}) में ${nodeNameHi} के साथ युति में हैं, जिससे गुरु चांडाल दोष बनता है। यह विचारों में असमंजस, मार्गदर्शकों से वैचारिक मतभेद या निर्णय लेने में संशय दे सकता है। उपाय: गुरुवार को मंदिर में चने की दाल या हल्दी दान करें; अपने शिक्षकों व बुजुर्गों का सम्मान करें; "ॐ बृं बृहस्पतये नमः" का नित्य जाप करें।`
+      });
+    }
+  }
+
+  // 5. Kemdrum Dosha (Isolated Moon) & Cancellation
+  if (moon) {
+    const nonSolars = ['Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn'];
+    const planetsInSecond = nonSolars.some(pName => {
+      const p = get(pName);
+      return p && p.sign === ((moon.sign + 1) % 12);
+    });
+    const planetsInTwelfth = nonSolars.some(pName => {
+      const p = get(pName);
+      return p && p.sign === ((moon.sign + 11) % 12);
+    });
+
+    if (!planetsInSecond && !planetsInTwelfth) {
+      // Check Kemdrum Bhanga (Cancellation): If any planet is in Kendra from Moon (1, 4, 7, 10) or Lagna
+      const planetsInKendraFromMoon = nonSolars.some(pName => {
+        const p = get(pName);
+        if (!p) return false;
+        const diff = (p.sign - moon.sign + 12) % 12;
+        return [0, 3, 6, 9].includes(diff);
+      });
+
+      if (planetsInKendraFromMoon) {
+        doshas.push({
+          name: 'Kemdrum Bhanga Yoga (Isolated Moon Mitigated)',
+          nameHi: 'केमद्रुम भंग योग (चन्द्र अलगाव शमित)',
+          present: false,
+          en: `Natal Moon in ${signNames[moon.sign]} has no flanking planets in the 2nd or 12th houses, which initially indicated Kemdrum. However, supportive planets occupy Kendra angles from the Moon, successfully dissolving the flaw and forming Kemdrum Bhanga Yoga (turning introspection into creative depth).`,
+          hi: `आपकी कुंडली में चन्द्रमा (${signNamesHi[moon.sign]}) के दूसरे और बारहवें भाव में कोई ग्रह नहीं होने से केमद्रुम प्रभाव था। परंतु चन्द्र से केंद्र भावों में शुभ ग्रह स्थित होने से केमद्रुम भंग योग बनता है, जो मानसिक एकाग्रता और मौलिक सोच को जागृत करता है।`
+        });
+      } else {
+        doshas.push({
+          name: 'Kemdrum Dosha (Isolated Moon)',
+          nameHi: 'केमद्रुम दोष (एकाकी चन्द्र)',
+          present: true,
+          en: `Moon in ${signNames[moon.sign]} is unoccupied by supporting planets on either flank (2nd and 12th houses), causing Kemdrum Dosha. This manifests as periodic emotional detachment, fluctuating self-confidence, or feeling misunderstood. Remedy: Worship Goddess Lakshmi and Lord Shiva on Mondays; offer white flowers and water to Shiva Lingam; keep a square silver piece in your purse.`,
+          hi: `चन्द्रमा (${signNamesHi[moon.sign]}) के आगे-पीछे (द्वितीय व द्वादश) भावों में कोई सहायक ग्रह न होने से केमद्रुम दोष बनता है। यह कभी-कभार मानसिक अकेलापन, आत्मविश्वास में उतार-चढ़ाव या वैराग्य की भावना दे सकता है। उपाय: प्रत्येक सोमवार को शिवलिंग पर जल व सफेद फूल चढ़ाएं; महालक्ष्मी की आराधना करें; अपने पास चांदी का चौकोर टुकड़ा रखें।`
+        });
+      }
+    }
+  }
+
+  // 6. Pitra Dosha (Sun conjunct Rahu/Ketu or Sun afflicted in 9th)
+  if (sun && (rahu || ketu)) {
+    const sunWithRahu = rahu && sun.sign === rahu.sign;
+    const sunWithKetu = ketu && sun.sign === ketu.sign;
+    const sunHouse = ((sun.sign - lagnaSign + 12) % 12) + 1;
+
+    if (sunWithRahu || sunWithKetu || (sunHouse === 9 && (rahu || ketu || saturn) && [rahu?.sign, ketu?.sign, saturn?.sign].includes(sun.sign))) {
+      doshas.push({
+        name: `Pitra Dosha (Solar-Nodal Affliction in House ${sunHouse})`,
+        nameHi: `पितृ दोष (सूर्य-राहु/केतु युति ${sunHouse}वें भाव में)`,
+        present: true,
+        en: `Sun (Atmakaraka & Pitru Karaka) is conjunct ${sunWithRahu ? 'Rahu' : 'Ketu'} in House ${sunHouse} (${signNames[sun.sign]}), indicating unresolved ancestral karmic debts. This can generate career delays or complex relationships with authority figures. Remedy: Offer water mixed with red sandalwood and flowers to the rising Sun daily from a copper vessel; feed cows and donate grains on Amavasya (new moon); honor parents and ancestral memory.`,
+        hi: `सूर्य (आत्मकारक व पितृकारक) ${sunHouse}वें भाव (${signNamesHi[sun.sign]}) में ${sunWithRahu ? 'राहु' : 'केतु'} के साथ युति में हैं, जिससे पितृ दोष का प्रभाव बनता है। यह कार्यक्षेत्र में अप्रत्याशित विलंब या वरिष्ठों से तनाव दे सकता है। उपाय: प्रतिदिन प्रातः तांबे के लोटे से सूर्य देव को लाल चंदन मिश्रित जल अर्पित करें; अमावस्या पर गायों को हरा चारा खिलाएं और पितरों का स्मरण करें।`
+      });
+    }
+  }
+
+  // 7. Clean Chart (No Major Doshas Found)
+  if (doshas.length === 0) {
+    const lagnaLord = signLords[lagnaSign] || 'Sun';
+    const lagnaLordHi = signLordsHi[lagnaSign] || 'सूर्य';
+    doshas.push({
+      name: `Harmonious Chart - No Major Doshas Found (${signNames[lagnaSign]} Lagna)`,
+      nameHi: `शुभ व निर्दोष कुंडली - कोई प्रमुख दोष नहीं (${signNamesHi[lagnaSign]} लग्न)`,
+      present: false,
+      en: `Your Vedic birth chart shows exceptional purity with no severe afflictions of Mangal, Sade Sati, or Kaal Sarp doshas. Your Lagna (${signNames[lagnaSign]}) and Lagna Lord (${lagnaLord}) offer a smooth and clear channel for spiritual growth, financial realization, and relationship peace. Continue your daily Lagna Lord mantra recitation to amplify this natural grace.`,
+      hi: `आपकी जन्म कुंडली में मंगल, साढ़े साती, काल सर्प आदि का कोई गंभीर दोष नहीं है। आपका ${signNamesHi[lagnaSign]} लग्न और लग्नेश ${lagnaLordHi} आपके जीवन पथ को सुगम व सामंजस्यपूर्ण बना रहे हैं। अपने लग्नेश के नियमित मंत्र जाप से इस प्राकृतिक सकारात्मकता को और अधिक सशक्त करें।`
+    });
+  }
+
+  return doshas;
 }
 
-// Shani Sade Sati
-if (saturn && moon) {
-const satMoonDiff = ((saturn.sign - moon.sign + 12) % 12);
-if ([0,1,11].includes(satMoonDiff)) {
-doshas.push({
-name: 'Shani Sade Sati',
-nameHi: 'शनि साढ़े साती',
-present: true,
-en: 'Saturn is transiting near your Moon sign - this is the Sade Sati period. This can bring challenges, slow progress, and increased responsibilities. Remedy: Worship Shiva on Mondays; donate black sesame seeds on Saturdays; chant Om Sham Shanaishcharaya Namah 108 times.',
-hi: 'शनि आपके चन्द्र राशि के समीप है - यह साढ़े साती काल है। इससे चुनौतियाँ, प्रगति में मंदी और जिम्मेदारियाँ बढ़ सकती हैं। उपाय: सोमवार को शिव पूजा; शनिवार को काले तिल दान; ॐ शं शनैश्चराय नमः का 108 बार जाप।'
-});
-}
-}
-
-// Kaal Sarp Dosha
-if (rahu && get('Ketu')) {
-const rahuSign = rahu.sign;
-const planetSigns = ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn'].map(n => get(n)?.sign).filter(s => s !== undefined);
-const allBetween = planetSigns.every(s => {
-let d = (s - rahuSign + 12) % 12;
-return d > 0 && d < 6;
-});
-if (allBetween) {
-doshas.push({
-name: 'Kaal Sarp Dosha',
-nameHi: 'काल सर्प दोष',
-present: true,
-en: 'All planets are hemmed between Rahu and Ketu - Kaal Sarp Dosha is present. This can create repeated obstacles, karmic delays, and a sense of unfulfilled potential. Remedy: Perform Kaal Sarp Shanti puja; visit Trimbakeshwar or Ujjain for the special ritual; chant Om Nagabhyam Namah 108 times.',
-hi: 'सभी ग्रह राहु और केतु के बीच हैं - काल सर्प दोष विद्यमान है। यह बाधाएं, कर्मिक विलंब और अधूरी संभावनाओं का अहसास दे सकता है। उपाय: काल सर्प शांति पूजा; त्र्यंबकेश्वर या उज्जैन में विशेष अनुष्ठान; ॐ नागभ्यां नमः का जाप।'
-});
-}
-}
-
-if (doshas.length === 0) {
-doshas.push({
-name: 'No Major Doshas Found',
-nameHi: 'कोई प्रमुख दोष नहीं',
-present: false,
-en: 'Your chart does not show any major planetary doshas. This is a favorable indication for a relatively smooth life path. Continue strengthening your chart through your ruling planet\'s mantra and regular spiritual practice.',
-hi: 'आपकी कुंडली में कोई प्रमुख दोष नहीं है। यह एक अनुकूल संकेत है। नियमित आध्यात्मिक साधना और अपने लग्न स्वामी के मंत्र जाप से जीवन और उज्जवल होगा।'
-});
-}
-return doshas;
-}
 
 // Overhauled bilingual generateChart
 
@@ -13397,6 +13749,22 @@ setKundliLang(kundliLang);
 // Draw Kundali chart
 drawChart();
 
+// Automatically synchronize Coach Mission and Daily Quests with the new Kundali calculations
+try {
+  if (typeof generateCoachMission === 'function') {
+    generateCoachMission({ preventDefault: () => {} });
+  }
+} catch(e) {
+  console.warn('Coach Mission auto-sync notice:', e);
+}
+try {
+  if (typeof refreshDailyQuestsUI === 'function') {
+    refreshDailyQuestsUI(typeof currentAppLang !== 'undefined' ? currentAppLang : 'en');
+  }
+} catch(e) {
+  console.warn('Daily Quests auto-sync notice:', e);
+}
+
 if (btn) {
 btn.innerHTML = originalText;
 btn.disabled = false;
@@ -14214,22 +14582,23 @@ document.getElementById('lk-teva-details').innerHTML = `
 `;
 
 // Remedies HTML
-const isMangalBad = mInfo.status.includes('Mangal Bad') || mInfo.status.includes('मंद मंगल');
-const isBudhBad = bInfo.status.includes('Budh Bad') || bInfo.status.includes('मंद बुध');
+// 100% Kundli-Derived Lal Kitab Upayas
+const activeGoals = (typeof getActiveGoals === 'function') ? getActiveGoals() : ['job'];
+const primaryGoal = activeGoals[0] || 'job';
+let dashaInfo = null;
+try {
+  const moonPl = cachedPlacementsList.find(p => p.name === 'Moon');
+  if (moonPl) {
+    const moonSidLon = moonPl.sidLon || (moonPl.sign * 30.0 + moonPl.degree);
+    const dobStr = localStorage.getItem('user_dob') || '1995-01-01';
+    const [y, m, d] = dobStr.split('-').map(Number);
+    dashaInfo = computeDasha(moonSidLon, y, m, d);
+  }
+} catch(e) {}
+const userDashaObj = dashaInfo || { planet: 'Sun', balanceYears: 5 };
 
-const remediesEn = [
-`Perform Surya Namaskar (Sun Salutation) in the morning and offer sweet food to birds daily.`,
-isMangalBad ? `Keep a solid silver ball (pure silver) in your pocket or wallet at all times.` : `Donate sweet tandoori roti (sweet wheat bread) to stray dogs on Tuesdays.`,
-isBudhBad ? `Drink pure water out of a silver glass/cup daily to strengthen Mercury.` : `Keep a copper coin with a central hole in your pocket or wear it in a thread.`,
-`Always respect your mother and sister, and maintain a high moral character for continuous prosperity.`
-];
-
-const remediesHi = [
-`सुबह सूर्य नमस्कार करें और प्रतिदिन पक्षियों को मीठा भोजन खिलाएं।`,
-isMangalBad ? `हर समय अपनी जेब या बटुए में एक ठोस चांदी की गोली (शुद्ध चांदी) रखें।` : `मंगलवार को आवारा कुत्तों को मीठी तंदूरी रोटी खिलाएं।`,
-isBudhBad ? `बुध को मजबूत करने के लिए प्रतिदिन चांदी के गिलास से शुद्ध पानी पिएं।` : `अपनी जेब में छेद वाला तांबे का सिक्का रखें या इसे गले में धारण करें।`,
-`निरंतर समृद्धि के लिए हमेशा अपनी माता और बहन का सम्मान करें और उच्च नैतिक चरित्र बनाए रखें।`
-];
+const remediesEn = getKundaliLalKitabSolutions(cachedPlacementsList, cachedLagnaSignNum, userDashaObj, primaryGoal, 'en');
+const remediesHi = getKundaliLalKitabSolutions(cachedPlacementsList, cachedLagnaSignNum, userDashaObj, primaryGoal, 'hi');
 
 document.getElementById('lk-remedies-details').innerHTML = `
 <ul style="margin: 0; padding-left: 18px;">
@@ -15917,100 +16286,107 @@ function handleWizardQ3(btn, index) {
 
 function generateAuthenticVedicAlternative(taskTitle, taskText, location, issue) {
   const lang = (typeof currentAppLang !== 'undefined') ? currentAppLang : 'en';
+  const isHi = lang === 'hi';
   const textLower = (taskTitle + " " + taskText).toLowerCase();
   const isOffice = location.includes('Office') || location.includes('कार्यालय');
   const isOutside = location.includes('Outside') || location.includes('Traveling') || location.includes('बाहर') || location.includes('यात्रा');
 
-  // 1. MARS / TUESDAY / HANUMAN / COURAGE / DEBT REMEDIES
-  if (textLower.includes('tuesday') || textLower.includes('mars') || textLower.includes('hanuman') || textLower.includes('bhaumaya') || textLower.includes('मंगल')) {
+  // Derive user's astrological context
+  const lagnaSign = (typeof cachedLagnaSignNum === 'number') ? cachedLagnaSignNum : 0;
+  const lagnaLord = signLords[lagnaSign] || 'Sun';
+  const lagnaLordHi = signLordsHi[lagnaSign] || 'सूर्य';
+
+  // Determine target planet from task text or default to user Lagna Lord
+  let targetPlanet = lagnaLord;
+  if (textLower.includes('sun') || textLower.includes('surya') || textLower.includes('सूर्य')) targetPlanet = 'Sun';
+  else if (textLower.includes('moon') || textLower.includes('chandra') || textLower.includes('चन्द्र') || textLower.includes('सोम')) targetPlanet = 'Moon';
+  else if (textLower.includes('mars') || textLower.includes('mangal') || textLower.includes('bhauma') || textLower.includes('मंगल') || textLower.includes('हनुमान')) targetPlanet = 'Mars';
+  else if (textLower.includes('mercury') || textLower.includes('budh') || textLower.includes('बुध') || textLower.includes('गणेश')) targetPlanet = 'Mercury';
+  else if (textLower.includes('jupiter') || textLower.includes('guru') || textLower.includes('brihaspati') || textLower.includes('गुरु') || textLower.includes('विष्णु')) targetPlanet = 'Jupiter';
+  else if (textLower.includes('venus') || textLower.includes('shukra') || textLower.includes('शुक्र') || textLower.includes('लक्ष्मी')) targetPlanet = 'Venus';
+  else if (textLower.includes('saturn') || textLower.includes('shani') || textLower.includes('शनि')) targetPlanet = 'Saturn';
+  else if (textLower.includes('rahu') || textLower.includes('राहु')) targetPlanet = 'Rahu';
+  else if (textLower.includes('ketu') || textLower.includes('केतु')) targetPlanet = 'Ketu';
+
+  const pMeta = (typeof vedicLordMantraMeta !== 'undefined' && vedicLordMantraMeta[targetPlanet]) ? vedicLordMantraMeta[targetPlanet] : vedicLordMantraMeta['Sun'];
+  const mantra = isHi ? pMeta.mantraHi : pMeta.mantra;
+  const pDir = isHi ? pMeta.dirHi : pMeta.dirEn;
+  const targetPlanetName = isHi ? (planetNamesHi[targetPlanet] || targetPlanet) : targetPlanet;
+
+  // 1. VEDIC MANTRA & RITUAL
+  if (textLower.includes('vedic') || textLower.includes('mantra') || textLower.includes('chant') || textLower.includes('मंत्र') || textLower.includes('जाप') || textLower.includes('puja') || textLower.includes('पूजा')) {
     if (isOffice) {
-      return lang === 'hi'
-        ? "कार्यस्थल मङ्गल ऊर्जा: अपनी डेस्क पर 11 बार 'ॐ हनुमते नमः' का मानसिक जाप करें, या ऋण बाधाओं को शांत करने के लिए किसी सहकर्मी को 1 स्वच्छ पानी का गिलास दें।"
-        : "Workplace Mars Energy: Mentally chant 'Om Hanumate Namah' 11 times at your desk, or offer a glass of clean water to a colleague to dissolve debt obstacles.";
+      return isHi
+        ? `कार्यस्थल सात्विक जाप (${targetPlanetName}): अपनी डेस्क पर ${pDir} की ओर मुख करें, 3 गहरी सांसें लें और मन ही मन 11 बार "${mantra}" का स्मरण करें।`
+        : `Workplace Sattvic Chant (${targetPlanetName}): Face ${pDir} at your desk, take 3 calm breaths, and mentally chant "${mantra}" 11 times.`;
     } else if (isOutside) {
-      return lang === 'hi'
-        ? "यात्रा मङ्गल ऊर्जा: यात्रा के दौरान आवारा पशुओं/पक्षियों को कुछ भोजन दें, या मन में 7 बार 'ॐ हनुमते नमः' का जाप करें।"
-        : "Travel Mars Energy: Offer biscuits or grain to street animals/birds while traveling, or silently repeat 'Om Hanumate Namah' 7 times.";
+      return isHi
+        ? `यात्रा सात्विक स्मरण (${targetPlanetName}): चलते हुए या यात्रा में मन ही मन 7 बार "${mantra}" का ध्यान करें और किसी जरूरतमंद को जल या भोजन दें।`
+        : `Travel Sattvic Focus (${targetPlanetName}): While traveling, repeat "${mantra}" 7 times silently in your mind and offer water or grain to birds/animals.`;
     } else { // Home
-      return lang === 'hi'
-        ? "गृह मङ्गल सात्विकता: 11 बार 'ॐ हनुमते नमः' का जाप करें, या दक्षिण दिशा की ओर मुख करके दीपक/अगरबत्ती जलाएं।"
-        : "Home Mars Sattva: Recite 'Om Hanumate Namah' 11 times, or light a lamp facing South for courage and debt clearance.";
+      return isHi
+        ? `गृह वैदिक साधना (${targetPlanetName}): शांत कक्ष में ${pDir} की ओर मुख करके बैठें और 21 बार "${mantra}" का सात्विक जाप करें।`
+        : `Home Vedic Sadhana (${targetPlanetName}): Sit quietly facing ${pDir} in a clean space and chant "${mantra}" 21 times with single-pointed devotion.`;
     }
   }
 
-  // 2. VEDIC MANTRA / SHIVA / VISHNU / MERCURY REMEDIES
-  if (textLower.includes('vedic') || textLower.includes('shivaya') || textLower.includes('budhaya') || textLower.includes('vishnu') || textLower.includes('मंत्र') || textLower.includes('जाप')) {
+  // 2. LAL KITAB PHYSICAL UPAYAS
+  if (textLower.includes('lalkitab') || textLower.includes('remedy') || textLower.includes('उपाय') || textLower.includes('silver') || textLower.includes('copper') || textLower.includes('चांदी') || textLower.includes('तांबा')) {
     if (isOffice) {
-      return lang === 'hi'
-        ? "डेस्क वैदिक जाप: अपनी डेस्क पर पूर्व की ओर मुख करके बैठें, 3 गहरी सांसें लें और मन में 11 बार 'ॐ नमः शिवाय' दोहराएं।"
-        : "Desk Vedic Chant: Sit upright facing East at your desk, take 3 deep breaths, and mentally repeat 'Om Namah Shivaya' 11 times.";
+      return isHi
+        ? `कार्यस्थल लाल किताब शुद्धि (${targetPlanetName}): अपनी डेस्क पर 1 स्वच्छ गिलास जल रखें, ${pDir} की ओर मुख करके 3 सचेत घूंट लें और नकारात्मक विचारों से बचें।`
+        : `Workplace Lal Kitab Sattva (${targetPlanetName}): Keep 1 glass of fresh water on your desk, take 3 conscious sips facing ${pDir}, and maintain calm speech.`;
     } else if (isOutside) {
-      return lang === 'hi'
-        ? "यात्रा मंत्र जाप: चलते या यात्रा करते समय मन ही मन 7 बार 'ॐ नमः शिवाय' का स्मरण करें।"
-        : "Travel Vedic Chanting: Repeat 'Om Namah Shivaya' 7 times silently in your mind while walking or traveling.";
+      return isHi
+        ? `सार्वजनिक कर्म शुद्धि (${targetPlanetName}): यात्रा के दौरान सड़क पर किसी असहाय व्यक्ति या पशु को भोजन या जल अर्पण करें।`
+        : `Public Karma Sattva (${targetPlanetName}): Offer a meal or water to a street animal or needy person while traveling outside to pacify planetary afflictions.`;
     } else { // Home
-      return lang === 'hi'
-        ? "गृह वैदिक अनुष्ठान: शांत मन से पूर्व या उत्तर की ओर मुख करके 11 बार 'ॐ नमः शिवाय' का जाप करें।"
-        : "Home Vedic Ritual: Recite 'Om Namah Shivaya' 11 times with calm mind facing East or North.";
+      return isHi
+        ? `गृह लाल किताब उपाय (${targetPlanetName}): प्रातः घर के किसी हरे पौधे को जल अर्पित करें और शुद्ध भाव से माता/बुजुर्गों का चरण स्पर्श करें।`
+        : `Home Lal Kitab Upaya (${targetPlanetName}): Water a fresh green plant at home, touch elders' feet for blessings, and drink pure water.`;
     }
   }
 
-  // 3. LAL KITAB REMEDIES & PHYSICAL ITEMS
-  if (textLower.includes('lalkitab') || textLower.includes('banyan') || textLower.includes('milk') || textLower.includes('silver') || textLower.includes('lentil') || textLower.includes('लाल किताब') || textLower.includes('उपाय')) {
+  // 3. VASTU & DIRECTIONAL ALIGNMENTS
+  if (textLower.includes('vastu') || textLower.includes('direction') || textLower.includes('कोण') || textLower.includes('वास्तु') || textLower.includes('दिशा')) {
     if (isOffice) {
-      return lang === 'hi'
-        ? "कार्यस्थल लाल किताब सात्विकता: अपनी डेस्क पर पीने के पानी का 1 स्वच्छ गिलास रखें और 3 सचेत घूंट ग्रह शांति संकल्प के साथ लें।"
-        : "Workplace Lal Kitab Sattva: Keep 1 clean glass of drinking water on your desk and take 3 conscious sips dedicated to planetary peace.";
+      return isHi
+        ? `डेस्क वास्तु संरेखण (${pDir}): अपनी कार्य मेज के ${pDir} कोने को तुरंत साफ करें और वहां भारी वस्तुएं या कचरा न रखें।`
+        : `Desk Vastu Realignment (${pDir}): Declutter the ${pDir} sector of your desk surface immediately; ensure light and airflow are unobstructed.`;
     } else if (isOutside) {
-      return lang === 'hi'
-        ? "सार्वजनिक कर्म: बाहर रहते हुए किसी जरूरतमंद व्यक्ति या पक्षी को पानी या भोजन अर्पण करें।"
-        : "Public Lal Kitab Karma: Offer 1 coin or food item to a needy person or street bird while traveling outside.";
+      return isHi
+        ? `दिशा ऊर्जा ध्यान (${pDir}): 10 सेकंड रुककर ${pDir} की ओर मुख करें और अपने मुख्य लक्ष्य में सफलता की प्रार्थना करें।`
+        : `Directional Energy Focus (${pDir}): Pause facing ${pDir} for 10 seconds, close your eyes, and visualize obstacle removal in your primary goal.`;
     } else { // Home
-      return lang === 'hi'
-        ? "गृह लाल किताब उपाय: घर के पौधे की हरी पत्ती को स्पर्श करें और शांत मन से 1 गिलास स्वच्छ जल ग्रहण करें।"
-        : "Home Lal Kitab Remedy: Touch a green leaf of an indoor plant and consume 1 glass of fresh water with a calm mind.";
+      return isHi
+        ? `गृह वास्तु संरेखण (${pDir}): अपने मुख्य कक्ष के ${pDir} कोने को साफ रखें और वहां 2 मिनट के लिए दीपक या सुगंधित धूप प्रज्वलित करें।`
+        : `Home Vastu Harmony (${pDir}): Keep the ${pDir} sector of your room clean and illuminate it with a gentle lamp or natural fragrance for 2 minutes.`;
     }
   }
 
-  // 4. VASTU & DIRECTIONAL ALIGNMENTS
-  if (textLower.includes('vastu') || textLower.includes('direction') || textLower.includes('ishana') || textLower.includes('north') || textLower.includes('वास्तु') || textLower.includes('दिशा')) {
+  // 4. PRACTICAL GOAL ACTIONS
+  if (textLower.includes('practical') || textLower.includes('step') || textLower.includes('debt') || textLower.includes('ledger') || textLower.includes('कार्य') || textLower.includes('कदम') || textLower.includes('ऋण')) {
     if (isOffice) {
-      return lang === 'hi'
-        ? "डेस्क वास्तु संरेखन: अपनी डेस्क से 2 मिनट के लिए कागजी कचरा साफ़ करें और अपनी स्क्रीन को उत्तर या पूर्व दिशा की ओर रखें।"
-        : "Desk Vastu Alignment: Clear paper clutter off your desk surface for 2 minutes and position your screen facing North or East.";
+      return isHi
+        ? `कार्यालय व्यावहारिक कदम: स्मार्टफोन या डायरी में आज के 2 मुख्य कार्य लिखकर 25 मिनट का एकाग्र कार्य खंड (Deep Work Block) पूरा करें।`
+        : `Workplace Action Step: Note down today's top 2 priorities in your smartphone or planner and execute a 25-minute deep focus block.`;
     } else if (isOutside) {
-      return lang === 'hi'
-        ? "यात्रा दिशा ध्यान: 10 सेकंड के लिए पूर्व की ओर मुख करके रुकें और अपने लक्ष्य में सफलता का ध्यान करें।"
-        : "Travel Direction Focus: Pause facing East for 10 seconds, close your eyes, and visualize success in your goal.";
+      return isHi
+        ? `यात्रा व्यावहारिक कदम: स्मार्टफोन में अपने 90-दिवसीय लक्ष्य की समीक्षा करें और आज का 1 मुख्य संपर्क या कार्य तय करें।`
+        : `Travel Action Step: Review your 90-day roadmap in your smartphone and finalize 1 key decision or phone call today.`;
     } else { // Home
-      return lang === 'hi'
-        ? "गृह वास्तु संरेखन: कमरे के उत्तर-पूर्व (ईशान) कोण में 2 मिनट के लिए स्वच्छ मुद्रा में शांत बैठें।"
-        : "Home Vastu Alignment: Sit quietly in the North-East corner of your room for 2 minutes with clean posture and focus.";
+      return isHi
+        ? `गृह व्यावहारिक कदम: शांत वातावरण में बैठकर अपने वित्तीय या व्यक्तिगत लक्ष्य के खर्चों व प्राथमिकताओं की 5 मिनट समीक्षा करें।`
+        : `Home Action Step: In a quiet corner, spend 5 focused minutes reviewing your financial ledger or daily goal milestones.`;
     }
   }
 
-  // 5. PRACTICAL / DEBT ACTION STEPS
-  if (textLower.includes('debt') || textLower.includes('action') || textLower.includes('interest') || textLower.includes('ledger') || textLower.includes('कार्य') || textLower.includes('ऋण')) {
-    if (isOffice) {
-      return lang === 'hi'
-        ? "कार्यालय लक्ष्य कार्य: अपने स्मार्टफोन नोटपैड या वर्क प्लानर में 1 वित्तीय प्राथमिकता बिंदु लिखें।"
-        : "Office Goal Action: Take 2 minutes to write 1 financial priority item in your smartphone notepad or work planner.";
-    } else if (isOutside) {
-      return lang === 'hi'
-        ? "यात्रा लक्ष्य ध्यान: अपने फोन नोटपैड में अपने मुख्य लक्ष्य की समीक्षा करें और आज 1 कार्य कदम तय करें।"
-        : "Travel Goal Focus: Review your primary monthly goal in your phone notepad and commit to 1 action step today.";
-    } else { // Home
-      return lang === 'hi'
-        ? "गृह लक्ष्य ध्यान: अपने ऋण मुक्ति बहीखाते या मासिक बचत योजना की समीक्षा के लिए 3 मिनट दें।"
-        : "Home Goal Focus: Spend 3 minutes reviewing your debt clearance ledger or monthly savings plan.";
-    }
-  }
-
-  // Fallback
+  // Fallback (Astrologically aligned with Lagna Lord & Power Vector)
   return isOffice
-    ? (lang === 'hi' ? "डेस्क ऊर्जा संरेखन: पूर्व की ओर मुख करके 3 बार गहरी सांसें लें और अपने लक्ष्य संकल्प का 3 बार मानसिक जाप करें।" : "Desk Energy Alignment: Take 3 deep conscious breaths facing East at your desk and repeat your goal affirmation 3 times.")
-    : (lang === 'hi' ? "गृह ऊर्जा संरेखन: उत्तर-पूर्व दिशा में 2 मिनट बैठें और अपने जीवन लक्ष्य में सफलता का ध्यान करें।" : "Home Energy Alignment: Sit in a quiet room facing North-East for 2 minutes and focus on goal success.");
+    ? (isHi ? `डेस्क ग्रह संरेखण: ${pDir} की ओर मुख करके 3 गहरी सांसें लें और मन ही मन "${mantra}" का 3 बार स्मरण करें।` : `Desk Planetary Alignment: Take 3 deep conscious breaths facing ${pDir} at your desk and mentally chant "${mantra}" 3 times.`)
+    : (isHi ? `गृह ग्रह संरेखण: ${pDir} दिशा में 2 मिनट शांत बैठें और अपने लग्नेश ${lagnaLordHi} से आत्मबल की प्रार्थना करें।` : `Home Planetary Alignment: Sit quietly facing ${pDir} for 2 minutes and focus your mind on Lagna Lord ${lagnaLord}'s protective energy.`);
 }
+
 
 function generateStep4AlternativeSolutions() {
   const issue = wizardState.q1_issue;
