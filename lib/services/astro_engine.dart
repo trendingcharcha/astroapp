@@ -146,6 +146,23 @@ class AstroEngine {
     "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
   ];
 
+  /// Detect astronomical retrograde (Vakri) motion
+  static bool isPlanetRetrograde(String planetName, double jd) {
+    if (planetName == 'Rahu' || planetName == 'Ketu') return true;
+    if (planetName == 'Sun' || planetName == 'Moon' || planetName == 'Lagna') return false;
+    double l1 = getPlanetLongitude(planetName, jd - 0.02);
+    double l2 = getPlanetLongitude(planetName, jd + 0.02);
+    double diff = l2 - l1;
+    if (diff > 180) diff -= 360;
+    if (diff < -180) diff += 360;
+    return diff < 0;
+  }
+
+  static const Map<String, int> planetExaltation = {
+    "Sun": 0, "Moon": 1, "Mars": 9, "Mercury": 5,
+    "Jupiter": 3, "Venus": 11, "Saturn": 6, "Rahu": 1, "Ketu": 7
+  };
+
   /// Comprehensive calculation of user's Vedic Kundali
   static Map<String, dynamic> calculateFullKundli({
     required int year,
@@ -176,12 +193,16 @@ class AstroEngine {
       final sidLon = (tropLon - ayanamsa + 360) % 360;
       final signNum = (sidLon / 30.0).floor();
       final houseNum = ((signNum - lagnaSignNum + 12) % 12) + 1;
+      final isRet = isPlanetRetrograde(pName, jd);
+      final isEx = planetExaltation[pName] == signNum;
       planetPlacements[pName] = {
         'sign': signNum,
         'signName': signNames[signNum],
         'house': houseNum,
         'degree': sidLon % 30.0,
         'sidLon': sidLon,
+        'isRetrograde': isRet,
+        'isExalted': isEx,
       };
     }
 
