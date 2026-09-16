@@ -3032,6 +3032,18 @@ H12
 </div>
 </div>
 
+<!-- Section: Dhatu & Gemstone Cross-Bhava Safety Analysis -->
+<div class="card" style="margin-bottom: 15px; border-left: 3px solid var(--gold);">
+<h4 style="color: var(--gold); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+<span class="k-lbl-en">Dhatu & Gemstone Safety Protocol (Zero-Harm Analysis)</span>
+<span class="k-lbl-hi" style="display:none;">धातु व रत्न शुद्धि सुरक्षा प्रोटोकॉल (अहिंसक ज्योतिष)</span>
+</h4>
+<div id="lk-dhatu-safety-details" style="font-size: 0.86rem; line-height: 1.5; color: var(--text-subtle);">
+<!-- Populated dynamically -->
+</div>
+</div>
+
 <!-- Section: Lal Kitab Remedies (Upay) -->
 <div class="card" style="margin-bottom: 15px;">
 <h4 style="color: var(--gold); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
@@ -3879,6 +3891,109 @@ const vedicLordMantraMeta = {
   }
 };
 
+function evaluateDhatuSafety(chartPlacements, lagnaSignNum, lang) {
+  const isHi = lang === 'hi';
+  const placements = chartPlacements || [];
+  const getP = name => placements.find(p => p.name === name);
+  const getHouse = p => p ? (((p.sign - lagnaSignNum + 12) % 12) + 1) : null;
+
+  const sun = getP('Sun');
+  const moon = getP('Moon');
+  const mars = getP('Mars');
+  const mercury = getP('Mercury');
+  const jupiter = getP('Jupiter');
+  const venus = getP('Venus');
+  const saturn = getP('Saturn');
+  const rahu = getP('Rahu');
+  const ketu = getP('Ketu');
+
+  const moonHouse = getHouse(moon);
+  const venusHouse = getHouse(venus);
+  const jupHouse = getHouse(jupiter);
+  const marsHouse = getHouse(mars);
+  const satHouse = getHouse(saturn);
+  const sunHouse = getHouse(sun);
+  const mercHouse = getHouse(mercury);
+  const rahuHouse = getHouse(rahu);
+  const ketuHouse = getHouse(ketu);
+
+  const report = {
+    safeMetals: [],
+    bannedMetals: [],
+    warnings: [],
+    gemstoneGuidance: []
+  };
+
+  // 1. Silver (Chandi) Evaluation (Governed by Moon & Venus)
+  const secondSign = (lagnaSignNum + 1) % 12;
+  const secondLord = signLords[secondSign];
+  const secondLordPl = getP(secondLord);
+  const secondLordHouse = getHouse(secondLordPl);
+
+  let silverSafe = true;
+  let silverReasonEn = '';
+  let silverReasonHi = '';
+
+  if (venusHouse === 12 || secondLordHouse === 12) {
+    silverSafe = false;
+    silverReasonEn = `Silver (Chandi) is strictly CONTRAINDICATED. Your 2nd Lord of Wealth Storage (${secondLord}) / Venus is positioned in the 12th House of Expenditure (Vyaya Bhava). Wearing or carrying silver acts as a vibrational trigger that leaks your accumulated wealth into sudden, unwanted expenses.`;
+    silverReasonHi = `चांदी धारण करना या रखना सख्त वर्जित (निषेध) है। आपके धन भाव के स्वामी (${signLordsHi[secondSign] || secondLord}) / शुक्र द्वादश भाव (व्यय भाव) में स्थित हैं। चांदी रखने से 12वें भाव की ऊर्जा सक्रिय होकर संचित धन का अप्रत्याशित अपव्यय कराती है।`;
+  } else if (moonHouse === 8 || venusHouse === 8) {
+    silverSafe = false;
+    silverReasonEn = `Silver is contraindicated for retention on body because Moon/Venus is in the 8th House of vulnerability. Use silver only for donation or flowing in water.`;
+    silverReasonHi = `चांदी शरीर पर धारण न करें क्योंकि चन्द्र/शुक्र अष्टम भाव में स्थित हैं। चांदी का उपयोग केवल दान या जल प्रवाह हेतु करें।`;
+  }
+
+  if (silverSafe) {
+    report.safeMetals.push({ metal: 'Silver', metalHi: 'चांदी', noteEn: 'Benefic for calming emotional and partnership friction.', noteHi: 'मानसिक शांति व सद्भाव हेतु अनुकूल।' });
+  } else {
+    report.bannedMetals.push({ metal: 'Silver', metalHi: 'चांदी', reasonEn: silverReasonEn, reasonHi: silverReasonHi });
+    report.warnings.push(isHi ? silverReasonHi : silverReasonEn);
+  }
+
+  // 2. Copper (Tamba) Evaluation (Governed by Sun & Mars)
+  if (marsHouse === 8 && sunHouse === 8) {
+    report.bannedMetals.push({
+      metal: 'Copper', metalHi: 'तांबा',
+      reasonEn: 'Copper should not be worn continuously due to severe 8th house affliction; use copper only for morning solar arghya.',
+      reasonHi: 'अष्टम भाव में सूर्य-मंगल पीड़ित होने के कारण तांबा शरीर पर न पहनें; केवल प्रातः सूर्य अर्घ्य हेतु उपयोग करें।'
+    });
+  } else {
+    report.safeMetals.push({
+      metal: 'Copper',
+      metalHi: 'तांबा',
+      noteEn: `Highly auspicious. Strengthens Lagna Lord & Sun (Budhaditya Yoga in House ${sunHouse || 1}) without triggering 12th house leakage.`,
+      noteHi: `अत्यंत शुभ। 12वें भाव के अपव्यय को रोके बिना लग्न व सूर्य (${sunHouse || 1}वें भाव में बुधादित्य योग) को सशक्त करता है।`
+    });
+  }
+
+  // 3. Gold (Swarna) Evaluation (Governed by Sun & Jupiter)
+  report.safeMetals.push({
+    metal: 'Gold',
+    metalHi: 'सोना',
+    noteEn: 'Devaguru Jupiter metal. Amplifies wisdom, fortune, and spiritual discipline.',
+    noteHi: 'देवगुरु बृहस्पति की धातु। ज्ञान, भाग्य और सात्विक विवेक को बढ़ाती है।'
+  });
+
+  // 4. Gemstone-Metal Synergy Check (Ratna-Dhatu Virodha)
+  if (mercHouse === 1 && moonHouse === 1) {
+    report.gemstoneGuidance.push({
+      en: `Emerald (Panna) Setting Rule: Mercury is your Lagna Lord and Moon sits in House 1. Mercury considers Moon an enemy. Setting Emerald in Silver creates Gemstone-Metal Conflict (Ratna-Dhatu Virodha). Mount Emerald in pure COPPER (Tamba) or GOLD (Swarna) to energize Budhaditya Yoga and bypass the 12th-house Venus drainage.`,
+      hi: `पन्ना धारण नियम: बुध आपके लग्नेश हैं और चन्द्रमा प्रथम भाव में स्थित हैं। बुध चन्द्रमा को शत्रु मानता है। पन्ने को चांदी में जड़वाने से रत्न-धातु विरोध उत्पन्न होता है। पन्ने को केवल तांबे या सोने में बनवाएं ताकि बुधादित्य योग सक्रिय हो और 12वें भाव का शुक्र अपव्यय न करे।`
+    });
+  }
+
+  // 5. Nodal Axis & Ear Piercing Check (Karna Vedha)
+  if (rahuHouse === 6 && ketuHouse === 12) {
+    report.gemstoneGuidance.push({
+      en: `Rahu-Ketu Master Bodily Anchor (Karna Vedha): Rahu is in House 6 and Ketu is in House 12. To discipline Ketu and permanently block Rahu's erratic disruptions, undergo ear piercing (ears governed by Ketu) and wear pure Gold (governed by Jupiter) on a Thursday during Jupiter Hora. This anchors Devaguru's grace onto Ketu, transforming it into Ketu Nek and calming Rahu.`,
+      hi: `राहु-केतु मास्टर शारीरिक संरेखन (कर्ण वेध): राहु छठे और केतु बारहवें भाव में हैं। केतु को अनुशासित कर राहु के उपद्रव को शांत करने हेतु गुरुवार को गुरु होरा में दोनों कानों में कर्ण वेध कराकर शुद्ध सोना धारण करें। कान केतु का अंग है और सोना गुरु की धातु है; इससे केतु नेक होकर राहु को शांत रखता है।`
+    });
+  }
+
+  return report;
+}
+
 function getGoalAstrologicalHouse(goal, lagnaSignNum) {
   let norm = goal || 'job';
   if (norm.startsWith('marriage')) norm = 'marriage';
@@ -3940,35 +4055,56 @@ function getKundaliLalKitabSolutions(coachPlacements, lagnaSignNum, userDasha, g
   const lPl = placements.find(p => p.name === lagnaLord);
   const lHouse = lPl ? (((lPl.sign - lagnaSignNum + 12) % 12) + 1) : 1;
 
+  const dhatuSafety = evaluateDhatuSafety(placements, lagnaSignNum, lang);
+  const isSilverBanned = dhatuSafety.bannedMetals.some(b => b.metal === 'Silver');
+
   // A. Lagna Lord Lal Kitab Upaya
   const lkLagnaUpayasEn = {
     'Sun': `Lagna Lord Sun (House ${lHouse}): Offer water mixed with jaggery and red flowers to the rising Sun from a copper vessel; touch father's feet daily.`,
-    'Moon': `Lagna Lord Moon (House ${lHouse}): Drink water from a solid silver glass and keep a silver square in your pocket; honor mother daily.`,
-    'Mars': `Lagna Lord Mars (House ${lHouse}): Feed sweet tandoori rotis to stray dogs on Tuesdays and keep a solid pure silver square in your locker.`,
-    'Mercury': `Lagna Lord Mercury (House ${lHouse}): Feed whole green moong dal or fresh spinach to desi cows on Wednesdays; clean teeth with alum water.`,
+    'Moon': isSilverBanned
+      ? `Lagna Lord Moon (House ${lHouse}): Drink clean water from a clay pot; honor mother and donate white grains on Mondays (avoid holding raw silver due to 12th house leakage).`
+      : `Lagna Lord Moon (House ${lHouse}): Drink water from a solid silver glass and keep a silver square in your pocket; honor mother daily.`,
+    'Mars': isSilverBanned
+      ? `Lagna Lord Mars (House ${lHouse}): Feed sweet tandoori rotis to stray dogs on Tuesdays and maintain athletic vigor (avoid keeping silver articles to protect against 12th house financial drain).`
+      : `Lagna Lord Mars (House ${lHouse}): Feed sweet tandoori rotis to stray dogs on Tuesdays and keep a solid pure silver square in your locker.`,
+    'Mercury': `Lagna Lord Mercury (House ${lHouse}): Feed whole green moong dal or fresh spinach to desi cows on Wednesdays; clean teeth with alum water. Mount Emerald in Copper or Gold.`,
     'Jupiter': `Lagna Lord Jupiter (House ${lHouse}): Apply saffron (kesar) or turmeric tilak on forehead, navel & tongue each morning; respect teachers & elders.`,
     'Venus': `Lagna Lord Venus (House ${lHouse}): Feed cows with curd or jowar on Fridays, wear neat fragrant attire, and maintain mutual spousal respect.`,
     'Saturn': `Lagna Lord Saturn (House ${lHouse}): Perform Chhaya Daan (donate mustard oil in an iron bowl after viewing your reflection) on Saturdays; feed crows.`
   };
   const lkLagnaUpayasHi = {
     'Sun': `लग्नेश सूर्य (${lHouse}वें भाव में): तांबे के पात्र से गुड़ व लाल फूल मिलाकर उगते सूर्य को अर्घ्य दें; प्रतिदिन पिता का आशीर्वाद लें।`,
-    'Moon': `लग्नेश चन्द्र (${lHouse}वें भाव में): शुद्ध चांदी के गिलास से जल पिएं और जेब में चौकोर चांदी का टुकड़ा रखें; माता के चरण स्पर्श करें।`,
-    'Mars': `लग्नेश मंगल (${lHouse}वें भाव में): मंगलवार को आवारा कुत्तों को मीठी रोटी खिलाएं और तिजोरी में ठोस चांदी की गोली या चौकोर टुकड़ा रखें।`,
-    'Mercury': `लग्नेश बुध (${lHouse}वें भाव में): बुधवार को गायों को साबुत हरी मूंग या पालक खिलाएं; फिटकरी से दांत साफ रखें।`,
+    'Moon': isSilverBanned
+      ? `लग्नेश चन्द्र (${lHouse}वें भाव में): मिट्टी के पात्र से स्वच्छ जल ग्रहण करें; सोमवार को सफेद अन्न दान करें और माता का आशीर्वाद लें (12वें भाव के व्यय को रोकने हेतु चांदी रखने से बचें)।`
+      : `लग्नेश चन्द्र (${lHouse}वें भाव में): शुद्ध चांदी के गिलास से जल पिएं और जेब में चौकोर चांदी का टुकड़ा रखें; माता के चरण स्पर्श करें।`,
+    'Mars': isSilverBanned
+      ? `लग्नेश मंगल (${lHouse}वें भाव में): मंगलवार को आवारा कुत्तों को मीठी रोटी खिलाएं और शारीरिक अनुशासन बनाए रखें (12वें भाव के व्यय को रोकने हेतु चांदी से बचें)।`
+      : `लग्नेश मंगल (${lHouse}वें भाव में): मंगलवार को आवारा कुत्तों को मीठी रोटी खिलाएं और तिजोरी में ठोस चांदी की गोली या चौकोर टुकड़ा रखें।`,
+    'Mercury': `लग्नेश बुध (${lHouse}वें भाव में): बुधवार को गायों को साबुत हरी मूंग या पालक खिलाएं; फिटकरी से दांत साफ रखें। पन्ना तांबे या सोने में बनवाएं।`,
     'Jupiter': `लग्नेश गुरु (${lHouse}वें भाव में): प्रतिदिन माथे, नाभि और जिह्वा पर केसर या हल्दी का तिलक लगाएं; गुरुजनों का आदर करें।`,
     'Venus': `लग्नेश शुक्र (${lHouse}वें भाव में): शुक्रवार को गाय को दही या ज्वार का आटा खिलाएं, सुगंधित वस्त्र पहनें और जीवनसाथी का सम्मान करें।`,
     'Saturn': `लग्नेश शनि (${lHouse}वें भाव में): शनिवार को लोहे के पात्र में सरसों का तेल भरकर छाया दान करें; कौवों व काले कुत्तों को भोजन दें।`
   };
   upayas.push(isHi ? (lkLagnaUpayasHi[lagnaLord] || lkLagnaUpayasHi['Sun']) : (lkLagnaUpayasEn[lagnaLord] || lkLagnaUpayasEn['Sun']));
 
-  // B. Mars Placement
+  // B. Mars Placement & Dispositor Pacification
   const marsPl = placements.find(p => p.name === 'Mars');
   const marsHouse = marsPl ? (((marsPl.sign - lagnaSignNum + 12) % 12) + 1) : 1;
+  const marsSign = marsPl ? marsPl.sign : 0;
+  const marsDispositor = signLords[marsSign] || 'Jupiter';
+  const marsDispositorHi = signLordsHi[marsSign] || 'गुरु';
   const isMangalBad = [1, 4, 7, 8, 12].includes(marsHouse);
+
   if (isMangalBad) {
-    upayas.push(isHi 
-      ? `मंगल बद शांति (मंगल भाव ${marsHouse}): अपनी जेब या तिजोरी में ठोस चांदी की गोली रखें; मंगलवार को कभी कर्ज न लें, बल्कि पुराना कर्ज थोड़ा चुकाएं।`
-      : `Mangal Bad Pacification (Mars in House ${marsHouse}): Keep a solid pure silver ball in your pocket or vault; avoid initiating loans on Tuesdays; repay debt installments on Tuesday mornings.`);
+    if (isSilverBanned) {
+      upayas.push(isHi
+        ? `मंगल बद शांति (मंगल भाव ${marsHouse} - सुरक्षित भावेश संरेखण): मंगल ${signNamesHi[marsSign]} (स्वामी: ${marsDispositorHi}) में स्थित हैं। चांदी रखने या पहनने से बचें (क्योंकि 12वें भाव में स्थित शुक्र अत्यधिक वित्तीय अपव्यय कराएगा)। इसके स्थान पर मंगल को इसके राशि स्वामी ${marsDispositorHi} के माध्यम से शांत करें: माथे पर केसर/पीले चंदन का तिलक लगाएं, तांबे के पात्र से सूर्य को जल अर्पित करें और गुरुवार को गाय को मीठी रोटी खिलाएं।`
+        : `Mangal Bad Pacification (Mars in House ${marsHouse} - Safe Dispositor Alignment): Mars occupies ${signNames[marsSign]} (ruled by ${marsDispositor}). DO NOT keep or wear silver (as 2nd Lord / Venus in your 12th house triggers severe financial leakage). Instead, pacify Mars safely via its dispositor ${marsDispositor}: Apply saffron (Kesar) or yellow sandalwood tilak on your forehead at sunrise, offer water to the rising Sun from a copper vessel, and feed sweet bread to cows on Thursdays.`);
+    } else {
+      upayas.push(isHi
+        ? `मंगल बद शांति (मंगल भाव ${marsHouse}): अपनी जेब या तिजोरी में ठोस शुद्ध चांदी की गोली रखें; मंगलवार को नए ऋण लेने से बचें; मंगलवार सुबह कर्ज की किस्त चुकाएं।`
+        : `Mangal Bad Pacification (Mars in House ${marsHouse}): Keep a solid pure silver ball in your pocket or vault; avoid initiating loans on Tuesdays; repay debt installments on Tuesday mornings.`);
+    }
   } else {
     upayas.push(isHi
       ? `मंगल नेक संवर्धन (मंगल भाव ${marsHouse}): छोटे भाइयों का सहयोग करें, शारीरिक ऊर्जा बनाए रखें और मंगलवार को लाल मसूर की दाल दान करें।`
@@ -3981,7 +4117,7 @@ function getKundaliLalKitabSolutions(coachPlacements, lagnaSignNum, userDasha, g
   const isBudhManda = [3, 8, 9, 12].includes(mercHouse);
   if (isBudhManda) {
     upayas.push(isHi
-      ? `बुध मंदा शांति (बुध भाव ${mercHouse}): गले में सफेद धागे में छेद वाला तांबे का सिक्का धारण करें; महत्वपूर्ण कार्यों में हरे वस्त्र न पहनें।`
+      ? `बुध मंदा शांति (बुध भाव ${mercHouse}): गले में सफेद धागे में छेद वाला तांबे का सिक्का धारण करें; महत्वपूर्ण कार्यों में गहरे हरे वस्त्र न पहनें।`
       : `Budh Manda Remediation (Mercury in House ${mercHouse}): Wear a copper coin with a central drilled hole around your neck in a white thread; avoid dark green clothing during key meetings.`);
   } else {
     upayas.push(isHi
@@ -3993,31 +4129,45 @@ function getKundaliLalKitabSolutions(coachPlacements, lagnaSignNum, userDasha, g
   const dPlanet = (userDasha && userDasha.planet) ? userDasha.planet : 'Sun';
   const dashaUpayasEn = {
     'Sun': `Mahadasha Lord Sun Pacification: Throw a copper coin into a flowing river or feed wheat rotis with jaggery to a cow on Sundays.`,
-    'Moon': `Mahadasha Lord Moon Pacification: Keep an earthen or silver pot filled with rainwater/Gangajal on your terrace; avoid consuming milk late at night.`,
+    'Moon': isSilverBanned
+      ? `Mahadasha Lord Moon Pacification: Donate white rice and milk to needy persons on Mondays; avoid consuming milk late at night (avoid keeping silver pots due to 12th house leakage).`
+      : `Mahadasha Lord Moon Pacification: Keep an earthen or silver pot filled with rainwater/Gangajal on your terrace; avoid consuming milk late at night.`,
     'Mars': `Mahadasha Lord Mars Pacification: Donate sweet bread (revadi or patasha) in flowing water on Tuesdays; avoid harsh speech with colleagues.`,
     'Mercury': `Mahadasha Lord Mercury Pacification: Clean your teeth with alum (fitkari) powder every morning and donate copper utensils to a temple.`,
     'Jupiter': `Mahadasha Lord Jupiter Pacification: Plant a yellow flowering sapling or peepal tree in a public garden; wear a yellow sacred thread.`,
     'Venus': `Mahadasha Lord Venus Pacification: Donate pure desi cow ghee or camphor at a temple on Fridays; maintain clean and uncluttered bedroom bedding.`,
     'Saturn': `Mahadasha Lord Saturn Pacification: Bury a small bottle of pure mustard oil in secluded unpaved land on a Saturday evening; respect laborers.`,
-    'Rahu': `Mahadasha Lord Rahu Pacification: Float 8 dry coconuts in flowing water on a Wednesday evening; keep a silver square under your pillow.`,
+    'Rahu': isSilverBanned
+      ? `Mahadasha Lord Rahu Pacification: Float 8 dry coconuts in flowing water on a Wednesday evening; keep a pure sandalwood stick or copper coin under your pillow.`
+      : `Mahadasha Lord Rahu Pacification: Float 8 dry coconuts in flowing water on a Wednesday evening; keep a silver square under your pillow.`,
     'Ketu': `Mahadasha Lord Ketu Pacification: Feed two-colored sesame bread to black-and-white stray dogs; donate a dual-color blanket to a hospital or needy.`
   };
   const dashaUpayasHi = {
     'Sun': `महादशा स्वामी सूर्य शांति: रविवार को बहते जल में तांबे का सिक्का प्रवाहित करें या गाय को गुड़-गेहूं की रोटी खिलाएं।`,
-    'Moon': `महादशा स्वामी चन्द्र शांति: घर की छत पर चांदी या मिट्टी के बर्तन में गंगाजल या वर्षा का जल रखें; रात्रि में दूध पीने से बचें।`,
+    'Moon': isSilverBanned
+      ? `महादशा स्वामी चन्द्र शांति: सोमवार को जरूरतमंदों को सफेद चावल व दूध दान करें; रात्रि में दूध पीने से बचें (12वें भाव के अपव्यय से बचने हेतु चांदी न रखें)।`
+      : `महादशा स्वामी चन्द्र शांति: घर की छत पर चांदी या मिट्टी के बर्तन में गंगाजल या वर्षा का जल रखें; रात्रि में दूध पीने से बचें।`,
     'Mars': `महादशा स्वामी मंगल शांति: मंगलवार को रेवड़ी या बताशे बहते जल में प्रवाहित करें; कटु वाणी से बचें।`,
     'Mercury': `महादशा स्वामी बुध शांति: प्रतिदिन प्रातः फिटकरी से दांत साफ करें और मंदिर में तांबे का पात्र दान करें।`,
     'Jupiter': `महादशा स्वामी गुरु शांति: गुरुवार को पीले फूलों का पौधा लगाएं; कलाई में पीला सूती धागा बांधें।`,
     'Venus': `महादशा स्वामी शुक्र शांति: शुक्रवार को मंदिर में गाय का शुद्ध घी या कपूर दान करें; बेडरूम को सुगंधित व स्वच्छ रखें।`,
     'Saturn': `महादशा स्वामी शनि शांति: शनिवार शाम को कच्ची जमीन में थोड़ा सा सरसों का तेल दबाएं; श्रमिकों व सहायकों का आदर करें।`,
-    'Rahu': `महादशा स्वामी राहु शांति: बुधवार शाम को 8 सूखे नारियल बहते पानी में प्रवाहित करें; तकिये के नीचे चांदी का चौकोर टुकड़ा रखें।`,
+    'Rahu': isSilverBanned
+      ? `महादशा स्वामी राहु शांति: बुधवार शाम को 8 सूखे नारियल बहते पानी में प्रवाहित करें; तकिये के नीचे चंदन की लकड़ी या तांबे का सिक्का रखें।`
+      : `महादशा स्वामी राहु शांति: बुधवार शाम को 8 सूखे नारियल बहते पानी में प्रवाहित करें; तकिये के नीचे चांदी का चौकोर टुकड़ा रखें।`,
     'Ketu': `महादशा स्वामी केतु शांति: चितकबरे कुत्तों को मीठी रोटी या बिस्कुट खिलाएं; जरूरतमंदों को दोरंगा कंबल दान करें।`
   };
   upayas.push(isHi ? (dashaUpayasHi[dPlanet] || dashaUpayasHi['Sun']) : (dashaUpayasEn[dPlanet] || dashaUpayasEn['Sun']));
 
+  // E. Special Gemstone / Nodal Guidance from Dhatu Safety
+  if (dhatuSafety.gemstoneGuidance && dhatuSafety.gemstoneGuidance.length > 0) {
+    dhatuSafety.gemstoneGuidance.forEach(g => {
+      upayas.push(isHi ? g.hi : g.en);
+    });
+  }
+
   return upayas;
 }
-
 function getKundaliVastuSolutions(lagnaSignNum, coachPlacements, goal, lang) {
   const isHi = lang === 'hi';
   const lagnaLord = signLords[lagnaSignNum] || 'Sun';
@@ -14545,6 +14695,80 @@ en: 'Your chart is a Saadharan Teva (Balanced Chart). Your progress is directly 
 hi: 'आपकी कुंडली एक साधारण तेवा (संतुलित कुंडली) है। आपकी प्रगति सीधे आपके कर्म, सक्रिय लक्ष्यों और व्यक्तिगत प्रयासों से आकार लेती है। मंगल और बुध के निरंतर उपाय आपके पथ को ऊर्जावान बनाए रखेंगे।'
 }
 };
+
+// 4B. Dhatu & Cross-Bhava Safety Analysis
+const dhatuSafety = evaluateDhatuSafety(cachedPlacementsList, cachedLagnaSignNum, currentAppLang);
+const isSilverBanned = dhatuSafety.bannedMetals.some(b => b.metal === 'Silver');
+
+// Dynamic Dispositor Pacification for Mars if Silver is Banned
+if (isSilverBanned && mangalData[marsHouse]) {
+  const marsPl = (cachedPlacementsList || []).find(p => p.name === 'Mars');
+  const marsSign = marsPl ? marsPl.sign : 0;
+  const marsDispositor = signLords[marsSign] || 'Jupiter';
+  const marsDispositorHi = signLordsHi[marsSign] || 'गुरु';
+
+  if (marsHouse === 7) {
+    mangalData[7] = {
+      status: '<span class="k-lbl-en">Mangal Bad (House 7 - Safe Dispositor Pacification)</span><span class="k-lbl-hi" style="display:none;">अशुभ मंगल (सुरक्षित भावेश शांति)</span>',
+      en: `Mars in House 7 (${signNames[marsSign]} ruled by ${marsDispositor}) influences partnerships. Critical Safety Rule: DO NOT carry or wear silver (as 2nd Lord / Venus in your 12th house triggers severe financial leakage). Instead, pacify Mars safely via its dispositor ${marsDispositor}: Apply saffron (Kesar) or yellow sandalwood tilak on forehead, offer water to the rising Sun from a copper vessel, and feed sweet bread to cows on Thursdays.`,
+      hi: `सप्तम भाव में मंगल (${signNamesHi[marsSign]}, स्वामी: ${marsDispositorHi}) वैवाहिक ऊर्जा को प्रभावित करता है। अत्यंत महत्वपूर्ण नियम: चांदी धारण करने या रखने से बचें (क्योंकि 12वें भाव में स्थित शुक्र अत्यधिक वित्तीय अपव्यय और धन हानि कराएगा)। इसके स्थान पर मंगल को इसके राशि स्वामी ${marsDispositorHi} के माध्यम से शांत करें: प्रातः माथे पर केसर या पीले चंदन का तिलक लगाएं, तांबे के लोटे से सूर्य को जल अर्पित करें और गुरुवार को गाय को मीठी रोटी खिलाएं।`
+    };
+  } else if ([1, 4, 8, 12].includes(marsHouse)) {
+    mangalData[marsHouse].en = mangalData[marsHouse].en.replace(/Keep a solid silver ball.*?to calm Mars\./i, `Avoid keeping raw silver (which leaks 12th house Venus funds); pacify via morning copper vessel solar offerings and ${marsDispositor} guidance.`);
+    mangalData[marsHouse].hi = mangalData[marsHouse].hi.replace(/चांदी की गोली.*?रखें।/i, `12वें भाव के व्यय को रोकने हेतु चांदी से बचें; तांबे के पात्र से सूर्य अर्घ्य दें और ${marsDispositorHi} के उपाय करें।`);
+  }
+}
+
+// Populate Dhatu Safety Card in Lal Kitab Tab
+const dhatuEl = document.getElementById('lk-dhatu-safety-details');
+if (dhatuEl) {
+  let bannedHTML = '';
+  if (dhatuSafety.bannedMetals.length > 0) {
+    bannedHTML = `
+    <div style="background: rgba(255, 107, 107, 0.08); border-left: 3px solid #ff6b6b; padding: 10px 12px; border-radius: 8px; margin-bottom: 10px;">
+      <strong style="color: #ff6b6b; display: block; margin-bottom: 4px;">
+        <span class="k-lbl-en">Contraindicated / Banned Metals: ${dhatuSafety.bannedMetals.map(b => b.metal).join(', ')}</span>
+        <span class="k-lbl-hi" style="display:none;">वर्जित धातुएं: ${dhatuSafety.bannedMetals.map(b => b.metalHi).join(', ')}</span>
+      </strong>
+      <p class="k-lbl-en" style="margin: 0; font-size: 0.82rem; line-height: 1.5; color: #ff9999;">${dhatuSafety.bannedMetals.map(b => b.reasonEn).join(' ')}</p>
+      <p class="k-lbl-hi" style="margin: 0; font-size: 0.82rem; line-height: 1.5; color: #ff9999; display: none;">${dhatuSafety.bannedMetals.map(b => b.reasonHi).join(' ')}</p>
+    </div>
+    `;
+  }
+
+  const safeHTML = `
+  <div style="background: rgba(46, 204, 113, 0.08); border-left: 3px solid #2ecc71; padding: 10px 12px; border-radius: 8px; margin-bottom: 10px;">
+    <strong style="color: #2ecc71; display: block; margin-bottom: 4px;">
+      <span class="k-lbl-en">Auspicious & Safe Metals: ${dhatuSafety.safeMetals.map(s => s.metal).join(', ')}</span>
+      <span class="k-lbl-hi" style="display:none;">शुभ व सुरक्षित धातुएं: ${dhatuSafety.safeMetals.map(s => s.metalHi).join(', ')}</span>
+    </strong>
+    <ul style="margin: 4px 0 0 16px; padding: 0; font-size: 0.82rem; color: var(--text-muted);">
+      ${dhatuSafety.safeMetals.map(s => `
+        <li class="k-lbl-en" style="margin-bottom: 4px;"><strong>${s.metal}:</strong> ${s.noteEn}</li>
+        <li class="k-lbl-hi" style="margin-bottom: 4px; display: none;"><strong>${s.metalHi}:</strong> ${s.noteHi}</li>
+      `).join('')}
+    </ul>
+  </div>
+  `;
+
+  let guidanceHTML = '';
+  if (dhatuSafety.gemstoneGuidance.length > 0) {
+    guidanceHTML = `
+    <div style="background: rgba(232, 200, 121, 0.08); border-left: 3px solid var(--gold); padding: 10px 12px; border-radius: 8px;">
+      <strong style="color: var(--gold); display: block; margin-bottom: 4px;">
+        <span class="k-lbl-en">Master Gemstone & Nodal Bodily Protocol:</span>
+        <span class="k-lbl-hi" style="display:none;">रत्न जड़ाई व शारीरिक संरेखन नियम:</span>
+      </strong>
+      ${dhatuSafety.gemstoneGuidance.map(g => `
+        <p class="k-lbl-en" style="margin: 0 0 6px 0; font-size: 0.82rem; line-height: 1.5; color: var(--text-muted);">${g.en}</p>
+        <p class="k-lbl-hi" style="margin: 0 0 6px 0; font-size: 0.82rem; line-height: 1.5; color: var(--text-muted); display: none;">${g.hi}</p>
+      `).join('')}
+    </div>
+    `;
+  }
+
+  dhatuEl.innerHTML = bannedHTML + safeHTML + guidanceHTML;
+}
 
 // 5. Populate HTML dynamically based on Mars and Mercury placements
 const mInfo = mangalData[marsHouse];
