@@ -176,10 +176,10 @@ class _HomeDashboardState extends State<HomeDashboard> {
     final List<KarmaTask> newTasks = [];
     
     if (lines.length >= 4) {
-      newTasks.add(KarmaTask(title: "Vedic Quest", description: lines[0].replaceAll(RegExp(r'^(🕉️|)\s*Vedic:\s*'), ''), karmaPoints: 20));
-      newTasks.add(KarmaTask(title: "Lal Kitab Quest", description: lines[1].replaceAll(RegExp(r'^(🔴|)\s*Lal Kitab:\s*'), ''), karmaPoints: 15));
-      newTasks.add(KarmaTask(title: "Vastu Quest", description: lines[2].replaceAll(RegExp(r'^(🏡|)\s*Vastu:\s*'), ''), karmaPoints: 15));
-      newTasks.add(KarmaTask(title: "Action Quest", description: lines[3].replaceAll(RegExp(r'^(💼|)\s*Action:\s*'), ''), karmaPoints: 30));
+      newTasks.add(KarmaTask(title: "Vedic Quest", description: lines[0].replaceAll(RegExp(r'^\s*Vedic:\s*'), ''), karmaPoints: 20));
+      newTasks.add(KarmaTask(title: "Lal Kitab Quest", description: lines[1].replaceAll(RegExp(r'^\s*Lal Kitab:\s*'), ''), karmaPoints: 15));
+      newTasks.add(KarmaTask(title: "Vastu Quest", description: lines[2].replaceAll(RegExp(r'^\s*Vastu:\s*'), ''), karmaPoints: 15));
+      newTasks.add(KarmaTask(title: "Action Quest", description: lines[3].replaceAll(RegExp(r'^\s*Action:\s*'), ''), karmaPoints: 30));
     } else {
       // Dynamic fallback derived directly from calculated Kundli
       final gLord = kundli['goalLord'] ?? 'Sun';

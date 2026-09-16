@@ -180,7 +180,7 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen>
           final fast = data['fastPrep'];
           await flutterLocalNotificationsPlugin.show(
             1,
-            fast['title'] ?? '🍎 1-Day Prior Fast Prep',
+            fast['title'] ?? '1-Day Prior Fast Prep',
             fast['body'] ??
                 'Tomorrow is a sacred fast day. Prepare your sattvic items today.',
             _notifDetails,
@@ -192,7 +192,7 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen>
           final morning = data['morning'];
           await flutterLocalNotificationsPlugin.show(
             2,
-            morning['title'] ?? '🌅 Your CosmoVedic Daily Plan is Ready',
+            morning['title'] ?? 'Your CosmoVedic Daily Plan is Ready',
             morning['body'] ??
                 'Open the app to see today\'s personalized Vedic tasks and remedies.',
             _notifDetails,
@@ -204,7 +204,7 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen>
           final rahu = data['rahuKaal'];
           await flutterLocalNotificationsPlugin.show(
             3,
-            rahu['title'] ?? '⚠️ Rahu Kaal Starts in 15 Minutes',
+            rahu['title'] ?? 'Rahu Kaal Starts in 15 Minutes',
             rahu['body'] ??
                 'Avoid new work and important decisions during Rahu Kaal period.',
             _notifDetails,
@@ -216,7 +216,7 @@ class _CosmoVedicMainScreenState extends State<CosmoVedicMainScreen>
           final streak = data['streakSaver'];
           await flutterLocalNotificationsPlugin.show(
             4,
-            streak['title'] ?? '🔥 Don\'t Break Your Streak!',
+            streak['title'] ?? 'Don\'t Break Your Streak!',
             streak['body'] ??
                 'Complete today\'s Karma tasks before midnight to keep your streak alive.',
             _notifDetails,

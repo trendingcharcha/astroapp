@@ -5957,22 +5957,7 @@ showToast(`<svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='c
 showOnboardingStep('path');
 }
 
-async function downloadKundliPDF() {
-showToast(`<svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' style='vertical-align:middle; margin-right:4px;'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/></svg> Preparing B&W PDF Report...`, "gold");
-
-document.body.classList.add('print-pdf-active');
-// Paint all three charts for the PDF report
-drawChartGeneric('chartCanvasPrintD1', 'D1', true);
-drawChartGeneric('chartCanvasPrintD9', 'D9', true);
-drawChartGeneric('chartCanvasPrintD10', 'D10', true);
-
-setTimeout(() => {
-window.print();
-
-document.body.classList.remove('print-pdf-active');
-drawChart();
-}, 150);
-}
+// Duplicate downloadKundliPDF consolidated to high-DPI implementation at end of script
 
 // ═══════════════════════════════════════════════════════════════
 // MULTI-GOAL MANAGEMENT & SMART DE-DUPLICATION ENGINE
@@ -12253,6 +12238,9 @@ function computeDoshas(placements, lagnaSign) {
   const venus = get('Venus');
   const mercury = get('Mercury');
 
+  const dhatuSafety = (typeof evaluateDhatuSafety === 'function') ? evaluateDhatuSafety(placements, lagnaSign, 'en') : null;
+  const isSilverBanned = dhatuSafety ? (dhatuSafety.bannedMetals || []).some(b => b.metal === 'Silver') : false;
+
   // 1. Mangal Dosha (Kuja Dosha) with House-Specific Analysis & Cancellation (Bhanga)
   if (mars) {
     const marsHouse = ((mars.sign - lagnaSign + 12) % 12) + 1;
@@ -12303,8 +12291,12 @@ function computeDoshas(placements, lagnaSign) {
         12: `द्वादश भाव में मंगल व्यय व निद्रा चक्र को प्रभावित करता है; नियमित दिनचर्या व ध्यान से ऊर्जा संतुलित होती है।`
       };
 
-      const remediesEn = `Remedies: Recite Hanuman Chalisa daily at twilight; offer sweet roti or jaggery to cows/dogs on Tuesdays; maintain pure silver article in pocket; speak with gentle warmth during disagreements.`;
-      const remediesHi = `उपाय: प्रतिदिन संध्या समय श्री हनुमान चालीसा का पाठ करें; मंगलवार को गाय या कुत्ते को मीठी रोटी या गुड़ खिलाएं; बटुए में ठोस चांदी रखें।`;
+      const remediesEn = isSilverBanned
+        ? `Remedies: Recite Hanuman Chalisa daily at twilight; offer water to rising Sun from a copper vessel; offer sweet roti or jaggery to cows/dogs on Tuesdays; avoid raw silver retention (to safeguard against 12th-house expenditure triggers); speak with gentle warmth during disagreements.`
+        : `Remedies: Recite Hanuman Chalisa daily at twilight; offer sweet roti or jaggery to cows/dogs on Tuesdays; maintain pure silver article in pocket; speak with gentle warmth during disagreements.`;
+      const remediesHi = isSilverBanned
+        ? `उपाय: प्रतिदिन संध्या समय श्री हनुमान चालीसा का पाठ करें; प्रातः तांबे के लोटे से सूर्य को जल दें; मंगलवार को गाय या कुत्ते को मीठी रोटी या गुड़ खिलाएं; चांदी रखने से बचें (12वें भाव के व्यय को रोकने हेतु); वाणी में सौम्यता रखें।`
+        : `उपाय: प्रतिदिन संध्या समय श्री हनुमान चालीसा का पाठ करें; मंगलवार को गाय या कुत्ते को मीठी रोटी या गुड़ खिलाएं; बटुए में ठोस चांदी रखें।`;
 
       if (isMitigated) {
         doshas.push({
@@ -12326,10 +12318,16 @@ function computeDoshas(placements, lagnaSign) {
     }
   }
 
-  // 2. Shani Sade Sati / Shani Dhaiya with Exact Phase Analysis
-  if (saturn && moon) {
-    const satMoonDiff = ((saturn.sign - moon.sign + 12) % 12);
-    const satSignName = signNames[saturn.sign];
+  // 2. Shani Sade Sati / Shani Dhaiya with Exact Real-Time Astronomical Transit (Gochar) Analysis
+  if (moon) {
+    const now = new Date();
+    const todayJd = getJulianDay(now.getFullYear(), now.getMonth() + 1, now.getDate(), 12, 0, 5.5);
+    const todayAyanamsa = getLahiriAyanamsa(todayJd);
+    const transitSaturnTropLon = getPlanetLongitude('Saturn', todayJd);
+    const transitSaturnSidLon = (transitSaturnTropLon - todayAyanamsa + 360) % 360;
+    const transitSaturnSign = Math.floor(transitSaturnSidLon / 30.0);
+    const satMoonDiff = ((transitSaturnSign - moon.sign + 12) % 12);
+    const satSignName = signNames[transitSaturnSign];
     const moonSignName = signNames[moon.sign];
     const moonSignNameHi = signNamesHi[moon.sign];
 
@@ -12338,7 +12336,7 @@ function computeDoshas(placements, lagnaSign) {
         name: `Shani Sade Sati - Phase 1 (Rising Phase)`,
         nameHi: `शनि साढ़े साती - प्रथम चरण (उदय चरण)`,
         present: true,
-        en: `Saturn in ${satSignName} is transiting 12th from your natal Moon (${moonSignName}). This Rising Phase tests financial discipline, increases overseas or travel possibilities, and induces mental restructuring. Remedy: Light a mustard oil lamp under a Peepal tree on Saturday evenings; chant "Om Sham Shanaishcharaya Namah" 108 times; avoid unnecessary financial liabilities.`,
+        en: `Transiting Saturn in ${satSignName} is currently passing through the 12th house from your natal Moon (${moonSignName}). This Rising Phase tests financial discipline, increases travel or overseas possibilities, and induces mental restructuring. Remedy: Light a mustard oil lamp under a Peepal tree on Saturday evenings; chant "Om Sham Shanaishcharaya Namah" 108 times; avoid unnecessary financial liabilities.`,
         hi: `शनि (${satSignName}) आपकी जन्म चन्द्र राशि (${moonSignNameHi}) से 12वें भाव में गोचर कर रहे हैं। यह साढ़े साती का प्रथम चरण (उदय) है, जो व्यय नियंत्रण, यात्राओं और मानसिक धैर्य की परीक्षा लेता है। उपाय: शनिवार शाम पीपल के वृक्ष के नीचे सरसों के तेल का दीपक जलाएं; "ॐ शं शनैश्चराय नमः" का 108 बार जाप करें; फिजूलखर्ची से बचें।`
       });
     } else if (satMoonDiff === 0) {
@@ -12346,7 +12344,7 @@ function computeDoshas(placements, lagnaSign) {
         name: `Shani Sade Sati - Phase 2 (Peak / Janma Shani)`,
         nameHi: `शनि साढ़े साती - द्वितीय चरण (शिखर / जन्म शनि)`,
         present: true,
-        en: `Saturn is transiting directly over your natal Moon in ${moonSignName}. This Peak Phase demands profound maturity, hard work, emotional resilience, and karmic realignment. Remedy: Recite Dasharatha Shani Stotra on Saturdays; donate black sesame or iron articles to workers/laborers; perform Shiva Panchakshari japa daily.`,
+        en: `Transiting Saturn is moving directly over your natal Moon in ${moonSignName}. This Peak Phase demands profound maturity, diligent effort, emotional resilience, and karmic realignment. Remedy: Recite Dasharatha Shani Stotra on Saturdays; donate black sesame or iron articles to workers/laborers; perform Shiva Panchakshari japa daily.`,
         hi: `शनि आपकी जन्म चन्द्र राशि (${moonSignNameHi}) के ऊपर से ही गोचर कर रहे हैं। यह साढ़े साती का मुख्य शिखर चरण (जन्म शनि) है, जो गहन कर्म निष्ठा, भावनात्मक परिपक्वता और आत्म-अनुशासन की मांग करता है। उपाय: शनिवार को दशरथकृत शनि स्तोत्र का पाठ करें; श्रमिकों व सेवादारों को काले तिल या भोजन दान करें; नित्य "ॐ नमः शिवाय" का जाप करें।`
       });
     } else if (satMoonDiff === 1) {
@@ -12354,7 +12352,7 @@ function computeDoshas(placements, lagnaSign) {
         name: `Shani Sade Sati - Phase 3 (Setting Phase)`,
         nameHi: `शनि साढ़े साती - तृतीय चरण (अस्त चरण)`,
         present: true,
-        en: `Saturn in ${satSignName} is transiting 2nd from your natal Moon (${moonSignName}). This Setting Phase focuses on settling accumulated responsibilities, consolidating wealth, and stabilizing family harmony. Remedy: Feed crows or black dogs on Saturdays; speak with deliberate truth and patience; honor elderly mentors.`,
+        en: `Transiting Saturn in ${satSignName} is moving through the 2nd house from your natal Moon (${moonSignName}). This Setting Phase focuses on settling accumulated responsibilities, consolidating wealth, and stabilizing family harmony. Remedy: Feed crows or black dogs on Saturdays; speak with deliberate truth and patience; honor elderly mentors.`,
         hi: `शनि आपकी जन्म चन्द्र राशि (${moonSignNameHi}) से द्वितीय भाव में गोचर कर रहे हैं। यह साढ़े साती का अंतिम चरण (उतरती साढ़े साती) है, जिसमें संचित धन की रक्षा, पारिवारिक जिम्मेदारियों का निर्वहन और कर्म शुद्धि पूर्ण होती है। उपाय: शनिवार को कौवों या काले कुत्तों को रोटी खिलाएं; सत्य व नम्र वाणी का प्रयोग करें।`
       });
     } else if (satMoonDiff === 3) {
@@ -12362,7 +12360,7 @@ function computeDoshas(placements, lagnaSign) {
         name: `Shani Kantak Dhaiya (4th from Moon)`,
         nameHi: `शनि कंटक ढैय्या (चन्द्र से चतुर्थ भाव)`,
         present: true,
-        en: `Saturn is positioned 4th from your Moon in ${moonSignName}, forming Kantak Dhaiya. This can cause occasional restlessness regarding residence, mother's health, or inner peace. Remedy: Worship Lord Shiva on Mondays; avoid property litigation; keep domestic spaces calm and clutter-free.`,
+        en: `Transiting Saturn is positioned in the 4th house from your Moon in ${moonSignName}, forming Kantak Dhaiya. This can cause occasional restlessness regarding residence, mother's health, or inner peace. Remedy: Worship Lord Shiva on Mondays; avoid property litigation; keep domestic spaces calm and clutter-free.`,
         hi: `शनि आपकी चन्द्र राशि (${moonSignNameHi}) से चौथे भाव में गोचररत हैं, जिससे कंटक ढैय्या का प्रभाव बनता है। यह गृहस्थ शांति व माता के स्वास्थ्य के प्रति सतर्क रहने का संकेत है। उपाय: सोमवार को शिवलिंग पर जल अर्पित करें; घर में शांत वातावरण रखें।`
       });
     } else if (satMoonDiff === 7) {
@@ -12370,8 +12368,19 @@ function computeDoshas(placements, lagnaSign) {
         name: `Shani Ashtam Dhaiya (8th from Moon)`,
         nameHi: `शनि अष्टम ढैय्या (चन्द्र से अष्टम भाव)`,
         present: true,
-        en: `Saturn is transiting 8th from your Moon in ${moonSignName}, forming Ashtam Dhaiya. Caution is advised with unexpected changes, routine health, and speculative investments. Remedy: Recite Hanuman Chalisa daily; pour mustard oil in a bowl, view reflection (Chhaya Daan), and donate on Saturdays.`,
+        en: `Transiting Saturn is moving 8th from your Moon in ${moonSignName}, forming Ashtam Dhaiya. Caution is advised with unexpected changes, routine health, and speculative investments. Remedy: Recite Hanuman Chalisa daily; pour mustard oil in a bowl, view reflection (Chhaya Daan), and donate on Saturdays.`,
         hi: `शनि आपकी चन्द्र राशि (${moonSignNameHi}) से आठवें भाव में हैं, जिससे अष्टम ढैय्या का प्रभाव है। अचानक आने वाले परिवर्तनों और स्वास्थ्य के प्रति सजग रहें। उपाय: प्रतिदिन हनुमान चालीसा का पाठ करें; शनिवार को कटोरी में सरसों के तेल में अपना चेहरा देखकर छाया दान करें।`
+      });
+    }
+
+    // Check Natal Conjunction (Shani-Chandra Vish Yoga)
+    if (saturn && saturn.sign === moon.sign) {
+      doshas.push({
+        name: `Shani-Chandra Vish Yoga (Natal Conjunction in ${signNames[moon.sign]})`,
+        nameHi: `शनि-चन्द्र विष योग (जन्म युति - ${signNamesHi[moon.sign]})`,
+        present: true,
+        en: `Saturn and Moon are conjunct in ${signNames[moon.sign]} in your natal birth chart, forming Vish Yoga. This creates deep contemplative instincts, periodic melancholic undercurrents, and emotional discipline. Remedy: Recite Dasharatha Shani Stotra on Saturdays, offer water and raw milk to Shiva Lingam on Mondays, and practice Pranayama to keep emotional serenity steady.`,
+        hi: `आपकी जन्म कुंडली में शनि और चन्द्रमा की ${signNamesHi[moon.sign]} में युति है, जिससे विष योग का निर्माण होता है। यह मन में कभी-कभी एकांतप्रियता, अति-विचार या मानसिक संवेदनशीलता दे सकता है। उपाय: शनिवार को दशरथ कृत शनि स्तोत्र का पाठ करें; सोमवार को शिवलिंग पर जल व कच्चा दूध अर्पित करें और नित्य प्राणायाम करें।`
       });
     }
   }
@@ -12491,12 +12500,19 @@ function computeDoshas(placements, lagnaSign) {
           hi: `आपकी कुंडली में चन्द्रमा (${signNamesHi[moon.sign]}) के दूसरे और बारहवें भाव में कोई ग्रह नहीं होने से केमद्रुम प्रभाव था। परंतु चन्द्र से केंद्र भावों में शुभ ग्रह स्थित होने से केमद्रुम भंग योग बनता है, जो मानसिक एकाग्रता और मौलिक सोच को जागृत करता है।`
         });
       } else {
+        const kemdrumRemedyEn = isSilverBanned
+          ? `Remedy: Worship Goddess Lakshmi and Lord Shiva on Mondays; offer white flowers and pure water to Shiva Lingam; keep a fragrant sandalwood piece or sacred copper coin in your purse (avoiding raw silver retention to prevent 12th-house financial drainage).`
+          : `Remedy: Worship Goddess Lakshmi and Lord Shiva on Mondays; offer white flowers and water to Shiva Lingam; keep a square silver piece in your purse.`;
+        const kemdrumRemedyHi = isSilverBanned
+          ? `उपाय: प्रत्येक सोमवार को शिवलिंग पर जल व सफेद फूल चढ़ाएं; महालक्ष्मी की आराधना करें; अपने पास चंदन की लकड़ी या पवित्र तांबे का सिक्का रखें (12वें भाव के अपव्यय से बचने हेतु चांदी रखने से परहेज करें)।`
+          : `उपाय: प्रत्येक सोमवार को शिवलिंग पर जल व सफेद फूल चढ़ाएं; महालक्ष्मी की आराधना करें; अपने पास चांदी का चौकोर टुकड़ा रखें।`;
+
         doshas.push({
           name: 'Kemdrum Dosha (Isolated Moon)',
           nameHi: 'केमद्रुम दोष (एकाकी चन्द्र)',
           present: true,
-          en: `Moon in ${signNames[moon.sign]} is unoccupied by supporting planets on either flank (2nd and 12th houses), causing Kemdrum Dosha. This manifests as periodic emotional detachment, fluctuating self-confidence, or feeling misunderstood. Remedy: Worship Goddess Lakshmi and Lord Shiva on Mondays; offer white flowers and water to Shiva Lingam; keep a square silver piece in your purse.`,
-          hi: `चन्द्रमा (${signNamesHi[moon.sign]}) के आगे-पीछे (द्वितीय व द्वादश) भावों में कोई सहायक ग्रह न होने से केमद्रुम दोष बनता है। यह कभी-कभार मानसिक अकेलापन, आत्मविश्वास में उतार-चढ़ाव या वैराग्य की भावना दे सकता है। उपाय: प्रत्येक सोमवार को शिवलिंग पर जल व सफेद फूल चढ़ाएं; महालक्ष्मी की आराधना करें; अपने पास चांदी का चौकोर टुकड़ा रखें।`
+          en: `Moon in ${signNames[moon.sign]} is unoccupied by supporting planets on either flank (2nd and 12th houses), causing Kemdrum Dosha. This manifests as periodic emotional detachment, fluctuating self-confidence, or feeling misunderstood. ${kemdrumRemedyEn}`,
+          hi: `चन्द्रमा (${signNamesHi[moon.sign]}) के आगे-पीछे (द्वितीय व द्वादश) भावों में कोई सहायक ग्रह न होने से केमद्रुम दोष बनता है। यह कभी-कभार मानसिक अकेलापन, आत्मविश्वास में उतार-चढ़ाव या वैराग्य की भावना दे सकता है। ${kemdrumRemedyHi}`
         });
       }
     }
@@ -15778,8 +15794,10 @@ function getVashya(r, deg) {
   if (r === 7) return 'Keeta';
   return 'Manava';
 }
-const vashya1 = getVashya(groomRashi, (moonLon1 % 30));
-const vashya2 = getVashya(brideRashi, (moonLon2 % 30));
+const groomDeg = isP1Male ? (moonLon1 % 30) : (moonLon2 % 30);
+const brideDeg = isP1Male ? (moonLon2 % 30) : (moonLon1 % 30);
+const vashya1 = getVashya(groomRashi, groomDeg);
+const vashya2 = getVashya(brideRashi, brideDeg);
 let vashyaScore = 1;
 if (vashya1 === vashya2) vashyaScore = 2;
 else if ((vashya1 === 'Manava' && vashya2 === 'Chatushpada') || (vashya1 === 'Chatushpada' && vashya2 === 'Manava')) vashyaScore = 1;
@@ -15884,8 +15902,15 @@ const nGroom = nakNadi[groomNak];
 const nBride = nakNadi[brideNak];
 let nadiScore = 8;
 if (nGroom === nBride) {
-  if (groomRashi !== brideRashi) nadiScore = 8; // Cancelled
-  else nadiScore = 0; // Nadi Dosha
+  const isSameRashi = (groomRashi === brideRashi);
+  const isSameNak = (groomNak === brideNak);
+  if (isSameRashi && !isSameNak) {
+    nadiScore = 8; // Cancelled: Eka Rashi Bhinna Nakshatra
+  } else if (!isSameRashi && isSameNak) {
+    nadiScore = 8; // Cancelled: Eka Nakshatra Bhinna Rashi (border Nakshatra)
+  } else {
+    nadiScore = 0; // True Nadi Dosha
+  }
 }
 
 // True Total Score (0 to 36 Gunas - Zero Artificial Clamping!)
@@ -15911,7 +15936,7 @@ if (isOppositeGender) {
 // Update Result Elements
 const titleEl = document.getElementById('matching-couple-title');
 if (titleEl) {
-titleEl.innerHTML = `<span style="color:var(--gold);">${p1Name}</span> (${p1Gender}) <span style="color:#ff6b6b;"></span> <span style="color:#5dade2;">${p2Name}</span> (${p2Gender})`;
+titleEl.innerHTML = `<span style="color:var(--gold);">${p1Name}</span> (${p1Gender}) <span style="color:var(--gold); font-weight:bold; margin: 0 4px;">&amp;</span> <span style="color:#5dade2;">${p2Name}</span> (${p2Gender})`;
 }
 
 const gunEl = document.getElementById('matching-gun-score');
@@ -16332,7 +16357,7 @@ handleOAuthCallback();
 
     <!-- Chat Input Form -->
     <form onsubmit="handleLiveChatSubmit(event)" style="padding: 10px 14px; background: rgba(18, 13, 43, 0.95); border-top: 1px solid rgba(142, 111, 214, 0.2); display: flex; gap: 8px; align-items: center;">
-      <button type="button" onclick="toggleVoiceInput()" id="chat-mic-btn" title="Voice Input" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(142, 111, 214, 0.4); color: var(--purple); border-radius: 8px; padding: 8px 10px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+      <button type="button" onclick="toggleLiveChatVoiceInput()" id="chat-mic-btn" title="Voice Input" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(142, 111, 214, 0.4); color: var(--purple); border-radius: 8px; padding: 8px 10px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
       </button>
       <input type="text" id="livechat-input" required placeholder="Tell Assistant your situation (e.g. at office, traveling)..." style="flex: 1; font-size: 0.85rem; padding: 10px 12px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #fff;">
@@ -16914,7 +16939,7 @@ function selectFbTag(btn, tag) {
 
 // VOICE-TO-TEXT SPEECH RECOGNITION FOR LIVE CHAT
 let isVoiceRecording = false;
-function toggleVoiceInput() {
+function toggleLiveChatVoiceInput() {
   const micBtn = document.getElementById('chat-mic-btn');
   const inputEl = document.getElementById('livechat-input');
   

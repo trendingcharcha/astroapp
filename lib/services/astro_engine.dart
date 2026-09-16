@@ -210,25 +210,29 @@ class AstroEngine {
     final moonNakIdx = (moonLon / (360.0 / 27.0)).floor() % 27;
     final moonSignNum = planetPlacements["Moon"]!['sign'] as int;
 
-    // Determine specific goal ruling planet
+    // Determine specific goal ruling planet aligned with classical houses & index.html
     String goalLord = lagnaLord;
-    if (goal == 'job' || goal == 'business') {
+    if (goal == 'job' || goal == 'career') {
       final tenthSign = (lagnaSignNum + 9) % 12;
       goalLord = signLords[tenthSign];
+    } else if (goal == 'business') {
+      final seventhSign = (lagnaSignNum + 6) % 12;
+      goalLord = signLords[seventhSign];
     } else if (goal == 'marriage' || goal == 'love') {
       final seventhSign = (lagnaSignNum + 6) % 12;
       goalLord = signLords[seventhSign];
-    } else if (goal == 'debt') {
+    } else if (goal == 'debt' || goal == 'money' || goal == 'finance') {
       final secondSign = (lagnaSignNum + 1) % 12;
       goalLord = signLords[secondSign];
-    } else if (goal == 'baby') {
+    } else if (goal == 'baby' || goal == 'education') {
       final fifthSign = (lagnaSignNum + 4) % 12;
       goalLord = signLords[fifthSign];
     } else if (goal == 'property') {
       final fourthSign = (lagnaSignNum + 3) % 12;
       goalLord = signLords[fourthSign];
     } else if (goal == 'health') {
-      goalLord = lagnaLord;
+      final sixthSign = (lagnaSignNum + 5) % 12;
+      goalLord = signLords[sixthSign];
     }
 
     return {
