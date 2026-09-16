@@ -13099,6 +13099,19 @@ city = {name: cityName, lat: 28.6139, lng: 77.2090, tz: 5.5};
 }
 }
 
+// Ensure full user profile is permanently synced to the newly entered details
+localStorage.setItem('user_name', name);
+localStorage.setItem('user_gender', gender);
+localStorage.setItem('user_dob', date);
+localStorage.setItem('user_tob', time);
+localStorage.setItem('user_pob', cityName);
+localStorage.setItem('user_goal', goal);
+if (city && city.lat) {
+  localStorage.setItem('user_lat', String(city.lat));
+  localStorage.setItem('user_lng', String(city.lng));
+  localStorage.setItem('user_timezone', String(city.tz || 5.5));
+}
+
 // Parse birth date and time
 let year, month, day, hour, min;
 try {
