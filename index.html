@@ -30,7 +30,7 @@
 // Clears: localStorage, sessionStorage, browser HTTP cache, SW cache.
 // ═══════════════════════════════════════════════════════════════
 (function() {
-var APP_CACHE_VER = 'cv_20260730_REALTIME_SYNC_FIX_V1029';
+var APP_CACHE_VER = 'cv_20260919_ASTROCHAT_FIX_V1030';
 
 // ── STEP 1: Detect old version or garbled localStorage ──────
 var storedVer = '';
@@ -16361,8 +16361,10 @@ _authListenerFired = false;
 try { loadCloudConfig(); setupSupabaseAuthListener(); } catch(e) {}
 
 if (document.readyState === 'loading') {
-document.addEventListener('DOMContentLoaded', handleOAuthCallback);
+  document.addEventListener('DOMContentLoaded', handleOAuthCallback);
 } else {
+  handleOAuthCallback();
+}
 
 
 // ═════════════════════════════════════════════════════════════════════════════
@@ -18291,10 +18293,6 @@ function renderPermanentLifestyleCard() {
       </div>
     </div>
   `;
-}
-
-
-handleOAuthCallback();
 }
 
 </script>
