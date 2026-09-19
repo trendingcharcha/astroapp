@@ -3647,17 +3647,17 @@ H12
         </button>
       </div>
 
-      <!-- Chat Input Form -->
-      <form onsubmit="handleAstroChatSubmit(event)" style="display: flex; gap: 8px; align-items: center; background: rgba(18, 13, 43, 0.95); padding: 8px 12px; border: 1px solid rgba(142, 111, 214, 0.35); border-radius: 12px;">
+      <!-- Chat Input Container (Zero-Reload Div Architecture) -->
+      <div id="astrochat-input-box" style="display: flex; gap: 8px; align-items: center; background: rgba(18, 13, 43, 0.95); padding: 8px 12px; border: 1px solid rgba(142, 111, 214, 0.35); border-radius: 12px;">
         <button type="button" onclick="toggleAstroChatVoiceInput()" id="astrochat-mic-btn" title="Voice Input" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(142, 111, 214, 0.4); color: var(--purple); border-radius: 8px; padding: 8px 10px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
         </button>
-        <input type="text" id="astrochat-input" placeholder="Ask about gemstones, daridra yoga, milk rules, marriage..." style="flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 0.85rem; padding: 6px 4px;" autocomplete="off" />
-        <button type="submit" class="btn" style="width: auto; padding: 8px 14px; font-size: 0.82rem; background: linear-gradient(135deg, var(--gold), #d4af37); color: #0C0922; font-weight: bold; border-radius: 8px;">
+        <input type="text" id="astrochat-input" onkeydown="if(event.key==='Enter'){event.preventDefault();event.stopPropagation();handleAstroChatSubmit(event);return false;}" placeholder="Ask about gemstones, daridra yoga, milk rules, marriage..." style="flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 0.85rem; padding: 6px 4px;" autocomplete="off" />
+        <button type="button" id="astrochat-ask-btn" onclick="handleAstroChatSubmit(event)" class="btn" style="width: auto; padding: 8px 14px; font-size: 0.82rem; background: linear-gradient(135deg, var(--gold), #d4af37); color: #0C0922; font-weight: bold; border-radius: 8px; cursor: pointer;">
           <span class="k-lbl-en">Ask</span>
           <span class="k-lbl-hi" style="display:none;">पूछें</span>
         </button>
-      </form>
+      </div>
     </div>
 
   </main>
@@ -11767,8 +11767,14 @@ if (typeof initAstroChatUI === 'function') {
 initAstroChatUI();
 }
 setTimeout(() => {
-const chatInput = document.getElementById('astrochat-input');
-if (chatInput) chatInput.focus();
+  const chatInput = document.getElementById('astrochat-input');
+  if (chatInput) {
+    try {
+      chatInput.focus({ preventScroll: true });
+    } catch(e) {
+      chatInput.focus();
+    }
+  }
 }, 150);
 }
 } catch(err) {
@@ -17948,9 +17954,15 @@ function initAstroChatUI() {
   const isHi = (typeof currentAppLang !== 'undefined' && currentAppLang === 'hi');
   const userName = localStorage.getItem('user_name') || (isHi ? 'साधक' : 'Seeker');
   const lagnaSign = (typeof cachedLagnaSignNum === 'number') ? cachedLagnaSignNum : (parseInt(localStorage.getItem('kundli_lagna_sign'), 10) || 0);
-  const placements = (typeof cachedPlacementsList !== 'undefined' && Array.isArray(cachedPlacementsList) && cachedPlacementsList.length > 0)
+  let placements = (typeof cachedPlacementsList !== 'undefined' && Array.isArray(cachedPlacementsList) && cachedPlacementsList.length > 0)
     ? cachedPlacementsList
     : (typeof currentPlacements !== 'undefined' ? currentPlacements : []);
+  if ((!placements || placements.length === 0) && typeof localStorage !== 'undefined') {
+    try {
+      const savedP = JSON.parse(localStorage.getItem('cached_placements_list') || '[]');
+      if (Array.isArray(savedP) && savedP.length > 0) placements = savedP;
+    } catch(e) {}
+  }
 
   const statusBar = document.getElementById('astrochat-status-bar');
   if (statusBar) {
@@ -18033,46 +18045,94 @@ function appendAstroChatMessage(sender, text, saveToHistory = true) {
 function formatMarkdownToHTML(md) {
   if (!md) return '';
   let html = md;
+  // Headers
+  html = html.replace(/### (.*?)(?:\n|$)/g, '<h4 style="color:var(--gold); margin:6px 0 4px 0; font-size:0.92rem; font-weight:700;">$1</h4>');
+  html = html.replace(/## (.*?)(?:\n|$)/g, '<h3 style="color:var(--gold); margin:8px 0 6px 0; font-size:1rem; font-weight:700;">$1</h3>');
   // Bold
   html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  // Headers
-  html = html.replace(/### (.*?)\n/g, '<h4 style="color:var(--gold); margin:4px 0 8px 0; font-size:0.95rem;">$1</h4>');
-  html = html.replace(/## (.*?)\n/g, '<h3 style="color:var(--gold); margin:6px 0 10px 0; font-size:1.02rem;">$1</h3>');
   // Bullet points
-  html = html.replace(/^\* (.*?)$/gm, '<li style="margin-left:16px; margin-bottom:4px;">$1</li>');
-  html = html.replace(/(<li.*<\/li>)/s, '<ul style="margin:4px 0; padding-left:4px;">$1</ul>');
+  html = html.replace(/^\* (.*?)$/gm, '<li style="margin-left:14px; margin-bottom:4px; list-style-type:disc;">$1</li>');
   // Blockquotes
   html = html.replace(/^> (.*?)$/gm, '<blockquote style="border-left:3px solid var(--gold); padding:4px 10px; margin:8px 0; background:rgba(232,200,121,0.08); font-size:0.78rem; color:var(--text-muted);">$1</blockquote>');
   // Paragraph linebreaks
   html = html.replace(/\n\n/g, '<br/><br/>');
+  html = html.replace(/\n/g, '<br/>');
   return html;
 }
 
 function handleAstroChatSubmit(e) {
-  if (e) e.preventDefault();
+  if (e) {
+    if (typeof e.preventDefault === 'function') e.preventDefault();
+    if (typeof e.stopPropagation === 'function') e.stopPropagation();
+  }
   const inputEl = document.getElementById('astrochat-input');
-  if (!inputEl) return;
+  if (!inputEl) return false;
   const q = inputEl.value.trim();
-  if (!q) return;
+  if (!q) return false;
 
   inputEl.value = '';
   appendAstroChatMessage('user', q, true);
 
+  // Keep focus on input for seamless continuous chat without page jump
+  try {
+    inputEl.focus({ preventScroll: true });
+  } catch(err) {
+    inputEl.focus();
+  }
+
   const isHi = (typeof currentAppLang !== 'undefined' && currentAppLang === 'hi');
   const lagnaSign = (typeof cachedLagnaSignNum === 'number') ? cachedLagnaSignNum : (parseInt(localStorage.getItem('kundli_lagna_sign'), 10) || 0);
-  const placements = (typeof cachedPlacementsList !== 'undefined' && Array.isArray(cachedPlacementsList) && cachedPlacementsList.length > 0)
+  let placements = (typeof cachedPlacementsList !== 'undefined' && Array.isArray(cachedPlacementsList) && cachedPlacementsList.length > 0)
     ? cachedPlacementsList
     : (typeof currentPlacements !== 'undefined' ? currentPlacements : []);
+  if ((!placements || placements.length === 0) && typeof localStorage !== 'undefined') {
+    try {
+      const savedP = JSON.parse(localStorage.getItem('cached_placements_list') || '[]');
+      if (Array.isArray(savedP) && savedP.length > 0) placements = savedP;
+    } catch(e) {}
+  }
   const activeGoal = localStorage.getItem('user_current_view_goal') || localStorage.getItem('user_goal') || 'job';
 
-  if (typeof processAstroChatQuery === 'function') {
-    const reply = processAstroChatQuery(q, placements, lagnaSign, activeGoal, isHi ? 'hi' : 'en');
-    setTimeout(() => {
-      appendAstroChatMessage('assistant', reply, true);
-    }, 250);
-  } else {
-    appendAstroChatMessage('assistant', isHi ? 'कृपया पहले अपनी जन्म कुंडली की गणना करें।' : 'Please calculate your Kundli first to receive personalized astrological insights.', true);
+  // Temporary typing indicator
+  const msgContainer = document.getElementById('astrochat-messages');
+  const typingId = 'astrochat-typing-indicator';
+  if (msgContainer) {
+    const typingDiv = document.createElement('div');
+    typingDiv.id = typingId;
+    typingDiv.style.alignSelf = 'flex-start';
+    typingDiv.style.background = 'rgba(255, 255, 255, 0.05)';
+    typingDiv.style.color = 'var(--gold)';
+    typingDiv.style.border = '1px dashed rgba(232, 200, 121, 0.4)';
+    typingDiv.style.borderRadius = '12px';
+    typingDiv.style.padding = '8px 14px';
+    typingDiv.style.fontSize = '0.78rem';
+    typingDiv.style.display = 'flex';
+    typingDiv.style.alignItems = 'center';
+    typingDiv.style.gap = '8px';
+    typingDiv.innerHTML = '<span style="display:inline-block;">•</span> <span>' + (isHi ? 'दैवज्ञ आपकी जन्म कुंडली का विश्लेषण कर रहे हैं...' : 'Daivajna is consulting your Janma Kundali...') + '</span>';
+    msgContainer.appendChild(typingDiv);
+    msgContainer.scrollTop = msgContainer.scrollHeight;
   }
+
+  setTimeout(() => {
+    const typingEl = document.getElementById(typingId);
+    if (typingEl && typingEl.parentNode) {
+      typingEl.parentNode.removeChild(typingEl);
+    }
+    try {
+      if (typeof processAstroChatQuery === 'function') {
+        const reply = processAstroChatQuery(q, placements, lagnaSign, activeGoal, isHi ? 'hi' : 'en');
+        appendAstroChatMessage('assistant', reply, true);
+      } else {
+        appendAstroChatMessage('assistant', isHi ? 'कृपया पहले अपनी जन्म कुंडली की गणना करें।' : 'Please calculate your Kundli first to receive personalized astrological insights.', true);
+      }
+    } catch(err) {
+      console.error('[AstroChat Engine Error]:', err);
+      appendAstroChatMessage('assistant', isHi ? 'ज्योतिषीय विश्लेषण में तकनीकी समस्या आई। कृपया पुनः प्रयास करें।' : 'Technical error analyzing chart. Please try asking again.', false);
+    }
+  }, 180);
+
+  return false;
 }
 
 function sendQuickAstroChip(chipKey) {
@@ -18089,16 +18149,26 @@ function sendQuickAstroChip(chipKey) {
   appendAstroChatMessage('user', queryText, true);
 
   const lagnaSign = (typeof cachedLagnaSignNum === 'number') ? cachedLagnaSignNum : (parseInt(localStorage.getItem('kundli_lagna_sign'), 10) || 0);
-  const placements = (typeof cachedPlacementsList !== 'undefined' && Array.isArray(cachedPlacementsList) && cachedPlacementsList.length > 0)
+  let placements = (typeof cachedPlacementsList !== 'undefined' && Array.isArray(cachedPlacementsList) && cachedPlacementsList.length > 0)
     ? cachedPlacementsList
     : (typeof currentPlacements !== 'undefined' ? currentPlacements : []);
+  if ((!placements || placements.length === 0) && typeof localStorage !== 'undefined') {
+    try {
+      const savedP = JSON.parse(localStorage.getItem('cached_placements_list') || '[]');
+      if (Array.isArray(savedP) && savedP.length > 0) placements = savedP;
+    } catch(e) {}
+  }
   const activeGoal = localStorage.getItem('user_current_view_goal') || localStorage.getItem('user_goal') || 'job';
 
-  if (typeof processAstroChatQuery === 'function') {
-    const reply = processAstroChatQuery(queryText, placements, lagnaSign, activeGoal, isHi ? 'hi' : 'en');
-    setTimeout(() => {
-      appendAstroChatMessage('assistant', reply, true);
-    }, 250);
+  try {
+    if (typeof processAstroChatQuery === 'function') {
+      const reply = processAstroChatQuery(queryText, placements, lagnaSign, activeGoal, isHi ? 'hi' : 'en');
+      setTimeout(() => {
+        appendAstroChatMessage('assistant', reply, true);
+      }, 200);
+    }
+  } catch(err) {
+    console.error('[AstroChat QuickChip Error]:', err);
   }
 }
 
