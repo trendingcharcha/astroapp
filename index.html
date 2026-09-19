@@ -1247,6 +1247,15 @@ display: block;
 animation: fadeInScale 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+#tab-astrochat.active {
+display: flex !important;
+flex-direction: column;
+height: 100%;
+box-sizing: border-box;
+overflow: hidden;
+padding: 0 0 8px 0 !important;
+}
+
 @keyframes fadeInScale {
 from { opacity: 0; transform: scale(0.98); }
 to { opacity: 1; transform: scale(1); }
@@ -3582,74 +3591,75 @@ H12
 </div>
 
     <!-- TAB 7: COSMIC ASTRO CHAT VIEW (DAIVAJNA CLIENT-SIDE SACRED CHAT) -->
-    <div id="tab-astrochat" class="tab-content" style="padding-bottom: 90px;">
-      <div style="background: linear-gradient(135deg, rgba(142, 111, 214, 0.22), rgba(12, 9, 34, 0.95)); border: 1px solid rgba(142, 111, 214, 0.35); border-radius: 16px; padding: 14px 16px; margin-bottom: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+    <div id="tab-astrochat" class="tab-content" style="height: 100%; display: none; flex-direction: column; box-sizing: border-box; overflow: hidden;">
+      <!-- Top Card: Header & Kundli status (Pinned Top) -->
+      <div style="background: linear-gradient(135deg, rgba(142, 111, 214, 0.22), rgba(12, 9, 34, 0.95)); border: 1px solid rgba(142, 111, 214, 0.35); border-radius: 14px; padding: 10px 14px; margin-bottom: 8px; flex-shrink: 0; box-shadow: 0 4px 16px rgba(0,0,0,0.4);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <div style="width: 10px; height: 10px; border-radius: 50%; background: #00E676; box-shadow: 0 0 8px #00E676;"></div>
-            <h3 style="margin: 0; font-size: 1.05rem; color: var(--gold); letter-spacing: 0.5px;">
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: #00E676; box-shadow: 0 0 8px #00E676;"></div>
+            <h3 style="margin: 0; font-size: 0.98rem; color: var(--gold); letter-spacing: 0.5px;">
               <span class="k-lbl-en">Cosmic Astro Chat</span>
               <span class="k-lbl-hi" style="display:none;">दैवज्ञ वैदिक चैट</span>
             </h3>
           </div>
           <div style="display: flex; gap: 6px; align-items: center;">
-            <button type="button" onclick="switchTab(0)" class="btn btn-outline" style="padding: 4px 10px; font-size: 0.72rem; font-weight: 700; border-color: rgba(232,200,121,0.6); color: var(--gold); display: inline-flex; align-items: center; gap: 4px; border-radius: 14px;" title="Back to Home">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <button type="button" onclick="switchTab(0)" class="btn btn-outline" style="padding: 3px 8px; font-size: 0.7rem; font-weight: 700; border-color: rgba(232,200,121,0.6); color: var(--gold); display: inline-flex; align-items: center; gap: 4px; border-radius: 12px;" title="Back to Home">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
               <span class="k-lbl-en">BACK</span>
               <span class="k-lbl-hi" style="display:none;">वापस</span>
             </button>
-            <button type="button" onclick="clearAstroChatHistory()" class="btn btn-outline" style="padding: 4px 8px; font-size: 0.72rem; border-color: rgba(232,200,121,0.4); color: var(--gold);" title="Clear Chat">
+            <button type="button" onclick="clearAstroChatHistory()" class="btn btn-outline" style="padding: 3px 8px; font-size: 0.7rem; border-color: rgba(232,200,121,0.4); color: var(--gold);" title="Clear Chat">
               <span class="k-lbl-en">Clear</span>
               <span class="k-lbl-hi" style="display:none;">साफ करें</span>
             </button>
-            <button type="button" onclick="toggleAppLanguage()" class="btn btn-outline" style="padding: 4px 8px; font-size: 0.72rem; border-color: rgba(142,111,214,0.4); color: var(--purple);">
+            <button type="button" onclick="toggleAppLanguage()" class="btn btn-outline" style="padding: 3px 8px; font-size: 0.7rem; border-color: rgba(142,111,214,0.4); color: var(--purple);">
               <span class="app-lang-label">EN / हिंदी</span>
             </button>
           </div>
         </div>
 
         <!-- Dynamic Kundali Status Chips -->
-        <div id="astrochat-status-bar" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.72rem;">
+        <div id="astrochat-status-bar" style="display: flex; flex-wrap: wrap; gap: 5px; font-size: 0.7rem;">
           <!-- Rendered dynamically -->
         </div>
       </div>
 
-      <!-- Chat Messages Container -->
-      <div id="astrochat-messages" style="display: flex; flex-direction: column; gap: 12px; min-height: 380px; max-height: 52vh; overflow-y: auto; padding: 12px; background: rgba(10, 8, 28, 0.6); border: 1px solid rgba(142, 111, 214, 0.25); border-radius: 14px; margin-bottom: 12px;">
+      <!-- Chat Messages Container (Scrollable Middle Body) -->
+      <div id="astrochat-messages" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 10px 12px; background: rgba(10, 8, 28, 0.65); border: 1px solid rgba(142, 111, 214, 0.25); border-radius: 14px; margin-bottom: 8px;">
         <!-- Dynamically rendered -->
       </div>
 
       <!-- Quick Suggestion Chips -->
-      <div style="margin-bottom: 12px; overflow-x: auto; white-space: nowrap; display: flex; gap: 8px; padding-bottom: 4px;">
-        <button type="button" onclick="sendQuickAstroChip('gemstones')" class="btn btn-outline" style="padding: 6px 10px; font-size: 0.75rem; border-radius: 20px; border-color: rgba(232,200,121,0.4); color: var(--gold); white-space: nowrap;">
+      <div style="flex-shrink: 0; margin-bottom: 8px; overflow-x: auto; white-space: nowrap; display: flex; gap: 6px; padding-bottom: 2px;">
+        <button type="button" onclick="sendQuickAstroChip('gemstones')" class="btn btn-outline" style="padding: 5px 9px; font-size: 0.72rem; border-radius: 16px; border-color: rgba(232,200,121,0.4); color: var(--gold); white-space: nowrap;">
           <span class="k-lbl-en">Gemstones &amp; Metals</span>
           <span class="k-lbl-hi" style="display:none;">रत्न व धातु नियम</span>
         </button>
-        <button type="button" onclick="sendQuickAstroChip('daridra')" class="btn btn-outline" style="padding: 6px 10px; font-size: 0.75rem; border-radius: 20px; border-color: rgba(255,123,123,0.4); color: #FF7B7B; white-space: nowrap;">
+        <button type="button" onclick="sendQuickAstroChip('daridra')" class="btn btn-outline" style="padding: 5px 9px; font-size: 0.72rem; border-radius: 16px; border-color: rgba(255,123,123,0.4); color: #FF7B7B; white-space: nowrap;">
           <span class="k-lbl-en">Daridra &amp; Debt Remedies</span>
           <span class="k-lbl-hi" style="display:none;">दरिद्र योग व ऋण उपाय</span>
         </button>
-        <button type="button" onclick="sendQuickAstroChip('diet')" class="btn btn-outline" style="padding: 6px 10px; font-size: 0.75rem; border-radius: 20px; border-color: rgba(142,111,214,0.4); color: #B39DDB; white-space: nowrap;">
+        <button type="button" onclick="sendQuickAstroChip('diet')" class="btn btn-outline" style="padding: 5px 9px; font-size: 0.72rem; border-radius: 16px; border-color: rgba(142,111,214,0.4); color: #B39DDB; white-space: nowrap;">
           <span class="k-lbl-en">Milk &amp; Dietary Rules</span>
           <span class="k-lbl-hi" style="display:none;">दूध व खानपान नियम</span>
         </button>
-        <button type="button" onclick="sendQuickAstroChip('relations')" class="btn btn-outline" style="padding: 6px 10px; font-size: 0.75rem; border-radius: 20px; border-color: rgba(142,111,214,0.4); color: #B39DDB; white-space: nowrap;">
+        <button type="button" onclick="sendQuickAstroChip('relations')" class="btn btn-outline" style="padding: 5px 9px; font-size: 0.72rem; border-radius: 16px; border-color: rgba(142,111,214,0.4); color: #B39DDB; white-space: nowrap;">
           <span class="k-lbl-en">Family &amp; Relational Conduct</span>
           <span class="k-lbl-hi" style="display:none;">रिश्तेदार संरेखन उपाय</span>
         </button>
-        <button type="button" onclick="sendQuickAstroChip('sadesati')" class="btn btn-outline" style="padding: 6px 10px; font-size: 0.75rem; border-radius: 20px; border-color: rgba(232,200,121,0.4); color: var(--gold); white-space: nowrap;">
+        <button type="button" onclick="sendQuickAstroChip('sadesati')" class="btn btn-outline" style="padding: 5px 9px; font-size: 0.72rem; border-radius: 16px; border-color: rgba(232,200,121,0.4); color: var(--gold); white-space: nowrap;">
           <span class="k-lbl-en">Shani Sade Sati Status</span>
           <span class="k-lbl-hi" style="display:none;">शनि साढ़े साती स्थिति</span>
         </button>
       </div>
 
-      <!-- Chat Input Container (Zero-Reload Div Architecture) -->
-      <div id="astrochat-input-box" style="display: flex; gap: 8px; align-items: center; background: rgba(18, 13, 43, 0.95); padding: 8px 12px; border: 1px solid rgba(142, 111, 214, 0.35); border-radius: 12px;">
-        <button type="button" onclick="toggleAstroChatVoiceInput()" id="astrochat-mic-btn" title="Voice Input" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(142, 111, 214, 0.4); color: var(--purple); border-radius: 8px; padding: 8px 10px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      <!-- Chat Input Container (Zero-Reload Div Architecture, pinned at bottom) -->
+      <div id="astrochat-input-box" style="flex-shrink: 0; display: flex; gap: 8px; align-items: center; background: rgba(18, 13, 43, 0.98); padding: 8px 12px; border: 1.5px solid rgba(142, 111, 214, 0.45); border-radius: 14px; box-shadow: 0 4px 18px rgba(0,0,0,0.5);">
+        <button type="button" onclick="toggleAstroChatVoiceInput()" id="astrochat-mic-btn" title="Voice Input" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(142, 111, 214, 0.4); color: var(--purple); border-radius: 8px; padding: 7px 9px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
         </button>
         <input type="text" id="astrochat-input" onkeydown="if(event.key==='Enter'){event.preventDefault();event.stopPropagation();handleAstroChatSubmit(event);return false;}" placeholder="Ask about gemstones, daridra yoga, milk rules, marriage..." style="flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 0.85rem; padding: 6px 4px;" autocomplete="off" />
-        <button type="button" id="astrochat-ask-btn" onclick="handleAstroChatSubmit(event)" class="btn" style="width: auto; padding: 8px 14px; font-size: 0.82rem; background: linear-gradient(135deg, var(--gold), #d4af37); color: #0C0922; font-weight: bold; border-radius: 8px; cursor: pointer;">
+        <button type="button" id="astrochat-ask-btn" onclick="handleAstroChatSubmit(event)" onpointerdown="if(event.pointerType==='touch'||event.pointerType==='mouse'){ event.preventDefault(); handleAstroChatSubmit(event); }" class="btn" style="width: auto; padding: 7px 15px; font-size: 0.82rem; background: linear-gradient(135deg, var(--gold), #d4af37); color: #0C0922; font-weight: bold; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
           <span class="k-lbl-en">Ask</span>
           <span class="k-lbl-hi" style="display:none;">पूछें</span>
         </button>
@@ -11711,6 +11721,18 @@ const navItems = document.querySelectorAll('.nav-item');
 if (navItems[index]) navItems[index].classList.add('active');
 if (btn) btn.classList.add('active');
 
+const mainEl = document.querySelector('main');
+if (mainEl) {
+  if (index === 7 || tabIds[index] === 'tab-astrochat') {
+    mainEl.scrollTop = 0;
+    mainEl.style.overflow = 'hidden';
+    mainEl.style.padding = '10px 14px 4px 14px';
+  } else {
+    mainEl.style.overflow = 'auto';
+    mainEl.style.padding = '20px 16px';
+  }
+}
+
 
 
 // 2. Safe async tab data population
@@ -17974,13 +17996,18 @@ function initAstroChatUI() {
   // Load chat history or show welcome message
   const msgContainer = document.getElementById('astrochat-messages');
   if (msgContainer && msgContainer.children.length === 0) {
+    let hasLoadedMessages = false;
     const saved = localStorage.getItem('astro_chat_history');
     if (saved) {
       try {
         const history = JSON.parse(saved);
-        history.forEach(m => appendAstroChatMessage(m.sender, m.text, false));
+        if (Array.isArray(history) && history.length > 0) {
+          history.forEach(m => appendAstroChatMessage(m.sender, m.text, false));
+          hasLoadedMessages = true;
+        }
       } catch(e) {}
-    } else {
+    }
+    if (!hasLoadedMessages) {
       const welcome = isHi
         ? `नमस्ते <strong>${userName}</strong>! मैं आपका निजी दैवज्ञ ज्योतिषीय सहचर हूँ। आपकी कुंडली के आधार पर आप मुझसे रत्न, धातु, दरिद्र योग, साढ़े साती, खानपान के नियम या पारिवारिक संबंधों से जुड़ा कोई भी प्रश्न पूछ सकते हैं।`
         : `Namaste <strong>${userName}</strong>! I am your personal Vedic Daivajna Astrologer. Grounded strictly in your birth chart, feel free to ask me about gemstones, metal safety, Daridra Yoga, Shani Sade Sati, dietary rules, or family karma.`;
@@ -18048,15 +18075,20 @@ function formatMarkdownToHTML(md) {
   return html;
 }
 
+let astroChatSubmitting = false;
 function handleAstroChatSubmit(e) {
   if (e) {
     if (typeof e.preventDefault === 'function') e.preventDefault();
     if (typeof e.stopPropagation === 'function') e.stopPropagation();
   }
+  if (astroChatSubmitting) return false;
   const inputEl = document.getElementById('astrochat-input');
   if (!inputEl) return false;
-  const q = inputEl.value.trim();
+  const q = (inputEl.value || '').trim();
   if (!q) return false;
+
+  astroChatSubmitting = true;
+  setTimeout(() => { astroChatSubmitting = false; }, 300);
 
   inputEl.value = '';
   appendAstroChatMessage('user', q, true);
@@ -18069,7 +18101,7 @@ function handleAstroChatSubmit(e) {
   }
 
   const isHi = (typeof currentAppLang !== 'undefined' && currentAppLang === 'hi');
-  const lagnaSign = (typeof cachedLagnaSignNum === 'number') ? cachedLagnaSignNum : (parseInt(localStorage.getItem('kundli_lagna_sign'), 10) || 0);
+  const lagnaSign = (!isNaN(cachedLagnaSignNum) && typeof cachedLagnaSignNum === 'number') ? cachedLagnaSignNum : (parseInt(localStorage.getItem('kundli_lagna_sign'), 10) || 0);
   let placements = (typeof cachedPlacementsList !== 'undefined' && Array.isArray(cachedPlacementsList) && cachedPlacementsList.length > 0)
     ? cachedPlacementsList
     : (typeof currentPlacements !== 'undefined' ? currentPlacements : []);
@@ -18118,7 +18150,7 @@ function handleAstroChatSubmit(e) {
       console.error('[AstroChat Engine Error]:', err);
       appendAstroChatMessage('assistant', isHi ? 'ज्योतिषीय विश्लेषण में तकनीकी समस्या आई। कृपया पुनः प्रयास करें।' : 'Technical error analyzing chart. Please try asking again.', false);
     }
-  }, 180);
+  }, 120);
 
   return false;
 }
@@ -18165,6 +18197,14 @@ function clearAstroChatHistory() {
   const msgContainer = document.getElementById('astrochat-messages');
   if (msgContainer) msgContainer.innerHTML = '';
   initAstroChatUI();
+}
+
+if (typeof window !== 'undefined') {
+  window.handleAstroChatSubmit = handleAstroChatSubmit;
+  window.sendQuickAstroChip = sendQuickAstroChip;
+  window.openAstroChatTab = openAstroChatTab;
+  window.initAstroChatUI = initAstroChatUI;
+  window.clearAstroChatHistory = clearAstroChatHistory;
 }
 
 function toggleAstroChatVoiceInput() {
