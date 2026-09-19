@@ -3690,9 +3690,9 @@ H12
 
 </div>
 
-<!-- Floating Action Cosmic Bubble (FAB) for Instant Astro Chat -->
-<button id="fab-astrochat" onclick="openAstroChatTab()" title="Open Astro Chat" style="position: fixed; bottom: 76px; right: 16px; width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #E8C879, #9B86ED); border: 2px solid rgba(255,255,255,0.3); box-shadow: 0 4px 20px rgba(155, 134, 237, 0.5); z-index: 999; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s ease;">
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0C0922" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+<!-- Floating Action Cosmic Bubble (FAB) for Instant Astro Chat - Locked strictly inside App Vertical Screen -->
+<button id="fab-astrochat" onclick="openAstroChatTab()" aria-label="Open Astro Chat" style="position: absolute; bottom: 78px; right: 16px; width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #E8C879, #9B86ED); border: 2px solid rgba(255,255,255,0.4); box-shadow: 0 4px 18px rgba(155, 134, 237, 0.55), 0 0 10px rgba(232, 200, 121, 0.35); z-index: 999; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.25s ease, box-shadow 0.25s ease;">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0C0922" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
 </button>
 
 </div>
@@ -11712,6 +11712,12 @@ const navItems = document.querySelectorAll('.nav-item');
 if (navItems[index]) navItems[index].classList.add('active');
 if (btn) btn.classList.add('active');
 
+// Toggle Floating Action Bubble (FAB): Hide when on Astro Chat tab, show on other tabs
+const fab = document.getElementById('fab-astrochat');
+if (fab) {
+  fab.style.display = (index === 7 || tabIds[index] === 'tab-astrochat') ? 'none' : 'flex';
+}
+
 // 2. Safe async tab data population
 try {
 if (index === 1) {
@@ -11748,9 +11754,15 @@ if (typeof generateCoachMission === 'function') {
 await generateCoachMission();
 }
 } else if (index === 7 || tabIds[index] === 'tab-astrochat') {
+const mainEl = document.querySelector('main');
+if (mainEl) mainEl.scrollTop = 0;
 if (typeof initAstroChatUI === 'function') {
 initAstroChatUI();
 }
+setTimeout(() => {
+const chatInput = document.getElementById('astrochat-input');
+if (chatInput) chatInput.focus();
+}, 150);
 }
 } catch(err) {
 console.error('[Astro AI] switchTab error:', err);
@@ -14009,6 +14021,7 @@ const placementsList = planetsList; // alias for compatibility
 cachedPlacementsList = planetsList;
 cachedLagnaSignNum = lagnaSignNum;
 localStorage.setItem('kundli_lagna_sign', lagnaSignNum);
+try { localStorage.setItem('cached_placements_list', JSON.stringify(planetsList)); } catch(e) {}
 
 // Moon details & Dasha
 const moonPl = placementsList.find(p => p.name === 'Moon');
@@ -17418,72 +17431,63 @@ document.addEventListener('DOMContentLoaded', handleOAuthCallback);
   function processAstroChatQuery(userQuery, placements, lagnaSign, activeGoal, lang) {
     const isHi = lang === 'hi';
     const q = (userQuery || '').toLowerCase().trim();
-    const userName = localStorage.getItem('user_name') || (isHi ? 'साधक' : 'Seeker');
-    const lagnaName = SIGN_NAMES[lagnaSign];
-    const lagnaNameHi = SIGN_NAMES_HI[lagnaSign];
-    const lagnaLord = SIGN_LORDS[lagnaSign];
-    const lagnaLordHi = SIGN_LORDS_HI[lagnaSign];
+    const userName = (typeof localStorage !== 'undefined' && localStorage.getItem('user_name')) || (isHi ? 'साधक' : 'Seeker');
+    const safeLagna = (typeof lagnaSign === 'number' && lagnaSign >= 0 && lagnaSign < 12) ? lagnaSign : 0;
+    const lagnaName = SIGN_NAMES[safeLagna];
+    const lagnaNameHi = SIGN_NAMES_HI[safeLagna];
+    const lagnaLord = SIGN_LORDS[safeLagna];
+    const lagnaLordHi = SIGN_LORDS_HI[safeLagna];
+
+    const safePlacements = (Array.isArray(placements) && placements.length > 0) ? placements : [];
 
     // Compute live chart dynamics
-    const analysis = compute7LayerAnalysis(placements, lagnaSign);
-    const yogas = computeComprehensiveYogas(placements, lagnaSign);
-    const gemstones = evaluateComprehensiveGemstonesAndDhatus(placements, lagnaSign, lang);
-    const lifestyle = evaluatePermanentLifestyleConduct(placements, lagnaSign, lang);
-    const currentGoal = activeGoal || localStorage.getItem('user_goal') || 'job';
-    const goalDay = getGoalDayOffset(currentGoal);
+    const analysis = compute7LayerAnalysis(safePlacements, safeLagna);
+    const yogas = computeComprehensiveYogas(safePlacements, safeLagna);
+    const gemstones = evaluateComprehensiveGemstonesAndDhatus(safePlacements, safeLagna, lang);
+    const lifestyle = evaluatePermanentLifestyleConduct(safePlacements, safeLagna, lang);
+    const currentGoal = activeGoal || (typeof localStorage !== 'undefined' && (localStorage.getItem('user_current_view_goal') || localStorage.getItem('user_goal'))) || 'job';
+    const goalDay = (typeof getGoalDayOffset === 'function') ? getGoalDayOffset(currentGoal) : 1;
 
-    // Intent Classification
-    const isGemstoneQuery = q.includes('stone') || q.includes('gem') || q.includes('panna') || q.includes('pukhraj') ||
-      q.includes('ruby') || q.includes('moti') || q.includes('pearl') || q.includes('diamond') || q.includes('neelam') ||
-      q.includes('gomed') || q.includes('moonga') || q.includes('coral') || q.includes('रत्न') || q.includes('माणिक') ||
-      q.includes('मोती') || q.includes('मूंगा') || q.includes('पन्ना') || q.includes('पुखराज') || q.includes('नीलम');
+    // Helper to find planet
+    const getPl = name => safePlacements.find(p => p.name.toLowerCase() === name.toLowerCase());
+    const getH = name => (analysis && analysis.dignity && analysis.dignity[name]) ? analysis.dignity[name].house : null;
 
-    const isMetalQuery = q.includes('metal') || q.includes('dhatu') || q.includes('silver') || q.includes('gold') ||
-      q.includes('copper') || q.includes('iron') || q.includes('brass') || q.includes('चांदी') || q.includes('सोना') ||
-      q.includes('तांबा') || q.includes('लोहा') || q.includes('पीतल') || q.includes('धातु');
+    // ── 1. GEMSTONE INTENT ──
+    const isGemstoneQuery = q.includes('stone') || q.includes('gem') || q.includes('panna') || q.includes('emerald') ||
+      q.includes('pukhraj') || q.includes('topaz') || q.includes('ruby') || q.includes('manik') || q.includes('moti') ||
+      q.includes('pearl') || q.includes('moonstone') || q.includes('diamond') || q.includes('heera') || q.includes('zircon') ||
+      q.includes('neelam') || q.includes('sapphire') || q.includes('amethyst') || q.includes('gomed') || q.includes('hessonite') ||
+      q.includes('moonga') || q.includes('coral') || q.includes('lehsunia') || q.includes('lahsuniya') || q.includes('cats eye') ||
+      q.includes('cat\'s eye') || q.includes('chrysoberyl') || q.includes('tourmaline') || q.includes('peridot') || q.includes('citrine') ||
+      q.includes('ring') || q.includes('anguthi') || q.includes('nagina') || q.includes('ratna') || q.includes('ratan') ||
+      q.includes('रत्न') || q.includes('माणिक') || q.includes('मोती') || q.includes('मूंगा') || q.includes('पन्ना') ||
+      q.includes('पुखराज') || q.includes('नीलम') || q.includes('हीरा') || q.includes('गोमेद') || q.includes('लहसुनिया') ||
+      q.includes('अंगूठी') || q.includes('नगीना');
 
-    const isDaridraOrWealthQuery = q.includes('daridra') || q.includes('debt') || q.includes('money') || q.includes('wealth') ||
-      q.includes('loan') || q.includes('rina') || q.includes('loss') || q.includes('दरिद्र') || q.includes('कर्ज') ||
-      q.includes('ऋण') || q.includes('धन') || q.includes('पैसा') || q.includes('नुकसान');
-
-    const isDietQuery = q.includes('milk') || q.includes('doodh') || q.includes('alcohol') || q.includes('sharab') ||
-      q.includes('drink') || q.includes('non veg') || q.includes('meat') || q.includes('haldi') || q.includes('दूध') ||
-      q.includes('शराब') || q.includes('मांस') || q.includes('हल्दी') || q.includes('भोजन') || q.includes('खान');
-
-    const isRelationQuery = q.includes('father') || q.includes('mother') || q.includes('in law') || q.includes('sasural') ||
-      q.includes('sali') || q.includes('wife') || q.includes('husband') || q.includes('spouse') || q.includes('pita') ||
-      q.includes('mata') || q.includes('saas') || q.includes('रिश्ते') || q.includes('पिता') || q.includes('माता') ||
-      q.includes('साली') || q.includes('ससुराल') || q.includes('पत्नी') || q.includes('पति');
-
-    const isGoalOrRoadmapQuery = q.includes('goal') || q.includes('90') || q.includes('task') || q.includes('today') ||
-      q.includes('job') || q.includes('business') || q.includes('career') || q.includes('लक्ष्य') || q.includes('कार्य') ||
-      q.includes('आज') || q.includes('नौकरी') || q.includes('व्यापार');
-
-    const isSadeSatiQuery = q.includes('sade sati') || q.includes('saturn') || q.includes('shani') || q.includes('साढ़े साती') ||
-      q.includes('शनि');
-
-    const isDoshaQuery = q.includes('mangal') || q.includes('manglik') || q.includes('kaal sarp') || q.includes('kemdrum') ||
-      q.includes('pitra') || q.includes('दोष') || q.includes('मंगल') || q.includes('मांगलिक') || q.includes('काल सर्प');
-
-    // ── ROUTE 1: GEMSTONE / RATNA QUERY ──
     if (isGemstoneQuery) {
-      const rec = gemstones.recommendedRatnas.map(r => `* **${isHi ? r.ratnaHi : r.ratna}**: ${isHi ? r.metalHi : r.metal} (${isHi ? r.reasonHi : r.reasonEn})`).join('\n');
-      const blk = gemstones.prohibitedRatnas.map(b => `* **${isHi ? b.ratnaHi : b.ratna}**: ${isHi ? b.reasonHi : b.reasonEn}`).join('\n');
-
+      const rec = (gemstones.recommendedRatnas || []).map(r => `* **${isHi ? r.ratnaHi : r.ratna}**: ${isHi ? r.metalHi : r.metal} (${isHi ? r.reasonHi : r.reasonEn})`).join('\n');
+      const blk = (gemstones.prohibitedRatnas || []).map(b => `* **${isHi ? b.ratnaHi : b.ratna}**: ${isHi ? b.reasonHi : b.reasonEn}`).join('\n');
       if (isHi) {
         return `### ${userName} जी, आपकी कुंडली (${lagnaNameHi} लग्न) हेतु संपूर्ण रत्न विश्लेषण:\n\n` +
-          `**अनुकूल एवं शुभ रत्न:**\n${rec}\n\n` +
-          `**सख्त वर्जित एवं हानिकारक रत्न:**\n${blk}\n\n` +
+          `**अनुकूल एवं शुभ रत्न:**\n${rec || '* कोई विशेष रत्न आवश्यक नहीं है।'}\n\n` +
+          `**सख्त वर्जित एवं हानिकारक रत्न:**\n${blk || '* कोई विशेष रत्न वर्जित नहीं है।'}\n\n` +
           `> **विशेष वैदिक नियम:** कभी भी परस्पर शत्रु ग्रहों के रत्न (जैसे माणिक्य और नीलम) एक साथ धारण न करें। रत्न को सदैव शुक्ल पक्ष में शुभ नक्षत्र व मुहूर्त में ही प्राण-प्रतिष्ठित करवाकर धारण करें।`;
       } else {
         return `### Comprehensive Gemstone Analysis for ${userName} (${lagnaName} Ascendant):\n\n` +
-          `**Auspicious & Recommended Gemstones:**\n${rec}\n\n` +
-          `**Strictly Contraindicated (Harmful) Stones:**\n${blk}\n\n` +
+          `**Auspicious & Recommended Gemstones:**\n${rec || '* No primary gemstone required.*'}\n\n` +
+          `**Strictly Contraindicated (Harmful) Stones:**\n${blk || '* None.*'}\n\n` +
           `> **Vedic Synergy Rule:** Never combine stones of natural planetary adversaries (e.g. Ruby with Blue Sapphire). Always consecrate gemstones in Shukla Paksha during the auspicious planetary Hora.`;
       }
     }
 
-    // ── ROUTE 2: METAL / DHATU QUERY ──
+    // ── 2. METAL INTENT ──
+    const isMetalQuery = q.includes('metal') || q.includes('dhatu') || q.includes('silver') || q.includes('chandi') ||
+      q.includes('gold') || q.includes('sona') || q.includes('copper') || q.includes('tamba') || q.includes('iron') ||
+      q.includes('loha') || q.includes('brass') || q.includes('pital') || q.includes('kansa') || q.includes('lead') ||
+      q.includes('ranga') || q.includes('panchdhatu') || q.includes('ashtadhatu') || q.includes('chhalla') ||
+      q.includes('चांदी') || q.includes('सोना') || q.includes('तांबा') || q.includes('लोहा') || q.includes('पीतल') ||
+      q.includes('धातु') || q.includes('कांसा') || q.includes('रांगा') || q.includes('पंचधातु') || q.includes('अष्टधातु') || q.includes('छल्ला');
+
     if (isMetalQuery) {
       const isBanned = gemstones.isSilverBanned;
       if (isHi) {
@@ -17492,21 +17496,78 @@ document.addEventListener('DOMContentLoaded', handleOAuthCallback);
           `* **सोना (Gold):** देवगुरु बृहस्पति और सूर्य की धातु। तर्जनी में हल्का सोने का छल्ला या पीला धागा पहनना शुभ फलदायी है।\n` +
           `* **तांबा (Copper):** सूर्य व मंगल की ऊर्जा। प्रातः सूर्य अर्घ्य हेतु अत्यंत शुभ।\n` +
           `* **पीतल (Brass):** गुरु की सात्विक धातु। मानसिक चंचलता को शांत करने हेतु श्रेष्ठ।\n` +
-          `* **लोहा (Iron):** शनिवार को छाया दान हेतु उत्तम; बिना ज्योतिषी परामर्श के लगातार लोहे का छल्ला न पहनें।`;
+          `* **लोहा (Iron):** शनिवार को छाया दान हेतु उत्तम; बिना ज्योतिषी परामर्श के लगातार लोहे का छल्ला न पहनें।\n` +
+          `* **कांसा व पंचधातु:** बुध व मिश्रित शुभ ग्रहों के संतुलन हेतु प्रयोग किया जाता है।`;
       } else {
         return `### Dhatu (Metal) Safety Analysis for ${userName} (${lagnaName} Ascendant):\n\n` +
           `* **Silver (Chandi):** ${isBanned ? '**STRICTLY BANNED** - Due to 12th/8th house vulnerability, holding or wearing silver acts as an energetic conductor leaking accumulated savings.' : '**SAFE & AUSPICIOUS** - Fosters emotional serenity and steady wealth retention.'}\n` +
           `* **Gold (Swarna):** Governed by Jupiter and Sun. Wearing a light gold band on the index finger amplifies moral authority and divine discernment.\n` +
           `* **Copper (Tamba):** Channels vital solar/martian stamina. Highly recommended for morning solar arghya.\n` +
           `* **Brass (Pital):** Sattvic alloy of Jupiter. Excellent for grounding agitated thoughts and keeping wealth stable.\n` +
-          `* **Iron (Loha):** Optimal for Saturday Chhaya Daan; avoid continuous iron rings unless Saturn is seated in an Upachaya house.`;
+          `* **Iron (Loha):** Optimal for Saturday Chhaya Daan; avoid continuous iron rings unless Saturn is seated in an Upachaya house.\n` +
+          `* **Panchadhatu / Bell Metal (Kansa):** Balances Mercury and provides energetic shielding.`;
       }
     }
 
-    // ── ROUTE 3: DARIDRA YOGA & WEALTH DRAINAGE ──
+    // ── 3. DIET & MILK INTENT ──
+    const isDietQuery = q.includes('milk') || q.includes('doodh') || q.includes('dudh') || q.includes('alcohol') ||
+      q.includes('sharab') || q.includes('daaru') || q.includes('daru') || q.includes('drink') || q.includes('non veg') ||
+      q.includes('nonveg') || q.includes('meat') || q.includes('chicken') || q.includes('fish') || q.includes('egg') ||
+      q.includes('haldi') || q.includes('turmeric') || q.includes('garlic') || q.includes('onion') || q.includes('vegetarian') ||
+      q.includes('shakahar') || q.includes('mansahar') || q.includes('peena') || q.includes('khana') ||
+      q.includes('दूध') || q.includes('शराब') || q.includes('दारू') || q.includes('मांस') || q.includes('हल्दी') ||
+      q.includes('भोजन') || q.includes('खान') || q.includes('लहसुन') || q.includes('प्याज') || q.includes('अंडा') ||
+      q.includes('नॉनवेज') || q.includes('शाकाहार') || q.includes('मांसाहार');
+
+    if (isDietQuery) {
+      const dRules = (lifestyle.dietaryRules || []).map(d => `* **${d.category}:** ${isHi ? d.ruleHi : d.ruleEn}`).join('\n\n');
+      if (isHi) {
+        return `### स्थायी आचार संहिता — खानपान एवं आहार नियम (${userName}):\n\n${dRules}\n\n` +
+          `> **वैदिक सिद्धांत:** आहार शुद्धि से ही सत्व शुद्धि होती है। जब आप अपने पीड़ित ग्रहों के अनुसार खानपान नियंत्रित करते हैं, तो ग्रहों की नकारात्मक रश्मियां शांत हो जाती हैं।`;
+      } else {
+        return `### Permanent Dietary Disciplines (Ahar Niyam) for ${userName}:\n\n${dRules}\n\n` +
+          `> **Vedic Core Principle:** Dietary discipline creates spiritual purity. Aligning your food and drink to pacify afflicted planets neutralizes negative astral vibrations at their physical root.`;
+      }
+    }
+
+    // ── 4. RELATIONAL KARMA INTENT ──
+    const isRelationQuery = q.includes('father') || q.includes('pita') || q.includes('pitaji') || q.includes('mother') ||
+      q.includes('mata') || q.includes('mataji') || q.includes('in law') || q.includes('inlaw') || q.includes('sasural') ||
+      q.includes('saas') || q.includes('sasur') || q.includes('sali') || q.includes('saali') || q.includes('wife') ||
+      q.includes('patni') || q.includes('husband') || q.includes('pati') || q.includes('spouse') || q.includes('jeevansathi') ||
+      q.includes('brother') || q.includes('bhai') || q.includes('sister') || q.includes('behen') || q.includes('behan') ||
+      q.includes('bhabhi') || q.includes('chacha') || q.includes('chachi') || q.includes('mama') || q.includes('mami') ||
+      q.includes('mausi') || q.includes('nana') || q.includes('nani') || q.includes('dada') || q.includes('dadi') ||
+      q.includes('laborers') || q.includes('servant') || q.includes('naukar') || q.includes('rishte') ||
+      q.includes('रिश्ते') || q.includes('पिता') || q.includes('माता') || q.includes('साली') || q.includes('ससुराल') ||
+      q.includes('सास') || q.includes('ससुर') || q.includes('पत्नी') || q.includes('पति') || q.includes('भाई') ||
+      q.includes('बहन') || q.includes('चाचा') || q.includes('मामा') || q.includes('मौसी') || q.includes('नाना') ||
+      q.includes('दादा') || q.includes('नौकर');
+
+    if (isRelationQuery) {
+      const rRules = (lifestyle.relationalRules || []).map(r => `* **${isHi ? r.relationHi : r.relationEn}:**\n  ${isHi ? r.conductHi : r.conductEn}`).join('\n\n');
+      if (isHi) {
+        return `### स्थायी रिश्तेदार एवं संबंध संरेखन (संबंध कर्म):\n\n${rRules}\n\n` +
+          `> **लाल किताब रहस्य:** रिश्ते केवल सामाजिक नहीं होते, प्रत्येक रिश्तेदार किसी न किसी ग्रह का साक्षात प्रतीक है। संबंधित रिश्तेदार का आदर करने से वह ग्रह स्वतः प्रसन्न होकर राजयोग देने लगता है।`;
+      } else {
+        return `### Permanent Relational Conduct Upayas (Living Karma) for ${userName}:\n\n${rRules}\n\n` +
+          `> **Lal Kitab Secret:** Family members are living embodiments of planetary energies. Treating each relative with their designated scriptural honor directly transmutes harsh planetary malice into benevolent blessings.`;
+      }
+    }
+
+    // ── 5. WEALTH & DARIDRA YOGA INTENT ──
+    const isDaridraOrWealthQuery = q.includes('daridra') || q.includes('debt') || q.includes('karz') || q.includes('karza') ||
+      q.includes('rin') || q.includes('rina') || q.includes('loan') || q.includes('money') || q.includes('wealth') ||
+      q.includes('dhan') || q.includes('paisa') || q.includes('rupiya') || q.includes('loss') || q.includes('nuksan') ||
+      q.includes('kharcha') || q.includes('karcha') || q.includes('amdani') || q.includes('aamdani') || q.includes('poverty') ||
+      q.includes('bankruptcy') || q.includes('kangali') || q.includes('barakat') || q.includes('daridrata') ||
+      q.includes('दरिद्र') || q.includes('कर्ज') || q.includes('ऋण') || q.includes('धन') || q.includes('पैसा') ||
+      q.includes('नुकसान') || q.includes('खर्च') || q.includes('आवक') || q.includes('कमाई') || q.includes('कंगाली') ||
+      q.includes('दरिद्रता') || q.includes('बरकत') || q.includes('आर्थिक');
+
     if (isDaridraOrWealthQuery) {
-      const daridraList = yogas.ashubhYogas.filter(y => y.type === 'Daridra' || y.type === 'Rina' || y.type === 'Shakata');
-      const shubhWealth = yogas.shubhYogas.filter(y => y.name.includes('Lakshmi') || y.name.includes('Dhana') || y.name.includes('Gajakesari'));
+      const daridraList = (yogas.ashubhYogas || []).filter(y => y.type === 'Daridra' || y.type === 'Rina' || y.type === 'Shakata');
+      const shubhWealth = (yogas.shubhYogas || []).filter(y => y.name.includes('Lakshmi') || y.name.includes('Dhana') || y.name.includes('Gajakesari'));
 
       if (daridraList.length === 0) {
         if (isHi) {
@@ -17534,56 +17595,14 @@ document.addEventListener('DOMContentLoaded', handleOAuthCallback);
       }
     }
 
-    // ── ROUTE 4: DIETARY RULES (MILK, ALCOHOL, FOOD) ──
-    if (isDietQuery) {
-      const dRules = lifestyle.dietaryRules.map(d => `* **${d.category}:** ${isHi ? d.ruleHi : d.ruleEn}`).join('\n\n');
-      if (isHi) {
-        return `### स्थायी आचार संहिता — खानपान एवं आहार नियम (${userName}):\n\n${dRules}\n\n` +
-          `> **वैदिक सिद्धांत:** आहार शुद्धि से ही सत्व शुद्धि होती है। जब आप अपने पीड़ित ग्रहों के अनुसार खानपान नियंत्रित करते हैं, तो ग्रहों की नकारात्मक रश्मियां शांत हो जाती हैं।`;
-      } else {
-        return `### Permanent Dietary Disciplines (Ahar Niyam) for ${userName}:\n\n${dRules}\n\n` +
-          `> **Vedic Core Principle:** Dietary discipline creates spiritual purity. Aligning your food and drink to pacify afflicted planets neutralizes negative astral vibrations at their physical root.`;
-      }
-    }
+    // ── 6. SHANI SADE SATI INTENT ──
+    const isSadeSatiQuery = q.includes('sade sati') || q.includes('sadesati') || q.includes('shani') || q.includes('saturn') ||
+      q.includes('dhaiya') || q.includes('dhayya') || q.includes('kantak') || q.includes('ashtam') || q.includes('panoti') ||
+      q.includes('panauti') || q.includes('साढ़े साती') || q.includes('शनि') || q.includes('ढैय्या') || q.includes('कंटक') ||
+      q.includes('अष्टम शनि') || q.includes('पनौती');
 
-    // ── ROUTE 5: RELATIONAL CONDUCT (MATA, PITA, SALI, IN-LAWS) ──
-    if (isRelationQuery) {
-      const rRules = lifestyle.relationalRules.map(r => `* **${isHi ? r.relationHi : r.relationEn}:**\n  ${isHi ? r.conductHi : r.conductEn}`).join('\n\n');
-      if (isHi) {
-        return `### स्थायी रिश्तेदार एवं संबंध संरेखन (संबंध कर्म):\n\n${rRules}\n\n` +
-          `> **लाल किताब रहस्य:** रिश्ते केवल सामाजिक नहीं होते, प्रत्येक रिश्तेदार किसी न किसी ग्रह का साक्षात प्रतीक है। संबंधित रिश्तेदार का आदर करने से वह ग्रह स्वतः प्रसन्न होकर राजयोग देने लगता है।`;
-      } else {
-        return `### Permanent Relational Conduct Upayas (Living Karma) for ${userName}:\n\n${rRules}\n\n` +
-          `> **Lal Kitab Secret:** Family members are living embodiments of planetary energies. Treating each relative with their designated scriptural honor directly transmutes harsh planetary malice into benevolent blessings.`;
-      }
-    }
-
-    // ── ROUTE 6: GOAL & ROADMAP QUERY ──
-    if (isGoalOrRoadmapQuery) {
-      const activeGoals = getActiveGoalsList();
-      const goalSummaries = activeGoals.map(g => {
-        const d = getGoalDayOffset(g);
-        return isHi
-          ? `* **लक्ष्य [${g.toUpperCase()}]:** दिन ${d} / 90 (स्वतंत्र 90-दिवसीय चक्र)`
-          : `* **Goal [${g.toUpperCase()}]:** Day ${d} of 90 (Running on independent 90-day cycle)`;
-      }).join('\n');
-
-      if (isHi) {
-        return `### सक्रिय 90-दिवसीय लक्ष्य एवं दैनिक प्रगति (${userName}):\n\n${goalSummaries}\n\n` +
-          `वर्तमान में आप अपने प्राथमिक लक्ष्य (**${currentGoal.toUpperCase()}**) के **दिन ${goalDay}** पर हैं।\n\n` +
-          `* **आज का मुख्य सिद्धांत:** कर्म शुद्धि के साथ दैनिक मंत्र और व्यावहारिक कार्य पूर्ण करें।\n` +
-          `* **मल्टी-गोल ट्रैकिंग:** आपका दूसरा लक्ष्य अपने स्वतंत्र समय पर चल रहा है और इसका कोई पिछला रिकॉर्ड नहीं मिटाया गया है।`;
-      } else {
-        return `### Active 90-Day Roadmap Progress for ${userName}:\n\n${goalSummaries}\n\n` +
-          `You are currently focused on **Day ${goalDay} of 90** for your **${currentGoal.toUpperCase()}** milestone.\n\n` +
-          `* **Independent Progression:** Each active goal runs on its own staggered 90-day clock with zero overwrite of historical days.\n` +
-          `* **Daily Focus:** Complete today's 4 daily quests on the Home dashboard to maintain your cosmic streak and level up your XP.`;
-      }
-    }
-
-    // ── ROUTE 7: SADE SATI / SATURN TRANSIT ──
     if (isSadeSatiQuery) {
-      const moonPl = placements.find(p => p.name === 'Moon');
+      const moonPl = getPl('Moon');
       const now = new Date();
       const todayJd = (typeof global.getJulianDay === 'function')
         ? global.getJulianDay(now.getFullYear(), now.getMonth() + 1, now.getDate(), 12, 0, 5.5)
@@ -17616,6 +17635,242 @@ document.addEventListener('DOMContentLoaded', handleOAuthCallback);
       }
     }
 
+    // ── 7. DOSHAS INTENT (MANGLIK, KAAL SARP, KEMDRUM, PITRA, VISH) ──
+    const isDoshaQuery = q.includes('mangal') || q.includes('manglik') || q.includes('kaal sarp') || q.includes('kalsarp') ||
+      q.includes('kemdrum') || q.includes('pitra') || q.includes('pitru') || q.includes('grahan') || q.includes('chandal') ||
+      q.includes('guru chandal') || q.includes('vish yoga') || q.includes('dosha') ||
+      q.includes('दोष') || q.includes('मंगल') || q.includes('मांगलिक') || q.includes('काल सर्प') || q.includes('केमद्रुम') ||
+      q.includes('पितृ') || q.includes('ग्रहण') || q.includes('चांडाल') || q.includes('विष योग');
+
+    if (isDoshaQuery) {
+      const marsH = getH('Mars');
+      const satH = getH('Saturn');
+      const moonH = getH('Moon');
+      const jupH = getH('Jupiter');
+      const rahuH = getH('Rahu');
+
+      const isManglik = marsH && [1, 4, 7, 8, 12].includes(marsH);
+      const isVishYoga = satH && moonH && (satH === moonH);
+      const isGuruChandal = jupH && rahuH && (jupH === rahuH);
+
+      if (isHi) {
+        return `### कुंडली के मुख्य दोष एवं वैदिक शांति उपाय (${userName}):\n\n` +
+          `* **मांगलिक दोष:** ${isManglik ? `**सक्रिय (मंगल ${marsH}वें भाव में)** - विवाह पूर्व गुण मिलान एवं कुंभ विवाह / मंगलवार को सुंदरकांड का पाठ आवश्यक है।` : '**दोष मुक्त** - मंगल केंद्र/त्रिक में मांगलिक प्रभाव नहीं बना रहा है।'}\n` +
+          `* **शनि-चन्द्र विष योग:** ${isVishYoga ? '**सक्रिय (शनि-चन्द्र युति)** - मानसिक तनाव व अवसाद की संभावना। उपाय: सोमवार को शिव पंचाक्षर स्तोत्र व दुग्ध-मिश्रित जल अर्पण।' : '**दोष मुक्त** - चन्द्रमा शनि की युति से सुरक्षित है।'}\n` +
+          `* **गुरु चांडाल योग:** ${isGuruChandal ? '**सक्रिय (गुरु-राहु युति)** - निर्णय क्षमता में भटकाव। उपाय: गुरुवार को हल्दी या चने की दाल का दान।' : '**दोष मुक्त** - देवगुरु राहु के बंधन से मुक्त हैं।'}\n\n` +
+          `> **वैदिक संरेखन:** किसी भी दोष से भयभीत न हों; सात्विक आचरण और नियमित देव उपासना से दोषों का प्रभाव स्वतः क्षीण हो जाता है।`;
+      } else {
+        return `### Principal Planetary Doshas & Classical Rectification for ${userName}:\n\n` +
+          `* **Manglik Dosha:** ${isManglik ? `**ACTIVE (Mars in House ${marsH})** - Requires balanced Gun Milan prior to marriage. Recite Sundarkand on Tuesdays.` : '**NOT PRESENT** - Mars occupies a non-afflicting house.'}\n` +
+          `* **Shani-Chandra Vish Yoga:** ${isVishYoga ? '**ACTIVE (Saturn-Moon Conjunction)** - Tends to generate psychological brooding. Remedy: Shiva Abhishek on Mondays.' : '**NOT PRESENT** - Natal Moon is unencumbered by Saturn.'}\n` +
+          `* **Guru Chandal Yoga:** ${isGuruChandal ? '**ACTIVE (Jupiter-Rahu Conjunction)** - Can obscure philosophical clarity. Remedy: Offer yellow chana dal to elders on Thursdays.' : '**NOT PRESENT** - Jupiter operates with unhindered benevolence.'}\n\n` +
+          `> **Parashari Guidance:** Vedic doshas are soul tests, not curses. Regular japa and ethical living transmute afflictions into spiritual maturity.`;
+      }
+    }
+
+    // ── 8. CAREER, BUSINESS & PROMOTION INTENT ──
+    const isCareerQuery = q.includes('career') || q.includes('job') || q.includes('naukri') || q.includes('naukari') ||
+      q.includes('promotion') || q.includes('interview') || q.includes('business') || q.includes('vyapar') ||
+      q.includes('vyavasay') || q.includes('office') || q.includes('work') || q.includes('profession') ||
+      q.includes('kamai') || q.includes('sarkari') || q.includes('government job') ||
+      q.includes('पदोन्नति') || q.includes('सरकारी नौकरी') || q.includes('नौकरी') || q.includes('व्यवसाय') ||
+      q.includes('व्यापार') || q.includes('करियर') || q.includes('पद') || q.includes('आजीविका');
+
+    if (isCareerQuery) {
+      const h10Sign = (safeLagna + 9) % 12;
+      const h10Lord = SIGN_LORDS[h10Sign];
+      const h10LordHi = SIGN_LORDS_HI[h10Sign];
+      const h10LordHouse = getH(h10Lord) || 10;
+      const sunH = getH('Sun');
+
+      if (isHi) {
+        return `### करियर, नौकरी एवं व्यावसायिक विश्लेषण (${userName}):\n\n` +
+          `* **कर्म भाव (10वां भाव):** ${SIGN_NAMES_HI[h10Sign]} राशि (दशमेश: **${h10LordHi}**)\n` +
+          `* **दशमेश की स्थिति:** ${h10LordHouse}वें भाव में स्थित\n` +
+          `* **सूर्य की स्थिति (सत्ता व नेतृत्व):** ${sunH ? `${sunH}वें भाव में` : 'शुभ'}\n\n` +
+          `**करियर उन्नति हेतु अचूक उपाय:**\n` +
+          `1. **दशमेश मंत्र:** दशमेश ${h10LordHi} के बीज मंत्र का नित्य 108 बार जाप करें।\n` +
+          `2. **सूर्य अर्घ्य:** प्रतिदिन प्रातः तांबे के लोटे से सूर्य को जल अर्पित करें (सरकारी व प्रशासनिक सफलता हेतु)।\n` +
+          `3. **शुभ व्यावसायिक होरा:** महत्वपूर्ण अनुबंध व साक्षात्कार दशमेश की होरा या सूर्य/गुरु होरा में ही निर्धारित करें।`;
+      } else {
+        return `### Career, Profession & Business Strategy for ${userName}:\n\n` +
+          `* **10th House (Karma Bhava):** ${SIGN_NAMES[h10Sign]} (10th Lord: **${h10Lord}**)\n` +
+          `* **10th Lord Placement:** Situated in House ${h10LordHouse}\n` +
+          `* **Sun's Authority (Leadership & Public Standing):** ${sunH ? `House ${sunH}` : 'Direct'}\n\n` +
+          `**Career Growth Protocol:**\n` +
+          `1. **10th Lord Resonance:** Recite the seed mantra for ${h10Lord} 108 times on its planetary weekday.\n` +
+          `2. **Solar Arghya:** Offer morning water from a pure copper vessel to activate executive charisma.\n` +
+          `3. **Planetary Timing:** Schedule critical interviews, pitches, and agreements during the Hora of Jupiter or Sun.`;
+      }
+    }
+
+    // ── 9. MARRIAGE & COMPATIBILITY INTENT ──
+    const isMarriageQuery = q.includes('marriage') || q.includes('shadi') || q.includes('shaadi') || q.includes('vivah') ||
+      q.includes('jeevansathi') || q.includes('partner') || q.includes('match') || q.includes('matching') ||
+      q.includes('milan') || q.includes('gun milan') || q.includes('vivaha') || q.includes('rishta') || q.includes('wedding') ||
+      q.includes('विवाह') || q.includes('शादी') || q.includes('जीवनसाथी') || q.includes('मिलान') || q.includes('गुण मिलान') ||
+      q.includes('रिश्ता') || q.includes('वर') || q.includes('वधू');
+
+    if (isMarriageQuery) {
+      const h7Sign = (safeLagna + 6) % 12;
+      const h7Lord = SIGN_LORDS[h7Sign];
+      const h7LordHi = SIGN_LORDS_HI[h7Sign];
+      const venusH = getH('Venus');
+      const marsH = getH('Mars');
+      const isManglik = marsH && [1, 4, 7, 8, 12].includes(marsH);
+
+      if (isHi) {
+        return `### विवाह, दांपत्य एवं जीवनसाथी विश्लेषण (${userName}):\n\n` +
+          `* **सप्तम भाव (विवाह भाव):** ${SIGN_NAMES_HI[h7Sign]} (सप्तमेश: **${h7LordHi}**)\n` +
+          `* **शुक्र की स्थिति (दांपत्य कारक):** ${venusH ? `${venusH}वें भाव में` : 'शुभ'}\n` +
+          `* **मांगलिक स्थिति:** ${isManglik ? '**मांगलिक प्रभाव उपस्थित** (कुंभ विवाह या मांगलिक मिलान अनुशंसित)' : '**मांगलिक दोष रहित**'}\n\n` +
+          `**दांपत्य सुख व शीघ्र विवाह के उपाय:**\n` +
+          `1. **सप्तमेश शांति:** प्रत्येक शुक्रवार को गाय को ताजी हरी घास या सफेद पेड़ा खिलाएं।\n` +
+          `2. **गौरी-शंकर संरेखन:** सोमवार को शिव-पार्वती को सुगंधित श्वेत पुष्प अर्पित करें।\n` +
+          `3. **पत्नी/जीवनसाथी का आदर:** जीवनसाथी का अनादर न करें; शुक्रवार को सुगंधित इत्र का प्रयोग करें।`;
+      } else {
+        return `### Marriage, Partnership & Relationship Guidance for ${userName}:\n\n` +
+          `* **7th House (Kalatra Bhava):** ${SIGN_NAMES[h7Sign]} (7th Lord: **${h7Lord}**)\n` +
+          `* **Venus Placement (Karaka of Love & Conjugal Bliss):** ${venusH ? `House ${venusH}` : 'Direct'}\n` +
+          `* **Manglik Profile:** ${isManglik ? '**Manglik Influences Active** (Balanced compatibility recommended)' : '**Free of Manglik Affliction**'}\n\n` +
+          `**Marital Harmony Protocol:**\n` +
+          `1. **Venus Harmonization:** Feed a cow fresh green grass or white sweets on Friday mornings.\n` +
+          `2. **Gauri-Shankar Alignment:** Offer fragrant white flowers to Shiva-Parvati on Mondays.\n` +
+          `3. **Spousal Respect:** Never engage in bitter marital accusations; apply pure natural sandalwood or floral fragrance on Fridays.`;
+      }
+    }
+
+    // ── 10. VASTU & COMPASS DIRECTIONS INTENT ──
+    const isVastuQuery = q.includes('vastu') || q.includes('direction') || q.includes('disha') || q.includes('north') ||
+      q.includes('uttar') || q.includes('east') || q.includes('poorv') || q.includes('purva') || q.includes('south') ||
+      q.includes('dakshin') || q.includes('west') || q.includes('pashchim') || q.includes('northeast') ||
+      q.includes('ishanya') || q.includes('ishan') || q.includes('main door') || q.includes('kitchen') ||
+      q.includes('bedroom') || q.includes('toilet') ||
+      q.includes('वास्तु') || q.includes('दिशा') || q.includes('उत्तर') || q.includes('पूर्व') || q.includes('दक्षिण') ||
+      q.includes('पश्चिम') || q.includes('ईशान') || q.includes('मुख्य द्वार') || q.includes('रसोई');
+
+    if (isVastuQuery) {
+      const elements = ['Fire', 'Earth', 'Air', 'Water', 'Fire', 'Earth', 'Air', 'Water', 'Fire', 'Earth', 'Air', 'Water'];
+      const elementsHi = ['अग्नि', 'पृथ्वी', 'वायु', 'जल', 'अग्नि', 'पृथ्वी', 'वायु', 'जल', 'अग्नि', 'पृथ्वी', 'वायु', 'जल'];
+      const elem = elements[safeLagna];
+      const elemHi = elementsHi[safeLagna];
+
+      if (isHi) {
+        return `### वास्तु एवं दिशा संरेखन रिपोर्ट (${lagnaNameHi} लग्न — ${elemHi} तत्व):\n\n` +
+          `* **सर्वश्रेष्ठ कार्य दिशा:** **पूर्व (East) एवं उत्तर-पूर्व (ईशान कोण)** — मानसिक स्पष्टता एवं धन वृद्धि हेतु।\n` +
+          `* **मुख्य तिजोरी / धन स्थान:** कमरे के **दक्षिण-पश्चिम (नैऋत्य कोण)** में रखें, जिसका द्वार उत्तर दिशा की ओर खुले।\n` +
+          `* **शयन कक्ष वास्तु:** सिर सदैव दक्षिण (South) या पूर्व (East) दिशा की ओर करके सोएं; उत्तर की ओर सिर करके कभी न सोएं।\n` +
+          `* **रसोई घर (अग्नि कोण):** दक्षिण-पूर्व (South-East) में अग्नि की स्थापना सर्वोत्तम है।`;
+      } else {
+        return `### Personalized Vastu Compass Directives (${lagnaName} Ascendant — ${elem} Element):\n\n` +
+          `* **Primary Success Direction:** **East & Northeast (Ishanya)** — Optimal for work desk, meditation, and strategic planning.\n` +
+          `* **Cash Vault & Treasury Alignment:** Place safe in the **Southwest (Nairutya)** opening towards North (Kubera's quadrant).\n` +
+          `* **Master Bedroom Sleep Posture:** Sleep with crown of head towards **South or East**; avoid sleeping with head towards North.\n` +
+          `* **Kitchen Alignment:** Kitchen located in the **Southeast (Agneya)** keeps metabolic and financial vitality balanced.`;
+      }
+    }
+
+    // ── 11. LUCKY COLORS, NUMBERS & DAYS INTENT ──
+    const isLuckyQuery = q.includes('lucky') || q.includes('shubh') || q.includes('anukool') || q.includes('color') ||
+      q.includes('colour') || q.includes('rang') || q.includes('number') || q.includes('ank') || q.includes('day') ||
+      q.includes('din') || q.includes('var') || q.includes('favorable') ||
+      q.includes('शुभ रंग') || q.includes('शुभ अंक') || q.includes('शुभ दिन') || q.includes('अनुकूल') || q.includes('भाग्यशाली');
+
+    if (isLuckyQuery) {
+      const luckyData = [
+        { color: 'Red, Saffron & Yellow', colorHi: 'लाल, केसरिया व पीला', days: 'Tuesday & Sunday', daysHi: 'मंगलवार व रविवार', nums: '1, 9' }, // Aries
+        { color: 'White, Cream & Silver', colorHi: 'सफेद, क्रीम व चांदी', days: 'Friday & Wednesday', daysHi: 'शुक्रवार व बुधवार', nums: '2, 6' }, // Taurus
+        { color: 'Green & Light Yellow', colorHi: 'हरा व हल्का पीला', days: 'Wednesday & Friday', daysHi: 'बुधवार व शुक्रवार', nums: '5, 3' }, // Gemini
+        { color: 'Pearl White & Golden', colorHi: 'मोती सफेद व सुनहरा', days: 'Monday & Thursday', daysHi: 'सोमवार व गुरुवार', nums: '2, 7' }, // Cancer
+        { color: 'Gold, Orange & Ruby Red', colorHi: 'सुनहरा, नारंगी व गहरा लाल', days: 'Sunday & Tuesday', daysHi: 'रविवार व मंगलवार', nums: '1, 5' }, // Leo
+        { color: 'Emerald Green & White', colorHi: 'पन्ना हरा व सफेद', days: 'Wednesday & Saturday', daysHi: 'बुधवार व शनिवार', nums: '5, 6' }, // Virgo
+        { color: 'Pastel Blue & White', colorHi: 'हल्का नीला व श्वेत', days: 'Friday & Saturday', daysHi: 'शुक्रवार व शनिवार', nums: '6, 8' }, // Libra
+        { color: 'Bright Red & Maroon', colorHi: 'चमकीला लाल व महरून', days: 'Tuesday & Thursday', daysHi: 'मंगलवार व गुरुवार', nums: '9, 3' }, // Scorpio
+        { color: 'Yellow, Saffron & Gold', colorHi: 'पीला, केसरिया व स्वर्ण', days: 'Thursday & Sunday', daysHi: 'गुरुवार व रविवार', nums: '3, 1' }, // Sagittarius
+        { color: 'Deep Blue & Black', colorHi: 'गहरा नीला व काला', days: 'Saturday & Friday', daysHi: 'शनिवार व शुक्रवार', nums: '8, 6' }, // Capricorn
+        { color: 'Navy Blue & Violet', colorHi: 'नेवी ब्लू व बैंगनी', days: 'Saturday & Wednesday', daysHi: 'शनिवार व बुधवार', nums: '8, 5' }, // Aquarius
+        { color: 'Golden Yellow & Sea Green', colorHi: 'पीला, सुनहरा व समुद्री हरा', days: 'Thursday & Monday', daysHi: 'गुरुवार व सोमवार', nums: '3, 7' }  // Pisces
+      ];
+      const lk = luckyData[safeLagna];
+
+      if (isHi) {
+        return `### आपके शुभ रंग, अंक एवं दिन (${lagnaNameHi} लग्न - ${userName}):\n\n` +
+          `* **शुभ रंग:** **${lk.colorHi}** (सकारात्मक ऊर्जा व आत्मविश्वास संवर्धन हेतु)\n` +
+          `* **शुभ दिन:** **${lk.daysHi}** (महत्वपूर्ण कार्य एवं निवेश शुभारंभ हेतु)\n` +
+          `* **शुभ अंक (मूलांक संरेखन):** **${lk.nums}**\n` +
+          `* **इष्ट देव:** **${lagnaLordHi}** के अनुसार भगवान शिव अथवा श्री विष्णु\n\n` +
+          `> शुभ दिनों में शुभ रंगों के वस्त्र धारण करने से आपकी आभा (Aura) स्वतः ऊर्जान्वित रहती है।`;
+      } else {
+        return `### Auspicious Colors, Numbers & Days for ${userName} (${lagnaName} Ascendant):\n\n` +
+          `* **Favorable Colors:** **${lk.color}** (Enhances confidence and astral vibrance)\n` +
+          `* **Auspicious Weekdays:** **${lk.days}** (Optimal for beginning major initiatives)\n` +
+          `* **Cosmic Harmony Numbers:** **${lk.nums}**\n` +
+          `* **Guiding Deity:** Dedicated to ${lagnaLord} (Lord Shiva / Sri Vishnu)\n\n` +
+          `> Wearing your favorable colors on auspicious days strengthens your natural energetic aura.`;
+      }
+    }
+
+    // ── 12. GOAL & ROADMAP INTENT ──
+    const isGoalOrRoadmapQuery = q.includes('goal') || q.includes('90') || q.includes('task') || q.includes('today') ||
+      q.includes('job') || q.includes('business') || q.includes('career') || q.includes('roadmap') || q.includes('plan') ||
+      q.includes('quest') || q.includes('progress') || q.includes('streak') || q.includes('xp') ||
+      q.includes('लक्ष्य') || q.includes('कार्य') || q.includes('आज') || q.includes('नौकरी') || q.includes('व्यापार') ||
+      q.includes('योजना') || q.includes('दिनचर्या') || q.includes('प्रगति');
+
+    if (isGoalOrRoadmapQuery) {
+      const activeGoals = (typeof getActiveGoalsList === 'function') ? getActiveGoalsList() : [currentGoal];
+      const goalSummaries = activeGoals.map(g => {
+        const d = (typeof getGoalDayOffset === 'function') ? getGoalDayOffset(g) : 1;
+        return isHi
+          ? `* **लक्ष्य [${g.toUpperCase()}]:** दिन ${d} / 90 (स्वतंत्र 90-दिवसीय चक्र)`
+          : `* **Goal [${g.toUpperCase()}]:** Day ${d} of 90 (Running on independent 90-day cycle)`;
+      }).join('\n');
+
+      if (isHi) {
+        return `### सक्रिय 90-दिवसीय लक्ष्य एवं दैनिक प्रगति (${userName}):\n\n${goalSummaries}\n\n` +
+          `वर्तमान में आप अपने प्राथमिक लक्ष्य (**${currentGoal.toUpperCase()}**) के **दिन ${goalDay}** पर हैं।\n\n` +
+          `* **आज का मुख्य सिद्धांत:** कर्म शुद्धि के साथ दैनिक मंत्र और व्यावहारिक कार्य पूर्ण करें।\n` +
+          `* **मल्टी-गोल ट्रैकिंग:** आपका दूसरा लक्ष्य अपने स्वतंत्र समय पर चल रहा है और इसका कोई पिछला रिकॉर्ड नहीं मिटाया गया है।`;
+      } else {
+        return `### Active 90-Day Roadmap Progress for ${userName}:\n\n${goalSummaries}\n\n` +
+          `You are currently focused on **Day ${goalDay} of 90** for your **${currentGoal.toUpperCase()}** milestone.\n\n` +
+          `* **Independent Progression:** Each active goal runs on its own staggered 90-day clock with zero overwrite of historical days.\n` +
+          `* **Daily Focus:** Complete today's 4 daily quests on the Home dashboard to maintain your cosmic streak and level up your XP.`;
+      }
+    }
+
+    // ── 13. SPECIFIC PLANET DEEP-DIVE INTENT ──
+    const planetNames = ['sun', 'moon', 'mars', 'mercury', 'jupiter', 'venus', 'saturn', 'rahu', 'ketu'];
+    const planetNamesHiMap = { sun: 'सूर्य', moon: 'चन्द्र', mars: 'मंगल', mercury: 'बुध', jupiter: 'बृहस्पति', venus: 'शुक्र', saturn: 'शनि', rahu: 'राहु', ketu: 'केतु' };
+    const matchedPlanet = planetNames.find(p => q.includes(p) || q.includes(planetNamesHiMap[p]));
+
+    if (matchedPlanet) {
+      const pNameCap = matchedPlanet.charAt(0).toUpperCase() + matchedPlanet.slice(1);
+      const plObj = getPl(pNameCap);
+      const pHouse = getH(pNameCap);
+      const pDignity = (analysis && analysis.dignity && analysis.dignity[pNameCap]) ? analysis.dignity[pNameCap] : null;
+
+      if (plObj && pHouse) {
+        const pSignName = SIGN_NAMES[plObj.sign];
+        const pSignNameHi = SIGN_NAMES_HI[plObj.sign];
+        const status = pDignity ? pDignity.status : 'Normal';
+
+        if (isHi) {
+          return `### ${planetNamesHiMap[matchedPlanet]} ग्रह की आपकी कुंडली में स्थिति:\n\n` +
+            `* **भाव:** ${pHouse}वें भाव में\n` +
+            `* **राशि:** ${pSignNameHi} (${(plObj.degree || 0).toFixed(1)}°)\n` +
+            `* **अवस्था/गरिमा:** **${status}** ${plObj.isRetrograde ? '(वक्र / Retrograde)' : ''}\n\n` +
+            `> **सात्विक उपाय:** ${planetNamesHiMap[matchedPlanet]} के शुभ फल हेतु उसके नियत वार पर प्रातः उसके बीज मंत्र का पाठ करें और संबंधित रिश्तेदार का आदर करें।`;
+        } else {
+          return `### Analysis of ${pNameCap} in Your Natal Kundali:\n\n` +
+            `* **House Placement:** House ${pHouse}\n` +
+            `* **Zodiac Sign:** ${pSignName} (${(plObj.degree || 0).toFixed(1)}°)\n` +
+            `* **Astrological Dignity:** **${status}** ${plObj.isRetrograde ? '(Retrograde)' : ''}\n\n` +
+            `> **Empowerment Protocol:** Recite the seed mantra for ${pNameCap} on its planetary day and observe designated relational conduct to align its energetic vibrations.`;
+        }
+      }
+    }
+
     // ── DEFAULT: GENERAL COMPREHENSIVE KUNDALI SYNTHESIS ──
     const dashaInfo = (typeof global.currentDashaInfo !== 'undefined') ? global.currentDashaInfo : null;
     const dashaLord = dashaInfo ? dashaInfo.mahadasha : lagnaLord;
@@ -17632,7 +17887,7 @@ document.addEventListener('DOMContentLoaded', handleOAuthCallback);
         `2. *"मेरी कुंडली में दरिद्र योग या कर्ज के उपाय क्या हैं?"*\n` +
         `3. *"मुझे रात में दूध पीना चाहिए या नहीं?"*\n` +
         `4. *"ससुराल व रिश्तेदारों से संबंधित क्या सावधानियां रखनी चाहिए?"*\n` +
-        `5. *"मेरे व्यापार/करियर हेतु शुभ होरा और उपाय बताएं।"*`;
+        `5. *"मेरे करियर/नौकरी और विवाह हेतु शुभ समय व उपाय बताएं।"*`;
     } else {
       return `### Namaste ${userName}! Personalized Cosmic Intelligence Summary:\n\n` +
         `* **Ascendant (Lagna):** ${lagnaName} (Lagna Lord: ${lagnaLord})\n` +
@@ -17644,11 +17899,10 @@ document.addEventListener('DOMContentLoaded', handleOAuthCallback);
         `2. *"Do I have Daridra Yoga or debt leakages in my chart?"*\n` +
         `3. *"What are my nighttime milk and dietary rules?"*\n` +
         `4. *"What conduct should I maintain with in-laws or relatives?"*\n` +
-        `5. *"What are my best remedies for career and wealth expansion?"*`;
+        `5. *"What are my best remedies for career, marriage, and wealth expansion?"*`;
     }
   }
 
-  // Export to global environment
   global.CosmoVedicEngine = {
     compute7LayerAnalysis,
     computeComprehensiveYogas,
