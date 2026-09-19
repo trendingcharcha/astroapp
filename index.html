@@ -30,7 +30,7 @@
 // Clears: localStorage, sessionStorage, browser HTTP cache, SW cache.
 // ═══════════════════════════════════════════════════════════════
 (function() {
-var APP_CACHE_VER = 'cv_20260919_ASTROCHAT_FIX_V1030';
+var APP_CACHE_VER = 'cv_20260919_GEMSTONE_DUSTHANA_FIX_V1031';
 
 // ── STEP 1: Detect old version or garbled localStorage ──────
 var storedVer = '';
@@ -17118,8 +17118,15 @@ if (document.readyState === 'loading') {
       const cat = GEMSTONE_CATALOGUE[pName];
       if (!cat) return;
 
-      const isFavorable = lagnaProfile.benefics.includes(pName);
-      const isAdverse = lagnaProfile.malefics.includes(pName);
+      const pl = (placements || []).find(p => p.name === pName);
+      const house = (pl && typeof pl.sign === 'number') ? (((pl.sign - lagnaSign + 12) % 12) + 1) : null;
+      const dData = DIGNITY_MAP[pName];
+      const isDebilitated = (pl && dData) ? (pl.sign === dData.debil) : false;
+      const isAdverseByLagna = lagnaProfile.malefics.includes(pName);
+      const isBeneficByLagna = lagnaProfile.benefics.includes(pName);
+
+      // Classical Dusthana Check: Houses 6, 8, 12 (Universal Ratna Shastra Rule)
+      const isDusthana = (house === 6 || house === 8 || house === 12);
 
       // Safe metal resolution factoring in Dhatu safety
       let safeMetalEn = cat.primaryMetal;
@@ -17129,7 +17136,46 @@ if (document.readyState === 'loading') {
         safeMetalHi = safeMetalHi.replace(/चांदी/gi, 'सफेद सोना / प्लैटिनम / अष्टधातु');
       }
 
-      if (isFavorable) {
+      if (isDusthana) {
+        let dusthanaReasonEn = '';
+        let dusthanaReasonHi = '';
+        if (house === 12) {
+          dusthanaReasonEn = `${pName} is placed in House 12 (Vyaya Bhava - House of Expenditure & Loss). Wearing ${cat.ratna} or its substitutes will energize and activate the 12th house, triggering severe wealth drainage, uncontrolled expenses, hospitalizations, and mental dissipation. Strictly contraindicated.`;
+          dusthanaReasonHi = `${pName} आपकी कुंडली के द्वादश भाव (व्यय व हानि भाव) में स्थित हैं। ${cat.ratnaHi} अथवा इसके उप-रत्न धारण करने से 12वां भाव सक्रिय हो जाएगा, जिससे संचित धन का तीव्र अपव्यय, अचानक नुकसान, मानसिक अशांति व खर्चों में भारी वृद्धि होगी। यह रत्न पूर्णतः वर्जित है।`;
+        } else if (house === 8) {
+          dusthanaReasonEn = `${pName} is placed in House 8 (Randhra Bhava - Chronic Crises & Sudden Perils). Wearing ${cat.ratna} will activate the 8th house, attracting sudden crises, health perils, or emotional turmoil. Strictly contraindicated.`;
+          dusthanaReasonHi = `${pName} आपकी कुंडली के अष्टम भाव (आयु व संकट भाव) में स्थित हैं। ${cat.ratnaHi} धारण करने से 8वां भाव सक्रिय होगा, जिससे अचानक संकट, स्वास्थ्य बाधाएं व मानसिक कष्ट बढ़ सकते हैं। यह रत्न पूर्णतः वर्जित है।`;
+        } else if (house === 6) {
+          dusthanaReasonEn = `${pName} is placed in House 6 (Roga, Rina, Shatru Bhava - Debts, Disease & Adversaries). Wearing ${cat.ratna} will activate the 6th house, aggravating debts, health issues, and disputes. Strictly contraindicated.`;
+          dusthanaReasonHi = `${pName} आपकी कुंडली के छठे भाव (रोग, ऋण व शत्रु भाव) में स्थित हैं। ${cat.ratnaHi} धारण करने से छठा भाव सक्रिय होगा, जिससे कर्ज, स्वास्थ्य समस्याएं व शत्रु बाधाएं बढ़ेंगी। यह रत्न पूर्णतः वर्जित है।`;
+        }
+        prohibitedRatnas.push({
+          planet: pName,
+          ratna: cat.ratna,
+          ratnaHi: cat.ratnaHi,
+          house,
+          reasonEn: dusthanaReasonEn,
+          reasonHi: dusthanaReasonHi
+        });
+      } else if (isDebilitated) {
+        prohibitedRatnas.push({
+          planet: pName,
+          ratna: cat.ratna,
+          ratnaHi: cat.ratnaHi,
+          house,
+          reasonEn: `${pName} is in its Debilitation Sign (${SIGN_NAMES[pl.sign]} - Neecha). Wearing ${cat.ratna} will radiate weakened, afflicted cosmic wavelengths into your aura. Strictly contraindicated.`,
+          reasonHi: `${pName} आपकी कुंडली में नीच राशि (${SIGN_NAMES_HI[pl.sign]}) में स्थित हैं। नीच ग्रह का रत्न धारण करने से नकारात्मक व क्षीण ऊर्जा बढ़ती है। यह रत्न पूर्णतः वर्जित है।`
+        });
+      } else if (isAdverseByLagna) {
+        prohibitedRatnas.push({
+          planet: pName,
+          ratna: cat.ratna,
+          ratnaHi: cat.ratnaHi,
+          house,
+          reasonEn: `${pName} rules inauspicious or Maraka houses for ${lagnaName} Ascendant. Wearing ${cat.ratna} will stimulate acute financial obstacles, litigation, or vitality leakage. Strictly contraindicated.`,
+          reasonHi: `${pName} ${lagnaNameHi} लग्न के लिए मारक अथवा अशुभ भाव के स्वामी हैं। इनका रत्न धारण करने से धन हानि, विवाद या स्वास्थ्य समस्याएं बढ़ सकती हैं। यह पूर्णतः वर्जित है।`
+        });
+      } else if (isBeneficByLagna) {
         recommendedRatnas.push({
           planet: pName,
           ratna: cat.ratna,
@@ -17141,16 +17187,9 @@ if (document.readyState === 'loading') {
           finger: cat.finger,
           day: cat.day,
           mantra: cat.mantra,
-          reasonEn: `${pName} is a Functional Benefic for ${lagnaName} Ascendant. Wearing its consecrated gemstone channels vital vigor, intellectual clarity, and fortune.`,
-          reasonHi: `${pName} ${lagnaNameHi} लग्न के लिए शुभ कारक ग्रह हैं। इनका अभिमंत्रित रत्न धारण करने से कार्यसिद्धि व ऊर्जा में वृद्धि होती है।`
-        });
-      } else if (isAdverse) {
-        prohibitedRatnas.push({
-          planet: pName,
-          ratna: cat.ratna,
-          ratnaHi: cat.ratnaHi,
-          reasonEn: `${pName} rules inauspicious or Maraka houses for ${lagnaName} Ascendant. Wearing ${cat.ratna} will stimulate acute financial obstacles, litigation, or vitality leakage. Strictly contraindicated.`,
-          reasonHi: `${pName} ${lagnaNameHi} लग्न के लिए मारक अथवा अशुभ भाव के स्वामी हैं। इनका रत्न धारण करने से धन हानि, विवाद या स्वास्थ्य समस्याएं बढ़ सकती हैं। यह पूर्णतः वर्जित है।`
+          house,
+          reasonEn: `${pName} is an auspicious Functional Benefic seated in House ${house} for ${lagnaName} Ascendant. Wearing its consecrated gemstone channels vital vigor, intellectual clarity, and fortune.`,
+          reasonHi: `${pName} ${lagnaNameHi} लग्न हेतु शुभ कारक ग्रह हैं तथा भाव ${house} में स्थित हैं। इनका अभिमंत्रित रत्न धारण करने से कार्यसिद्धि व ऊर्जा में वृद्धि होती है।`
         });
       }
     });
@@ -17492,16 +17531,35 @@ if (document.readyState === 'loading') {
     if (isGemstoneQuery) {
       const rec = (gemstones.recommendedRatnas || []).map(r => `* **${isHi ? r.ratnaHi : r.ratna}**: ${isHi ? r.metalHi : r.metal} (${isHi ? r.reasonHi : r.reasonEn})`).join('\n');
       const blk = (gemstones.prohibitedRatnas || []).map(b => `* **${isHi ? b.ratnaHi : b.ratna}**: ${isHi ? b.reasonHi : b.reasonEn}`).join('\n');
+
+      const venusH = getH('Venus');
+      const mentionsVenusOrDiamond = q.includes('diamond') || q.includes('heera') || q.includes('venus') || q.includes('shukra') || q.includes('silver') || q.includes('chandi') || q.includes('12');
+
+      let specificVenusNotice = '';
+      if (venusH === 12 && mentionsVenusOrDiamond) {
+        if (isHi) {
+          specificVenusNotice = `\n\n> **द्वादश भाव शुक्र (12th House Venus) एवं हीरा/चांदी विशेष विश्लेषण:**\n` +
+            `> आप बिल्कुल सही कह रहे हैं। वैदिक रत्न शास्त्र व लाल किताब के अनुसार, रत्न उस भाव को जाग्रत करते हैं जिसमें ग्रह स्थित होता है। आपकी कुंडली में शुक्र 12वें भाव (व्यय भाव) में स्थित हैं, अतः **हीरा (Diamond) या श्वेत जरकन धारण करना पूर्णतः वर्जित है**; इसे पहनने से 12वां भाव सक्रिय होकर अप्रत्याशित खर्च, धन क्षरण व परेशानियां बढ़ाएगा।\n` +
+            `> इसी प्रकार, **चांदी (Silver) भी वर्जित है** क्योंकि चांदी शुक्र व चन्द्रमा की धातु है जो 12वें भाव के शुक्र की व्यय ऊर्जा को उत्तेजित करती है। 12वें शुक्र हेतु रत्न नहीं, बल्कि आचार विचार व सात्विक दान (शुक्रवार को सफेद वस्तु/दही दान, स्वच्छता, हल्दी वाला दूध) ही सर्वोत्तम उपाय है।\n`;
+        } else {
+          specificVenusNotice = `\n\n> **Special Shastric Clarification on Diamond (Heera) & Silver (Venus in 12th House):**\n` +
+            `> You are 100% correct and astronomically accurate. In authentic Vedic Ratna Shastra and Lal Kitab, gemstones act as cosmic antennas that energize the specific house where a planet sits. Because your Venus is placed in House 12 (Vyaya Bhava - House of Expenditure & Losses), **wearing Diamond (Heera) or its substitutes (White Zircon, Opal) is strictly prohibited**; wearing it directly activates 12th-house losses, uncontrollable expenses, and financial drainage.\n` +
+            `> Furthermore, **Silver (Chandi) is strictly banned** because silver is the primary metallic conductor of Venus and Moon, stimulating this 12th-house loss axis. For 12th-house Venus, gemstone amplification is completely contraindicated; only living conduct and subtle Upayas (maintaining bedroom cleanliness, Friday charity of white items/curd, nighttime turmeric milk) should be followed.\n`;
+        }
+      }
+
       if (isHi) {
         return `### ${userName} जी, आपकी कुंडली (${lagnaNameHi} लग्न) हेतु संपूर्ण रत्न विश्लेषण:\n\n` +
-          `**अनुकूल एवं शुभ रत्न:**\n${rec || '* कोई विशेष रत्न आवश्यक नहीं है।'}\n\n` +
-          `**सख्त वर्जित एवं हानिकारक रत्न:**\n${blk || '* कोई विशेष रत्न वर्जित नहीं है।'}\n\n` +
-          `> **विशेष वैदिक नियम:** कभी भी परस्पर शत्रु ग्रहों के रत्न (जैसे माणिक्य और नीलम) एक साथ धारण न करें। रत्न को सदैव शुक्ल पक्ष में शुभ नक्षत्र व मुहूर्त में ही प्राण-प्रतिष्ठित करवाकर धारण करें।`;
+          (specificVenusNotice ? `${specificVenusNotice}\n\n` : '') +
+          `**अनुकूल एवं शुभ रत्न:**\n${rec || '* आपकी कुंडली में वर्तमान में कोई प्राथमिक रत्न अनुकूल नहीं है (शुभ ग्रह त्रिक भावों में स्थित हैं)।*'}\n\n` +
+          `**सख्त वर्जित एवं हानिकारक रत्न:**\n${blk || '* कोई विशेष रत्न वर्जित नहीं है।*'}\n\n` +
+          `> **शास्त्रीय त्रिक भाव नियम:** कोई भी ग्रह (चाहे वह त्रिकोणेश या लग्नेश ही क्यों न हो) यदि 6ठे, 8वें या 12वें भाव में स्थित हो, तो उसका रत्न कभी नहीं पहनना चाहिए, अन्यथा रोग, ऋण या धन हानि बढ़ जाती है। परस्पर शत्रु ग्रहों के रत्न भी कभी साथ न पहनें।`;
       } else {
         return `### Comprehensive Gemstone Analysis for ${userName} (${lagnaName} Ascendant):\n\n` +
-          `**Auspicious & Recommended Gemstones:**\n${rec || '* No primary gemstone required.*'}\n\n` +
+          (specificVenusNotice ? `${specificVenusNotice}\n\n` : '') +
+          `**Auspicious & Recommended Gemstones:**\n${rec || '* No primary gemstone is currently recommended (benefic planets reside in sensitive Dusthana houses).*\n'}\n\n` +
           `**Strictly Contraindicated (Harmful) Stones:**\n${blk || '* None.*'}\n\n` +
-          `> **Vedic Synergy Rule:** Never combine stones of natural planetary adversaries (e.g. Ruby with Blue Sapphire). Always consecrate gemstones in Shukla Paksha during the auspicious planetary Hora.`;
+          `> **Classical Dusthana Rule:** A gemstone amplifies the exact house where the planet resides. Even if a planet is a functional benefic, if it sits in the 6th, 8th, or 12th house (Dusthanas), wearing its gemstone activates debt, crisis, or financial loss. Never wear stones of planets in Dusthana houses.`;
       }
     }
 
@@ -17515,9 +17573,29 @@ if (document.readyState === 'loading') {
 
     if (isMetalQuery) {
       const isBanned = gemstones.isSilverBanned;
+      const venusH = getH('Venus');
+      const moonH = getH('Moon');
+      let silverDetailEn = '';
+      let silverDetailHi = '';
+      if (isBanned) {
+        if (venusH === 12) {
+          silverDetailEn = '**STRICTLY BANNED** - Venus (governor of silver & luxury) sits in House 12 (Vyaya Bhava). Wearing or carrying silver stimulates the 12th house, converting accumulated wealth into sudden, unwanted expenditures and dissipation.';
+          silverDetailHi = '**पूर्णतः वर्जित (BANNED)** - शुक्र (चांदी व विलासिता के कारक) द्वादश भाव (व्यय भाव) में स्थित हैं। चांदी धारण करने से 12वां भाव सक्रिय होकर संचित धन का तीव्र अपव्यय कराता है।';
+        } else if (moonH === 12 || moonH === 8) {
+          silverDetailEn = `**STRICTLY BANNED** - Moon is in House ${moonH}. Carrying silver exacerbates emotional volatility and financial leakages.`;
+          silverDetailHi = `**पूर्णतः वर्जित (BANNED)** - चन्द्रमा ${moonH}वें भाव में स्थित हैं। चांदी धारण करने से मानसिक अशांति व अनावश्यक खर्च बढ़ते हैं।`;
+        } else {
+          silverDetailEn = '**STRICTLY BANNED** - Due to 12th/8th house vulnerability, holding or wearing silver acts as an energetic conductor leaking accumulated savings.';
+          silverDetailHi = '**पूर्णतः वर्जित (BANNED)** - आपकी कुंडली में 12वें/8वें भाव के प्रभाव के कारण चांदी धारण करने से संचित धन का अपव्यय होता है।';
+        }
+      } else {
+        silverDetailEn = '**SAFE & AUSPICIOUS** - Fosters emotional serenity and steady wealth retention.';
+        silverDetailHi = '**अनुकूल एवं शुभ** - मानसिक शांति व धन संचय हेतु चांदी धारण करना उत्तम है।';
+      }
+
       if (isHi) {
         return `### धातु संरेखन रिपोर्ट (${lagnaNameHi} लग्न - ${userName}):\n\n` +
-          `* **चांदी (Silver):** ${isBanned ? '**पूर्णतः वर्जित (BANNED)** - आपकी कुंडली में 12वें/8वें भाव के प्रभाव के कारण चांदी धारण करने से संचित धन का अपव्यय होता है।' : '**अनुकूल एवं शुभ** - मानसिक शांति व धन संचय हेतु चांदी धारण करना उत्तम है।'}\n` +
+          `* **चांदी (Silver):** ${silverDetailHi}\n` +
           `* **सोना (Gold):** देवगुरु बृहस्पति और सूर्य की धातु। तर्जनी में हल्का सोने का छल्ला या पीला धागा पहनना शुभ फलदायी है।\n` +
           `* **तांबा (Copper):** सूर्य व मंगल की ऊर्जा। प्रातः सूर्य अर्घ्य हेतु अत्यंत शुभ।\n` +
           `* **पीतल (Brass):** गुरु की सात्विक धातु। मानसिक चंचलता को शांत करने हेतु श्रेष्ठ।\n` +
@@ -17525,7 +17603,7 @@ if (document.readyState === 'loading') {
           `* **कांसा व पंचधातु:** बुध व मिश्रित शुभ ग्रहों के संतुलन हेतु प्रयोग किया जाता है।`;
       } else {
         return `### Dhatu (Metal) Safety Analysis for ${userName} (${lagnaName} Ascendant):\n\n` +
-          `* **Silver (Chandi):** ${isBanned ? '**STRICTLY BANNED** - Due to 12th/8th house vulnerability, holding or wearing silver acts as an energetic conductor leaking accumulated savings.' : '**SAFE & AUSPICIOUS** - Fosters emotional serenity and steady wealth retention.'}\n` +
+          `* **Silver (Chandi):** ${silverDetailEn}\n` +
           `* **Gold (Swarna):** Governed by Jupiter and Sun. Wearing a light gold band on the index finger amplifies moral authority and divine discernment.\n` +
           `* **Copper (Tamba):** Channels vital solar/martian stamina. Highly recommended for morning solar arghya.\n` +
           `* **Brass (Pital):** Sattvic alloy of Jupiter. Excellent for grounding agitated thoughts and keeping wealth stable.\n` +
